@@ -1,0 +1,1 @@
+<?php PrintCategoriesDropdownTree::print_dropdown( $categoriesTree, 'content_list_categories', old('categories', (isset($contentCategories) ? $contentCategories : null)), 'content_list_categories', 'form-control' ); ?>

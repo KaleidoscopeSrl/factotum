@@ -1,0 +1,548 @@
+@-webkit-keyframes passing-through {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateY(40px);
+		-moz-transform: translateY(40px);
+		-ms-transform: translateY(40px);
+		-o-transform: translateY(40px);
+		transform: translateY(40px); }
+	30%, 70% {
+		opacity: 1;
+		-webkit-transform: translateY(0px);
+		-moz-transform: translateY(0px);
+		-ms-transform: translateY(0px);
+		-o-transform: translateY(0px);
+		transform: translateY(0px); }
+	100% {
+		opacity: 0;
+		-webkit-transform: translateY(-40px);
+		-moz-transform: translateY(-40px);
+		-ms-transform: translateY(-40px);
+		-o-transform: translateY(-40px);
+		transform: translateY(-40px); } }
+@-moz-keyframes passing-through {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateY(40px);
+		-moz-transform: translateY(40px);
+		-ms-transform: translateY(40px);
+		-o-transform: translateY(40px);
+		transform: translateY(40px); }
+	30%, 70% {
+		opacity: 1;
+		-webkit-transform: translateY(0px);
+		-moz-transform: translateY(0px);
+		-ms-transform: translateY(0px);
+		-o-transform: translateY(0px);
+		transform: translateY(0px); }
+	100% {
+		opacity: 0;
+		-webkit-transform: translateY(-40px);
+		-moz-transform: translateY(-40px);
+		-ms-transform: translateY(-40px);
+		-o-transform: translateY(-40px);
+		transform: translateY(-40px); } }
+@keyframes passing-through {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateY(40px);
+		-moz-transform: translateY(40px);
+		-ms-transform: translateY(40px);
+		-o-transform: translateY(40px);
+		transform: translateY(40px); }
+	30%, 70% {
+		opacity: 1;
+		-webkit-transform: translateY(0px);
+		-moz-transform: translateY(0px);
+		-ms-transform: translateY(0px);
+		-o-transform: translateY(0px);
+		transform: translateY(0px); }
+	100% {
+		opacity: 0;
+		-webkit-transform: translateY(-40px);
+		-moz-transform: translateY(-40px);
+		-ms-transform: translateY(-40px);
+		-o-transform: translateY(-40px);
+		transform: translateY(-40px); } }
+@-webkit-keyframes slide-in {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateY(40px);
+		-moz-transform: translateY(40px);
+		-ms-transform: translateY(40px);
+		-o-transform: translateY(40px);
+		transform: translateY(40px); }
+	30% {
+		opacity: 1;
+		-webkit-transform: translateY(0px);
+		-moz-transform: translateY(0px);
+		-ms-transform: translateY(0px);
+		-o-transform: translateY(0px);
+		transform: translateY(0px); } }
+@-moz-keyframes slide-in {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateY(40px);
+		-moz-transform: translateY(40px);
+		-ms-transform: translateY(40px);
+		-o-transform: translateY(40px);
+		transform: translateY(40px); }
+	30% {
+		opacity: 1;
+		-webkit-transform: translateY(0px);
+		-moz-transform: translateY(0px);
+		-ms-transform: translateY(0px);
+		-o-transform: translateY(0px);
+		transform: translateY(0px); } }
+@keyframes slide-in {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateY(40px);
+		-moz-transform: translateY(40px);
+		-ms-transform: translateY(40px);
+		-o-transform: translateY(40px);
+		transform: translateY(40px); }
+	30% {
+		opacity: 1;
+		-webkit-transform: translateY(0px);
+		-moz-transform: translateY(0px);
+		-ms-transform: translateY(0px);
+		-o-transform: translateY(0px);
+		transform: translateY(0px); } }
+@-webkit-keyframes pulse {
+	0% {
+		-webkit-transform: scale(1);
+		-moz-transform: scale(1);
+		-ms-transform: scale(1);
+		-o-transform: scale(1);
+		transform: scale(1); }
+	10% {
+		-webkit-transform: scale(1.1);
+		-moz-transform: scale(1.1);
+		-ms-transform: scale(1.1);
+		-o-transform: scale(1.1);
+		transform: scale(1.1); }
+	20% {
+		-webkit-transform: scale(1);
+		-moz-transform: scale(1);
+		-ms-transform: scale(1);
+		-o-transform: scale(1);
+		transform: scale(1); } }
+@-moz-keyframes pulse {
+	0% {
+		-webkit-transform: scale(1);
+		-moz-transform: scale(1);
+		-ms-transform: scale(1);
+		-o-transform: scale(1);
+		transform: scale(1); }
+	10% {
+		-webkit-transform: scale(1.1);
+		-moz-transform: scale(1.1);
+		-ms-transform: scale(1.1);
+		-o-transform: scale(1.1);
+		transform: scale(1.1); }
+	20% {
+		-webkit-transform: scale(1);
+		-moz-transform: scale(1);
+		-ms-transform: scale(1);
+		-o-transform: scale(1);
+		transform: scale(1); } }
+@keyframes pulse {
+	0% {
+		-webkit-transform: scale(1);
+		-moz-transform: scale(1);
+		-ms-transform: scale(1);
+		-o-transform: scale(1);
+		transform: scale(1); }
+	10% {
+		-webkit-transform: scale(1.1);
+		-moz-transform: scale(1.1);
+		-ms-transform: scale(1.1);
+		-o-transform: scale(1.1);
+		transform: scale(1.1); }
+	20% {
+		-webkit-transform: scale(1);
+		-moz-transform: scale(1);
+		-ms-transform: scale(1);
+		-o-transform: scale(1);
+		transform: scale(1); } }
+
+	@mixin translate($x, $y) {
+			-moz-transform: translate($x, $y);
+			-webkit-transform: translate($x, $y);
+			-o-transform: translate($x, $y);
+			-ms-transform: translate($x, $y);
+			transform: translate($x, $y);
+	}
+
+	@mixin translateX($x) {
+			-moz-transform: translateX($x);
+			-webkit-transform: translateX($x);
+			-o-transform: translateX($x);
+			-ms-transform: translateX($x);
+			transform: translateX($x);
+	}
+
+	@mixin translateY($y) {
+			-moz-transform: translateY($y);
+			-webkit-transform: translateY($y);
+			-o-transform: translateY($y);
+			-ms-transform: translateY($y);
+			transform: translateY($y);
+	}
+
+	@mixin rotate($rot) {
+			-moz-transform: rotate(#{$rot}deg);
+			-webkit-transform: rotate(#{$rot}deg);
+			-o-transform: rotate(#{$rot}deg);
+			-ms-transform: rotate(#{$rot}deg);
+			transform: rotate(#{$rot}deg);
+	}
+
+	@mixin translate3d($x, $y, $z) {
+		-webkit-transform: translate3d($x,$y,$z);
+		transform: translate3d($x,$y,$z);
+	}
+
+	@mixin translate_rotate($x, $y, $rot) {
+		transform: translate($x, $y) rotate(#{$rot}deg);
+		-webkit-transform: translate($x, $y) rotate(#{$rot}deg);
+	}
+
+	@mixin transition-delay($time, $time2:false) {
+		$params: #{$time}s;
+		@if $time2
+			 { $params: (#{$time}s), #{$time2}s; }
+
+		-webkit-transition-delay: $params;
+		transition-delay: $params;
+	}
+
+	@mixin scale($val) {
+			-moz-transform: scale($val);
+			-webkit-transform: scale($val);
+			-o-transform: scale($val);
+			-ms-transform: scale($val);
+			transform: scale($val);	
+	}
+	@mixin scale3d($x, $y, $z) {
+			-moz-transform: scale3d($x, $y, $z);
+			-webkit-transform: scale3d($x, $y, $z);
+			-o-transform: scale3d($x, $y, $z);
+			-ms-transform: scale3d($x, $y, $z);
+			transform: scale3d($x, $y, $z);	
+	}
+
+	@mixin no-transform {
+		-webkit-transform: none;
+		-moz-transform: none;
+		-ms-transform: none;
+		-o-transform: none;
+		transform: none;
+	}
+
+	@mixin translate3d_scale3d($x1, $y1, $z1, $x2, $y2, $z2) {
+			-webkit-transform: translate3d($x1,$y1,$z1) scale3d($x2,$y2,$z2);
+			transform: translate3d($x1,$y1,$z1) scale3d($x2,$y2,$z2);
+	}
+
+	@mixin box-shadow ($shadow1, $shadow2:false) {
+			$params: $shadow1;
+			@if $shadow2
+				 { $params: $shadow1, $shadow2; }
+		
+		  -webkit-box-shadow: $params;
+		     -moz-box-shadow: $params;
+		          box-shadow: $params;
+	}
+
+	@mixin user-select ($value) {
+			-webkit-user-select: $value;
+			-khtml-user-select: $value;
+			-moz-user-select: $value;
+			-ms-user-select: $value;
+			user-select: $value;
+	}
+	@mixin all-transition ($time, $easing:ease, $delay:0) {
+			-webkit-transition: all #{$time}s $easing #{$delay}s;
+			-moz-transition: all #{$time}s $easing #{$delay}s;
+			-ms-transition: all #{$time}s $easing #{$delay}s;
+			-o-transition: all #{$time}s $easing #{$delay}s;
+			transition: all #{$time}s $easing #{$delay}s;
+	}
+	@mixin no-transition {
+			-webkit-transition: none;
+			-moz-transition: none;
+			-ms-transition: none;
+			-o-transition: none;
+			transition: none;
+	}
+	@mixin transform-opacity-transition($time1, $time2, $delay1:0, $delay2:0) {
+			-webkit-transition: -webkit-transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s;
+			-moz-transition: -moz-transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s;
+			-ms-transition: -ms-transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s;
+			-o-transition: -o-transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s;
+			transition: transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s;
+	}
+	@mixin transform-opacity-visibility-transition($time1, $time2, $time3, $delay1:0, $delay2:0, $delay3:0) {
+		-webkit-transition: -webkit-transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s, visibility #{$time3}s #{$delay3}s;
+		-moz-transition: -moz-transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s, visibility #{$time3}s #{$delay3}s;
+		-ms-transition: -ms-transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s, visibility #{$time3}s #{$delay3}s;
+		-o-transition: -o-transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s, visibility #{$time3}s #{$delay3}s;
+		transition: transform (#{$time1}s) #{$delay1}s, opacity #{$time2}s #{$delay2}s, visibility #{$time3}s #{$delay3}s;
+	}
+
+	@mixin background-transition ($time, $easing:ease, $delay:0) {
+		-webkit-transition: background #{$time}s $easing #{$delay}s;
+		-moz-transition: background #{$time}s $easing #{$delay}s;
+		-ms-transition: background #{$time}s $easing #{$delay}s;
+		-o-transition: background #{$time}s $easing #{$delay}s;
+		transition: background #{$time}s $easing #{$delay}s;
+	}
+	@mixin background-color-transition ($time, $easing:ease, $delay:0) {
+		-webkit-transition: background-color #{$time}s $easing #{$delay}s;
+		-moz-transition: background-color #{$time}s $easing #{$delay}s;
+		-ms-transition: background-color #{$time}s $easing #{$delay}s;
+		-o-transition: background-color #{$time}s $easing #{$delay}s;
+		transition: background-color #{$time}s $easing #{$delay}s;
+	}
+
+	@mixin color-transition ($time, $easing:ease) {
+		-webkit-transition: color #{$time}s $easing;
+		-moz-transition: color #{$time}s $easing;
+		-ms-transition: color #{$time}s $easing;
+		-o-transition: color #{$time}s $easing;
+		transition: color #{$time}s $easing;
+	}
+
+	@mixin transform-transition ($time, $easing:ease) {
+		-webkit-transition: -webkit-transform #{$time}s $easing;
+		-moz-transition: -moz-transform #{$time}s $easing;
+		-ms-transition: -ms-transform #{$time}s $easing;
+		-o-transition: -o-transform #{$time}s $easing;
+		transition: transform #{$time}s $easing;
+	}
+
+	@mixin opacity-transition ($time, $easing:ease) {
+		-webkit-transition: opacity #{$time}s $easing;
+		-moz-transition: opacity #{$time}s $easing;
+		-ms-transition: opacity #{$time}s $easing;
+		-o-transition: opacity #{$time}s $easing;
+		transition: opacity #{$time}s $easing;
+	}
+
+	@mixin custom-transition ($attrs) {
+		-webkit-transition: #{$attrs};
+		-moz-transition: #{$attrs};
+		-ms-transition: #{$attrs};
+		-o-transition: #{$attrs};
+		transition: #{$attrs};
+	}
+
+	@mixin transition-duration ($time, $time2) {
+		$params: #{$time}s;
+		@if $time2
+			 { $params: (#{$time}s), #{$time2}s; }
+
+		-webkit-transition-duration: $params;
+		-moz-transition-duration: $params;
+		-ms-transition-duration: $params;
+		-o-transition-duration: $params;
+		transition-duration: $params;
+	}
+
+	@mixin transition-property ($attrs) {
+		-webkit-transition-property: #{$attrs};
+		-moz-transition-property: #{$attrs};
+		-ms-transition-property: #{$attrs};
+		-o-transition-property: #{$attrs};
+		transition-property: #{$attrs};
+	}
+
+	@mixin transition-timing-function ($attrs) {
+		-webkit-transition-timing-function: #{$attrs};
+		-moz-transition-timing-function: #{$attrs};
+		-ms-transition-timing-function: #{$attrs};
+		-o-transition-timing-function: #{$attrs};
+		transition-timing-function: #{$attrs};
+	}
+
+
+	@mixin border-radius($radius) {
+		-webkit-border-radius: $radius;
+		border-radius: $radius;
+	}
+
+	@mixin box-sizing($boxSizing) {
+	    box-sizing: $boxSizing;
+	    -webkit-box-sizing: $boxSizing;
+	}
+
+	@mixin transform-style($transformStyle) {
+			-webkit-transform-style: $transformStyle;
+			-moz-transform-style: $transformStyle;
+			-o-transform-origin: $transformStyle;
+			-ms-transform-origin: $transformStyle;
+			transform-style: $transformStyle;
+	}
+
+	@mixin transform-origin($x, $y) {
+			-webkit-transform-origin: $x $y;
+			-moz-transform-origin: $x $y;
+			-o-transform-origin: $x $y;
+			-ms-transform-origin: $x $y;
+			transform-origin: $x $y;
+	}
+
+	@mixin rotateX($rot) {
+			-webkit-transform: rotateX(#{$rot}deg);
+			-moz-transform: rotateX(#{$rot}deg);
+			transform: rotateX(#{$rot}deg);
+	}
+
+	@mixin animation($animationName, $duration, $easing:ease, $delay:0) {
+		-webkit-animation: $animationName #{$duration}s $easing #{$delay}s;
+		-moz-animation: $animationName #{$duration}s $easing #{$delay}s;
+		-ms-animation: $animationName #{$duration}s $easing #{$delay}s;
+		-o-transition: $animationName #{$duration}s $easing #{$delay}s;
+		animation: $animationName #{$duration}s $easing #{$delay}s;
+	}
+
+	@mixin box-sizing($boxSizing) {
+			-moz-box-sizing: $boxSizing;
+			-webkit-box-sizing: $boxSizing;
+			box-sizing: $boxSizing;
+	}
+
+	@mixin animation-name($animationName) {
+			-webkit-animation-name: $animationName;
+			animation-name: $animationName;		
+	}
+
+	@mixin animation-timing-function($timing) {
+			-webkit-animation-timing-function: #{$timing}; 
+			animation-timing-function: #{$timing};
+	}
+
+	@mixin animation-fill-mode($fillMode) {
+			-webkit-animation-fill-mode: $fillMode;
+			animation-fill-mode: $fillMode;	
+	}
+
+	@mixin animation-direction($direction) {
+			-webkit-animation-direction: $direction;
+			animation-direction: $direction;
+	}
+
+	@mixin animation-iteration-count($val) {
+		animation-iteration-count: $val;
+		-webkit-animation-iteration-count: $val;
+		-moz-animation-iteration-count: $val;
+		-o-animation-iteration-count: $val;
+		-ms-animation-iteration-count: $val;
+	}
+	@mixin animation-delay($time) {
+			animation-delay: #{$time}s;
+			-webkit-animation-delay: #{$time}s;
+			-moz-animation-delay: #{$time}s;
+			-o-animation-delay: #{$time}s;
+			-ms-animation-delay: #{$time}s;
+	}
+	@mixin backface-visibility($visibility) {
+			-moz-backface-visibility: $visibility;
+			-webkit-backface-visibility: $visibility;
+			backface-visibility: $visibility;
+	}
+	@mixin custom-transform($transform) {
+			transform: $transform;
+			-webkit-transform: $transform;
+			-moz-transform: $transform;
+			-o-transform: $transform;
+			-ms-transform: $transform;
+	}
+
+
+	@mixin perspective($perspective){
+			-webkit-perspective: $perspective;
+			-moz-perspective: $perspective;
+			perspective: $perspective;
+	}
+	@mixin perspective-origin($a,$b){
+			-webkit-perspective-origin: $a $b;
+			-moz-perspective-origin: $a $b;
+			perspective-origin: $a $b;
+	}
+	@mixin transition($val,$time){
+			-webkit-transition: $val $time;
+			-moz-transition: $val $time;
+			transition: $val $time;
+	}
+	@mixin overflow-scrolling($val){
+			-webkit-overflow-scrolling: $val;
+			-moz-overflow-scrolling: $val;
+			-overflow-scrolling: $val;
+	}
+	@mixin touch-callout($val){
+			-webkit-touch-callout: $val;
+			-moz-touch-callout: $val;
+			-touch-callout: $val;
+	}
+	@mixin appearance($property){
+			-webkit-appearance: $property;
+			-moz-appearance: $property;
+			-appearance: $property;
+	}
+
+	@mixin keyframes($animationName) {
+	  @-webkit-keyframes #{$animationName} {
+	    @content;
+	  }
+	  @-moz-keyframes #{$animationName} {
+	    @content;
+	  }
+	  @keyframes #{$animationName} {
+	    @content;
+	  }
+	}
+
+	@mixin centered {
+		position: absolute;
+		top: 50%; left: 50%;
+		@include translate(-50%, -50%);
+	}
+	@mixin vertically-centered {
+		position: absolute;
+		top: 50%;
+		@include translateY(-50%);
+	}
+
+	/// Mixin to customize scrollbars
+	/// Beware, this does not work in all browsers
+	/// @author Hugo Giraudel
+	/// @param {Length} $size - Horizontal scrollbar's height and vertical scrollbar's width
+	/// @param {Color} $foreground-color - Scrollbar's color
+	/// @param {Color} $background-color [mix($foreground-color, white, 50%)] - Scrollbar's color
+	/// @example scss - Scrollbar styling
+	///   @include scrollbars(.5em, slategray);
+	@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%)) {
+		// For Google Chrome
+		::-webkit-scrollbar {
+			width:  $size;
+			height: $size;
+		}
+
+		::-webkit-scrollbar-thumb {
+			@include border-radius(4px);
+			background: $foreground-color;
+		}
+
+		::-webkit-scrollbar-track {
+			background: $background-color;
+		}
+
+		// For Internet Explorer
+		body {
+			scrollbar-face-color: $foreground-color;
+			scrollbar-track-color: $background-color;
+		}
+	}

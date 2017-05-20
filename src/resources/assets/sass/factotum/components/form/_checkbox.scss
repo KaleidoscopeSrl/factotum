@@ -1,0 +1,214 @@
+// Checkbox variables
+$checkbox-size: 20px;
+$checkbox-animation-ripple: 700ms;
+$checkbox-animation-check: 0.3s;
+$lightbg-text: rgba(0,0,0,0.84);
+.form-horizontal {
+.checkbox {
+  display: inline-block;
+  transform: translateZ(0); // Force 3d rendering
+  padding-top: 0;
+  margin-left: -10px;
+  label {
+    cursor: pointer;
+    padding-left: 0; // Reset for Bootstrap rule
+    margin-bottom: 0;
+    padding-top: 0;
+
+  }
+
+  // Hide native checkbox
+  input[type=checkbox] {
+    opacity: 0;
+    position: absolute;
+    margin: 0;
+    z-index: -1;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    left: 0;
+    pointer-events: none;
+  }
+
+  .checkbox-material {
+    vertical-align: middle;
+    position: relative;
+    top: 3px;
+    margin-right: 10px;
+    &:before {
+      position: absolute;
+      left: 0px;
+      top: 2px;
+      content: "";
+      height: 4px;
+      width: 4px;
+      border-radius: 100%;
+      z-index: 1;
+      opacity: 0;
+      margin: 0;
+      //transform: scale3d(2.3, 2.3, 1);
+    }
+
+    .check {
+      position: relative;
+      display: inline-block;
+      width: $checkbox-size;
+      height: $checkbox-size;
+      border: 2px solid;
+      border-radius: 2px;
+      overflow: hidden;
+      color: rgba(180,180,180, 1);
+      z-index: 1;
+    }
+    .check:before {
+      position: absolute;
+      content: "";
+      transform: rotate(45deg);
+      display: block;
+      margin-top: -4px;
+      margin-left: 6px;
+      width: 0;
+      height: 0;
+      box-shadow:
+        0 0 0 0,
+        0 0 0 0,
+        0 0 0 0,
+        0 0 0 0,
+        0 0 0 0,
+        0 0 0 0,
+        0 0 0 0 inset;
+      animation: checkbox-off $checkbox-animation-check forwards ease-out;
+    }
+  }
+
+
+  input[type=checkbox]:focus + .checkbox-material {
+    color: $darkYellow;
+  }
+  input[type=checkbox]:focus + .checkbox-material .check,
+  input[type=checkbox]:checked + .checkbox-material .check {
+    color: $darkYellow;
+    
+  }
+  input[type=checkbox]:checked + .checkbox-material .check:before {
+    box-shadow:
+      0 0 0 10px,
+      10px -10px 0 10px,
+      32px 0px 0 20px,
+      0px 32px 0 20px,
+      -5px 5px 0 10px,
+      20px -12px 0 11px;
+    animation: checkbox-on $checkbox-animation-check forwards ease-out;
+  }
+  
+  // Style for disabled inputs
+  input[type=checkbox][disabled]:not(:checked) ~ .checkbox-material .check:before,
+  input[type=checkbox][disabled] + .circle {
+    opacity: 0.5;
+  }
+  input[type=checkbox][disabled] + .checkbox-material .check:after {
+    background-color: $darkYellow;
+    transform: rotate(-45deg);
+  }
+
+}
+
+// Animations
+@keyframes checkbox-on {
+  0% {
+    box-shadow:
+      0 0 0 10px $darkYellow,
+      10px -10px 0 10px $darkYellow,
+      32px 0px 0 20px $darkYellow,
+      0px 32px 0 20px $darkYellow,
+      -5px 5px 0 10px $darkYellow,
+      15px 2px 0 11px $darkYellow;
+  }
+  50% {
+    box-shadow:
+      0 0 0 10px $darkYellow,
+      10px -10px 0 10px $darkYellow,
+      32px 0px 0 20px $darkYellow,
+      0px 32px 0 20px $darkYellow,
+      -5px 5px 0 10px $darkYellow,
+      20px 2px 0 11px $darkYellow;
+  }
+  100% {
+    box-shadow:
+      0 0 0 10px $darkYellow,
+      10px -10px 0 10px $darkYellow,
+      32px 0px 0 20px $darkYellow,
+      0px 32px 0 20px $darkYellow,
+      -5px 5px 0 10px $darkYellow,
+      20px -12px 0 11px $darkYellow;
+  }
+}
+@keyframes checkbox-off {
+  0% {
+    box-shadow:
+      0 0 0 10px,
+      10px -10px 0 10px,
+      32px 0px 0 20px,
+      0px 32px 0 20px,
+      -5px 5px 0 10px,
+      20px -12px 0 11px,
+      0 0 0 0 inset;
+  }
+
+  25% {
+    box-shadow:
+      0 0 0 10px,
+      10px -10px 0 10px,
+      32px 0px 0 20px,
+      0px 32px 0 20px,
+      -5px 5px 0 10px,
+      20px -12px 0 11px,
+      0 0 0 0 inset;
+  }
+  50% {
+    transform: rotate(45deg);
+    margin-top: -4px;
+    margin-left: 6px;
+    width: 0px;
+    height: 0px;
+    box-shadow:
+      0 0 0 10px,
+      10px -10px 0 10px,
+      32px 0px 0 20px,
+      0px 32px 0 20px,
+      -5px 5px 0 10px,
+      15px 2px 0 11px,
+      0 0 0 0 inset;
+  }
+  51% {
+    transform: rotate(0deg);
+    margin-top: -2px;
+    margin-left: -2px;
+    width: 20px;
+    height: 20px;
+    box-shadow:
+      0 0 0 0,
+      0 0 0 0,
+      0 0 0 0,
+      0 0 0 0,
+      0 0 0 0,
+      0 0 0 0,
+      0px 0px 0 10px inset;
+  }
+  100% {
+    transform: rotate(0deg);
+    margin-top: -2px;
+    margin-left: -2px;
+    width: 20px;
+    height: 20px;
+    box-shadow:
+      0 0 0 0,
+      0 0 0 0,
+      0 0 0 0,
+      0 0 0 0,
+      0 0 0 0,
+      0 0 0 0,
+      0px 0px 0 0px inset;
+  }
+}
+}

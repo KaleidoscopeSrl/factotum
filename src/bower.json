@@ -1,0 +1,28 @@
+{
+  "name": "factotum",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Filippo Matteo Riggio <filippo@kaleidoscope.it>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "^3.3.7",
+    "froala-wysiwyg-editor": "^2.5.0",
+    "datetimepicker": "^2.5.4",
+    "searchable-list": "^2.0.0",
+    "jquery": "2.2.4",
+    "jquery-ui": "jqueryui#^1.12.1",
+    "dropzone": "^4.3.0",
+    "select2": "select2-dist#^4.0.3"
+  }
+}

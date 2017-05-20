@@ -1,0 +1,32 @@
+@media #{$mq-xs} {
+	.form-horizontal {
+		input[type="radio"] {
+			display: block;
+			width: 25px;
+			display: none;
+			& + label {
+				display: inline-block;
+				margin-right: 15px;
+				a {
+					color: red;
+				}
+			}
+			& + label::before {
+				position: relative;
+				top: 3px;
+				display: inline-block;
+				width: 15px;
+				height: 15px;
+				margin-right: 5px;
+				border: 1px solid $dynamicGrey;
+				box-shadow: 0 0 0 3px #FFF inset;
+				border-radius: 50px;
+				content:"";
+			}
+
+			&:checked + label::before {
+				background-color: $darkYellow;
+			}
+		}
+	}
+}

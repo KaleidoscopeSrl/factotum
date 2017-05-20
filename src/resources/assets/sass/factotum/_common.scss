@@ -1,0 +1,282 @@
+.login {
+	margin-top: 80px;
+}
+footer {
+	background-color: transparent;
+	font-size: 12px;
+	line-height: 25px;
+	.credits {
+		display: inline-block;
+		float: right;
+	}
+}
+.resize_media_bar {
+	position: relative;
+	width: 100%;
+	height: 20px;
+	margin-bottom: 30px;
+	background-color: #ccc;
+
+	.bar {
+		width: 0;
+		height: 20px;
+		background-color: $brand-primary;
+	}
+	.percentage {
+		position: absolute;
+		top: 0; left: 50%;
+		width: 30px;
+		margin-left: -15px;
+		color: #FFF;
+		font-weight: bold;
+	}
+}
+
+.page_link {
+	display: inline-block;
+	color: $dynamicGrey;
+	margin-top: 10px;
+}
+
+.table-title {
+	margin-top: 0;
+	margin-bottom: 0.5em;
+	color: $lightYellow;
+}
+
+.table-subtitle {
+	margin-top: 0;
+	margin-bottom: 0.5em;
+	color: $dynamicGrey;
+	opacity: 0.75;
+}
+
+.username {
+	position: relative;
+	top: -5px;
+}
+
+.edit,
+.delete {
+	display: inline-block;
+	line-height: 30px;
+	width:30px;
+	margin-right: 10px;
+	background-color: $lightYellow;
+	border-radius: 2px;
+	text-align: center;
+	color: $dynamicGrey;
+	@include box-shadow(0 0 5px 0 rgba(0,0,0,.1));
+	// -webkit-transition: box-shadow .5s ease-out;
+	// transition: box-shadow .5s ease-out;
+	&:hover {
+		background-color: $darkYellow;
+		color: #FFF;
+		// @include box-shadow(0 0 10px 0 rgba(0,0,0,.2));
+	}
+}
+
+@media #{$mq-xs} {
+	.wrapper {
+		padding-top: 75px;
+		@include all-transition(.5);
+		min-height: calc(100vh - 25px);
+	}
+	.homepage-icon {
+		display: inline-block;
+		margin-right: 10px;
+	}
+	.btn {
+		margin-top: 3px;
+	}
+	.register-btn {
+		text-align: center;
+		margin-top: 15px;
+		color: rgba(128,128,128,0.75);
+	}
+	
+	.language_container {
+		text-align: left;
+		padding: 0 15px;
+		margin-bottom: 25px;
+
+		.language-label {
+			color: rgba(128,128,128,0.75);
+		}
+		a {
+			color: $textColor;
+			&:hover, 
+			strong {
+				color: $darkYellow;
+			}
+		}
+	}
+	
+	.alert {
+		position: absolute;
+		width: 100%;
+		z-index: 1000;
+	}
+	.sort {
+		opacity: .25;
+		font-size: .8em;
+		text-align: center;
+
+	}
+
+	.sort--alt {
+		position: relative;
+		top: 7px;
+		opacity: .5;
+		text-align: left; 
+
+	}
+	.status-bar {
+		margin-right: 200px;
+	}
+	.username-container {
+		text-align: center;
+	}
+	.username {
+		font-size: 18px;
+		font-weight: normal;
+		line-height: 50px;
+		color: $dynamicGrey;
+		width: 100%;
+		text-align: center;
+
+		&:hover {
+			text-decoration: none;
+			color: $dynamicGrey;
+		}
+	}
+
+	#abs_url {
+		background-color: transparent;
+		border: none;
+		box-shadow: none;
+		padding:0;
+	}
+
+	.status-bar {
+		position: fixed;
+		height: 50px;
+		left: 0;
+		width: 100%;
+		// background-color: $blueGrey;
+		background-color: $lightYellow;
+		border-bottom: 1px solid $lightGrey;
+		padding: 0 15px;
+		z-index: 101;
+		
+		@include all-transition(.5, ease-out);
+		.logout-container {
+			text-align: right;
+			.logout {
+				font-size: 22px;
+				line-height: 46px;
+				color: $dynamicGrey;
+				&:hover {
+					color: $dynamicGrey;
+				}
+			}
+		}
+	}
+}
+
+@media #{$mq-sm} {
+	.pwd-recover {
+		text-align: right;
+		a {
+			padding:0;
+			color: #999;
+			margin-top: 0;
+			&:hover {
+				color: $darkYellow;
+				text-decoration: none;
+			}
+		}
+	}
+
+
+	.username {
+		display: inline;
+		font-size: 20px;
+		font-weight: normal;
+		line-height: 50px;
+		color: lighten($dynamicGrey, 50);
+		text-align: center;
+
+		&:hover {
+			text-decoration: none;
+			color: lighten($dynamicGrey, 50);
+			em {
+				color: $darkYellow;
+			}
+		}
+	}
+
+	.status-bar {
+		background-color: #FFF;
+		border-bottom: 1px solid $lightGrey;
+		&.logged-in {
+			margin-left: 200px;
+			width: calc(100% - 200px);
+		}
+		.logout-container {
+			.logout {
+				font-size: 14px;
+				color: rgba(128, 128, 128, 0.75);
+				&:hover {
+					color: $darkYellow;
+				}
+			}
+		}
+	}
+	.wrapper, 
+	footer {
+		padding-left: 15px;
+		padding-right: 15px;
+		&.logged-in {
+			margin-left: 200px;
+			width: calc(100% - 200px);
+		}
+	}
+	.utility_btn {
+		text-align: right;
+	}
+
+	.alert {
+		width: calc(100% - 200px);
+		left: 200px;
+	}
+
+}
+
+@media #{$mq-md} {
+	.wrapper,
+	footer {
+		&.logged-in {
+			margin-left: 250px;
+			width: calc(100% - 250px);
+		}
+		
+	}
+	.alert {
+		width: calc(100% - 250px);
+		left: 250px;
+	}
+	.status-bar {
+		background-color: #FFF;
+		border-bottom: 1px solid $lightGrey;
+		&.logged-in {
+			margin-left: 250px;
+			width: calc(100% - 250px);
+		}
+	}
+}
+
+@media #{$mq-lg} {
+	.wrapper {
+	}
+}
