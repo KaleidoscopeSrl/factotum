@@ -4,28 +4,42 @@ _We love KISSing the DRY PIE_.
 
 ### Installation
 
+Install a fresh laravel application
+```
+laravel new [project name]
+```
+
 Install wia composer:
 ```
 composer require kaleidoscope/factotum
 ```
 And add these services providers in config/app.php:
 ```php
-Intervention\Image\ImageServiceProvider::class,
-Barryvdh\Debugbar\ServiceProvider::class,
-Kaleidoscope\Factotum\FactotumServiceProvider::class,
+'providers' => [
+    ...
+    Intervention\Image\ImageServiceProvider::class,
+    Barryvdh\Debugbar\ServiceProvider::class,
+    Kaleidoscope\Factotum\FactotumServiceProvider::class,
+    ...
+]
 ```
 
 Then register Facade class aliases:
 
 ```php
-'Image'                       => Intervention\Image\Facades\Image::class,
-'PrintContentsTree'           => Kaleidoscope\Factotum\Helpers\PrintContentsTreeHelper::class,
-'PrintCategoriesTree'         => Kaleidoscope\Factotum\Helpers\PrintCategoriesTreeHelper::class,
-'PrintContentsDropdownTree'   => Kaleidoscope\Factotum\Helpers\PrintContentsDropdownTreeHelper::class,
-'PrintCategoriesDropdownTree' => Kaleidoscope\Factotum\Helpers\PrintCategoriesDropdownTreeHelper::class,
-'PrintMenu'                   => Kaleidoscope\Factotum\Helpers\PrintMenuHelper::class,
-'PrintCategories'             => Kaleidoscope\Factotum\Helpers\PrintCategoriesHelper::class,
-'PrintField'=> Kaleidoscope\Factotum\Helpers\PrintFieldHelper::class,
+'aliases' => [
+    ...
+    'Image'                       => Intervention\Image\Facades\Image::class,
+    'PrintContentsTree'           => Kaleidoscope\Factotum\Helpers\PrintContentsTreeHelper::class,
+    'PrintCategoriesTree'         => Kaleidoscope\Factotum\Helpers\PrintCategoriesTreeHelper::class,
+    'PrintContentsDropdownTree'   => Kaleidoscope\Factotum\Helpers\PrintContentsDropdownTreeHelper::class,
+    'PrintCategoriesDropdownTree' => Kaleidoscope\Factotum\Helpers\PrintCategoriesDropdownTreeHelper::class,
+    'PrintMenu'                   => Kaleidoscope\Factotum\Helpers\PrintMenuHelper::class,
+    'PrintCategories'             => Kaleidoscope\Factotum\Helpers\PrintCategoriesHelper::class,
+    'PrintField'                  => Kaleidoscope\Factotum\Helpers\PrintFieldHelper::class,
+    ...
+]
+
 ```
 
 Publish CMS parts:

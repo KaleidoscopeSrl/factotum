@@ -3,7 +3,7 @@
     "description": "Laravel-based CMS baked by Kaleidoscope Srl",
     "keywords": ["cms", "laravel"],
     "license": "MIT",
-    "type": "cms project",
+    "type": "cms-project",
     "require": {
         "php": ">=5.6.4",
         "laravel/laravel": "^5.4",
@@ -17,9 +17,9 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "Kaleidoscope\\Factotum\\Library": "packages/Kaleidoscope/Factotum/src/app/Library",
-            "Kaleidoscope\\Factotum\\Helpers": "packages/Kaleidoscope/Factotum/src/app/Helpers",
-            "Kaleidoscope\\Factotum\\Http\\Middleware": "packages/Kaleidoscope/Factotum/src/app/Http/Middleware"
+            "Kaleidoscope\\Factotum\\Library\\": "packages/Kaleidoscope/Factotum/src/app/Library",
+            "Kaleidoscope\\Factotum\\Helpers\\": "packages/Kaleidoscope/Factotum/src/app/Helpers",
+            "Kaleidoscope\\Factotum\\Http\\Middleware\\": "packages/Kaleidoscope/Factotum/src/app/Http/Middleware"
         },
         "files": [
             "Kaleidoscope/Factotum/Library/ContentSearch.php",
