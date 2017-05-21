@@ -57,9 +57,9 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		// Migrations & Seeds
-		$this->loadMigrationsFrom(__DIR__ . '/migrations');
+		$this->loadMigrationsFrom(__DIR__ . '/database/migrations');
 		$this->publishes([
-			__DIR__ . '/database/seeds/'      => database_path('/seeds')
+			__DIR__ . '/database/seeds/' => database_path('/seeds')
 		], 'migrations');
 
 
