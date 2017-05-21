@@ -15,7 +15,7 @@ class CreateController extends Controller
 	public function create()
 	{
 		$roles = Role::all();
-		return view('admin.user.edit')
+		return view('factotum::admin.user.edit')
 					->with('title', Lang::get('factotum::user.add_new_user') )
 					->with('postUrl', url('/admin/user/store') )
 					->with('roles', $roles);

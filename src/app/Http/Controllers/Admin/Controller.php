@@ -45,6 +45,6 @@ class Controller extends BaseController
 
 	public function index()
 	{
-		return view('admin.index');
+		return view('factotum::admin.index');
 	}
 }

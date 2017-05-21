@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('factotum::admin.layouts.app')
 
 <!-- Main Content -->
 @section('content')
@@ -17,26 +17,19 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/admin/auth/password/email') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            
-
-                            <div class="col-sm-12">
-                                <label for="email" class="control-label">@lang('factotum::auth.email')</label>
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                        <?php
+                        $email = new stdClass();
+                        $email->name        = 'email';
+                        $email->label       =  Lang::get('factotum::auth.email');
+                        $email->mandatory   = true;
+                        $email->type        = 'email';
+                        $email->show_errors = true;
+                        PrintField::print_field( $email, $errors, old('email') ? old('email') : null );
+                        ?>
 
                         <div class="form-group">
                             <div class="col-xs-12">
-                                <button type="submit" class="btn btn-primary">
-                                    @lang('factotum::auth.reset_password_link')
-                                </button>
+                                <button type="submit" class="btn btn-primary">@lang('factotum::auth.reset_password_link')</button>
                             </div>
                         </div>
                     </form>

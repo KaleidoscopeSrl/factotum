@@ -12,7 +12,7 @@ class ReadController extends Controller
 
 	public function index()
 	{
-		return view('admin.tools.list');
+		return view('factotum::admin.tools.list');
 	}
 
 	public function resizeMedia( Request $request )

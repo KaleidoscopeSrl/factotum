@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('factotum::admin.layouts.app')
 
 @section('content')
 
@@ -19,10 +19,10 @@
 							<div class="col-md-6">
 								<?php
 								$firstName = new stdClass();
-								$firstName->name      = 'first_name';
-								$firstName->label     = Lang::get('factotum::user.first_name');
-								$firstName->mandatory = true;
-								$firstName->type      = 'text';
+								$firstName->name        = 'first_name';
+								$firstName->label       = Lang::get('factotum::user.first_name');
+								$firstName->mandatory   = true;
+								$firstName->type        = 'text';
 								$firstName->show_errors = true;
 								PrintField::print_field( $firstName, $errors, isset($user) ? $user->profile->first_name : null );
 								?>
@@ -30,10 +30,10 @@
 							<div class="col-md-6">
 								<?php
 								$lastName = new stdClass();
-								$lastName->name      = 'last_name';
-								$lastName->label     = Lang::get('factotum::user.last_name');
-								$lastName->mandatory = true;
-								$lastName->type      = 'text';
+								$lastName->name        = 'last_name';
+								$lastName->label       = Lang::get('factotum::user.last_name');
+								$lastName->mandatory   = true;
+								$lastName->type        = 'text';
 								$lastName->show_errors = true;
 								PrintField::print_field( $lastName, $errors, isset($user) ? $user->profile->last_name : null );
 								?>

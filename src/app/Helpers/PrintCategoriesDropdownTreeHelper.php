@@ -38,10 +38,6 @@ class PrintCategoriesDropdownTreeHelper {
 	{
 		foreach( $options as $opt ) {
 
-//			if ( !$opt['parent_id'] ) {
-//				$counter = 0;
-//			}
-
 			$selected = '';
 			if (self::$multiple) {
 				if (( is_array(old(self::$name)) && in_array($opt['id'], old(self::$name)) ) ||
@@ -72,7 +68,6 @@ class PrintCategoriesDropdownTreeHelper {
 
 	protected static function print_single_opt( $opt, $counter, $selected )
 	{
-		//$counter = ( !$opt['parent_id'] ? 0 : $counter );
 ?>
 		<option value="<?php echo $opt['id']; ?>"<?php echo $selected; ?>>
 			<?php echo str_repeat('— ', $counter) . ( isset($opt['title']) ? $opt['title'] : $opt['label'] ); ?>

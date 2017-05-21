@@ -23,7 +23,7 @@ class UpdateController extends Controller
 			$contentField->resizes = Utility::convertOptionsTextToAssocArray( $contentField->resizes );
 		}
 
-		return view('admin.content_field.edit')
+		return view('factotum::admin.content_field.edit')
 					->with('contentField', $contentField)
 					->with('title', Lang::get('factotum::content_field.edit_content_field'))
 					->with('fieldTypes', $this->fieldTypes)

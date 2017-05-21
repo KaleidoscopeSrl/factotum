@@ -18,9 +18,9 @@ class PrintFieldHelper {
 		self::$errors = $errors;
 
 		if ( $default ) {
-			self::$default = $default;
+			self::$default = old( self::$field->name, $default );
 		} else {
-			self::$default = null;
+			self::$default = old( self::$field->name );
 		}
 
 
@@ -31,7 +31,10 @@ class PrintFieldHelper {
 			 <?php self::print_label(); ?>
 <?php
 				switch ( self::$field->type ) {
-					case 'text':
+					case 'hidden':
+						self::print_hidden();
+					break;
+				    case 'text':
 						self::print_input();
 					break;
 					case 'email':
@@ -86,13 +89,9 @@ class PrintFieldHelper {
 						self::print_multiple_linked_content();
 					break;
 				}
-?>
-				<?php if ( isset( self::$field->show_errors ) && self::$field->show_errors ) { ?>
-				<span class="help-block error">
-					<strong><?php echo $errors->first( self::$field->name ); ?></strong>
-				</span>
-				<?php } ?>
 
+				self::print_errors();
+?>
 
 			 </div>
 		</div>
@@ -100,7 +99,14 @@ class PrintFieldHelper {
 <?php
 	}
 
-
+    private static function print_data_attrs()
+    {
+		if ( isset(self::$field->data_attrs) && is_array(self::$field->data_attrs) && count(self::$field->data_attrs) > 0 ) {
+		    foreach ( self::$field->data_attrs as $key => $value ) {
+		        echo ' data-' . $key . '="' . $value . '" ';
+            }
+		}
+    }
 
 	private static function print_label()
 	{
@@ -115,13 +121,20 @@ class PrintFieldHelper {
 		}
 	}
 
-
+	private static function print_hidden($type = 'text')
+	{
+		self::print_input('hidden');
+	}
 
 	private static function print_input($type = 'text')
 	{
 ?>
-		<input id="<?php echo self::$field->name; ?>" type="<?php echo $type; ?>" class="form-control"
+		<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+               type="<?php echo $type; ?>" class="form-control"
 			   name="<?php echo self::$field->name; ?>"
+               <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+			   <?php echo ( isset(self::$field->maxlength) && self::$field->maxlength ? ' maxlength="' . self::$field->maxlength . '" ' : ''); ?>
+               <?php self::print_data_attrs(); ?>
 			   value="<?php echo old( self::$field->name, (isset(self::$default) ? self::$default : null)); ?>"
 			   <?php echo ( self::$field->mandatory ? 'required' : '' ); ?> autofocus>
 
@@ -139,12 +152,15 @@ class PrintFieldHelper {
 	}
 
 
-	private static function print_textarea( $wysiwyg = false)
+	private static function print_textarea( $wysiwyg = false )
 	{
 ?>
 		<textarea class="form-control<?php echo ($wysiwyg ? ' wysiwyg' : ''); ?>"
-			id="<?php echo self::$field->name; ?>"
-			name="<?php echo self::$field->name; ?>"
+            id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+            name="<?php echo self::$field->name; ?>"
+			<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+			<?php echo ( isset(self::$field->maxlength) && self::$field->maxlength ? ' maxlength="' . self::$field->maxlength . '" ' : ''); ?>
+			<?php self::print_data_attrs(); ?>
 			<?php echo ( self::$field->mandatory ? 'required' : '' ) . (!$wysiwyg ? ' autofocus' : ''); ?>><?php echo old( self::$field->name, (isset(self::$default) ? self::$default : null)); ?></textarea>
 
 <?php
@@ -157,8 +173,11 @@ class PrintFieldHelper {
 			self::$default = Utility::convertIsoDateToHuman( self::$default );
 		}
 ?>
-		<input id="<?php echo self::$field->name; ?>" type="text" class="form-control date"
+		<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+               type="text" class="form-control date"
 			   name="<?php echo self::$field->name; ?>"
+			   <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+			   <?php self::print_data_attrs(); ?>
 			   value="<?php echo old( self::$field->name, (isset(self::$default) ? self::$default : null)); ?>"
 			<?php echo ( self::$field->mandatory ? 'required' : '' ); ?> autofocus>
 <?php
@@ -171,8 +190,11 @@ class PrintFieldHelper {
 			self::$default = Utility::convertIsoDateTimeToHuman( self::$default );
 		}
 ?>
-		<input id="<?php echo self::$field->name; ?>" type="text" class="form-control datetime"
+		<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+               type="text" class="form-control datetime"
 			   name="<?php echo self::$field->name; ?>"
+			   <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+			   <?php self::print_data_attrs(); ?>
 			   value="<?php echo old( self::$field->name, (isset(self::$default) ? self::$default : null)); ?>"
 			<?php echo ( self::$field->mandatory ? 'required' : '' ); ?> autofocus>
 		<?php
@@ -186,9 +208,11 @@ class PrintFieldHelper {
 		<div class="form-control" style="border: none; box-shadow: none;">
             <div class="checkbox">
                 <label for="<?php echo self::$field->name; ?>">
-                    <input type="checkbox" id="<?php echo self::$field->name; ?>"
+                    <input type="checkbox" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
                            name="<?php echo self::$field->name; ?>"
                            value="<?php echo key($options); ?>"
+						   <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+						   <?php self::print_data_attrs(); ?>
                            <?php echo ( self::$field->mandatory ? 'required' : '' ); ?>
                            <?php echo ( (isset(self::$default) && self::$default == key($options)) || ( old(self::$field->name) == key($options) ) ? ' checked' : '' ); ?>>
                     <span class="checkbox-material"><span class="check"></span></span>
@@ -219,7 +243,8 @@ class PrintFieldHelper {
 						$check = true;
 					}
 ?>
-					<input type="checkbox" id="<?php echo self::$field->name . '_' . $index; ?>"
+					<input type="checkbox"
+                           id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name) . '_' . $index; ?>"
 						   name="<?php echo self::$field->name; ?>[]"
 						   <?php echo ( $check ? 'checked="checked"' : null ); ?>
 						   <?php //echo ( self::$field->mandatory ? 'required' : '' ); ?>
@@ -242,7 +267,9 @@ class PrintFieldHelper {
 ?>
 	<div class="select-wrapper">
 		<select name="<?php echo self::$field->name; ?>"
-				id="<?php echo self::$field->name; ?>"
+                id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+			    <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+			    <?php self::print_data_attrs(); ?>
 				class="form-control" autofocus
 				<?php echo ( self::$field->mandatory ? 'required' : '' ); ?>>
 <?php
@@ -282,7 +309,9 @@ class PrintFieldHelper {
 ?>
 	<div class="select-wrapper">
 		<select name="<?php echo self::$field->name; ?>[]" multiple="multiple"
-				id="<?php echo self::$field->name; ?>"
+                id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+			    <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+			    <?php self::print_data_attrs(); ?>
 				class="form-control multiselect"
 			<?php echo ( self::$field->mandatory ? 'required' : '' ); ?>>
 			<?php
@@ -317,11 +346,13 @@ class PrintFieldHelper {
 <?php
 			$index = 0;
 			foreach ( $options as $value => $label ) { ?>
-				<input type="radio" id="<?php echo self::$field->name . '_' . $index; ?>"
+				<input type="radio" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name) . '_' . $index; ?>"
 					   name="<?php echo self::$field->name; ?>"
+					    <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+					    <?php self::print_data_attrs(); ?>
 					   value="<?php echo $value; ?>"
 					<?php echo ( self::$field->mandatory ? 'required' : '' ); ?>
-					<?php echo ( (isset(self::$default) && self::$default == $value) || ( old(self::$field->name) == $value)  ? ' checked' : '' ); ?>>
+					<?php echo ( (isset(self::$default) && self::$default == $value) || ( old(self::$field->name) == $value)  ? ' checked="checked"' : '' ); ?>>
 				<label for="<?php echo self::$field->name . '_' . $index; ?>"><?php echo $label; ?></label>
 <?php
 				$index++;
@@ -343,7 +374,7 @@ class PrintFieldHelper {
 
 		<div class="needsclick dropzone_cont"
 			 data-max-files="1"
-			 data-field_id="<?php echo self::$field->id; ?>"
+			 data-field_id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
 			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
 			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
 			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
@@ -353,7 +384,8 @@ class PrintFieldHelper {
 			</div>
 
 			<div class="fallback">
-				<input id="<?php echo self::$field->name; ?>" type="file" class="form-control"
+				<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+                       type="file" class="form-control"
 					   name="<?php echo self::$field->name; ?>" <?php echo $required; ?> autofocus>
 			</div>
 
@@ -375,7 +407,7 @@ class PrintFieldHelper {
 
 		</div>
 
-		<input type="hidden" id="<?php echo self::$field->name; ?>_hidden"
+		<input type="hidden" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>_hidden"
 			   name="<?php echo self::$field->name; ?>_hidden"
 			   value="<?php echo ( isset(self::$default) && is_array(self::$default) ? self::$default['id'] : '' ); ?>" />
 
@@ -393,7 +425,7 @@ class PrintFieldHelper {
 
 		<div class="needsclick dropzone_cont"
 			 data-max-files="1"
-			 data-field_id="<?php echo self::$field->id; ?>"
+			 data-field_id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
 			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
 			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
 			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
@@ -403,7 +435,8 @@ class PrintFieldHelper {
 			</div>
 
 			<div class="fallback">
-				<input id="<?php echo self::$field->name; ?>" type="file" class="form-control" accept="image/*" multiple
+				<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+                       type="file" class="form-control" accept="image/*" multiple
 					   name="<?php echo self::$field->name; ?>" <?php echo $required; ?> autofocus>
 			</div>
 
@@ -425,7 +458,7 @@ class PrintFieldHelper {
 
 			<?php } ?>
 
-			<input type="hidden" id="<?php echo self::$field->name; ?>_hidden"
+			<input type="hidden" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>_hidden"
 				   name="<?php echo self::$field->name; ?>_hidden"
 				   value="<?php echo ( isset(self::$default) && is_array(self::$default) ? self::$default['id'] : '' ); ?>" />
 
@@ -448,7 +481,7 @@ class PrintFieldHelper {
 
 	<div class="needsclick dropzone_cont"
 		 data-max-files="999"
-		 data-field_id="<?php echo self::$field->id; ?>"
+		 data-field_id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
 		 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
 		 data-mockfile="mockFile<?php echo self::$field->name; ?>"
 		 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
@@ -458,7 +491,8 @@ class PrintFieldHelper {
 		</div>
 
 		<div class="fallback">
-			<input id="<?php echo self::$field->name; ?>" type="file" class="form-control" accept="image/*" multiple
+			<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+                   type="file" class="form-control" accept="image/*" multiple
 				   name="<?php echo self::$field->name; ?>[]" <?php echo $required; ?> autofocus>
 		</div>
 
@@ -488,7 +522,7 @@ class PrintFieldHelper {
 
 		<?php } ?>
 
-		<input type="hidden" id="<?php echo self::$field->name; ?>_hidden"
+		<input type="hidden" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>_hidden"
 			   name="<?php echo self::$field->name; ?>_hidden"
 			   value="<?php echo ( count($tmpIDs) > 0 ? join(';', $tmpIDs) : '' ); ?>" />
 
@@ -514,18 +548,11 @@ class PrintFieldHelper {
 		PrintCategoriesDropdownTreeHelper::print_dropdown(self::$field->options, self::$field->name, self::$default, self::$field->name, 'form-control multiple multiselect', true, self::$field->mandatory);
 	}
 
-
-
-
-
-
-
-
 	private static function print_errors()
 	{
-		if (self::$errors->has( self::$field->name )) {
+		if ( isset( self::$field->show_errors ) && self::$field->show_errors && self::$errors->has( self::$field->name )) {
 ?>
-			<span class="help-block">
+			<span class="help-block error">
 				<strong><?php echo self::$errors->first( self::$field->name ); ?></strong>
             </span>
 <?php
@@ -533,7 +560,3 @@ class PrintFieldHelper {
 	}
 
 }
-
-
-
-

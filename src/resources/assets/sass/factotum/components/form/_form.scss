@@ -9,9 +9,14 @@
 			}
 		}
 
-		.form-control:focus {
-			border-color: rgba(0,0,0,.1);
-			box-shadow: 0 0 8px $lightYellow;
+		.form-group {
+			&.field-hidden {
+				margin-bottom: 0;
+			}
+			&:focus {
+				border-color: rgba(0,0,0,.1);
+				box-shadow: 0 0 8px $lightYellow;
+			}
 		}
 
 		input, 

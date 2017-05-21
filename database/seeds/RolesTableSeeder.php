@@ -32,6 +32,7 @@ class RolesTableSeeder extends Seeder
 			'manage_users'              => 0,
 			'manage_categories'         => 0,
 			'manage_media'              => 1,
+			'manage_settings'           => 0,
 		]);
     }
 }

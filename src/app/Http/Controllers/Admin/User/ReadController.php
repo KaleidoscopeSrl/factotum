@@ -8,13 +8,7 @@ class ReadController extends Controller
 {
     public function index()
 	{
-		return view('admin.user.list')
+		return view('factotum::admin.user.list')
 					->with('users', User::with('profile')->get() );
-	}
-
-	public function detail($id)
-	{
-		$user = User::find($id);
-		echo '<pre>';print_r($user);die;
 	}
 }

@@ -13,7 +13,7 @@ class UpdateController extends Controller
 	{
 		$role = Role::find($id);
 
-		return view('admin.role.edit')
+		return view('factotum::admin.role.edit')
 				->with('role', $role)
 				->with('title', Lang::get('factotum::role.edit_role'))
 				->with('postUrl', url('/admin/role/update/' . $id ) );

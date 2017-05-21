@@ -15,7 +15,7 @@ class UpdateController extends Controller
 		$user = User::find($id);
 		$roles = Role::all();
 
-		return view('admin.user.edit')
+		return view('factotum::admin.user.edit')
 				->with('user', $user)
 				->with('title', Lang::get('factotum::user.edit_user') )
 				->with('postUrl', url('/admin/user/update/' . $id ) )

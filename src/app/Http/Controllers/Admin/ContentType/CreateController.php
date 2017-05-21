@@ -12,7 +12,7 @@ class CreateController extends Controller
 
 	public function create()
 	{
-		return view('admin.content_type.edit')
+		return view('factotum::admin.content_type.edit')
 					->with('title', Lang::get('factotum::content_type.add_new_content_type'))
 					->with('postUrl', url('/admin/content-type/store') );
 	}

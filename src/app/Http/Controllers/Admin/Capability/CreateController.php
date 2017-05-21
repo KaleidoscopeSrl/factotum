@@ -16,7 +16,7 @@ class CreateController extends Controller
 	{
 		$roles = Role::all();
 		$contentTypes = ContentType::all();
-		return view('admin.capability.edit')
+		return view('factotum::admin.capability.edit')
 					->with('title', Lang::get('factotum::capability.add_new_capability'))
 					->with('postUrl', url('/admin/capability/store') )
 					->with('roles', $roles)

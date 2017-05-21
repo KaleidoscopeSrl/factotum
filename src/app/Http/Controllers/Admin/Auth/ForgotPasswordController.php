@@ -15,7 +15,7 @@ class ForgotPasswordController extends Controller
 
 	public function index()
 	{
-		return view('admin.auth.passwords.email');
+		return view('factotum::admin.auth.passwords.email');
 	}
 
 	public function broker()
@@ -38,7 +38,7 @@ class ForgotPasswordController extends Controller
 
 	public function reset(Request $request, $token = null)
 	{
-		return view('admin.auth.passwords.reset')->with(
+		return view('factotum::admin.auth.passwords.reset')->with(
 			['token' => $token, 'email' => $request->email]
 		);
 	}

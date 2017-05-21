@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('factotum::admin.layouts.app')
 
 @section('content')
 
@@ -16,7 +16,7 @@
 
 						<div class="row">
 
-							<div class="col-md-6">
+							<div class="col-xs-12">
 								<?php
 									$roleField = new stdClass();
 									$roleField->name      = 'role_id';
@@ -33,7 +33,7 @@
 								?>
 							</div>
 
-							<div class="col-md-6">
+							<div class="col-xs-12">
 								<?php
 								$contentTypeField = new stdClass();
 								$contentTypeField->name      = 'content_type_id';
@@ -54,7 +54,7 @@
 
 						<div class="row">
 
-							<div class="col-md-6">
+							<div class="col-xs-12">
 								<?php
 								$configure = new stdClass();
 								$configure->name        = 'configure';
@@ -70,7 +70,7 @@
 
 						<div class="row">
 
-							<div class="col-md-6">
+							<div class="col-xs-12">
 								<?php
 								$edit = new stdClass();
 								$edit->name        = 'edit';
@@ -86,7 +86,7 @@
 
 						<div class="row">
 
-							<div class="col-md-6">
+							<div class="col-xs-12">
 								<?php
 								$publish = new stdClass();
 								$publish->name        = 'publish';

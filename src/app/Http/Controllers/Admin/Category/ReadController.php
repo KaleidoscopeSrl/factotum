@@ -19,20 +19,14 @@ class ReadController extends Controller
 			}
 		}
 
-		return view('admin.category.list')
+		return view('factotum::admin.category.list')
 				->with('contentTypesCategories', $contentTypes);
-	}
-
-	public function detail($id)
-	{
-		$contentType = ContentType::find($id);
-		echo '<pre>';print_r($contentType->toArray());die;
 	}
 
 	public function getContentTypeCategories(Request $request)
 	{
 		$contentTypeID = $request->input('content_type_id');
-		return view('admin.category.get_content_type_categories')
+		return view('factotum::admin.category.get_content_type_categories')
 					->with('categoriesTree', Category::treeChildsArray( $contentTypeID, null, $this->currentLanguage ));
 	}
 }

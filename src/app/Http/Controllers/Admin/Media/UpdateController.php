@@ -13,7 +13,7 @@ class UpdateController extends Controller
 	{
 		$media = Media::find($id);
 
-		return view('admin.media.edit')
+		return view('factotum::admin.media.edit')
 				->with('media', $media)
 				->with('title', Lang::get('factotum::media.edit_media'))
 				->with('postUrl', url('/admin/media/update/' . $id ) );

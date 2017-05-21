@@ -17,79 +17,64 @@ if (old('type') == 'image_upload' || old('type') == 'gallery' ) {
 <div id="image_section" class="{{ $imageSectionClass }}">
 	<div class="row">
 		<div class="col-md-6">
-			<!-- Image Max Width Size -->
-			<div class="form-group{{ $errors->has('min_width_size') ? ' has-error' : '' }}">
-				<div class="col-sm-12">
-					<label for="min_width_size" class="control-label">@lang('factotum::content_field.min_width')</label>
-					<input id="min_width_size" type="text" class="form-control"
-						   name="min_width_size" value="{{ old('min_width_size', (isset($contentField) ? $contentField->min_width_size : null)) }}" autofocus>
-
-					@if ($errors->has('min_width_size'))
-						<span class="help-block">
-							<strong>{{ $errors->first('min_width_size') }}</strong>
-						</span>
-					@endif
-				</div>
-			</div>
+			<!-- Image Min Width Size -->
+			<?php
+			$imageMinWidth = new stdClass();
+			$imageMinWidth->name        = 'min_width_size';
+			$imageMinWidth->label       = Lang::get('factotum::content_field.min_width');
+			$imageMinWidth->mandatory   = false;
+			$imageMinWidth->type        = 'text';
+			$imageMinWidth->show_errors = true;
+			PrintField::print_field( $imageMinWidth, $errors, old('min_width_size', (isset($contentField) ? $contentField->min_width_size : null)) );
+			?>
 		</div>
 		<div class="col-md-6">
 			<!-- Image Max Height Size -->
-			<div class="form-group{{ $errors->has('min_height_size') ? ' has-error' : '' }}">
-				<div class="col-sm-12">
-					<label for="max_height_size" class="control-label">@lang('factotum::content_field.min_height')</label>
-					<input id="min_height_size" type="text" class="form-control"
-						   name="min_height_size" value="{{ old('min_height_size', (isset($contentField) ? $contentField->min_height_size : null)) }}" autofocus>
-
-					@if ($errors->has('min_height_size'))
-						<span class="help-block">
-							<strong>{{ $errors->first('min_height_size') }}</strong>
-						</span>
-					@endif
-				</div>
-			</div>
+			<?php
+			$imageMinHeight = new stdClass();
+			$imageMinHeight->name        = 'min_height_size';
+			$imageMinHeight->label       = Lang::get('factotum::content_field.min_height');
+			$imageMinHeight->mandatory   = false;
+			$imageMinHeight->type        = 'text';
+			$imageMinHeight->show_errors = true;
+			PrintField::print_field( $imageMinHeight, $errors, old('min_height_size', (isset($contentField) ? $contentField->min_height_size : null)) );
+			?>
 		</div>
 	</div>
 	
 	<div class="row">
 		<div class="col-md-6">
 			<!-- Image Operation -->
-			<div class="form-group{{ $errors->has('image_operation') ? ' has-error' : '' }}">
-				<div class="col-sm-12">
-					<label for="field_image_operation" class="control-label">@lang('factotum::content_field.image_operation')</label>
-					<div class="select-wrapper">
-						<select name="image_operation" id="field_image_operation" class="form-control" required autofocus>
-							@foreach ($imageOperations as $imageOp => $imageOpLabel)
-								<option value="{{ $imageOp }}"
-								<?php echo ( old('image_operation', (isset($contentField) ? $contentField->image_operation : null)) == $imageOp ? 'selected' : ''); ?>>{{ $imageOpLabel }}</option>
-							@endforeach
-						</select>
-					</div>
-
-					@if ($errors->has('image_operation'))
-						<span class="help-block">
-							<strong>{{ $errors->first('image_operation') }}</strong>
-						</span>
-					@endif
-				</div>
-			</div>
+			<?php
+			$imageOperation = new stdClass();
+			$imageOperation->name        = 'image_operation';
+			$imageOperation->id          = 'field_image_operation';
+			$imageOperation->label       = Lang::get('factotum::content_field.image_operation');
+			$imageOperation->mandatory   = true;
+			$imageOperation->type        = 'select';
+			$imageOperation->show_errors = true;
+			$opts = array();
+			foreach ($imageOperations as $ind => $lab) {
+				$opts[] =  $ind . ':' . $lab;
+			}
+			$imageOperation->options = join(';', $opts);
+			PrintField::print_field( $imageOperation, $errors, old('image_operation', (isset($contentField) ? $contentField->image_operation : null)) );
+			?>
 		</div>
+	</div>
+	<div class="row">
 		<div class="col-md-6">
 			<!-- Image B/W -->
-			<div class="form-group{{ $errors->has('image_bw') ? ' has-error' : '' }}">
-				<div class="col-sm-12">
-					<label for="image_bw" class="control-label">
-					<div class="form-control" style="border: none; box-shadow: none;">
-						<div class="checkbox">
-							<label for="remember" class="control-label mt">
-								<input type="checkbox" id="image_bw"
-								name="image_bw" value="1"
-								<?php echo (isset($contentField) && $contentField->image_bw ? ' checked' : ''); ?>>
-								<span class="checkbox-material"><span class="check"></span></span> @lang('factotum::content_field.black_white')
-							</label>
-						</div>
-					</div>
-				</div>
-			</div>
+			<?php
+			$imageBW = new stdClass();
+			$imageBW->label       = ' ';
+			$imageBW->name        = 'image_bw';
+			$imageBW->mandatory   = false;
+			$imageBW->type        = 'checkbox';
+			$imageBW->show_errors = true;
+			$imageBW->options     = '1:' . Lang::get('factotum::content_field.black_white');
+			PrintField::print_field( $imageBW, $errors, isset($contentField) ? $contentField->image_bw : null );
+			?>
 		</div>
 	</div>
 

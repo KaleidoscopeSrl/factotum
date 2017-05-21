@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('factotum::admin.layouts.app')
 
 @section('content')
 
@@ -15,7 +15,7 @@
 						<div class="col-sm-6 utility_btn">
 							@if ( auth()->user()->canConfigure($contentType->id) )
 								<a href="{{ url('/admin/content-field/create/' . $contentType->id) }}"
-								   class="btn btn-default btn-info">@lang('factotum::content_field.add_new') {{ $contentType->content_type }} @lang('factotum::content_field.field')</a>
+								   class="btn btn-default btn-info">@lang('factotum::generic.add_new') {{ $contentType->content_type }} @lang('factotum::content_field.field')</a>
 							@endif
 						</div>
 					</div>

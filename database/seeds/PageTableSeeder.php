@@ -2,12 +2,12 @@
 
 use Illuminate\Database\Seeder;
 
-use Factotum\ContentType;
-use Factotum\ContentField;
-use Factotum\Capability;
-use Factotum\Role;
-use Factotum\User;
-use Factotum\Content;
+use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\Capability;
+use Kaleidoscope\Factotum\Role;
+use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Content;
 
 class PageTableSeeder extends Seeder
 {
@@ -18,11 +18,16 @@ class PageTableSeeder extends Seeder
      */
     public function run()
     {
+//		$values = array(
+//			'content_type'  => 'page',
+//			'editable'      => 0,
+//		);
+//		DB::table( 'content_types' )->insert( $values );
+
 		$contentType = new ContentType;
 		$contentType->content_type = 'page';
 		$contentType->editable = false;
 		$contentType->save();
-
 
 		$adminRole = Role::where('role', 'admin')->first();
 		$capability = new Capability;

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class FactotumSetup extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -128,7 +128,7 @@ class CreateUsersTable extends Migration
 			$table->foreign('content_type_id')->references('id')->on('content_types')->onDelete('cascade');
 			$table->integer('user_id')->unsigned();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-			$table->integer('parent_id')->unsigned()->nullable(true)->after('status');
+			$table->integer('parent_id')->unsigned()->nullable(true);
 			$table->foreign('parent_id')->references('id')->on('contents')->onDelete('cascade');
 			$table->string('status', 25);
 			$table->string('title', 255);

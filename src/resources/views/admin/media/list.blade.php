@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('factotum::admin.layouts.app')
 
 @section('content')
 

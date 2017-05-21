@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('factotum::admin.layouts.app')
 
 @section('content')
 
@@ -11,31 +11,28 @@
 						<form class="form-horizontal" role="form" method="POST" action="{{ $postUrl }}">
 							{{ csrf_field() }}
 
-							<div class="form-group{{ $errors->has('label') ? ' has-error' : '' }}">
-								<div class="col-sm-12">
-									<label for="category_label" class="control-label">@lang('factotum::category.category_label')</label>
-									<input id="category_label" type="text" class="form-control"
-										   name="label" value="{{ old('label', (isset($category) ? $category->label : null)) }}" required autofocus>
-
-									@if ($errors->has('label'))
-									<span class="help-block">
-										<strong>{{ $errors->first('label') }}</strong>
-									</span>
-									@endif
+							<div class="row">
+								<div class="col col-xs-12">
+									<?php
+									$categoryLabel = new stdClass();
+									$categoryLabel->name        = 'label';
+									$categoryLabel->label       = Lang::get('factotum::category.category_label');
+									$categoryLabel->mandatory   = true;
+									$categoryLabel->type        = 'text';
+									$categoryLabel->show_errors = true;
+									PrintField::print_field( $categoryLabel, $errors, isset($category) ? $category->label : null );
+									?>
 								</div>
-							</div>
-
-							<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-								<div class="col-sm-12">
-									<label for="category_name" class="control-label">@lang('factotum::category.category_name')</label>
-									<input id="category_name" type="text" class="form-control"
-										  name="name" value="{{ old('name', (isset($category) ? $category->name : null)) }}" required autofocus>
-
-									@if ($errors->has('name'))
-									<span class="help-block">
-										<strong>{{ $errors->first('name') }}</strong>
-									</span>
-									@endif
+								<div class="col col-xs-12">
+									<?php
+									$categoryName = new stdClass();
+									$categoryName->name        = 'name';
+									$categoryName->label       = Lang::get('factotum::category.category_name');
+									$categoryName->mandatory   = true;
+									$categoryName->type        = 'text';
+									$categoryName->show_errors = true;
+									PrintField::print_field( $categoryName, $errors, isset($category) ? $category->name : null );
+									?>
 								</div>
 							</div>
 

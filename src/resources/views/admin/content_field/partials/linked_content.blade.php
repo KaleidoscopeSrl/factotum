@@ -13,25 +13,24 @@ if (old('type') == 'linked_content' || old('type') == 'multiple_linked_content' 
 ?>
 
 <div id="linked_content_section" class="{{ $linkedContentSectionClass }}">
-	<!-- Linked Content Type -->
-	<div class="col-md-6">
-		<div class="form-group{{ $errors->has('linked_content_type_id') ? ' has-error' : '' }}">
-			<label for="field_linked_content_type_id" class="control-label">@lang('factotum::content_field.linked_content_type')</label>
-
-			
-			<select name="linked_content_type_id" id="field_linked_content_type_id" class="form-control" autofocus>
-				@foreach ($contentTypes as $contentType)
-					<option value="{{ $contentType->id }}"
-					<?php echo ( old('linked_content_type_id', (isset($contentField) ? $contentField->linked_content_type_id : null)) == $contentType->id ? 'selected' : ''); ?>>{{ $contentType->content_type }}</option>
-				@endforeach
-			</select>
-
-			@if ($errors->has('linked_content_type_id'))
-				<span class="help-block">
-					<strong>{{ $errors->first('linked_content_type_id') }}</strong>
-				</span>
-			@endif
-
+	<div class="row">
+		<!-- Linked Content Type -->
+		<div class="col-md-6">
+			<?php
+			$linkedContentType = new stdClass();
+			$linkedContentType->name        = 'linked_content_type_id';
+			$linkedContentType->id          = 'field_linked_content_type_id';
+			$linkedContentType->label       = Lang::get('factotum::content_field.linked_content_type');
+			$linkedContentType->mandatory   = false;
+			$linkedContentType->type        = 'select';
+			$linkedContentType->show_errors = true;
+			$opts = array();
+			foreach ($contentTypes as $contentType) {
+				$opts[] =  $contentType->id . ':' . $contentType->content_type;
+			}
+			$linkedContentType->options = join(';', $opts);
+			PrintField::print_field( $linkedContentType, $errors, old('linked_content_type_id', (isset($contentField) ? $contentField->linked_content_type_id : null)) );
+			?>
 		</div>
 	</div>
 </div>

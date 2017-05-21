@@ -22,7 +22,7 @@ class RegisterController extends Controller
 	public function index()
 	{
 		$roles = Role::all();
-		return view('admin.user.register')->with('roles', $roles);
+		return view('factotum::admin.user.register')->with('roles', $roles);
 	}
 
 	public function register(Request $request)

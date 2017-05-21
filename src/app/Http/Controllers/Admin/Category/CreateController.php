@@ -13,7 +13,7 @@ class CreateController extends Controller
 	{
 		$categories = Category::treeChildsArray( $contentTypeId, null, $this->currentLanguage );
 
-		return view('admin.category.edit')
+		return view('factotum::admin.category.edit')
 					->with('title', Lang::get('factotum::category.add_new_category') )
 					->with('postUrl', url('/admin/category/store/' . $contentTypeId) )
 					->with('categoriesTree', $categories);

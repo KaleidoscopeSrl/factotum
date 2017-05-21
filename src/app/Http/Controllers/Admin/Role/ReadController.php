@@ -9,12 +9,6 @@ class ReadController extends Controller
 	public function index()
 	{
 		$roles = Role::all();
-		return view('admin.role.list')->with('roles', $roles);
-	}
-
-	public function detail($id)
-	{
-		$role = Role::find($id);
-		echo '<pre>';print_r($role->toArray());die;
+		return view('factotum::admin.role.list')->with('roles', $roles);
 	}
 }

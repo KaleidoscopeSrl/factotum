@@ -12,7 +12,7 @@ class ReadController extends Controller
 	public function index()
 	{
 		$media = DB::table('media')->paginate(25);
-		return view('admin.media.list')->with('media', $media);
+		return view('factotum::admin.media.list')->with('media', $media);
 	}
 
 

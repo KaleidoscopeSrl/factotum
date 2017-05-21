@@ -4,16 +4,23 @@ _We love KISSing the DRY PIE_.
 
 ### Installation
 
-Install a fresh laravel application
+1. Install a fresh laravel application and configure your .env file with the database keys.
 ```
 laravel new [project name]
 ```
 
-Install wia composer:
+2. Remove the default migrations and user model created by the previous command
+```
+[project_path]/database/migrations
+[project_path]/app/User.php
+```
+
+3. Install wia composer:
 ```
 composer require kaleidoscope/factotum
 ```
-And add these services providers in config/app.php:
+
+4. And add these services providers in config/app.php:
 ```php
 'providers' => [
     ...
@@ -39,19 +46,16 @@ Then register Facade class aliases:
     'PrintField'                  => Kaleidoscope\Factotum\Helpers\PrintFieldHelper::class,
     ...
 ]
-
 ```
 
-Publish CMS parts:
+5. Launch the installation process:
 ```
-php artisan vendor:publish
+php artisan factotum:install
 ```
 
-Run database migrations and seeding:
-```
-php artisan migrate
-php artisan db:seed
-```
+_Note: pay attention to the default laravel folders permissions (storage and bootstrap folders)_
+
+ENJOY FACTOTUM!!
 
 You can find the full documentation here: [Factotum documentation](https://factotum.kaleidoscope.it/docs) .
 

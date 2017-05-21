@@ -13,7 +13,7 @@ class ResizeMediaController extends Controller
 
 	public function index()
 	{
-		return view('admin.tools.resize_media')
+		return view('factotum::admin.tools.resize_media')
 					->with( 'title', 'Resize Media' )
 					->with( 'postUrl', url('/admin/tools/do-resize-media') );
 	}
@@ -28,7 +28,7 @@ class ResizeMediaController extends Controller
 				$ids[] = $image->id;
 			}
 			$ids = join( ',', $ids );
-			return view('admin.tools.do_resize_media')
+			return view('factotum::admin.tools.do_resize_media')
 						->with( 'resizableMedia', $ids )
 						->with( 'count', $media->count() );
 		} else {

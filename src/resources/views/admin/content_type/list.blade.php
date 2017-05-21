@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('factotum::admin.layouts.app')
 
 @section('content')
 
@@ -27,7 +27,7 @@
 							<th scope="row">{{ $contentType->id }}</th>
 							<td>
 								@if ( $contentType->editable || (!$contentType->editable && auth()->user()->isAdmin()) )
-									<a href="{{ url('/admin/content-type/detail/' . $contentType->id) }}">{{ $contentType->content_type }}</a>
+									<a href="{{ url('/admin/content-type/edit/' . $contentType->id) }}">{{ $contentType->content_type }}</a>
 								@else
 									{{ $contentType->content_type }}
 								@endif

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-use Factotum\User;
+use Kaleidoscope\Factotum\User;
 
 class ProfilesTableSeeder extends Seeder
 {

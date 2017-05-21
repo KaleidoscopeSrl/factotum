@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Observers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Capability;
@@ -33,14 +34,16 @@ class ContentTypeObserver
 		}
 
 		$user = Auth::user();
+		if ( $user ) {
+			$capability = new Capability();
+			$capability->role_id         = $user->role->id;
+			$capability->content_type_id = $contentType->id;
+			$capability->configure       = 1;
+			$capability->edit            = 1;
+			$capability->publish         = 1;
+			$capability->save();
 
-		$capability = new Capability();
-		$capability->role_id         = $user->role->id;
-		$capability->content_type_id = $contentType->id;
-		$capability->configure       = 1;
-		$capability->edit            = 1;
-		$capability->publish         = 1;
-		$capability->save();
+		}
 	}
 
 

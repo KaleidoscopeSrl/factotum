@@ -28,7 +28,7 @@ class SettingsController extends Controller
 			}
 		}
 
-		return view('admin.settings.edit')
+		return view('factotum::admin.settings.edit')
 					->with('postUrl', url('/admin/settings/store') )
 					->with('contents', $tmp);
 	}

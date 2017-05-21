@@ -5110,6 +5110,9 @@ select[multiple].input-lg,
 .form-horizontal .form-group {
   margin-left: -15px;
   margin-right: -15px; }
+.form-horizontal .form-group.field-hidden {
+  margin-bottom: 0;
+}
   .form-horizontal .form-group:before, .form-horizontal .form-group:after {
     content: " ";
     display: table; }
@@ -7812,6 +7815,7 @@ button.close {
       .admin-menu .user .user_info {
         display: inline-block;
         width: 150px;
+        margin-top: 15px;
         vertical-align: top; }
         .admin-menu .user .user_info a {
           color: #FFEC19; }
@@ -8504,8 +8508,7 @@ footer {
 
 .page_link {
   display: inline-block;
-  color: rgba(0, 0, 0, 0.75);
-  margin-top: 10px; }
+  color: rgba(0, 0, 0, 0.75); }
 
 .table-title {
   margin-top: 0;

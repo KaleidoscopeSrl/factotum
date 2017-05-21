@@ -59,7 +59,7 @@ class UploadController extends Controller
 
 			if ( $field ) {
 				if ( $file && ( $field->type == 'image_upload' || $field->type == 'gallery' ) ) {
-					Media::saveImage( $field, $media->url );
+					Media::saveImage( $field, storage_path( 'app/' . $media->url ) );
 				}
 			}
 

@@ -5,8 +5,7 @@ namespace Kaleidoscope\Factotum;
 use Illuminate\Database\Eloquent\Model;
 use Image;
 
-use Factotum\Library\Utility;
-use Factotum\ContentField;
+use Kaleidoscope\Factotum\Library\Utility;
 
 class Media extends Model
 {

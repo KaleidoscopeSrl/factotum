@@ -43,7 +43,6 @@ Route::group([
 
 	// Factotum - User Routes - Logged In
 	Route::get('/user/list', 'User\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\User');
-	Route::get('/user/detail/{id}', 'User\ReadController@detail')->middleware('can:view,Kaleidoscope\Factotum\User');
 	Route::get('/user/create', 'User\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\User');
 	Route::post('/user/store', 'User\CreateController@store')->middleware('can:create,Kaleidoscope\Factotum\User');
 	Route::get('/user/edit/{id}', 'User\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\User,id');
@@ -53,7 +52,6 @@ Route::group([
 
 	// Factotum - Role Routes - Logged In
 	Route::get('/role/list', 'Role\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\Role');
-	Route::get('/role/detail/{id}', 'Role\ReadController@detail')->middleware('can:view,Kaleidoscope\Factotum\Role');
 	Route::get('/role/create', 'Role\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\Role');
 	Route::post('/role/store', 'Role\CreateController@store')->middleware('can:create,Kaleidoscope\Factotum\Role');
 	Route::get('/role/edit/{id}', 'Role\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\Role,id');
@@ -63,7 +61,6 @@ Route::group([
 	// Factotum - Capability Routes - Logged In
 	Route::get('/capability', function() { return redirect('/admin/capability/list'); });
 	Route::get('/capability/list', 'Capability\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\Capability');
-	Route::get('/capability/detail/{id}', 'Capability\ReadController@detail')->middleware('can:view,Kaleidoscope\Factotum\Capability');
 	Route::get('/capability/create', 'Capability\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\Capability');
 	Route::post('/capability/store', 'Capability\CreateController@store')->middleware('can:create,Kaleidoscope\Factotum\Capability');
 	Route::get('/capability/edit/{id}', 'Capability\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\Capability');
@@ -73,7 +70,6 @@ Route::group([
 	// Factotum - Content Type Routes - Logged In
 	Route::get('/content-type', function() { return redirect('/admin/content-type/list'); });
 	Route::get('/content-type/list', 'ContentType\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\ContentType');
-	Route::get('/content-type/detail/{id}', 'ContentType\ReadController@detail')->middleware('can:view,Kaleidoscope\Factotum\ContentType');
 	Route::get('/content-type/create', 'ContentType\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\ContentType');
 	Route::post('/content-type/store', 'ContentType\CreateController@store')->middleware('can:create,Kaleidoscope\Factotum\ContentType');
 	Route::get('/content-type/edit/{id}', 'ContentType\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\ContentType,id');
@@ -84,7 +80,6 @@ Route::group([
 	Route::get('/content-field', function() { return redirect('/admin/content-field/list'); });
 	Route::get('/content-field/list', 'ContentField\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\ContentField');
 	Route::post('/content-field/sort', 'ContentField\UpdateController@sortFields')->middleware('can:view,Kaleidoscope\Factotum\ContentField');
-	Route::get('/content-field/detail/{id}', 'ContentField\ReadController@detail')->middleware('can:view,Kaleidoscope\Factotum\ContentField');
 	Route::get('/content-field/create/{content_type_id}', 'ContentField\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\ContentField,content_type_id');
 	Route::post('/content-field/store/{content_type_id}', 'ContentField\CreateController@store')->middleware('can:create,Kaleidoscope\Factotum\ContentField,content_type_id');
 	Route::get('/content-field/edit/{content_type_id}/{id}', 'ContentField\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\ContentField,content_type_id');
@@ -105,7 +100,6 @@ Route::group([
 	Route::get('/category/list', 'Category\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\Category');
 	Route::post('/category/get-by-content-type', 'Category\ReadController@getContentTypeCategories')->middleware('can:view,Kaleidoscope\Factotum\Category');
 	Route::post('/category/sort', 'Category\UpdateController@sortCategories')->middleware('can:view,Kaleidoscope\Factotum\Category');
-	Route::get('/category/detail/{id}', 'Category\ReadController@detail')->middleware('can:view,Kaleidoscope\Factotum\Category');
 	Route::get('/category/create/{content_type_id}', 'Category\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\Category,content_type_id');
 	Route::post('/category/store/{content_type_id}', 'Category\CreateController@store')->middleware('can:create,Kaleidoscope\Factotum\Category,content_type_id');
 	Route::get('/category/edit/{id}', 'Category\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\Category,id');
@@ -127,7 +121,6 @@ Route::group([
 	// Factotum - Content Routes - Logged In
 	Route::get('/content/list/{content_type_id}', 'Content\ReadController@indexList')->middleware('can:view,Kaleidoscope\Factotum\Content,content_type_id');
 	Route::post('/content/sort/{content_type_id}', 'Content\UpdateController@sortContents')->middleware('can:view,Kaleidoscope\Factotum\ContentField');
-	Route::get('/content/detail/{id}', 'Content\ReadController@detail')->middleware('can:view,Kaleidoscope\Factotum\Content,content_type_id');
 	Route::get('/content/create/{content_type_id}', 'Content\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\Content,content_type_id');
 	Route::post('/content/store/{content_type_id}', 'Content\CreateController@store')->middleware('can:create,Kaleidoscope\Factotum\Content,content_type_id');
 	Route::get('/content/edit/{id}', 'Content\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\Content,id');

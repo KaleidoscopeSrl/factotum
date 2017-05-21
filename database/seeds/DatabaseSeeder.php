@@ -16,7 +16,7 @@ use Kaleidoscope\Factotum\Role;
 use Kaleidoscope\Factotum\User;
 
 
-class FactotumSeeder extends Seeder
+class DatabaseSeeder extends Seeder
 {
 	/**
 	 * Run the database seeds.
@@ -26,7 +26,7 @@ class FactotumSeeder extends Seeder
 	public function run()
 	{
 		$path = base_path('.env');
-		if ( file_exists($path) ) {
+		if ( file_exists($path) && !env('FACTOTUM_INSTALLED') ) {
 			file_put_contents ( $path , 'FACTOTUM_INSTALLED=true', FILE_APPEND );
 		}
 
@@ -43,7 +43,9 @@ class FactotumSeeder extends Seeder
 		Role::truncate();
 		User::truncate();
 
-		Schema::drop( 'page' );
+		if (Schema::hasTable('page')) {
+			Schema::drop( 'page' );
+		}
 
 		DB::statement('SET foreign_key_checks=1');
 

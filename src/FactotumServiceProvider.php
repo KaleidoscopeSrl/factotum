@@ -22,6 +22,11 @@ use Kaleidoscope\Factotum\Observers\ContentFieldObserver;
 use Kaleidoscope\Factotum\Observers\ContentObserver;
 use Kaleidoscope\Factotum\Observers\CategoryObserver;
 
+use Kaleidoscope\Factotum\Console\Commands\CreateStorageFolders;
+use Kaleidoscope\Factotum\Console\Commands\CreateSymbolicLinks;
+use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
+
+
 class FactotumServiceProvider extends ServiceProvider
 {
 	protected $policies = [
@@ -33,16 +38,6 @@ class FactotumServiceProvider extends ServiceProvider
 		Content::class       => ContentPolicy::class,
 		Media::class         => MediaPolicy::class,
 		Category::class      => CategoryPolicy::class,
-	];
-
-	protected $helpers = [
-		'PrintCategoriesDropdownTreeHelper.php',
-		'PrintCategoriesHelper.php',
-		'PrintCategoriesTreeHelper.php',
-		'PrintContentsDropdownTreeHelper.php',
-		'PrintContentsTreeHelper.php',
-		'PrintFieldHelper.php',
-		'PrintMenuHelper.php'
 	];
 
     public function boot(GateContract $gate)
@@ -57,10 +52,7 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		// Migrations & Seeds
-		$this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-		$this->publishes([
-			__DIR__ . '/database/seeds/' => database_path('/seeds')
-		], 'migrations');
+		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
 
 		// Routes
@@ -89,14 +81,13 @@ class FactotumServiceProvider extends ServiceProvider
 		], 'public');
 
 
-
-
-
-
-
-
-
-
+		if ($this->app->runningInConsole()) {
+			$this->commands([
+				CreateStorageFolders::class,
+				CreateSymbolicLinks::class,
+				FactotumInstallation::class
+			]);
+		}
 
 		Validator::extend('allowed_types', function($attribute, $value, $parameters, $validator) {
 			if ($value == '*') {

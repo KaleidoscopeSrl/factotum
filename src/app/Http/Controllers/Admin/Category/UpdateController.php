@@ -15,7 +15,7 @@ class UpdateController extends Controller
 		$category = Category::find($id);
 		$categories = Category::treeChildsArray( $category->content_type_id, null, $this->currentLanguage, $id );
 
-		return view('admin.category.edit')
+		return view('factotum::admin.category.edit')
 					->with('category', $category)
 					->with('title', Lang::get('factotum::category.edit_category'))
 					->with('postUrl', url('/admin/category/update/' . $id) )

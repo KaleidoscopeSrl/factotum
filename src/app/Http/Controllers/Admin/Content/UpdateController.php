@@ -26,7 +26,7 @@ class UpdateController extends Controller
 		$this->_prepareContentFields( $content->content_type_id, $id );
 		$contentType = ContentType::find( $content->content_type_id );
 
-		return view('admin.content.edit')
+		return view('factotum::admin.content.edit')
 					->with('content', $content)
 					->with('title', Lang::get('factotum::content.edit') . ' ' . $contentType->content_type )
 					->with('statuses', $this->statuses)

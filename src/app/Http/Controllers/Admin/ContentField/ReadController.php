@@ -9,13 +9,7 @@ class ReadController extends Controller
 	public function index()
 	{
 		$contentTypes = ContentType::with('content_fields')->get();
-		return view('admin.content_field.list')->with('contentTypes', $contentTypes);
-	}
-
-	public function detail($id)
-	{
-		$contentType = ContentType::find($id);
-		echo '<pre>';print_r($contentType->toArray());die;
+		return view('factotum::admin.content_field.list')->with('contentTypes', $contentTypes);
 	}
 }
 

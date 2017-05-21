@@ -17,7 +17,7 @@ class UpdateController extends Controller
 
 		$roles = Role::all();
 		$contentTypes = ContentType::all();
-		return view('admin.capability.edit')
+		return view('factotum::admin.capability.edit')
 			->with('title', Lang::get('factotum::capability.edit_capability'))
 			->with('postUrl', url('/admin/capability/update/' . $id) )
 			->with('capability', $capability)

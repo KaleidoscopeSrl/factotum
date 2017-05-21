@@ -11,16 +11,10 @@ class ReadController extends Controller
 	{
 		$contents = Content::treeChildsObjects( $contentTypeId, 50, $this->currentLanguage );
 
-		return view('admin.content.list')
+		return view('factotum::admin.content.list')
 					->with('contentTypeId', $contentTypeId)
 					->with('contentType', ContentType::find($contentTypeId))
 					->with('contents', $contents);
-	}
-
-	public function detail($id)
-	{
-		$contentType = ContentType::find($id);
-		echo '<pre>';print_r($contentType->toArray());die;
 	}
 
 	public function getContentsByType($contentTypeID)

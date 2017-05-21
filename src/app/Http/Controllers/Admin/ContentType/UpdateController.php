@@ -13,7 +13,7 @@ class UpdateController extends Controller
 	{
 		$contentType = ContentType::find($id);
 
-		return view('admin.content_type.edit')
+		return view('factotum::admin.content_type.edit')
 					->with('contentType', $contentType)
 					->with('title', Lang::get('factotum::content_type.edit_content_type'))
 					->with('postUrl', url('/admin/content-type/update/' . $id ) );
