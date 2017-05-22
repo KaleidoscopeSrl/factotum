@@ -2,6 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Helpers;
 
+use Illuminate\Support\Facades\Lang;
+
 class PrintCategoriesTreeHelper {
 
 	public static function print_list( $list )
@@ -24,7 +26,13 @@ class PrintCategoriesTreeHelper {
 				</td>
 				<td width="20%">
 					<a href="<?php echo url('/admin/category/edit/' . $category->id); ?>"" class="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-					<a href="<?php echo url('/admin/category/delete/' . $category->id); ?>" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+					<a href="<?php echo url('/admin/category/delete/' . $category->id); ?>" class="delete"
+                       data-toggle="confirmation"
+                       data-title="<?php echo Lang::get('factotum::generic.are_sure'); ?>"
+                       data-btn-ok-label="<?php echo Lang::get('factotum::generic.yes'); ?>"
+                       data-btn-cancel-label="<?php echo Lang::get('factotum::generic.no'); ?>">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
 				</td>
 			</tr>
 <?php

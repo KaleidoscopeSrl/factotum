@@ -58,9 +58,21 @@ elixir(function(mix) {
 		'./bower_components/jquery-ui/ui/widgets/progressbar.js',
 		// './bower_components/searchable-list/sol-2.0.0.js',
 		'./bower_components/select2/dist/js/select2.js',
-
 		'./bower_components/dropzone/dist/dropzone.js',
+		'./bower_components/bootstrap-confirmation2/bootstrap-confirmation.js',
 
+
+		// Dashboard
+		'./bower_components/Chart.js/Chart.js',
+		'./bower_components/moment/min/moment-with-locales.js',
+		'factotum/dashboard/analytics_utility.js',
+		'factotum/dashboard/analytics_auth.js',
+		'factotum/dashboard/analytics_week_over_week.js',
+		'factotum/dashboard/analytics_year_over_year.js',
+		'factotum/dashboard/analytics_top_browsers.js',
+		'factotum/dashboard/analytics_top_countries.js',
+		'factotum/dashboard/analytics_active_users.js',
+		'factotum/dashboard/main.js',
 
 		// Content Type
 		'resources/assets/js/factotum/content-type/main.js',

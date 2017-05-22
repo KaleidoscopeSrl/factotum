@@ -38,7 +38,11 @@
 						<a href="{{ url('/admin/capability/edit/' . $capability->id) }}" class="edit">
 							<i class="fa fa-pencil" aria-hidden="true"></i>
 						</a>
-						<a href="{{ url('/admin/capability/delete/' . $capability->id) }}" class="delete">
+						<a href="{{ url('/admin/capability/delete/' . $capability->id) }}" class="delete"
+						   data-toggle="confirmation"
+						   data-title="@lang('factotum::generic.are_sure')"
+						   data-btn-ok-label="@lang('factotum::generic.yes')"
+						   data-btn-cancel-label="@lang('factotum::generic.no')">
 							<i class="fa fa-trash" aria-hidden="true"></i>
 						</a>
 					</td>

@@ -53,4 +53,6 @@ return [
 		'it-IT' => 'Italiano'
 	),
 
+	'analytics_client_id' => '',
+	'analytics_site_id'   => '',
 ];

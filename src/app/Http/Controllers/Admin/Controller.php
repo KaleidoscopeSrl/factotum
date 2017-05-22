@@ -15,15 +15,6 @@ class Controller extends BaseController
 {
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-	protected $validationMessages = [
-		'required'    => 'Il campo :attribute è obbligatorio.',
-		'email'       => 'Il campo :attribute non è una email valida',
-		'min'         => 'Il campo :attribute deve essere lungo almeno :min caratteri.',
-		'max'         => 'Il campo :attribute deve essere lungo al massimo :max caratteri.',
-		'exists'      => 'Non esiste nessun utente con questa :attribute.',
-		'date_format' => 'Il campo :attribute non è formattato correttamente'
-	];
-
 	protected $currentLanguage;
 
 	public function __construct()
@@ -45,6 +36,10 @@ class Controller extends BaseController
 
 	public function index()
 	{
-		return view('factotum::admin.index');
+		$clientId = (config('factotum.factotum.analytics_client_id') != '' ? config('factotum.factotum.analytics_client_id') : false );
+		$siteId   = (config('factotum.factotum.analytics_site_id') != '' ? config('factotum.factotum.analytics_site_id') : false );
+		return view('factotum::admin.index')
+				->with('clientId', $clientId)
+				->with('siteId', $siteId);
 	}
 }

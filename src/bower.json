@@ -23,6 +23,9 @@
     "jquery": "2.2.4",
     "jquery-ui": "jqueryui#^1.12.1",
     "dropzone": "^4.3.0",
-    "select2": "select2-dist#^4.0.3"
+    "select2": "select2-dist#^4.0.3",
+    "Chart.js": "1.0.2",
+    "moment": "momentjs#^2.18.1",
+    "bootstrap-confirmation2": "^2.4.0"
   }
 }

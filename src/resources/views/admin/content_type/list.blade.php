@@ -37,7 +37,11 @@
 								<a href="{{ url('/admin/content-type/edit/' . $contentType->id) }}" class="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 								@endif
 								@if ( $contentType->editable || (!$contentType->editable && auth()->user()->isAdmin()) )
-								<a href="{{ url('/admin/content-type/delete/' . $contentType->id) }}" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+								<a href="{{ url('/admin/content-type/delete/' . $contentType->id) }}" class="delete"
+								   data-toggle="confirmation"
+								   data-title="@lang('factotum::generic.are_sure')"
+								   data-btn-ok-label="@lang('factotum::generic.yes')"
+								   data-btn-cancel-label="@lang('factotum::generic.no')"><i class="fa fa-trash" aria-hidden="true"></i></a>
 								@endif
 							</td>
 						</tr>

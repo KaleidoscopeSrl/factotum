@@ -7,4 +7,7 @@ return [
 	'create'   => 'Create',
 	'save'     => 'Save',
 	'register' => 'Register',
+	'yes'      => 'Yes',
+	'no'       => 'No',
+	'are_sure' => 'Are you sure?',
 ];
