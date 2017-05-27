@@ -12,5 +12,25 @@
 				@lang('factotum::navigation.add_user')
 			</a>
 		</li>
+		<li>
+			<a href="{{ url('/admin/role/list') }}">
+				@lang('factotum::navigation.see_all_roles')
+			</a>
+		</li>
+		<li>
+			<a href="{{ url('/admin/role/create') }}">
+				@lang('factotum::navigation.add_role')
+			</a>
+		</li>
+		<li>
+			<a href="{{ url('/admin/capability/list') }}">
+				@lang('factotum::navigation.see_all_capabilities')
+			</a>
+		</li>
+		<li>
+			<a href="{{ url('/admin/capability/create') }}">
+				@lang('factotum::navigation.add_capability')
+			</a>
+		</li>
 	</ul>
 </li>

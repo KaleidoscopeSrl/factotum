@@ -12,5 +12,10 @@
 				@lang('factotum::navigation.add_content_type')
 			</a>
 		</li>
+		<li>
+			<a href="{{ url('/admin/content-field/list') }}">
+				@lang('factotum::navigation.content_field_list')
+			</a>
+		</li>
 	</ul>
 </li>

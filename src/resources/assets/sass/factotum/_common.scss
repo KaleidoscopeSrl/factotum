@@ -35,6 +35,7 @@ footer {
 .page_link {
 	display: inline-block;
 	color: $dynamicGrey;
+	margin-top: 10px;
 }
 
 .table-title {
@@ -53,6 +54,7 @@ footer {
 .username {
 	position: relative;
 	top: -5px;
+	font-family: $baskerville;
 }
 
 .edit,
@@ -93,7 +95,7 @@ footer {
 		margin-top: 15px;
 		color: rgba(128,128,128,0.75);
 	}
-	
+
 	.language_container {
 		text-align: left;
 		padding: 0 15px;
@@ -104,13 +106,13 @@ footer {
 		}
 		a {
 			color: $textColor;
-			&:hover, 
+			&:hover,
 			strong {
 				color: $darkYellow;
 			}
 		}
 	}
-	
+
 	.alert {
 		position: absolute;
 		width: 100%;
@@ -127,7 +129,7 @@ footer {
 		position: relative;
 		top: 7px;
 		opacity: .5;
-		text-align: left; 
+		text-align: left;
 
 	}
 	.status-bar {
@@ -137,11 +139,13 @@ footer {
 		text-align: center;
 	}
 	.username {
+		width: 100%;
+		color: $dynamicGrey;
+		font-family: $baskerville;
 		font-size: 18px;
+		font-style: italic;
 		font-weight: normal;
 		line-height: 50px;
-		color: $dynamicGrey;
-		width: 100%;
 		text-align: center;
 
 		&:hover {
@@ -167,7 +171,7 @@ footer {
 		border-bottom: 1px solid $lightGrey;
 		padding: 0 15px;
 		z-index: 101;
-		
+
 		@include all-transition(.5, ease-out);
 		.logout-container {
 			text-align: right;
@@ -232,7 +236,7 @@ footer {
 			}
 		}
 	}
-	.wrapper, 
+	.wrapper,
 	footer {
 		padding-left: 15px;
 		padding-right: 15px;
@@ -259,7 +263,7 @@ footer {
 			margin-left: 250px;
 			width: calc(100% - 250px);
 		}
-		
+
 	}
 	.alert {
 		width: calc(100% - 250px);

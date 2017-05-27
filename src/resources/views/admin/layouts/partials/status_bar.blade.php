@@ -8,7 +8,7 @@
 			</div>
 			<div class="col-xs-6 col-sm-4 username-container">
 				<a class="username" href="{{ url('/') }}">
-					<em class="logo-deco">ƒ</em>actotum	<!-- {{ config('app.name', 'Factotum') }} -->
+					ƒactotum
 				</a>
 			</div>
 			<div class="col-xs-3 col-sm-4 logout-container">

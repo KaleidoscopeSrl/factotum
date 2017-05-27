@@ -124,7 +124,6 @@ class ContentSearch {
 		} else {
 			$contentListParser = new ContentListParser( $this->_model, $this->_query->get() );
 		}
-		var_dump($this->_query->get());die;
 		$contentListParser->loadCategories( $this->_loadCategories );
 
 		return $contentListParser->getList();

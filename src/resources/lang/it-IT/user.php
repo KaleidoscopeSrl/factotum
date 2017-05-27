@@ -14,4 +14,6 @@ return [
 	'success_create_user' => 'Utente creato con successo!',
 	'success_update_user' => 'Utente aggiornato con successo!',
 	'success_delete_user' => 'Utente cancellato con successo!',
+	'delete_user_title'   => 'Cancella Utente',
+	'reassign'            => 'Riassegna i contenuti dell\'utente in cancellazione all\'utente seguente'
 ];

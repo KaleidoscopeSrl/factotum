@@ -1,0 +1,12 @@
+$mq-minw-xs: 1px;
+$mq-minw-sm: 768px;
+$mq-minw-md: 992px;
+$mq-minw-lg: 1200px;
+$mq-xs: "only screen and (min-width:" + $mq-minw-xs + ")";
+$mq-sm: "only screen and (min-width:" + $mq-minw-sm + ")";
+$mq-md: "only screen and (min-width:" + $mq-minw-md + ")";
+$mq-lg: "only screen and (min-width:" + $mq-minw-lg + ")";
+
+// Typography
+$baskerville: 'LibreBaskerville-Italic', serif;
+$roboto: 'Roboto', sans-serif;

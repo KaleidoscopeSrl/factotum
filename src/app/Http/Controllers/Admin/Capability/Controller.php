@@ -32,8 +32,8 @@ class Controller extends MainAdminController
 
 		if ($id) {
 			$capability = Capability::where('role_id', $data['role_id'])
-							 ->where('content_type_id', $data['content_type_id'])
-							 ->first();
+									 ->where('content_type_id', $data['content_type_id'])
+									 ->first();
 			if ($capability && $capability->id != $id ) {
 				$rules['role_id'] = 'required|unique:capabilities,role_id,NULL,id,content_type_id,' . $data['content_type_id'];
 			} else {

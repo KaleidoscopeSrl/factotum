@@ -76,8 +76,9 @@ class FactotumServiceProvider extends ServiceProvider
 
 		// Resources and Public
 		$this->publishes([
-			__DIR__ . '/resources/assets'     => resource_path('assets'),
-			__DIR__ . '/public/assets'        => public_path('assets')
+			__DIR__ . '/resources/assets'         => resource_path('assets'),
+			__DIR__ . '/public/assets'            => public_path('assets'),
+			__DIR__ . '/resources/views/frontend' => resource_path( 'views/frontend' )
 		], 'public');
 
 

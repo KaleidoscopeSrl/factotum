@@ -15,7 +15,7 @@ return [
 	'content_type_list'     => 'Content Types',
 	'see_all_content_types' => 'See all content types',
 	'add_content_type'      => 'Add content type',
-	'content_field_list'    => 'Content Fields',
+	'content_field_list'    => 'Content Type Fields',
 	'category_list'         => 'Categories',
 	'media_list'         	=> 'Media',
 	'settings'              => 'Settings',

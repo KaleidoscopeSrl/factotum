@@ -48,6 +48,7 @@ Route::group([
 	Route::get('/user/edit/{id}', 'User\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\User,id');
 	Route::post('/user/update/{id}', 'User\UpdateController@update')->middleware('can:update,Kaleidoscope\Factotum\User,id');
 	Route::get('/user/delete/{id}', 'User\DeleteController@delete')->middleware('can:delete,Kaleidoscope\Factotum\User,id');
+	Route::post('/user/delete/{id}', 'User\DeleteController@deleteUser')->middleware('can:delete,Kaleidoscope\Factotum\User,id');
 
 
 	// Factotum - Role Routes - Logged In
@@ -57,6 +58,8 @@ Route::group([
 	Route::get('/role/edit/{id}', 'Role\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\Role,id');
 	Route::post('/role/update/{id}', 'Role\UpdateController@update')->middleware('can:update,Kaleidoscope\Factotum\Role,id');
 	Route::get('/role/delete/{id}', 'Role\DeleteController@delete')->middleware('can:delete,Kaleidoscope\Factotum\Role,id');
+	Route::post('/role/delete/{id}', 'Role\DeleteController@deleteRole')->middleware('can:delete,Kaleidoscope\Factotum\Role,id');
+
 
 	// Factotum - Capability Routes - Logged In
 	Route::get('/capability', function() { return redirect('/admin/capability/list'); });

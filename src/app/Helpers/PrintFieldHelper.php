@@ -25,7 +25,7 @@ class PrintFieldHelper {
 
 
 ?>
-		<div class="form-group<?php echo ($errors->has('status') ? ' has-error' : '' ); ?> field-<?php echo $field->type; ?>" id="form-group-<?php echo $field->name; ?>">
+		<div class="form-group<?php echo ($errors->has(self::$field->name) ? ' has-error' : '' ); ?> field-<?php echo $field->type; ?>" id="form-group-<?php echo $field->name; ?>">
 			
 			 <div class="col-md-12">
 			 <?php self::print_label(); ?>
@@ -128,8 +128,12 @@ class PrintFieldHelper {
 
 	private static function print_input($type = 'text')
 	{
+	    $id = self::$field->name;
+	    if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+	        $id = self::$field->id;
+        }
 ?>
-		<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+		<input id="<?php echo $id; ?>"
                type="<?php echo $type; ?>" class="form-control"
 			   name="<?php echo self::$field->name; ?>"
                <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
@@ -154,9 +158,13 @@ class PrintFieldHelper {
 
 	private static function print_textarea( $wysiwyg = false )
 	{
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
 		<textarea class="form-control<?php echo ($wysiwyg ? ' wysiwyg' : ''); ?>"
-            id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+            id="<?php echo $id; ?>"
             name="<?php echo self::$field->name; ?>"
 			<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
 			<?php echo ( isset(self::$field->maxlength) && self::$field->maxlength ? ' maxlength="' . self::$field->maxlength . '" ' : ''); ?>
@@ -172,8 +180,13 @@ class PrintFieldHelper {
 		if ( self::$default ) {
 			self::$default = Utility::convertIsoDateToHuman( self::$default );
 		}
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
-		<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+		<input id="<?php echo $id; ?>"
                type="text" class="form-control date"
 			   name="<?php echo self::$field->name; ?>"
 			   <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
@@ -189,8 +202,13 @@ class PrintFieldHelper {
 		if ( self::$default ) {
 			self::$default = Utility::convertIsoDateTimeToHuman( self::$default );
 		}
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
-		<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+		<input id="<?php echo $id; ?>"
                type="text" class="form-control datetime"
 			   name="<?php echo self::$field->name; ?>"
 			   <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
@@ -204,11 +222,16 @@ class PrintFieldHelper {
 	private static function print_checkbox()
 	{
 		$options = Utility::convertOptionsTextToAssocArray(self::$field->options);
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
 		<div class="form-control" style="border: none; box-shadow: none;">
             <div class="checkbox">
                 <label for="<?php echo self::$field->name; ?>">
-                    <input type="checkbox" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+                    <input type="checkbox" id="<?php echo $id; ?>"
                            name="<?php echo self::$field->name; ?>"
                            value="<?php echo key($options); ?>"
 						   <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
@@ -230,6 +253,11 @@ class PrintFieldHelper {
 		if ( self::$default ) {
 			self::$default = Utility::convertOptionsTextToArray(self::$default);
 		}
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
 		<div class="form-control" style="border: none; box-shadow: none;">
 <?php
@@ -244,7 +272,7 @@ class PrintFieldHelper {
 					}
 ?>
 					<input type="checkbox"
-                           id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name) . '_' . $index; ?>"
+                           id="<?php echo $id . '_' . $index; ?>"
 						   name="<?php echo self::$field->name; ?>[]"
 						   <?php echo ( $check ? 'checked="checked"' : null ); ?>
 						   <?php //echo ( self::$field->mandatory ? 'required' : '' ); ?>
@@ -264,10 +292,15 @@ class PrintFieldHelper {
 	private static function print_select()
 	{
 		$options = Utility::convertOptionsTextToAssocArray( self::$field->options );
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
 	<div class="select-wrapper">
 		<select name="<?php echo self::$field->name; ?>"
-                id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+                id="<?php echo $id; ?>"
 			    <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
 			    <?php self::print_data_attrs(); ?>
 				class="form-control" autofocus
@@ -306,10 +339,15 @@ class PrintFieldHelper {
 		if ( self::$default ) {
 			self::$default = Utility::convertOptionsTextToArray(self::$default);
 		}
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
 	<div class="select-wrapper">
 		<select name="<?php echo self::$field->name; ?>[]" multiple="multiple"
-                id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+                id="<?php echo $id; ?>"
 			    <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
 			    <?php self::print_data_attrs(); ?>
 				class="form-control multiselect"
@@ -341,12 +379,17 @@ class PrintFieldHelper {
 	private static function print_radio()
 	{
 		$options = Utility::convertOptionsTextToAssocArray(self::$field->options);
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
 		<div class="form-control" style="border: none; box-shadow: none;">
 <?php
 			$index = 0;
 			foreach ( $options as $value => $label ) { ?>
-				<input type="radio" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name) . '_' . $index; ?>"
+				<input type="radio" id="<?php echo $id . '_' . $index; ?>"
 					   name="<?php echo self::$field->name; ?>"
 					    <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
 					    <?php self::print_data_attrs(); ?>
@@ -370,11 +413,16 @@ class PrintFieldHelper {
 		if ( self::$field->mandatory ) {
 			$required = ( !self::$default ? 'required' : '' );
 		}
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
 
 		<div class="needsclick dropzone_cont"
 			 data-max-files="1"
-			 data-field_id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+			 data-field_id="<?php echo $id; ?>"
 			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
 			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
 			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
@@ -421,11 +469,16 @@ class PrintFieldHelper {
 		if ( self::$field->mandatory ) {
 			$required = ( !self::$default ? 'required' : '' );
 		}
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
 
 		<div class="needsclick dropzone_cont"
 			 data-max-files="1"
-			 data-field_id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+			 data-field_id="<?php echo $id; ?>"
 			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
 			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
 			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
@@ -477,11 +530,16 @@ class PrintFieldHelper {
 		}
 
 		$tmpIDs = array();
+
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
 ?>
 
 	<div class="needsclick dropzone_cont"
 		 data-max-files="999"
-		 data-field_id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+		 data-field_id="<?php echo $id; ?>"
 		 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
 		 data-mockfile="mockFile<?php echo self::$field->name; ?>"
 		 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">

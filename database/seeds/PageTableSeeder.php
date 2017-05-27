@@ -18,12 +18,6 @@ class PageTableSeeder extends Seeder
      */
     public function run()
     {
-//		$values = array(
-//			'content_type'  => 'page',
-//			'editable'      => 0,
-//		);
-//		DB::table( 'content_types' )->insert( $values );
-
 		$contentType = new ContentType;
 		$contentType->content_type = 'page';
 		$contentType->editable = false;

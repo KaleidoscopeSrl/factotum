@@ -1,6 +1,5 @@
 <?php
 
-
 return [
 	'tool_name'            => 'Resize Media',
 	'tool_action'          => 'Resize Media',

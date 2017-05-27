@@ -4,7 +4,7 @@ namespace Kaleidoscope\Factotum\Helpers;
 
 use Illuminate\Http\Request;
 
-use Factotum\Content;
+use Kaleidoscope\Factotum\Content;
 
 class PrintMenuHelper {
 

@@ -140,17 +140,15 @@
 							@endif
 
 							@if ( $contentType->content_type == 'page' )
-								<div id="form-group-link">
-									<?php
-									$contentLink = new stdClass();
-									$contentLink->name        = 'link';
-									$contentLink->label       = Lang::get('factotum::content.link');
-									$contentLink->mandatory   = false;
-									$contentLink->type        = 'text';
-									$contentLink->show_errors = true;
-									PrintField::print_field( $contentLink, $errors, old('link', (isset($content) ? $content->link : null)) );
-									?>
-								</div>
+								<?php
+								$contentLink = new stdClass();
+								$contentLink->name        = 'link';
+								$contentLink->label       = Lang::get('factotum::content.link');
+								$contentLink->mandatory   = false;
+								$contentLink->type        = 'text';
+								$contentLink->show_errors = true;
+								PrintField::print_field( $contentLink, $errors, old('link', (isset($content) ? $content->link : null)) );
+								?>
 
 								<div id="form-group-link_title">
 									<?php

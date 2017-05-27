@@ -18,6 +18,16 @@
 	font-style: normal;
 }
 
+@font-face {
+	font-family: 'LibreBaskerville-Italic';
+	src: url('/assets/fonts/factotum/LibreBaskerville-Italic.eot');
+	src: url('/assets/fonts/factotum/LibreBaskerville-Italic.eot?#iefix') format('embedded-opentype'),
+	url('/assets/fonts/factotum/LibreBaskerville-Italic.woff') format('woff'),
+	url('/assets/fonts/factotum/LibreBaskerville-Italic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
+}
+
 body {
 	font-family: 'Roboto', helvetica, arial, sans-serif;
 	color: $textColor;

@@ -155,11 +155,10 @@ class FrontController extends Controller
 							break;
 
 						case 'action':
-							$data = array( 'data' => array(
-												'content' => $content
-										 	),
+							$data = array(
+											'data'   => array( 'content' => $content ),
 											'action' => $content->action
-										 );
+										);
 							return $data;
 							break;
 					}
@@ -233,9 +232,10 @@ class FrontController extends Controller
 		}
 
 		if ( isset($data['action']) ) {
-			return $this->{ $data['action'] }( $request, $data);
+			return app('App\Http\Controllers\Controller')->{ $data['action'] }( $request, $data );
 		} elseif ( isset( $data['data'] ) ) {
-			return view( $data['view'] )->with( $data['data'] );
+			return view( $data['view'] )
+						->with( $data['data'] );
 		} else {
 			return view( $data['view'] );
 		}
