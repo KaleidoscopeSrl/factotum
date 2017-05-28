@@ -7,7 +7,7 @@ use Kaleidoscope\Factotum\Notifications\AdminResetPassword as AdminResetPassword
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends \App\User
+class User extends Authenticatable
 {
     use Notifiable;
 

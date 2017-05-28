@@ -12,6 +12,7 @@ laravel new [project name]
 2. Remove the default migrations and user model created by the previous command
 ```
 [project_path]/database/migrations
+[project_path]/database/seeds/DatabaseSeeder.php
 [project_path]/app/User.php
 ```
 
