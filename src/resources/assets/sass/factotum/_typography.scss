@@ -12,8 +12,8 @@
 	font-family: 'Roboto';
 	src: url('/assets/fonts/factotum/Roboto-Regular.eot');
 	src: url('/assets/fonts/factotum/Roboto-Regular.eot?#iefix') format('embedded-opentype'),
-		url('/assets/fonts/factotum/Roboto-Regular.woff') format('woff'),
-		url('/assets/fonts/factotum/Roboto-Regular.ttf') format('truetype');
+		 url('/assets/fonts/factotum/Roboto-Regular.woff') format('woff'),
+		 url('/assets/fonts/factotum/Roboto-Regular.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -22,11 +22,12 @@
 	font-family: 'LibreBaskerville-Italic';
 	src: url('/assets/fonts/factotum/LibreBaskerville-Italic.eot');
 	src: url('/assets/fonts/factotum/LibreBaskerville-Italic.eot?#iefix') format('embedded-opentype'),
-	url('/assets/fonts/factotum/LibreBaskerville-Italic.woff') format('woff'),
-	url('/assets/fonts/factotum/LibreBaskerville-Italic.ttf') format('truetype');
+		 url('/assets/fonts/factotum/LibreBaskerville-Italic.woff') format('woff'),
+		 url('/assets/fonts/factotum/LibreBaskerville-Italic.ttf') format('truetype');
 	font-weight: normal;
 	font-style: italic;
 }
+
 
 body {
 	font-family: 'Roboto', helvetica, arial, sans-serif;
@@ -42,7 +43,7 @@ body {
 	position: relative;
 	top: -1px;
 	margin-right: -2px;
-	font-family: georgia, times, serif;
+	font-family: $baskerville;
 	font-size: 1.5em;
 }
 
