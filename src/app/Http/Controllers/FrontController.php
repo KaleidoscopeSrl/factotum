@@ -208,8 +208,8 @@ class FrontController extends Controller
 		return $this->_switchContent( $content );
 	}
 
-    public function index($uri = '', Request $request)
-    {
+	protected function extractContentOnIndex( $uri = '' )
+	{
 		$uri = trim($uri, '/');
 		if ( $uri != '' ) {
 			$checkLang = $this->uriParts[0];
@@ -231,15 +231,25 @@ class FrontController extends Controller
 		} else {
 			$data = $this->_getHomepage( config('factotum.factotum.main_site_language') );
 		}
+		return $data;
+	}
+
+	public function index($uri = '', Request $request)
+	{
+		$data = $this->extractContentOnIndex($uri);
 
 		if ( isset($data['action']) ) {
-			return app('App\Http\Controllers\Controller')->{ $data['action'] }( $request, $data );
-		} elseif ( isset( $data['data'] ) ) {
-			return view( $data['view'] )
-						->with( $data['data'] );
-		} else {
-			return view( $data['view'] );
-		}
-    }
 
+			return app('App\Http\Controllers\Controller')->{ $data['action'] }( $request, $data );
+
+		} elseif ( isset( $data['data'] ) ) {
+
+			return view( $data['view'] )->with( $data['data'] );
+
+		} else {
+
+			return view( $data['view'] );
+
+		}
+	}
 }
