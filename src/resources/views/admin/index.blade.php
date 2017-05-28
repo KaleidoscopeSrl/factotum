@@ -21,9 +21,7 @@
 
 					<div class="row clearfix">
 						<div class="col col-xs-12">
-							<div class="hidden">
-								<div id="embed-api-auth-container"></div>
-							</div>
+							<div id="embed-api-auth-container"></div><br>
 							<div id="active-users-container"></div>
 						</div>
 					</div>

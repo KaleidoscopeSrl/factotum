@@ -111,7 +111,7 @@
 								$contentText = new stdClass();
 								$contentText->name        = 'content';
 								$contentText->label       = Lang::get('factotum::content.content');
-								$contentText->mandatory   = true;
+								$contentText->mandatory   = false;
 								$contentText->type        = 'wysiwyg';
 								$contentText->show_errors = true;
 								PrintField::print_field( $contentText, $errors, old('content', (isset($content) ? $content->content : null)) );

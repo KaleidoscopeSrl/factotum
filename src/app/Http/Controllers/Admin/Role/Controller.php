@@ -19,6 +19,7 @@ class Controller extends MainAdminController
 		$role->manage_users         = (isset($data['manage_users']) ? 1 : 0);
 		$role->manage_categories    = (isset($data['manage_categories']) ? 1 : 0);
 		$role->manage_media         = (isset($data['manage_media']) ? 1 : 0);
+		$role->manage_settings      = (isset($data['manage_settings']) ? 1 : 0);
 		$role->save();
 
 		return $role;

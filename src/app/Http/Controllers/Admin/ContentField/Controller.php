@@ -65,7 +65,6 @@ class Controller extends MainAdminController
 		'allowed_types'  => 'The field :attribute is not in the right format.',
 	];
 
-	// TODO: lato frontend aggiungere controllo che non esista :/; all'interno delle options
 	protected function _save( Request $request, $contentField )
 	{
 		$data = $request->all();
@@ -147,20 +146,33 @@ class Controller extends MainAdminController
 
 	protected function validator(array $data, $id = null)
 	{
-		$rules = array_merge($this->basicRules, $this->optionsRules, $this->fileRules, $this->imageRules);
+		$rules = array_merge($this->basicRules, $this->optionsRules);
 
 		$rules = $this->_setNameRules($data, $rules, $id);
+		$rules = $this->_setFilesRules($data, $rules);
 		$rules = $this->_setImagesRules($data, $rules);
 		$validator = Validator::make($data, $rules);
 		return $validator;
 	}
 
+	private function _setFilesRules( $data, $rules )
+	{
+		if ( $data['type'] == 'file_upload' || $data['type'] == 'image_upload' || $data['type'] == 'gallery') {
+			$rules = array_merge($rules, $this->fileRules);
+		}
+		return $rules;
+	}
+
 	private function _setImagesRules( $data, $rules )
 	{
-		if ( isset($data['width_resize']) && isset($data['height_resize']) &&
-			$data['width_resize'] != '' && $data['height_resize'] != '' ) {
-			$rules['width_resize'] = 'required_if:type,image_upload,gallery';
-			$rules['height_resize'] = 'required_if:type,image_upload,gallery';
+		if ( $data['type'] == 'image_upload' || $data['type'] == 'gallery' ) {
+			$rules = array_merge($rules, $this->imageRules);
+
+			if ( isset($data['width_resize']) && isset($data['height_resize']) &&
+				$data['width_resize'] != '' && $data['height_resize'] != '' ) {
+				$rules['width_resize'] = 'required_if:type,image_upload,gallery';
+				$rules['height_resize'] = 'required_if:type,image_upload,gallery';
+			}
 		}
 		return $rules;
 	}
@@ -171,8 +183,8 @@ class Controller extends MainAdminController
 
 		if ($id) {
 			$contentField = ContentField::where('name', $data['name'])
-										->where('content_type_id', $data['content_type_id'])
-										->first();
+				->where('content_type_id', $data['content_type_id'])
+				->first();
 			if ($contentField && $contentField->id != $id ) {
 				$rules['name'] .= '|unique:content_fields,name,NULL,id,content_type_id,' . $data['content_type_id'];
 			}

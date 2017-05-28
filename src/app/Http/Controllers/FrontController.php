@@ -157,7 +157,8 @@ class FrontController extends Controller
 						case 'action':
 							$data = array(
 											'data'   => array( 'content' => $content ),
-											'action' => $content->action
+											'action' => $content->action,
+											'view'   => 'frontend.' . $content->page_template,
 										);
 							return $data;
 							break;
