@@ -137,15 +137,15 @@ class FactotumSetup extends Migration
 			$table->string('abs_url', 255)->nullable(true)->unique();
 			$table->string('lang', 5);
 			$table->boolean('show_in_menu');
-			$table->boolean('is_home');
+			$table->boolean('is_home')->default(false)->nullable(true);
 			$table->integer('order_no')->nullable(true);
 			$table->string('link', 255)->nullable(true);
 			$table->string('link_title', 255)->nullable(true);
 			$table->string('link_open_in', 16)->nullable(true);
 			$table->string('seo_description', 160)->nullable(true);
 			$table->string('seo_canonical_url', 255)->nullable(true);
-			$table->string('seo_robots_indexing', 10)->nullable(true);
-			$table->string('seo_robots_following', 10)->nullable(true);
+			$table->string('seo_robots_indexing', 10)->default('index')->nullable(true);
+			$table->string('seo_robots_following', 10)->default('follow')->nullable(true);
 			$table->string('fb_title', 255)->nullable(true);
 			$table->string('fb_description', 255)->nullable(true);
 			$table->integer('fb_image')->nullable(true);

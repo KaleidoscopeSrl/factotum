@@ -1,0 +1,26 @@
+.pagination {
+
+	& > .active {
+		& > a,
+		& > span {
+			color: $textColor;
+			background-color: $yellow;
+			border-color: $yellow;
+
+			&:hover,
+			&:focus {
+				color: $textColor;
+				background-color: $yellow;
+				border-color: $yellow;
+			}
+		}
+	}
+
+	& > li > a,
+	& > li > span {
+		color: $textColor;
+		&:hover {
+			color: $textColor;
+		}
+	}
+}

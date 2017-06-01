@@ -2,9 +2,10 @@
 
 @section('content')
 
-	<h1><?php echo $content['title']; ?></h1>
+	<div class="container">
+		<h1><?php echo $content->title; ?></h1>
+		<h4><?php echo $content->news_subtitle; ?></h4>
+		<p><?php echo $content->content; ?></p>
+	</div>
 
-	<?php echo $content['content']; ?>
-
-	<?php var_dump($content); ?>
 @endsection

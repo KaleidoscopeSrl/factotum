@@ -8,8 +8,10 @@ $grid-gutter-width: 40px;
 @import "bootstrap/grid";
 @import "bootstrap/utilities";
 @import "bootstrap/responsive-utilities";
+@import "bootstrap/pagination";
 
 @import "mixins";
 @import "variables";
 @import "fonts";
 @import "common";
+@import "pagination";

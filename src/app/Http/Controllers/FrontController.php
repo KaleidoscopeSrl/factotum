@@ -67,7 +67,9 @@ class FrontController extends Controller
 		$content = $contentSearch->addWhereCondition( 'abs_url', '=', url('') . '/' . $uri )
 								 ->onlyPublished()
 								 ->addLimit(1)
-								 ->search()[0];
+								 ->search();
+
+		$content =  ( $content->count() > 0 ? $content[0] : null );
 
 		if ( !$content ) {
 			$uriParts = explode( '/' , $uri );
