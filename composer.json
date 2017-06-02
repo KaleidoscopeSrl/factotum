@@ -6,6 +6,7 @@
     "type": "cms-project",
     "require": {
         "php": ">=5.6.4",
+        "doctrine/dbal": "^2.5",
         "intervention/image": "^2.3",
         "froala/wysiwyg-editor-php-sdk" : "1.0.1",
         "barryvdh/laravel-debugbar": "^2.3"

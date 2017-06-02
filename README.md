@@ -4,7 +4,7 @@ _We love KISSing the DRY PIE_.
 
 ### Laravel Setup
 
-1. Install a fresh Laravel application and configure your .env file with the database keys.
+1. Install a fresh Laravel application and **configure your .env file** with the database keys.
 ```
 laravel new [project name]
 ```
@@ -13,6 +13,7 @@ laravel new [project name]
 _Attention!!_ 
 Be sure that the **bootstrap/cache** folder 
 and the **storage** folder are writable by the web server
+
 
 4. Set the Laravel Application Key
 ```
@@ -39,7 +40,7 @@ php artisan key:generate
 composer require kaleidoscope/factotum
 ```
 
-3. And add these services providers in config/app.php:
+3. And add these services providers in **config/app.php**:
 ```php
 'providers' => [
     ...
@@ -67,7 +68,9 @@ Then register Facade class aliases:
 ]
 ```
 
-4. Launch the install:
+4. Remove the default route in the file **routes/web.php**
+
+5. Launch the install:
 ```
 php artisan factotum:install
 ```

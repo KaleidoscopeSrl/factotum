@@ -33,6 +33,6 @@ return [
 	'success_create_content'        => 'Successfully created content!',
 	'success_update_content'        => 'Successfully updated content!',
 	'success_delete_content'        => 'Successfully deleted content!',
-	'draft'                         => 'Bozza',
-	'publish'                       => 'Pubblica',
+	'draft'                         => 'Draft',
+	'publish'                       => 'Publish',
 ];

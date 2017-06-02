@@ -23,9 +23,12 @@ class ContentSearch {
 	private $_cols = array(
 		'contents.id', 'contents.content_type_id', 'user_id', 'status', 'parent_id',
 		'title', 'content', 'url', 'abs_url', 'lang',
-		'show_in_menu',
+		'show_in_menu', 'is_home',
+		'order_no',
+		'link', 'link_title', 'link_open_in',
 		'seo_description', 'seo_canonical_url', 'seo_robots_indexing', 'seo_robots_following',
-		'fb_title', 'fb_description', 'fb_image'
+		'fb_title', 'fb_description', 'fb_image',
+		'created_at', 'updated_at'
 	);
 
 	public function __construct( array $contentType )

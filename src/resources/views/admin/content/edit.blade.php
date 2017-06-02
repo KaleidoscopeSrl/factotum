@@ -279,7 +279,7 @@
 									$opts[] =  $ind . ':' . $lab;
 								}
 								$seoRobotIndexing->options = join(';', $opts);
-								PrintField::print_field( $seoRobotIndexing, $errors, old('seo_robots_indexing', (isset($content) ? $content->seo_robots_indexing : null)) );
+								PrintField::print_field( $seoRobotIndexing, $errors, old('seo_robots_indexing', (isset($content) ? $content->seo_robots_indexing : 'index')) );
 								?>
 							</div>
 							<div class="col-xs-12">
@@ -299,7 +299,7 @@
 									$opts[] =  $ind . ':' . $lab;
 								}
 								$seoRobotFollowing->options = join(';', $opts);
-								PrintField::print_field( $seoRobotFollowing, $errors, old('seo_robots_following', (isset($content) ? $content->seo_robots_following : null)) );
+								PrintField::print_field( $seoRobotFollowing, $errors, old('seo_robots_following', (isset($content) ? $content->seo_robots_following : 'follow')) );
 								?>
 							</div>
 						</div>
