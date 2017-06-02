@@ -357,4 +357,9 @@
 	</div>
 
 </form>
+
+<script type="text/javascript">
+	var editingContent = <?php echo (isset($content) ? 'true' : 'false'); ?>;
+</script>
+
 @endsection

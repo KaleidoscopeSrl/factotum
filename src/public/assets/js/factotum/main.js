@@ -38181,10 +38181,12 @@ function generatePermalink(str) {
 }
 
 $('#title').on('keyup blur focusout', function() {
-	var permalink = generatePermalink($(this).val());
-	$('#url').val(permalink);
-	var startURL = $('#abs_url').data('baseurl');
-	$('#abs_url').val( startURL + '/' + permalink );
+	if ( !editingContent ) {
+		var permalink = generatePermalink($(this).val());
+		$('#url').val(permalink);
+		var startURL = $('#abs_url').data('baseurl');
+		$('#abs_url').val( startURL + '/' + permalink );
+	}
 });
 
 $.datetimepicker.setLocale('it');

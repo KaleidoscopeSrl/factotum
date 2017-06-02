@@ -26,7 +26,7 @@ return [
 	'fb_description'	 			=> 'Facebook Description',
 	'fb_title'			 			=> 'Facebook Title',
 	'add_new'         	 			=> 'Add New',
-	'edit'           	 			=> 'Add New',
+	'edit'           	 			=> 'Edit',
 	'title'           	 			=> 'Title',
 	'actions'         	 			=> 'Action',
 	'dropzone'         	 			=> 'Drop files here or click to upload.',
