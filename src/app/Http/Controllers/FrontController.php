@@ -153,16 +153,18 @@ class FrontController extends Controller
 							break;
 
 						case 'link':
-							return redirect($content->link, 301);
+							return array(
+								'data'   => array( 'content' => $content ),
+								'link'   => $content->link
+							);
 							break;
 
 						case 'action':
-							$data = array(
+							return array(
 											'data'   => array( 'content' => $content ),
 											'action' => $content->action,
 											'view'   => 'frontend.' . $content->page_template,
 										);
-							return $data;
 							break;
 					}
 
@@ -242,7 +244,11 @@ class FrontController extends Controller
 
 		if ( isset($data['action']) ) {
 
-			return app('App\Http\Controllers\Controller')->{ $data['action'] }( $request, $data );
+			return app('App\Http\Controllers\Controller')->{$data['action']}($request, $data);
+
+		} elseif ( isset($data['link']) ) {
+
+			return redirect($data['link'], 301);
 
 		} elseif ( isset( $data['data'] ) ) {
 
