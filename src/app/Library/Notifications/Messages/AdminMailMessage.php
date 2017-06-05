@@ -12,8 +12,8 @@ class AdminMailMessage extends IlluminateMailMessage
 	 * @var string
 	 */
 	public $view = [
-		'admin.notifications.email',
-		'admin.notifications.email-plain',
+		'factotum::admin.notifications.email',
+		'factotum::admin.notifications.email-plain',
 	];
 
 }
