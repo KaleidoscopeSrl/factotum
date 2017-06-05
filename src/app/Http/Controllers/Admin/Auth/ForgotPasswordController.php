@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
-	private $redirectTo = '/admin/auth/login';
+	protected $redirectTo = '/admin';
 
 	public function index()
 	{
