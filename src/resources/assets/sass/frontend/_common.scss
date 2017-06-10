@@ -7,6 +7,12 @@ body {
 	background-position: center;
 	font-family: 'Roboto', helvetica, arial, sans-serif;
 	color: #000;
+
+	&.error_404 {
+		background-image: url(/assets/media/frontend/img/bg_404.jpg);
+		background-blend-mode: multiply;
+		-webkit-background-blend-mode: multiply;
+	}
 }
 
 .baskerville {
@@ -15,6 +21,7 @@ body {
 .tac {
 	text-align: center;
 }
+
 @media #{$mq-xs} {
 
 	.container {
@@ -137,6 +144,9 @@ body {
 		h1 {
 			text-align: left;
 			text-indent: 10px;
+			&.tac {
+				text-align: center;
+			}
 		}
 		h2 {
 			text-align: left;

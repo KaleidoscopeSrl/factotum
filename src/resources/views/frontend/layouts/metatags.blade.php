@@ -7,11 +7,11 @@
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<?php if ( $content->seo_description != '' ) { ?>
+<?php if ( isset($content) && $content->seo_description != '' ) { ?>
 <meta name="description" content="<?php echo $content->seo_description; ?>">
 <?php } ?>
 
-<?php if ( $content->seo_canonical_url != '' ) { ?>
+<?php if ( isset($content) && $content->seo_canonical_url != '' ) { ?>
 <link rel="canonical" href="<?php echo $content->seo_canonical_url; ?>" />
 <?php } ?>
 
@@ -21,20 +21,20 @@
 <meta property="og:url" content="<?php echo url(Request::path()); ?>" />
 <meta property="og:site_name" content="<?php echo config('app.name'); ?>" />
 
-<?php if ( $content->fb_title != '' ) { ?>
+<?php if ( isset($content) && $content->fb_title != '' ) { ?>
 <meta property="og:title" content="<?php echo $content->fb_title; ?> - {{ config('app.name', 'Factotum') }}" />
 <meta name="twitter:title" content="<?php echo $content->fb_title; ?> - {{ config('app.name', 'Factotum') }}" >
 <?php } ?>
 
-<?php if ( $content->fb_description != '' ) { ?>
+<?php if ( isset($content) && $content->fb_description != '' ) { ?>
 <meta property="og:description" content="<?php echo $content->fb_description; ?>" />
 <meta name="twitter:description" content="<?php echo $content->fb_description; ?>" />
 <?php } ?>
 
-<?php if ( $content->seo_canonical_url != '' ) { ?>
+<?php if ( isset($content) && $content->seo_canonical_url != '' ) { ?>
 <link rel="canonical" href="<?php echo $content->seo_canonical_url; ?>" />
 <?php } ?>
 
 <meta name="robots" content="<?php
-echo ($content->seo_robots_indexing != '' ? $content->seo_robots_indexing : 'index') .
-	($content->seo_robots_following != '' ? ',' . $content->seo_robots_following : ''); ?>" />
+echo ( isset($content) && $content->seo_robots_indexing != '' ? $content->seo_robots_indexing : 'index') .
+	( isset($content) && $content->seo_robots_following != '' ? ',' . $content->seo_robots_following : ''); ?>" />

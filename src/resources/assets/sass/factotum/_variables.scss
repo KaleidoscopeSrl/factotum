@@ -1,3 +1,4 @@
+// MEDIA QUERIES
 $mq-minw-xs: 1px;
 $mq-minw-sm: 768px;
 $mq-minw-md: 992px;
@@ -7,54 +8,76 @@ $mq-sm: "only screen and (min-width:" + $mq-minw-sm + ")";
 $mq-md: "only screen and (min-width:" + $mq-minw-md + ")";
 $mq-lg: "only screen and (min-width:" + $mq-minw-lg + ")";
 
-// Body
-$body-bg: #F8F8F8;
-// $body-bg: #FeFeFe;
-// $body-bg: #343839;
 
-// Borders
-$laravel-border-color: darken($body-bg, 10%);
-$list-group-border: $laravel-border-color;
-$navbar-default-border: $laravel-border-color;
-$panel-default-border: $laravel-border-color;
-$panel-inner-border: $laravel-border-color;
-
-// Brands
+// BOOTSTRAP COLORS
 $brand-primary: #3097D1;
 $brand-info: #8eb4cb;
 $brand-success: #2ab27b;
 $brand-warning: #cbb956;
 $brand-danger:  #bf5329;
 
-// Typography
+
+// FONTS
 $baskerville: 'LibreBaskerville-Italic', serif;
 $font-family-sans-serif: 'Raleway', sans-serif;
 $font-size-base: 14px;
 $line-height-base: 1.6;
-$text-color: #636b6f;
 
-// Navbar
-$navbar-default-bg: #fff;
 
-// Buttons
-$btn-default-color: $text-color;
-
-// Inputs
-$input-border: lighten($text-color, 40%);
-$input-border-focus: lighten($brand-primary, 25%);
-$input-color-placeholder: lighten($text-color, 30%);
-
-// Panels
-$panel-default-heading-bg: #fff;
-
-// Colors 
-
-$lightYellow: #FFEC19;
-$yellow: #F5DB00;
-$darkYellow: #F1C81C;
-
-$lightGrey: #EAEAEA;
-$blueGrey: #37474F;
-$dynamicGrey: rgba(0, 0, 0, .75);
-
+// MAIN COLORS
+$body-bg: #F8F8F8;
 $textColor: #666;
+$text-color: #666;
+
+
+// STATUS BAR COLORS
+$statusBarBottomBorderColor: #F2F2F2;
+$statusBarBackgroundColor: #FFF;
+$statusBarColor: #808080;
+$statusBarHoverColor: #777;
+$statusBarLogoutColor: rgba(0, 0, 0, .75);
+$statusBarLogoutHoverColor: #000;
+
+
+// MENU
+$menuBackgroundColor: #FFEC19;
+$menuItemColor: #444;
+$menuItemBackgroundColor: #F1C81C;
+$submenuBackgroundColor: #F5DB00;
+$submenuItemColor: #444;
+$submenuItemBackgroundColor: #F5DB00;
+$menuUserBackgroundColor: #444;
+$menuUserColor: #F5DB00;
+$menuUserHoverColor: #F1C81C;
+$menuUserAvatarBorderColor: #FFEC19;
+
+// FORM
+$input-color-placeholder: #EEE;
+$input-border: #FFEC19;
+$input-border-focus: #FFEC19;
+$formInputFocusShadow: #FFEC19;
+$formInputOutline: #FFEC19;
+$formCheckboxActive: #F1C81C;
+$formRadioBorderColor: rgba(0, 0, 0, .75);
+$formRadioActive: #F1C81C;
+$formSelectArrowColor: #F1C81C;
+$formSelectItemColor: rgba(0, 0, 0, .75);
+$formSelectItemBackgroundColor: #FFEC19;
+
+// BUTTONS AND PAGINATIONS
+$buttonColor: rgba(0, 0, 0, .75);
+$buttonBackgroundColor: #FFEC19;
+$buttonHoverBackgroundColor: #F1C81C;
+
+// DROPZONE
+$dropzoneBorderColor: #FFEC19;
+
+// TABLES
+$tableTitleColor: #FFEC19;
+$tableSubtitleColor: rgba(0, 0, 0, .75);
+$tableTitleLight: rgba(0, 0, 0, .75);
+
+// LINKS
+$linkColor: #F1C81C;
+$linkHoverColor: #CDA80D;
+

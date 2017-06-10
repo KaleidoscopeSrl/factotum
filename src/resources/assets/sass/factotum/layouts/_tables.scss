@@ -1,0 +1,157 @@
+//
+// Tables
+// --------------------------------------------------
+
+table {
+	background-color: $table-bg;
+	border-collapse: separate;
+	border-spacing: 0 10px;
+}
+caption {
+	padding-top: $table-cell-padding;
+	padding-bottom: $table-cell-padding;
+	color: $text-muted;
+	text-align: left;
+}
+th {
+	text-align: left;
+}
+
+.table {
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: $line-height-computed;
+
+	> thead,
+	> tbody,
+	> tfoot {
+		> tr {
+			> th,
+			> td {
+				padding: 10px 15px;
+			}
+		}
+	}
+	> thead {
+		> tr {
+			> th {
+				opacity: .5;
+				font-size: .8em;
+				padding: 5px 15px;
+			}
+		}
+	}
+	> tbody {
+		> tr {
+			background-color: #FFF;
+			@include box-shadow(0 1px 3px rgba(0,0,0,.07));
+			@include custom-transition ( box-shadow .1s ease-out );
+			&.ui-sortable-helper {
+				@include box-shadow(0 1px 10px rgba(0,0,0,.25));
+				width: 100%;
+				cursor: move;
+				td {
+					position: relative;
+					top:-10px;
+				}
+			}
+			td {
+				vertical-align: center;
+
+				&:first-child {
+					border-top-left-radius: 2px;
+					border-bottom-left-radius: 2px;
+				}
+				&:last-child {
+					border-top-right-radius: 2px;
+					border-bottom-right-radius: 2px;
+				}
+	
+			}
+			th {
+				&:first-child {
+					border-top-left-radius: 2px;
+					border-bottom-left-radius: 2px;
+				}
+			}
+		}
+	}
+	> thead > tr > th {
+		vertical-align: bottom;
+	}
+	> caption + thead,
+	> colgroup + thead,
+	> thead:first-child {
+		> tr:first-child {
+			> th,
+			> td {
+				border-top: 0;
+			}
+		}
+	}
+	.table {
+		background-color: $body-bg;
+	}
+}
+
+table col[class*="col-"] {
+	position: static;
+	float: none;
+	display: table-column;
+}
+table {
+	td,
+	th {
+		&[class*="col-"] {
+			position: static;
+			float: none;
+			display: table-cell;
+		}
+	}
+}
+
+
+// Responsive tables
+.table-responsive {
+	overflow-x: auto;
+	min-height: 0.01%;
+
+	@media screen and (max-width: $screen-xs-max) {
+		width: 100%;
+		margin-bottom: ($line-height-computed * 0.75);
+		overflow-y: hidden;
+		-ms-overflow-style: -ms-autohiding-scrollbar;
+
+		> .table {
+			margin-bottom: 0;
+
+			> thead,
+			> tbody,
+			> tfoot {
+				> tr {
+					> th,
+					> td {
+						white-space: nowrap;
+					}
+				}
+			}
+		}
+	}
+}
+
+.table-title {
+	margin-top: 0;
+	margin-bottom: 0.5em;
+	color: $tableTitleColor;
+}
+
+.table-subtitle {
+	margin-top: 0;
+	margin-bottom: 0.5em;
+	color: $tableSubtitleColor;
+	opacity: 0.75;
+}
+
+.table-title-light {
+	color: $tableTitleLight;
+}

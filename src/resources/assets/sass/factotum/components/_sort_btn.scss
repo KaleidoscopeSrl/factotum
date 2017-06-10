@@ -1,0 +1,23 @@
+@media #{$mq-xs} {
+
+	.sort {
+		opacity: .25;
+		font-size: .8em;
+		text-align: center;
+
+	}
+
+	.sort--alt {
+		position: absolute;
+		top: 50%; left: 15px;
+		display: block;
+		width: 30px;
+		height: 30px;
+		opacity: .5;
+		background-color: #CCC;
+		@include border-radius(100%);
+		line-height: 30px;
+		text-align: center;
+	}
+
+}

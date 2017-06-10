@@ -36,7 +36,9 @@ class DeleteController extends Controller
 
 	private function _removeMedia($media)
 	{
-		Storage::deleteDirectory( 'media/' . $media->id );
-		return Media::destroy( $media->id );
+		if ( $media ) {
+			Storage::deleteDirectory( 'media/' . $media->id );
+			return Media::destroy( $media->id );
+		}
 	}
 }

@@ -1,20 +1,18 @@
 @media #{$mq-xs} {
+
 	.form-horizontal {
 		.select-wrapper {
 			position: relative;
 			&:after {
 				display: block;
 				position: absolute;
-				top:50%;
-				right: 10px;
+				top: 50%; right: 10px;
 				width: 0;
 				height: 0;
 				border-style: solid;
 				border-width: 6px 5px 0 5px;
-				border-color: $darkYellow transparent transparent transparent;
-				width: 0;
-				height:0;
-				content:"";
+				border-color: $formSelectArrowColor transparent transparent transparent;
+				content: "";
 				@include translateY(-50%);
 				pointer-events: none;
 			}
@@ -44,18 +42,19 @@
 		}
 		.select2-results__option[aria-selected=true] {
 	    	background-color: transparent;
-	    	color: $dynamicGrey;
+	    	color: $formSelectItemColor;
 		}
 		.select2-results__option--highlighted[aria-selected] {
-		    background-color: $lightYellow;
-		    color: $dynamicGrey;
+		    background-color: $formSelectItemBackgroundColor;
+		    color: $formSelectItemColor;
 		}
 		&.select2-container--focus {
 			.select2-selection--multiple {
-				outline: $darkYellow;
+				outline: $formSelectItemBackgroundColor;
 				border-color: rgba(0,0,0,.1);
-				@include box-shadow(0 0 10px 0 $lightYellow);
+				@include box-shadow(0 0 10px 0 $formSelectItemBackgroundColor);
 			} 
 		}
 	}
+
 }

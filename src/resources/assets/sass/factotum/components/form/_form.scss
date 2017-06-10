@@ -1,5 +1,7 @@
 @media #{$mq-xs} {
+
 	.form-horizontal {
+
 		.control-label {
 			display: block;	
 			margin-bottom: 10px;
@@ -15,7 +17,7 @@
 			}
 			&:focus {
 				border-color: rgba(0,0,0,.1);
-				box-shadow: 0 0 8px $lightYellow;
+				box-shadow: 0 0 8px $formInputFocusShadow;
 			}
 		}
 
@@ -23,8 +25,8 @@
 		select,
 		textarea {
 			border-radius: 2px;
-			border-color: #eee;
-			outline: $lightYellow;
+			border-color: #EEE;
+			outline: $formInputOutline;
 			height: 36px;
 			@include box-shadow(none);
 		}
@@ -33,9 +35,11 @@
 			height: 150px;
 			resize: none;
 		}
+
 	}
+
 }
 
-@import "components/form/checkbox";
-@import "components/form/radio";
-@import "components/form/select";
+@import "checkbox";
+@import "radio";
+@import "select";

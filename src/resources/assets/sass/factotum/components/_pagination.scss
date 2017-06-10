@@ -1,26 +1,25 @@
 .pagination {
-
 	& > .active {
 		& > a,
 		& > span {
-			color: $textColor;
-			background-color: $yellow;
-			border-color: $yellow;
+			color: $buttonColor;
+			background-color: $buttonBackgroundColor;
+			border-color: $buttonBackgroundColor;
 
 			&:hover,
 			&:focus {
-				color: $textColor;
-				background-color: $yellow;
-				border-color: $yellow;
+				color: $buttonColor;
+				background-color: $buttonHoverBackgroundColor;
+				border-color: $buttonHoverBackgroundColor;
 			}
 		}
 	}
 
 	& > li > a,
 	& > li > span {
-		color: $textColor;
+		color: $buttonColor;
 		&:hover {
-			color: $textColor;
+			color: $buttonColor;
 		}
 	}
 }

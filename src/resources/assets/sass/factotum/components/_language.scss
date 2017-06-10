@@ -1,0 +1,20 @@
+@media #{$mq-xs} {
+
+	.language_container {
+		text-align: left;
+		padding: 0 15px;
+		margin-bottom: 25px;
+
+		.language-label {
+			color: rgba(128,128,128,0.75);
+		}
+		a {
+			color: $buttonColor;
+			&:hover,
+			strong {
+				color: $buttonColor;
+			}
+		}
+	}
+
+}

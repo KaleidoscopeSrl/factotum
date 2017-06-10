@@ -1,25 +1,24 @@
 @media #{$mq-xs} {
+
 	.three-bars-button {
-		display: inline-block;
 		position: relative;
-		width: 100%;
-		height: 100%;
+		top: 4px; left: 0;
 		z-index: 100;
+		display: inline-block;
+		width: 100%;
+		max-width: 50px;
+		height: 100%;
 		margin: 0;
 		padding: 0;
+		border: none;
+		@include border-radius(none);
 		font-size: 0;
 		text-indent: -9999px;
-		top:4px;
-		left:0;
 		min-height:40px;
-		// @include translateY(-50%);
 		@include appearance(none);
 		@include box-shadow(none);
-		@include border-radius(none);
-		border: none;
 		cursor: pointer;
-		max-width: 50px;
-		
+
 		&:focus {
 			outline: none;
 		}
@@ -27,18 +26,11 @@
 		&.active {
 			&::after {
 				opacity: 0;
-				transition: opacity 0s;
+				@include opacity-transition(0);
 			}
-
 			span {
 				background: none;
 			}
-
-			span:before,
-			span:after {
-				// @include transition-delay(0, .3);
-			}
-
 			span:before {
 				top: 0;
 				@include rotate(45deg);
@@ -52,9 +44,7 @@
 
 
 		span {
-			position: absolute;
-			top: 50%;
-			@include translateY(-50%);
+			@include vertically-centered;
 			display: block;
 			width: 60%;
 			height: 3px;
@@ -71,7 +61,6 @@
 			height: 3px;
 			background-color: #000;
 			@include transition-duration(.3s, .3s);
-			// @include transition-delay(. 3, 0);
 		}
 
 		span:before {
@@ -87,6 +76,7 @@
 }
 
 @media #{$mq-sm} {
+
 	.three-bars-button {
 		float: right;
 		margin: 0;
@@ -101,6 +91,6 @@
 		&:after {
 			right: -20px;
 		}
-
 	}
+
 }

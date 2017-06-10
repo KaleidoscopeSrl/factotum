@@ -2,7 +2,7 @@
 	position: relative;
 	box-sizing: border-box;
 	min-height: 150px;
-	border: 2px $lightYellow dashed;
+	border: 2px $dropzoneBorderColor dashed;
 	background: white;
 	padding: 20px 20px;
 
@@ -19,10 +19,6 @@
 		.dz-message * {
 			cursor: pointer;
 		}
-	}
-
-	&.dz-started .dz-message {
-		//display: none;
 	}
 
 	&.dz-drag-hover {

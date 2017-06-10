@@ -6,10 +6,8 @@
 					<span>menu</span>
 				</a>
 			</div>
-			<div class="col-xs-6 col-sm-4 username-container">
-				<a class="username" href="{{ url('/') }}">
-					ƒactotum
-				</a>
+			<div class="col-xs-6 col-sm-4 app_title">
+				<a href="{{ url('/') }}">factotum</a>
 			</div>
 			<div class="col-xs-3 col-sm-4 logout-container">
 				@if ( Auth::check() )
