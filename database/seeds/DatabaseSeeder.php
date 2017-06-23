@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
 			file_put_contents ( $path , 'FACTOTUM_INSTALLED=true', FILE_APPEND );
 		}
 
-		DB::statement('SET foreign_key_checks=0');
+		$this->setFKCheckOff();
 
 		Capability::truncate();
 		Category::truncate();
@@ -47,11 +47,33 @@ class DatabaseSeeder extends Seeder
 			Schema::drop( 'page' );
 		}
 
-		DB::statement('SET foreign_key_checks=1');
+		$this->setFKCheckOn();
 
 		$this->call(RolesTableSeeder::class);
 		$this->call(UsersTableSeeder::class);
 		$this->call(ProfilesTableSeeder::class);
 		$this->call(PageTableSeeder::class);
+	}
+
+	private function setFKCheckOff() {
+		switch(DB::getDriverName()) {
+			case 'mysql':
+				DB::statement('SET FOREIGN_KEY_CHECKS=0');
+			break;
+			case 'sqlite':
+				DB::statement('PRAGMA foreign_keys = OFF');
+			break;
+		}
+	}
+
+	private function setFKCheckOn() {
+		switch(DB::getDriverName()) {
+			case 'mysql':
+				DB::statement('SET FOREIGN_KEY_CHECKS=1');
+			break;
+			case 'sqlite':
+				DB::statement('PRAGMA foreign_keys = ON');
+			break;
+		}
 	}
 }

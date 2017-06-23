@@ -44,12 +44,16 @@ class Controller extends MainAdminController
 			'last_name'      => 'required|max:64',
 			'role_id'        => 'required',
 			'email'          => 'required|email|max:128',
-			'avatar'         => 'required|image',
 		);
 
 		if (!$userId) {
 			$rules['email']    = 'required|email|max:128|unique:users';
 			$rules['password'] = 'required|min:6|confirmed';
+
+			if ( $data['avatar'] != '' ) {
+				$rules['avatar'] = 'required|image';
+			}
+
 		} else {
 			$user = User::find($userId);
 			if ($data['email'] != $user->email) {
@@ -62,6 +66,7 @@ class Controller extends MainAdminController
 				$rules['avatar'] = '';
 			}
 		}
+
 		return Validator::make($data, $rules);
 	}
 

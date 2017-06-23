@@ -21,14 +21,26 @@
 					@endif
 				@endforeach
 
-				@include('factotum::admin.layouts.partials.menu_items.media')
-				@include('factotum::admin.layouts.partials.menu_items.category')
+				@if ( auth()->user()->role->manage_media )
+					@include('factotum::admin.layouts.partials.menu_items.media')
+				@endif
 
-				@include('factotum::admin.layouts.partials.menu_items.content_type')
+				@if ( auth()->user()->role->manage_categories )
+					@include('factotum::admin.layouts.partials.menu_items.category')
+				@endif
 
-				@include('factotum::admin.layouts.partials.menu_items.user')
+				@if ( auth()->user()->role->manage_content_types )
+					@include('factotum::admin.layouts.partials.menu_items.content_type')
+				@endif
 
-				@include('factotum::admin.layouts.partials.menu_items.settings')
+				@if ( auth()->user()->role->manage_users )
+					@include('factotum::admin.layouts.partials.menu_items.user')
+				@endif
+
+				@if ( auth()->user()->role->manage_settings )
+					@include('factotum::admin.layouts.partials.menu_items.settings')
+				@endif
+
 				@include('factotum::admin.layouts.partials.menu_items.tools')
 
 			</ul>
