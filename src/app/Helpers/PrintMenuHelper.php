@@ -2,7 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Helpers;
 
-use Illuminate\Http\Request;
+use Request;
 
 use Kaleidoscope\Factotum\Content;
 
@@ -40,7 +40,8 @@ class PrintMenuHelper {
 					}
 
 				} else {
-					$html .= '<a href="' . $item->abs_url . '">' . $item->title . '</a>' . "\n";
+					$html .= '<a href="' . $item->abs_url . '"'
+						. (Request::url() == $item->abs_url ? ' class="active"' : '') . '>' . $item->title . '</a>' . "\n";
 				}
 				$html .= '</li>' . "\n";
 			}

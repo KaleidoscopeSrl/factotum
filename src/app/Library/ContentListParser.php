@@ -51,6 +51,16 @@ class ContentListParser {
 
 	public function getList()
 	{
+		foreach ( $this->_contentList as $index => $content ) {
+			if ($content && $content->fb_image) {
+				$fbImage = Media::find($content->fb_image);
+				if ($fbImage) {
+					$content->fb_image = $fbImage->toArray();
+				}
+				$this->_contentList[$index] = $content;
+			}
+		}
+
 		if ( !$this->_listNeededParsing() ) {
 			return $this->_contentList;
 		} else {
@@ -60,13 +70,6 @@ class ContentListParser {
 				$tmpIDs = array();
 
 				foreach ( $this->_contentList as $index => $content ) {
-
-					if ( $content && $content->fb_image ) {
-						$fbImage = Media::find($content->fb_image);
-						if ($fbImage) {
-							$content->fb_image = $fbImage->toArray();
-						}
-					}
 
 					foreach ( $this->_fields as $fieldName => $field ) {
 

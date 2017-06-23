@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		@include('factotum::frontend.layouts.metatags', array('content' => ( isset($content) ? $content : null)) )
+		@include('frontend.layouts.metatags', array('content' => ( isset($content) ? $content : null)) )
 
 		<!-- Styles -->
 		<link href="/assets/css/frontend/main.css" rel="stylesheet">
