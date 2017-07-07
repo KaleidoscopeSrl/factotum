@@ -41,6 +41,6 @@ class FactotumInstallation extends Command
 		$this->call('migrate');
 		$this->call('db:seed');
 		$this->call('factotum:storage');
-		$this->call('factotum:storage');
+		$this->call('factotum:symlinks');
     }
 }

@@ -50,7 +50,7 @@ class Controller extends MainAdminController
 			$rules['email']    = 'required|email|max:128|unique:users';
 			$rules['password'] = 'required|min:6|confirmed';
 
-			if ( $data['avatar'] != '' ) {
+			if ( isset($data['avatar']) && $data['avatar'] != '' ) {
 				$rules['avatar'] = 'required|image';
 			}
 

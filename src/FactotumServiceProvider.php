@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 use Kaleidoscope\Factotum\Policies\UserPolicy;
@@ -42,6 +43,8 @@ class FactotumServiceProvider extends ServiceProvider
 
     public function boot(GateContract $gate)
     {
+		Schema::defaultStringLength(191);
+
     	// Publish Configurations
 		$this->publishes([
 			__DIR__ . '/config/auth.php'     => config_path('factotum/auth.php'),
