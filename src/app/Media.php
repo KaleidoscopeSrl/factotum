@@ -80,22 +80,27 @@ class Media extends Model
 	public static function retrieve( $mediaId, $fieldModel )
 	{
 		if ( !is_array($mediaId) ) {
-			$media = self::find($mediaId)->toArray();
+			$media = self::find($mediaId);
 
-			if ( isset($fieldModel->sizes) && $fieldModel->sizes != '' ) {
-				$mediaUrl = substr( $media['url'], 0, -4);
-				$ext = substr( $media['filename'], strlen($media['filename'])-3, 3 );
+			if ( $media ) {
+				$media = $media->toArray();
 
-				if ( count($fieldModel->sizes) > 0 ) {
-					$tmp = array();
-					foreach ( $fieldModel->sizes as $size ) {
-						$tmp[] = $mediaUrl . $size . '.' . $ext ;
+				if ( isset($fieldModel->sizes) && $fieldModel->sizes != '' ) {
+					$mediaUrl = substr( $media['url'], 0, -4);
+					$ext = substr( $media['filename'], strlen($media['filename'])-3, 3 );
+
+					if ( count($fieldModel->sizes) > 0 ) {
+						$tmp = array();
+						foreach ( $fieldModel->sizes as $size ) {
+							$tmp[] = $mediaUrl . $size . '.' . $ext ;
+						}
+						$media['sizes'] = $tmp;
 					}
-					$media['sizes'] = $tmp;
 				}
+				return $media;
 			}
-			return $media;
 		}
 		return $mediaId;
+
 	}
 }
