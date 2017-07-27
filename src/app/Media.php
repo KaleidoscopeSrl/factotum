@@ -101,6 +101,6 @@ class Media extends Model
 			}
 		}
 		return $mediaId;
-
 	}
+
 }

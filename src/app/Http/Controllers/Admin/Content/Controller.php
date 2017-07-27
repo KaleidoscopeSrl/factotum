@@ -124,7 +124,7 @@ class Controller extends MainAdminController
 
 		$content->user_id   = $user->id;
 		$content->status    = $data['status'];
-		$content->parent_id = $data['parent_id'];
+		$content->parent_id = (isset($data['parent_id']) ? $data['parent_id'] : null);
 		$content->title     = $data['title'];
 		$content->url       = $data['url'];
 		$content->content   = $data['content'];

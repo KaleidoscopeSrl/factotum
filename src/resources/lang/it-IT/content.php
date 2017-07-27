@@ -35,4 +35,6 @@ return [
 	'success_delete_content'        => 'Contenuto cancellato con successo!',
 	'draft'                         => 'Bozza',
 	'publish'                       => 'Pubblica',
+	'creation_date'                 => 'Data/ora creazione',
+	'updated_date'                  => 'Data/ora ultimo aggiornamento',
 ];

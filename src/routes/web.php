@@ -133,7 +133,7 @@ Route::group([
 });
 
 
-Route::group(['middleware' => ['web']], function () {
+Route::group(['middleware' => ['web', 'language']], function () {
 	Route::get('/{uri?}', 'Kaleidoscope\Factotum\Http\Controllers\FrontController@index')->where('uri', '.*');
 	Route::post('/{uri?}', 'Kaleidoscope\Factotum\Http\Controllers\FrontController@index')->where('uri', '.*');
 });

@@ -36,9 +36,9 @@ class CreateController extends Controller
 		$content = new Content;
 		$content->content_type_id = $contentTypeId;
 
-		$this->_save( $request, $content );
+		$content = $this->_save( $request, $content );
 
-		return redirect( 'admin/content/list/' . $contentTypeId )
+		return redirect( 'admin/content/edit/' . $content->id )
 						->with('message', Lang::get('factotum::content.success_create_content'));
 	}
 

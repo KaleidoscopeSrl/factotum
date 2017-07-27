@@ -47,8 +47,15 @@ class UpdateController extends Controller
 		$content = Content::find($id);
 		$this->_save( $request, $content );
 
-		return redirect( 'admin/content/list/' . $content->content_type_id )
-					->with('message', Lang::get('factotum::content.success_update_content'));
+		if ( $request->ajax() ) {
+			return response()->json([
+				'result'       => 'ok',
+				'redirect_url' => $content->abs_url
+			]);
+		} else {
+			return redirect( 'admin/content/edit/' . $content->id )
+						->with('message', Lang::get('factotum::content.success_update_content'));
+		}
 	}
 
 	public function sortContents( Request $request )

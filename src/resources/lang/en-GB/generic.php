@@ -6,6 +6,7 @@ return [
 	'update'   => 'Update',
 	'create'   => 'Create',
 	'save'     => 'Save',
+	'preview'  => 'Preview',
 	'register' => 'Register',
 	'yes'      => 'Yes',
 	'no'       => 'No',

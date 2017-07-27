@@ -226,9 +226,37 @@
 							</div>
 						@endif
 
-						<div class="form-group">
+						<div class="row">
 							<div class="col-xs-12">
-								<button type="submit" class="btn btn-primary">@lang('factotum::generic.save')</button>
+								<?php
+								$creationDate = new stdClass();
+								$creationDate->name        = 'created_at';
+								$creationDate->label       = Lang::get('factotum::content.creation_date');
+								$creationDate->mandatory   = false;
+								$creationDate->type        = 'datetime';
+								$creationDate->show_errors = true;
+								PrintField::print_field( $creationDate, $errors, old('created_at', (isset($content) ? $content->created_at : null)) );
+								?>
+							</div>
+							<div class="col-xs-12">
+								<?php
+								$updateDate = new stdClass();
+								$updateDate->name        = 'updated_at';
+								$updateDate->label       = Lang::get('factotum::content.updated_date');
+								$updateDate->mandatory   = false;
+								$updateDate->type        = 'datetime';
+								$updateDate->show_errors = true;
+								PrintField::print_field( $updateDate, $errors, old('updated_at', (isset($content) ? $content->updated_at : null)) );
+								?>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-xs-6 btn_container">
+								<button type="submit" class="btn btn-primary" name="_save" value="save">@lang('factotum::generic.save')</button>
+								<?php if ( isset($content) ) { ?>
+								<a class="btn btn-primary" id="preview">@lang('factotum::generic.preview')</a>
+								<?php } ?>
 							</div>
 						</div>
 					</div>

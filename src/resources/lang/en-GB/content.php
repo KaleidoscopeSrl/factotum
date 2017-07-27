@@ -35,4 +35,6 @@ return [
 	'success_delete_content'        => 'Successfully deleted content!',
 	'draft'                         => 'Draft',
 	'publish'                       => 'Publish',
+	'creation_date'                 => 'Creation date/time',
+	'updated_date'                  => 'Last update date/time'
 ];

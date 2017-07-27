@@ -61,7 +61,7 @@ class FrontController extends Controller
 		});
 	}
 
-	private function _getContentByURI($uri)
+	protected function _getContentByURI($uri)
 	{
 		$contentSearch = new ContentSearch( $this->pageContentType );
 		$content = $contentSearch->addWhereCondition( 'abs_url', '=', url('') . '/' . $uri )
@@ -102,14 +102,14 @@ class FrontController extends Controller
 		}
 	}
 
-	private function _getCategoryByURIandContentType($uri, $contentTypeID)
+	protected function _getCategoryByURIandContentType($uri, $contentTypeID)
 	{
 		return Category::whereName($uri)
 						->whereContentTypeId($contentTypeID)
 						->first();
 	}
 
-	private function _switchContent( $content, $category = null )
+	protected function _switchContent( $content, $category = null )
 	{
 		if ($content) {
 
@@ -185,7 +185,7 @@ class FrontController extends Controller
 	}
 
 	// Function for parsing URIs just for categories
-	private function reparseUri()
+	protected function reparseUri()
 	{
 		if ( count($this->uriParts) > 0 ) {
 			$uri = array_pop( $this->uriParts );
@@ -202,7 +202,7 @@ class FrontController extends Controller
 		}
 	}
 
-	private function _getHomepage( $lang )
+	protected function _getHomepage( $lang )
 	{
 		$contentSearch = new ContentSearch( $this->pageContentType );
 		$content = $contentSearch->addWhereCondition('is_home', '=', true )
