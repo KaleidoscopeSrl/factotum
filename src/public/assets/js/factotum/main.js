@@ -38389,10 +38389,10 @@ $(function() {
 
 					if ( typeof file.xhr !== "undefined" ) {
 						var response = JSON.parse(file.xhr.response);
+						var $hiddenField = $('input[name="' + hiddenField + '"]');
 
-						if ( response.status == 'ok' && $('#' + hiddenField).length > 0 ) {
-
-							var val = $('#' + hiddenField).val();
+						if ( response.status == 'ok' && $hiddenField.length > 0 ) {
+							var val = $hiddenField.val();
 							if (val != '') {
 								val = val.split(';');
 								val.push(response.id);
@@ -38400,19 +38400,51 @@ $(function() {
 							} else {
 								val = response.id;
 							}
-							$('#' + hiddenField).val( val );
+							$hiddenField.val( val );
 
 							if (file.previewElement) {
 								return file.previewElement.classList.add('dz-complete');
 							}
 						}
-
 					}
 				}
 			});
 		});
-
 	}
+
+	$('a#preview').on('click', function(event) {
+		event.preventDefault();
+
+		var url = $('#edit_content_form').attr('action');
+		var data = $('#edit_content_form').serializeArray();
+		var objToSend = {};
+		$.each(data, function(index, item) {
+			objToSend[item.name] = item.value;
+		});
+
+		$.ajax({
+			url: url,
+			method: 'POST',
+			data: objToSend,
+			success: function(data) {
+				if ( data.result == 'ok' ) {
+					var win = window.open(data.redirect_url, '_blank');
+					if ( win ) {
+						win.focus();
+					}
+				}
+			},
+			error: function(error, other) {
+				var data = error.responseJSON;
+				var html = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
+				for (var er in data) {
+					html += '<strong>' + er.toUpperCase() + '</strong> ' + data[er] + '<br>';
+				}
+				html += '</div>';
+				$('body').prepend(html);
+			}
+		});
+	});
 
 });
 function generateCategoryName(str) {

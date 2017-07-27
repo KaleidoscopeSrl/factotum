@@ -65,8 +65,6 @@
 		</div>
 	</div>
 
-	<button class="btn btn-default">Confirmation</button>
-
 	<script type="text/javascript">
 		var sortContentFieldsURL = '<?php echo url('/admin/content-field/sort/'); ?>';
 	</script>

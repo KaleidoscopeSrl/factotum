@@ -15,10 +15,10 @@ use Kaleidoscope\Factotum\Content;
 class FrontController extends Controller
 {
 	protected $currentLanguage;
-	private $uri;
-	private $uriParts;
-	private $origUriParts;
-	private $pageContentType;
+	protected $uri;
+	protected $uriParts;
+	protected $origUriParts;
+	protected $pageContentType;
 
 	public function __construct()
 	{

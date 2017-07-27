@@ -39,7 +39,6 @@ class Media extends Model
 		}
 
 		$filename = str_replace( 'jpeg', 'jpg', $filename );
-
 		$ext          = substr( $filename, strlen($filename) - 3, 3 );
 		$origFilename = substr( $filename, 0, -4 );
 
@@ -63,6 +62,7 @@ class Media extends Model
 					});
 				}
 				$image->save( $newFilename, 90 );
+				$image->destroy();
 			}
 		}
 
@@ -71,8 +71,8 @@ class Media extends Model
 		$origImage->fit( $thumbSize['width'], $thumbSize['height'], function ($constraint) {
 			$constraint->upsize();
 		});
-
 		$origImage->save( $thumbFilename );
+		$origImage->destroy();
 
 		return $origImage;
 	}

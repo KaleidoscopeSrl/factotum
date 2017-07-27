@@ -471,9 +471,10 @@ class PrintFieldHelper {
 		}
 
 		$id = self::$field->name;
-		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+		if ( isset(self::$field->id) ) {
 			$id = self::$field->id;
 		}
+
 ?>
 
 		<div class="needsclick dropzone_cont"
