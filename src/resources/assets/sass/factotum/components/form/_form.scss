@@ -3,7 +3,7 @@
 	.form-horizontal {
 
 		.control-label {
-			display: block;	
+			display: block;
 			margin-bottom: 10px;
 			text-align: left;
 			&.mt {
@@ -19,9 +19,15 @@
 				border-color: rgba(0,0,0,.1);
 				box-shadow: 0 0 8px $formInputFocusShadow;
 			}
+
+			.btn_container {
+				button {
+					margin-right: 10px;
+				}
+			}
 		}
 
-		input, 
+		input,
 		select,
 		textarea {
 			border-radius: 2px;
@@ -43,3 +49,5 @@
 @import "checkbox";
 @import "radio";
 @import "select";
+@import "sortable";
+

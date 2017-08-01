@@ -37,4 +37,6 @@ return [
 	'publish'                       => 'Pubblica',
 	'creation_date'                 => 'Data/ora creazione',
 	'updated_date'                  => 'Data/ora ultimo aggiornamento',
+	'select_content'                => 'Contenuti selezionabili',
+	'to_content'                    => 'Contenuti selezionati'
 ];

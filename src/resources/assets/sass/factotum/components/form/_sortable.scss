@@ -1,0 +1,16 @@
+
+.connectedSortable {
+	min-height: 45px;
+	list-style-type: none;
+	margin: 0;
+	padding: 5px;
+	background-color: #EEE;
+
+	li {
+		border: 1px solid #EEE;
+		margin: 0;
+		padding: 5px 10px;
+		background-color: #FFF;
+		font-size: 16px;
+	}
+}

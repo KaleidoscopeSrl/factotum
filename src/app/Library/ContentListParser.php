@@ -18,13 +18,13 @@ class ContentListParser {
 	private $_avoidDeepLinking;
 	private $_loadCategories;
 
-	public function __construct( $model, $contentList )
+	public function __construct( $model, $contentList, $avoidDeepLinking = false )
 	{
-		$this->_model       = $model;
-		$this->_fields      = (isset($this->_model->fields) ? (array) $this->_model->fields : array() );
-		$this->_relations   = (isset($this->_model->relations) ? (array) $this->_model->relations : array());
-		$this->_contentList = $contentList;
-		$this->_avoidDeepLinking = false;
+		$this->_model            = $model;
+		$this->_fields           = (isset($this->_model->fields) ? (array) $this->_model->fields : array() );
+		$this->_relations        = (isset($this->_model->relations) ? (array) $this->_model->relations : array());
+		$this->_contentList      = $contentList;
+		$this->_avoidDeepLinking = $avoidDeepLinking;
 	}
 
 	public function enableAvoidDeepLinking()
@@ -150,7 +150,10 @@ class ContentListParser {
 			$mediaIDs = explode(';', $value);
 			$tmp = array();
 			foreach ($mediaIDs as $id) {
-				$tmp[] = Media::retrieve($id, $fieldModel);
+				$media = Media::retrieve($id, $fieldModel);
+				if ($media) {
+					$tmp[] = $media;
+				}
 			}
 			return $tmp;
 		}
@@ -162,7 +165,7 @@ class ContentListParser {
 		if ( $value != '' && !($value instanceof \stdClass) ) {
 			$contentSearch = new ContentSearch( (array) $fieldModel->linked_content_type );
 			$contentSearch->addWhereCondition( 'id', '=', $value );
-			$subContentList = $contentSearch->search();
+			$subContentList = $contentSearch->search(true);
 			if ( $subContentList && $subContentList->count() > 0 ) {
 				$model = json_decode( Storage::get( 'models/' . $fieldModel->linked_content_type->content_type . '.json' ) );
 				$clp = new ContentListParser( $model, $subContentList );
@@ -179,7 +182,7 @@ class ContentListParser {
 			$contentSearch = new ContentSearch( (array) $fieldModel->linked_content_type);
 			$contentSearch->addWhereCondition('id', 'in', $contentIDs);
 			$contentSearch->addOrderBy('order_no', 'asc');
-			$subContentList = $contentSearch->search();
+			$subContentList = $contentSearch->search(true);
 
 			if ( $subContentList && $subContentList->count() > 0 ) {
 				$model = json_decode( Storage::get( 'models/' . $fieldModel->linked_content_type->content_type . '.json' ) );

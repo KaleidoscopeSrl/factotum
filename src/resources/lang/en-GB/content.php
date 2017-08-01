@@ -36,5 +36,7 @@ return [
 	'draft'                         => 'Draft',
 	'publish'                       => 'Publish',
 	'creation_date'                 => 'Creation date/time',
-	'updated_date'                  => 'Last update date/time'
+	'updated_date'                  => 'Last update date/time',
+	'select_content'                => 'Selectable contents',
+	'to_content'                    => 'Selected contents'
 ];

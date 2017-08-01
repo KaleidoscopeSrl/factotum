@@ -105,7 +105,7 @@ $('#content_type_to_list').on('change', function() {
 		});
 	}
 }).trigger('change');
-alert('asdf');
+
 
 $(function() {
 
@@ -134,9 +134,51 @@ $(function() {
 		});
 	}
 
+	if ( $('.connectedSortable').length > 0 ) {
+		$('.connectedSortable').each(function(index, item) {
+			if ($(item).hasClass('source')) {
+				var fieldId = $(item).data('field_id');
+
+				$( '#sortable1_' + fieldId ).sortable({
+					connectWith: '#sortable2_' + fieldId,
+					receive: function( event, ui ) {
+						var fieldId = $(ui.item).parent().data('field_id');
+						var value = getValueFromSortable( $( '#sortable2_' + fieldId ) );
+						value = value.trim(';');
+						$('#field_' + fieldId).val( value );
+					}
+				});
+
+				$( '#sortable2_' + fieldId ).sortable({
+					connectWith: '#sortable1_' + fieldId,
+					receive: function( event, ui ) {
+						var fieldId = $(ui.item).parent().data('field_id');
+						var value = getValueFromSortable( $( '#sortable2_' + fieldId ) );
+						value = value.trim(';');
+						$('#field_' + fieldId).val( value );
+					},
+					stop: function( event, ui ) {
+						var fieldId = $(ui.item).parent().data('field_id');
+						var value = getValueFromSortable( $( '#sortable2_' + fieldId ) );
+						value = value.trim(';');
+						$('#field_' + fieldId).val( value );
+					}
+				});
+			}
+		});
+
+		function getValueFromSortable($sortable) {
+			var tmp = new Array();
+			$sortable.find('li').each(function(index, item) {
+				tmp.push( $(item).data('content_id') );
+			});
+			return tmp.join(';');
+		}
+	}
+
 	$('.multiselect').select2({
-  		dropdownAutoWidth : true,
-    	width: '100%'
+		dropdownAutoWidth : true,
+		width: '100%'
 	});
 
 	Dropzone.options.imageUpload = {
@@ -146,7 +188,6 @@ $(function() {
 	};
 
 	if ( $('.dropzone_cont').length > 0 ) {
-
 		$('.dropzone_cont').each(function(index, item) {
 
 			var $item = $(item),
@@ -168,20 +209,20 @@ $(function() {
 					if ( typeof mockFile !== "undefined" ) {
 						if (typeof mockFile.length !== "undefined") {
 							for (var i = 0; i < mockFile.length; i++) {
-                                this.emit('addedfile', mockFile[i]);
-                                this.emit('complete', mockFile[i]);
-                                this.options.maxFiles = this.options.maxFiles - 1;
-                                this.options.thumbnail.call(this, mockFile[i], mockFile[i].thumb);
-                                this.files.push(mockFile[i]);
+								this.emit('addedfile', mockFile[i]);
+								this.emit('complete', mockFile[i]);
+								this.options.maxFiles = this.options.maxFiles - 1;
+								this.options.thumbnail.call(this, mockFile[i], mockFile[i].thumb);
+								this.files.push(mockFile[i]);
 								mockFile[i].previewElement.classList.add('dz-success');
 								mockFile[i].previewElement.classList.add('dz-complete');
 							}
 						}
 					}
-                    this.on('removedfile', function (file) {
-                        this.options.maxFiles = this.options.maxFiles + 1;
-                        $('#' + $item.data('fillable-hidden')).val('');
-                    });
+					this.on('removedfile', function (file) {
+						this.options.maxFiles = this.options.maxFiles + 1;
+						$('#' + $item.data('fillable-hidden')).val('');
+					});
 				},
 				sending: function (file, xhr, formData) {
 					formData.append( 'field_id', $($(this)[0].element).data('field_id') );
@@ -199,7 +240,7 @@ $(function() {
 							if (data.result == 'ok') {
 								$(file.previewElement).remove();
 								if ( $item.data('max-files') == 0 ) {
-                                    $item.attr('data-max-files', 1);
+									$item.attr('data-max-files', 1);
 								}
 							}
 						}
@@ -213,8 +254,13 @@ $(function() {
 						var response = JSON.parse(file.xhr.response);
 						var $hiddenField = $('input[name="' + hiddenField + '"]');
 
+						if ( maxFiles == 1 ) {
+							$hiddenField.val('');
+						}
+
 						if ( response.status == 'ok' && $hiddenField.length > 0 ) {
 							var val = $hiddenField.val();
+
 							if (val != '') {
 								val = val.split(';');
 								val.push(response.id);

@@ -14407,6 +14407,22 @@ button.close {
   }
 }
 
+.connectedSortable {
+  min-height: 45px;
+  list-style-type: none;
+  margin: 0;
+  padding: 5px;
+  background-color: #EEE;
+}
+
+.connectedSortable li {
+  border: 1px solid #EEE;
+  margin: 0;
+  padding: 5px 10px;
+  background-color: #FFF;
+  font-size: 16px;
+}
+
 @media only screen and (min-width: 1px) {
   .language_container {
     text-align: left;

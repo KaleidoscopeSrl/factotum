@@ -200,7 +200,7 @@ class Controller extends MainAdminController
 
 				// Multioptions fields
 				if ( isset( $data[ $field->name ] ) &&
-					 ($field->type == 'multicheckbox' || $field->type == 'multiselect' || $field->type == 'multiple_linked_content') ) {
+					 ($field->type == 'multicheckbox' || $field->type == 'multiselect' ) ) {
 					if ( is_array($data[ $field->name ]) ) {
 						$data[ $field->name ] = Utility::convertOptionsArrayToText( $data[ $field->name ] );
 					}
@@ -262,9 +262,7 @@ class Controller extends MainAdminController
 					}
 				}
 
-				if ( isset($data[ $field->name ]) && $data[ $field->name ] != '') {
-					$additionalValues[ $field->name ] = $data[ $field->name ];
-				}
+				$additionalValues[ $field->name ] = (isset($data[ $field->name ]) ? $data[ $field->name ] : null);
 			}
 
 			if ( $additionalValuesExists ) {

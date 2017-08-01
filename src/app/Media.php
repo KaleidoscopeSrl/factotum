@@ -99,8 +99,10 @@ class Media extends Model
 				}
 				return $media;
 			}
+		} else if ( is_array($mediaId) ) {
+			return $mediaId;
 		}
-		return $mediaId;
+		return null;
 	}
 
 }

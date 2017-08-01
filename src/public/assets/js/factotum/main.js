@@ -38391,8 +38391,13 @@ $(function() {
 						var response = JSON.parse(file.xhr.response);
 						var $hiddenField = $('input[name="' + hiddenField + '"]');
 
+						if ( maxFiles == 1 ) {
+							$hiddenField.val('');
+						}
+
 						if ( response.status == 'ok' && $hiddenField.length > 0 ) {
 							var val = $hiddenField.val();
+
 							if (val != '') {
 								val = val.split(';');
 								val.push(response.id);

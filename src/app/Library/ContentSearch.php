@@ -120,12 +120,12 @@ class ContentSearch {
 		return $this;
 	}
 
-	public function search()
+	public function search( $avoidDeepLinking = false )
 	{
 		if ( $this->_pagination ) {
-			$contentListParser = new ContentListParser( $this->_model, $this->_query->paginate( $this->_pagination ) );
+			$contentListParser = new ContentListParser( $this->_model, $this->_query->paginate( $this->_pagination ), $avoidDeepLinking );
 		} else {
-			$contentListParser = new ContentListParser( $this->_model, $this->_query->get() );
+			$contentListParser = new ContentListParser( $this->_model, $this->_query->get(), $avoidDeepLinking );
 		}
 		$contentListParser->loadCategories( $this->_loadCategories );
 

@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Helpers;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\Library\Utility;
 
@@ -599,7 +600,60 @@ class PrintFieldHelper {
 	{
 		self::$default = Utility::convertOptionsTextToArray( self::$default );
 
-		PrintContentsDropdownTreeHelper::print_dropdown(self::$field->options, self::$field->name, self::$default, self::$field->name, 'form-control multiple multiselect', true, self::$field->mandatory);
+		$tmp = array();
+		$tmpIDs = '';
+
+		if ( isset(self::$default) && count(self::$default) > 0 ) {
+			$tmpIDs = Utility::convertOptionsArrayToText(self::$default);
+
+			foreach ( self::$default as $def ) {
+
+				if (isset(self::$field->options)) {
+					foreach (self::$field->options as $opt) {
+						if ( $def == $opt['id'] ) {
+							$tmp[] = $opt;
+						}
+					}
+				}
+			}
+		}
+
+?>
+
+		<div class="row clearfix">
+
+			<div class="col col-xs-12 col-sm-6">
+				<p><?php echo Lang::get('factotum::content.select_content'); ?></p>
+				<ul id="sortable1_<?php echo self::$field->id; ?>" class="connectedSortable source"
+					data-field_id="<?php echo self::$field->id; ?>">
+					<?php if ( isset(self::$field->options) ) { ?>
+						<?php foreach ( self::$field->options as $opt ) { ?>
+							<?php if ( !in_array($opt['id'], self::$default) ) { ?>
+								<li class="ui-state-default" data-content_id="<?php echo $opt['id']; ?>"><?php echo $opt['title']; ?></li>
+							<?php } ?>
+						<?php } ?>
+					<?php } ?>
+				</ul>
+			</div>
+
+			<div class="col col-xs-12 col-sm-6">
+				<p><?php echo Lang::get('factotum::content.to_content'); ?></p>
+				<ul id="sortable2_<?php echo self::$field->id; ?>" class="connectedSortable"
+					data-field_id="<?php echo self::$field->id; ?>">
+					<?php if ( count($tmp) > 0 ) { ?>
+						<?php foreach ( $tmp as $opt ) { ?>
+							<li class="ui-state-highlight" data-content_id="<?php echo $opt['id']; ?>"><?php echo $opt['title']; ?></li>
+						<?php } ?>
+					<?php } ?>
+				</ul>
+			</div>
+
+		</div>
+
+		<input id="field_<?php echo self::$field->id; ?>" type="hidden"
+			   name="<?php echo self::$field->name; ?>"
+			   value="<?php echo old( self::$field->name, (isset(self::$default) ? $tmpIDs : null)); ?>">
+<?php
 	}
 
 	private static function print_multiple_linked_categories()
