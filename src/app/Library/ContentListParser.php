@@ -181,7 +181,7 @@ class ContentListParser {
 			$contentIDs = explode(';', $value);
 			$contentSearch = new ContentSearch( (array) $fieldModel->linked_content_type);
 			$contentSearch->addWhereCondition('id', 'in', $contentIDs);
-			$contentSearch->addOrderBy('order_no', 'asc');
+			$contentSearch->addOrderBySequence('id', join(',', $contentIDs));
 			$subContentList = $contentSearch->search(true);
 
 			if ( $subContentList && $subContentList->count() > 0 ) {

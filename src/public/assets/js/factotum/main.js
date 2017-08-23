@@ -38312,6 +38312,48 @@ $(function() {
 		});
 	}
 
+	if ( $('.connectedSortable').length > 0 ) {
+		$('.connectedSortable').each(function(index, item) {
+			if ($(item).hasClass('source')) {
+				var fieldId = $(item).data('field_id');
+
+				$( '#sortable1_' + fieldId ).sortable({
+					connectWith: '#sortable2_' + fieldId,
+					receive: function( event, ui ) {
+						var fieldId = $(ui.item).parent().data('field_id');
+						var value = getValueFromSortable( $( '#sortable2_' + fieldId ) );
+						value = value.trim(';');
+						$('#field_' + fieldId).val( value );
+					}
+				});
+
+				$( '#sortable2_' + fieldId ).sortable({
+					connectWith: '#sortable1_' + fieldId,
+					receive: function( event, ui ) {
+						var fieldId = $(ui.item).parent().data('field_id');
+						var value = getValueFromSortable( $( '#sortable2_' + fieldId ) );
+						value = value.trim(';');
+						$('#field_' + fieldId).val( value );
+					},
+					stop: function( event, ui ) {
+						var fieldId = $(ui.item).parent().data('field_id');
+						var value = getValueFromSortable( $( '#sortable2_' + fieldId ) );
+						value = value.trim(';');
+						$('#field_' + fieldId).val( value );
+					}
+				});
+			}
+		});
+
+		function getValueFromSortable($sortable) {
+			var tmp = new Array();
+			$sortable.find('li').each(function(index, item) {
+				tmp.push( $(item).data('content_id') );
+			});
+			return tmp.join(';');
+		}
+	}
+
 	$('.multiselect').select2({
   		dropdownAutoWidth : true,
     	width: '100%'
@@ -38324,7 +38366,6 @@ $(function() {
 	};
 
 	if ( $('.dropzone_cont').length > 0 ) {
-
 		$('.dropzone_cont').each(function(index, item) {
 
 			var $item = $(item),

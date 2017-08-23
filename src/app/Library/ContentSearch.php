@@ -83,6 +83,12 @@ class ContentSearch {
 		return $this;
 	}
 
+	public function addOrderBySequence( $field, $value )
+	{
+		$this->_query->orderByRaw(DB::raw( 'FIELD(contents.' . $field .',' . $value . ')' ));
+		return $this;
+	}
+
 	public function addLimit( $limit )
 	{
 		$this->_query->limit( $limit );

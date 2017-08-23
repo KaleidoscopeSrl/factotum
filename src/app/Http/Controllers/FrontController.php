@@ -51,6 +51,7 @@ class FrontController extends Controller
 
 			$menu = Content::with('childrenRecursive')
 							->whereParentId(null)
+							->whereStatus('publish')
 							->whereLang($this->currentLanguage)
 							->whereShowInMenu( 1 )
 							->get();
