@@ -54,9 +54,10 @@ class FrontController extends Controller
 							->whereStatus('publish')
 							->whereLang($this->currentLanguage)
 							->whereShowInMenu( 1 )
+							->orderBy('order_no', 'ASC')
 							->get();
 
-			View::share( 'menu', $menu->toArray() );
+			View::share( 'menu', $menu );
 
 			return $next($request);
 		});

@@ -56,7 +56,8 @@ class Content extends Model
 	{
 		$query = Content::where( 'content_type_id', '=', $contentTypeId )
 						->whereNull( 'parent_id' )
-						->orderBy('order_no');
+						//->orderBy('order_no', 'ASC')
+						->orderBy('title', 'ASC');
 
 		if ( $language != '' ) {
 			$query->whereLang($language);
@@ -73,6 +74,7 @@ class Content extends Model
 	{
 		foreach ($contents as $c) {
 			if ( $c->childs->count() > 0 ) {
+				$c->childs = $c->childs->sortBy('order_no');
 				$c->childs = self::_parseChildsTree($c->childs);
 			}
 		}

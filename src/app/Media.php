@@ -71,6 +71,7 @@ class Media extends Model
 		$origImage->fit( $thumbSize['width'], $thumbSize['height'], function ($constraint) {
 			$constraint->upsize();
 		});
+
 		$origImage->save( $thumbFilename );
 		$origImage->destroy();
 

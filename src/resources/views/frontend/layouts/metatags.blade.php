@@ -1,4 +1,13 @@
-<title><?php echo ( isset($content) ? $content->title : ''); ?> - {{ config('app.name', 'Factotum') }}</title>
+<title><?php
+	if ( isset($content) ) {
+		if ( $content->seo_title != '' ) {
+			echo $content->seo_title;
+		} else if ( $content->title != '' ) {
+			echo $content->title;
+		}
+	}
+	echo ' - ' . config('app.name', 'Factotum');
+?></title>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">

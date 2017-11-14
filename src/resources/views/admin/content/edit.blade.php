@@ -269,6 +269,18 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<?php
+								$seoTitle = new stdClass();
+								$seoTitle->name        = 'seo_title';
+								$seoTitle->label       = Lang::get('factotum::content.seo_title');
+								$seoTitle->mandatory   = false;
+								$seoTitle->type        = 'text';
+								$seoTitle->show_errors = true;
+								$seoTitle->maxlength   = 60;
+								PrintField::print_field( $seoTitle, $errors, old('seo_title', (isset($content) ? $content->seo_title : null)) );
+								?>
+							</div>
+							<div class="col-xs-12">
+								<?php
 								$seoDescription = new stdClass();
 								$seoDescription->name        = 'seo_description';
 								$seoDescription->label       = Lang::get('factotum::content.seo_description');

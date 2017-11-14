@@ -62,7 +62,7 @@ class ContentObserver
 				->update([ 'abs_url' => $absUrl ]);
 
 			if ( $content->childs ) {
-				$this->updateChildsAbsURL( $content->childrenRecursive()->get(), $content );
+				$this->updateChildsAbsURL( $content->childs, $content );
 			}
 		}
 	}
@@ -99,10 +99,12 @@ class ContentObserver
 	private function updateChildsAbsURL( $childs, $parent )
 	{
 		foreach ( $childs as $item ) {
-			$item->abs_url = $parent->abs_url . '/' . $item->url;
-			$item->save();
-			if ( $item->childrenRecursive ) {
-				return $this->updateChildsAbsURL( $item->childrenRecursive, $item );
+			DB::table('contents')
+				->where( 'id', $item->id )
+				->update([ 'abs_url' => $parent->abs_url . '/' . $item->url ]);
+
+			if ( $item->childs->count() ) {
+				return $this->updateChildsAbsURL( $item->childs, $item );
 			}
 		}
 	}

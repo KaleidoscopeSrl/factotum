@@ -16,6 +16,7 @@ return [
 	'same_page' 	     			=> 'Same Page',
 	'new_page'	   	     			=> 'New Page/Tab',
 	'popup'	   		     			=> 'Popup',
+	'seo_title'                     => 'SEO Title',
 	'seo_description'    			=> 'SEO description',
 	'seo_canonical_url'  			=> 'SEO canonical URL',
 	'seo_robots_indexing'			=> 'Meta Robots Indexing',

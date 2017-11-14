@@ -26,7 +26,7 @@ class ContentSearch {
 		'show_in_menu', 'is_home',
 		'order_no',
 		'link', 'link_title', 'link_open_in',
-		'seo_description', 'seo_canonical_url', 'seo_robots_indexing', 'seo_robots_following',
+		'seo_title', 'seo_description', 'seo_canonical_url', 'seo_robots_indexing', 'seo_robots_following',
 		'fb_title', 'fb_description', 'fb_image',
 		'created_at', 'updated_at'
 	);

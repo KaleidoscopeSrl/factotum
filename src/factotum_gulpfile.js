@@ -96,7 +96,7 @@ elixir(function(mix) {
 		// Utilities
 		'factotum/utility.js'
 
-	], 'public/assets/js/factotum/main.js');
+	], './public/assets/js/factotum/main.js');
 
 	mix.copy( './bower_components/font-awesome/fonts/**', 'public/assets/fonts/factotum/');
 	mix.copy( './bower_components/jquery-ui/themes/base/images/**', 'public/assets/css/factotum/images/');

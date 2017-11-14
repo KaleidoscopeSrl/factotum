@@ -414,16 +414,11 @@ class PrintFieldHelper {
 		if ( self::$field->mandatory ) {
 			$required = ( !self::$default ? 'required' : '' );
 		}
-
-		$id = self::$field->name;
-		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
-			$id = self::$field->id;
-		}
 ?>
 
 		<div class="needsclick dropzone_cont"
 			 data-max-files="1"
-			 data-field_id="<?php echo $id; ?>"
+			 data-field_id="<?php echo self::$field->id; ?>"
 			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
 			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
 			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
@@ -471,16 +466,11 @@ class PrintFieldHelper {
 			$required = ( !self::$default ? 'required' : '' );
 		}
 
-		$id = self::$field->name;
-		if ( isset(self::$field->id) ) {
-			$id = self::$field->id;
-		}
-
 ?>
 
 		<div class="needsclick dropzone_cont"
 			 data-max-files="1"
-			 data-field_id="<?php echo $id; ?>"
+			 data-field_id="<?php echo self::$field->id; ?>"
 			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
 			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
 			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
@@ -533,15 +523,11 @@ class PrintFieldHelper {
 
 		$tmpIDs = array();
 
-		$id = self::$field->name;
-		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
-			$id = self::$field->id;
-		}
 ?>
 
 	<div class="needsclick dropzone_cont"
 		 data-max-files="999"
-		 data-field_id="<?php echo $id; ?>"
+		 data-field_id="<?php echo self::$field->id; ?>"
 		 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
 		 data-mockfile="mockFile<?php echo self::$field->name; ?>"
 		 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">

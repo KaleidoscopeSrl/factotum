@@ -129,6 +129,10 @@ class Controller extends MainAdminController
 		$content->url       = $data['url'];
 		$content->content   = $data['content'];
 
+		if ( $data['created_at'] ) {
+			$content->created_at = Utility::convertHumanDateTimeToIso( $data['created_at'] );
+		}
+
 		$content->lang = $request->session()->get('currentLanguage');
 
 		$content->abs_url = url('') . '/'
@@ -156,6 +160,7 @@ class Controller extends MainAdminController
 		}
 
 		// SEO Fields
+		$content->seo_title            = $data['seo_title'];
 		$content->seo_description      = $data['seo_description'];
 		$content->seo_canonical_url    = $data['seo_canonical_url'];
 		$content->seo_robots_indexing  = $data['seo_robots_indexing'];
