@@ -139,6 +139,7 @@ class FrontController extends Controller
 							if ( $category ) {
 								$contentSearch->filterByCategories( $category );
 							}
+							$contentSearch->addWhereCondition('lang', '=', $this->currentLanguage);
 							$contentSearch->addOrderBy($orderBy, $sort);
 
 							if ($content->content_list_pagination) {

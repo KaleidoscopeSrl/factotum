@@ -38408,7 +38408,7 @@ $(function() {
 				},
 				removedfile: function(file) {
 					$.ajax({
-						url: deleteMediaURL,
+						url: deleteMediaURL + '/' +file.name,
 						method: 'POST',
 						data: {
 							_token: window.Laravel.csrfToken,

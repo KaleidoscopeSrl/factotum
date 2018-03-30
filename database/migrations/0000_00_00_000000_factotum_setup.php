@@ -114,6 +114,8 @@ class FactotumSetup extends Migration
 			$table->increments('id');
 			$table->string('filename', 50)->unique();
 			$table->string('url', 255)->nullable(true);
+			$table->integer('user_id')->unsigned();
+			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->string('mime_type', 50);
 			$table->text('caption')->nullable(true);
 			$table->string('alt_text', 255)->nullable(true);
@@ -133,8 +135,8 @@ class FactotumSetup extends Migration
 			$table->string('status', 25);
 			$table->string('title', 255);
 			$table->text('content')->nullable(true);
-			$table->string('url', 255);
-			$table->string('abs_url', 255)->nullable(true)->unique();
+			$table->string('url', 191);
+			$table->string('abs_url', 191)->nullable(true)->unique();
 			$table->string('lang', 5);
 			$table->boolean('show_in_menu');
 			$table->boolean('is_home')->default(false)->nullable(true);

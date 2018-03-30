@@ -2,8 +2,10 @@
 
 namespace Kaleidoscope\Factotum\Policies;
 
-use Kaleidoscope\Factotum\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+
+use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Media;
 
 class MediaPolicy
 {
@@ -24,9 +26,13 @@ class MediaPolicy
 		return ( $user->role->backend_access && $user->role->manage_media ? true : false );
 	}
 
-	public function delete(User $user)
+	public function delete(User $user, $filename)
 	{
-		return ( $user->role->backend_access && $user->role->manage_media ? true : false );
+		if ( $user->role->backend_access && $user->role->manage_media ) {
+			$media = Media::whereFilename($filename)->whereUserId($user->id)->get();
+			return ( count($media) > 0 ? true : false );
+		}
+		return false;
 	}
 
 }

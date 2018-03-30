@@ -24,7 +24,7 @@ if ( old('type') == 'select' || old('type') == 'multiselect' ||
 	<div id="options_list" class="sortable_options">
 
 <?php
-if ( isset($contentField) && count($contentField->options) > 0 ) {
+if ( isset($contentField) && is_array($contentField->options) && count($contentField->options) > 0 ) {
 
 	$index = 0;
 	foreach ( $contentField->options as $value => $label) {

@@ -110,6 +110,22 @@ class FactotumServiceProvider extends ServiceProvider
 			return $value == 'foo';
 		});
 
+		Validator::extend('max_mb', function($attribute, $value, $parameters, $validator) {
+			if ( $value instanceof UploadedFile && ! $value->isValid() ) {
+				return false;
+			}
+
+			// If call getSize()/1024/1024 on $value here it'll be numeric and not
+			// get divided by 1024 once in the Validator::getSize() method.
+			$megabytes = $value->getSize() / 1024 / 1024;
+
+			return $megabytes <= $parameters[0];
+		});
+
+		Validator::replacer('max_mb', function($message, $attribute, $rule, $parameters) {
+			return str_replace(array(':attribute', ':max'), array($attribute, $parameters[0]), $message);
+		});
+
 		if ( env('FACTOTUM_INSTALLED') ) {
 			$contentTypes = ContentType::all();
 			View::share('contentTypes', $contentTypes);

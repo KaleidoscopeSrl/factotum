@@ -52,6 +52,7 @@ return [
         'string'  => 'Il valore di :attribute non deve essere superiore a :max caratteri.',
         'array'   => 'Il valore di :attribute non deve avere più di :max elementi.',
     ],
+	'max_mb'               => 'Il valore di :attribute non deve essere superiore a :max MB.',
     'mimes'                => 'Il valore di :attribute deve essere un file del tipo: :values.',
     'mimetypes'            => 'Il valore di :attribute deve essere un file del tipo: :values.',
     'min'                  => [

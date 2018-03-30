@@ -16,7 +16,7 @@ class CreateController extends Controller
 		$contentTypes = ContentType::all();
 
 		return view('factotum::admin.content_field.edit')
-					->with('title', Lang::get('factotum::content_type.add_new_content_type') )
+					->with('title', Lang::get('factotum::content_field.add_new_content_field') )
 					->with('fieldTypes', $this->fieldTypes)
 					->with('imageOperations', $this->imageOperations)
 					->with('contentTypes', $contentTypes)

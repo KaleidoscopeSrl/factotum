@@ -25,100 +25,100 @@ class PrintFieldHelper {
 		}
 
 
-?>
-		<div class="form-group<?php echo ($errors->has(self::$field->name) ? ' has-error' : '' ); ?> field-<?php echo $field->type; ?>" id="form-group-<?php echo $field->name; ?>">
-			
-			 <div class="col-md-12">
-			 <?php self::print_label(); ?>
-<?php
+		?>
+		<div class="form-group<?php echo ($errors->has(self::$field->name) ? ' has-error' : '' ); ?> field-<?php echo $field->type; ?> clearfix" id="form-group-<?php echo $field->name; ?>">
+
+			<div class="col-md-12">
+				<?php self::print_label(); ?>
+				<?php
 				switch ( self::$field->type ) {
 					case 'hidden':
 						self::print_hidden();
-					break;
-				    case 'text':
+						break;
+					case 'text':
 						self::print_input();
-					break;
+						break;
 					case 'email':
 						self::print_email();
-					break;
+						break;
 					case 'password':
 						self::print_password();
-					break;
+						break;
 					case 'textarea':
 						self::print_textarea();
-					break;
+						break;
 					case 'wysiwyg':
 						self::print_textarea( true );
-					break;
+						break;
 					case 'date':
 						self::print_date();
-					break;
+						break;
 					case 'datetime':
 						self::print_datetime();
-					break;
+						break;
 					case 'checkbox':
 						self::print_checkbox();
-					break;
+						break;
 					case 'multicheckbox':
 						self::print_multicheckbox();
-					break;
+						break;
 					case 'select':
 						self::print_select();
-					break;
+						break;
 					case 'multiselect':
 						self::print_multiselect();
-					break;
+						break;
 					case 'radio':
 						self::print_radio();
-					break;
+						break;
 					case 'file_upload':
 						self::print_file_upload();
-					break;
+						break;
 					case 'image_upload':
 						self::print_image_upload();
-					break;
+						break;
 					case 'gallery':
 						self::print_gallery();
-					break;
+						break;
 					case 'linked_content':
 						self::print_linked_content();
-					break;
+						break;
 					case 'multiple_linked_content':
 						self::print_multiple_linked_content();
-					break;
+						break;
 					case 'multiple_linked_categories':
 						self::print_multiple_linked_content();
-					break;
+						break;
 				}
 
 				self::print_errors();
-?>
+				?>
 
-			 </div>
+			</div>
 		</div>
 
-<?php
+		<?php
 	}
 
-    private static function print_data_attrs()
-    {
+	private static function print_data_attrs()
+	{
 		if ( isset(self::$field->data_attrs) && is_array(self::$field->data_attrs) && count(self::$field->data_attrs) > 0 ) {
-		    foreach ( self::$field->data_attrs as $key => $value ) {
-		        echo ' data-' . $key . '="' . $value . '" ';
-            }
+			foreach ( self::$field->data_attrs as $key => $value ) {
+				echo ' data-' . $key . '="' . $value . '" ';
+			}
 		}
-    }
+	}
 
 	private static function print_label()
 	{
-	    if ( isset(self::$field->label) && self::$field->label != '' ) {
-?>
-            <label for="<?php self::$field->name; ?>"
-                   class="control-label">
+		if ( isset(self::$field->label) && self::$field->label != '' ) {
+			?>
+			<label for="<?php self::$field->name; ?>"
+				   class="control-label">
 				<?php echo self::$field->label . (self::$field->mandatory ? ' *' : ''); ?>
 				<?php echo(isset(self::$field->hint) && self::$field->hint != '' ? ' - <em>' . self::$field->hint . '</em>' : ''); ?>
-            </label>
-<?php
+			</label>
+			<?php
 		}
 	}
 
@@ -129,21 +129,22 @@ class PrintFieldHelper {
 
 	private static function print_input($type = 'text')
 	{
-	    $id = self::$field->name;
-	    if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
-	        $id = self::$field->id;
-        }
-?>
+		$id = self::$field->name;
+		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
+			$id = self::$field->id;
+		}
+		?>
 		<input id="<?php echo $id; ?>"
-               type="<?php echo $type; ?>" class="form-control"
+			   type="<?php echo $type; ?>" class="form-control"
 			   name="<?php echo self::$field->name; ?>"
-               <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
-			   <?php echo ( isset(self::$field->maxlength) && self::$field->maxlength ? ' maxlength="' . self::$field->maxlength . '" ' : ''); ?>
-               <?php self::print_data_attrs(); ?>
+			<?php echo ( isset(self::$field->placeholder) && self::$field->placeholder ? ' placeholder="' . self::$field->placeholder . '"' : ''); ?>
+			<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+			<?php echo ( isset(self::$field->maxlength) && self::$field->maxlength ? ' maxlength="' . self::$field->maxlength . '" ' : ''); ?>
+			<?php self::print_data_attrs(); ?>
 			   value="<?php echo old( self::$field->name, (isset(self::$default) ? self::$default : null)); ?>"
-			   <?php echo ( self::$field->mandatory ? 'required' : '' ); ?> autofocus>
+			<?php echo ( self::$field->mandatory ? 'required' : '' ); ?> autofocus>
 
-<?php
+		<?php
 	}
 
 	private static function print_email()
@@ -163,16 +164,17 @@ class PrintFieldHelper {
 		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
 			$id = self::$field->id;
 		}
-?>
+		?>
 		<textarea class="form-control<?php echo ($wysiwyg ? ' wysiwyg' : ''); ?>"
-            id="<?php echo $id; ?>"
-            name="<?php echo self::$field->name; ?>"
+				  id="<?php echo $id; ?>"
+				  name="<?php echo self::$field->name; ?>"
+			<?php echo ( isset(self::$field->placeholder) && self::$field->placeholder ? ' placeholder="' . self::$field->placeholder . '"' : ''); ?>
 			<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
 			<?php echo ( isset(self::$field->maxlength) && self::$field->maxlength ? ' maxlength="' . self::$field->maxlength . '" ' : ''); ?>
 			<?php self::print_data_attrs(); ?>
 			<?php echo ( self::$field->mandatory ? 'required' : '' ) . (!$wysiwyg ? ' autofocus' : ''); ?>><?php echo old( self::$field->name, (isset(self::$default) ? self::$default : null)); ?></textarea>
 
-<?php
+		<?php
 	}
 
 
@@ -186,15 +188,16 @@ class PrintFieldHelper {
 		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
 			$id = self::$field->id;
 		}
-?>
+		?>
 		<input id="<?php echo $id; ?>"
-               type="text" class="form-control date"
+			   type="text" class="form-control date"
 			   name="<?php echo self::$field->name; ?>"
-			   <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
-			   <?php self::print_data_attrs(); ?>
+			<?php echo ( isset(self::$field->placeholder) && self::$field->placeholder ? ' placeholder="' . self::$field->placeholder . '"' : ''); ?>
+			<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+			<?php self::print_data_attrs(); ?>
 			   value="<?php echo old( self::$field->name, (isset(self::$default) ? self::$default : null)); ?>"
 			<?php echo ( self::$field->mandatory ? 'required' : '' ); ?> autofocus>
-<?php
+		<?php
 	}
 
 
@@ -208,12 +211,13 @@ class PrintFieldHelper {
 		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
 			$id = self::$field->id;
 		}
-?>
+		?>
 		<input id="<?php echo $id; ?>"
-               type="text" class="form-control datetime"
+			   type="text" class="form-control datetime"
 			   name="<?php echo self::$field->name; ?>"
-			   <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
-			   <?php self::print_data_attrs(); ?>
+			<?php echo ( isset(self::$field->placeholder) && self::$field->placeholder ? ' placeholder="' . self::$field->placeholder . '"' : ''); ?>
+			<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+			<?php self::print_data_attrs(); ?>
 			   value="<?php echo old( self::$field->name, (isset(self::$default) ? self::$default : null)); ?>"
 			<?php echo ( self::$field->mandatory ? 'required' : '' ); ?> autofocus>
 		<?php
@@ -228,23 +232,23 @@ class PrintFieldHelper {
 		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
 			$id = self::$field->id;
 		}
-?>
+		?>
 		<div class="form-control" style="border: none; box-shadow: none;">
-            <div class="checkbox">
-                <label for="<?php echo self::$field->name; ?>">
-                    <input type="checkbox" id="<?php echo $id; ?>"
-                           name="<?php echo self::$field->name; ?>"
-                           value="<?php echo key($options); ?>"
-						   <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
-						   <?php self::print_data_attrs(); ?>
-                           <?php echo ( self::$field->mandatory ? 'required' : '' ); ?>
-                           <?php echo ( (isset(self::$default) && self::$default == key($options)) || ( old(self::$field->name) == key($options) ) ? ' checked' : '' ); ?>>
-                    <span class="checkbox-material"><span class="check"></span></span>
-                    <?php echo array_pop($options); ?>
-                </label>
-            </div>
+			<div class="checkbox">
+				<label for="<?php echo self::$field->name; ?>">
+					<input type="checkbox" id="<?php echo $id; ?>"
+						   name="<?php echo self::$field->name; ?>"
+						   value="<?php echo key($options); ?>"
+						<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+						<?php self::print_data_attrs(); ?>
+						<?php echo ( self::$field->mandatory ? 'required' : '' ); ?>
+						<?php echo ( (isset(self::$default) && self::$default == key($options)) || ( old(self::$field->name) == key($options) ) ? ' checked' : '' ); ?>>
+					<span class="checkbox-material"><span class="check"></span></span>
+					<?php echo array_pop($options); ?>
+				</label>
+			</div>
 		</div>
-<?php
+		<?php
 	}
 
 
@@ -259,33 +263,33 @@ class PrintFieldHelper {
 		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
 			$id = self::$field->id;
 		}
-?>
+		?>
 		<div class="form-control" style="border: none; box-shadow: none;">
-<?php
+			<?php
 			if ( count($options) > 0 ) {
 
 				$index = 0;
 				foreach ( $options as $value => $label ) {
 					$check = false;
 					if ( (isset(self::$default) && in_array($value, self::$default)) ||
-						 ( is_array(old(self::$field->name)) && in_array($value, old(self::$field->name)) ) ) {
+						( is_array(old(self::$field->name)) && in_array($value, old(self::$field->name)) ) ) {
 						$check = true;
 					}
-?>
+					?>
 					<input type="checkbox"
-                           id="<?php echo $id . '_' . $index; ?>"
+						   id="<?php echo $id . '_' . $index; ?>"
 						   name="<?php echo self::$field->name; ?>[]"
-						   <?php echo ( $check ? 'checked="checked"' : null ); ?>
-						   <?php //echo ( self::$field->mandatory ? 'required' : '' ); ?>
+						<?php echo ( $check ? 'checked="checked"' : null ); ?>
+						<?php //echo ( self::$field->mandatory ? 'required' : '' ); ?>
 						   value="<?php echo $value; ?>" />
 					<label for="<?php echo self::$field->name . '_' . $index; ?>"><?php echo $label; ?></label>
-<?php
+					<?php
 					$index++;
 				}
 			}
-?>
+			?>
 		</div>
-<?php
+		<?php
 	}
 
 
@@ -298,15 +302,16 @@ class PrintFieldHelper {
 		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
 			$id = self::$field->id;
 		}
-?>
-	<div class="select-wrapper">
-		<select name="<?php echo self::$field->name; ?>"
-                id="<?php echo $id; ?>"
-			    <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
-			    <?php self::print_data_attrs(); ?>
-				class="form-control" autofocus
+		?>
+		<div class="select-wrapper">
+			<select name="<?php echo self::$field->name; ?>"
+					id="<?php echo $id; ?>"
+				<?php echo ( isset(self::$field->placeholder) && self::$field->placeholder ? ' placeholder="' . self::$field->placeholder . '"' : ''); ?>
+				<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+				<?php self::print_data_attrs(); ?>
+					class="form-control" autofocus
 				<?php echo ( self::$field->mandatory ? 'required' : '' ); ?>>
-<?php
+				<?php
 				if ( count($options) > 0 ) {
 
 					foreach ($options as $value => $label) {
@@ -316,18 +321,18 @@ class PrintFieldHelper {
 							( old(self::$field->name) == $value )) {
 							$check = true;
 						}
-?>
+						?>
 						<option value="<?php echo $value; ?>"
 							<?php echo ( $check ? 'selected="selected"' : null ); ?>>
 							<?php echo $label; ?>
 						</option>
-<?php
+						<?php
 					}
 				}
-?>
-		</select>
-	</div>
-<?php
+				?>
+			</select>
+		</div>
+		<?php
 
 	}
 
@@ -345,35 +350,36 @@ class PrintFieldHelper {
 		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
 			$id = self::$field->id;
 		}
-?>
-	<div class="select-wrapper">
-		<select name="<?php echo self::$field->name; ?>[]" multiple="multiple"
-                id="<?php echo $id; ?>"
-			    <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
-			    <?php self::print_data_attrs(); ?>
-				class="form-control multiselect"
-			<?php echo ( self::$field->mandatory ? 'required' : '' ); ?>>
-			<?php
-			if ( count($options) > 0 ) {
+		?>
+		<div class="select-wrapper">
+			<select name="<?php echo self::$field->name; ?>[]" multiple="multiple"
+					id="<?php echo $id; ?>"
+				<?php echo ( isset(self::$field->placeholder) && self::$field->placeholder ? ' placeholder="' . self::$field->placeholder . '"' : ''); ?>
+				<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+				<?php self::print_data_attrs(); ?>
+					class="form-control multiselect"
+				<?php echo ( self::$field->mandatory ? 'required' : '' ); ?>>
+				<?php
+				if ( count($options) > 0 ) {
 
-				foreach ($options as $value => $label) {
+					foreach ($options as $value => $label) {
 
-					$check = false;
-					if ( ( isset(self::$default) && in_array($value, self::$default) ) ||
-						 (  is_array(old(self::$field->name)) && in_array($value, old(self::$field->name)) ) ) {
-						$check = true;
+						$check = false;
+						if ( ( isset(self::$default) && in_array($value, self::$default) ) ||
+							(  is_array(old(self::$field->name)) && in_array($value, old(self::$field->name)) ) ) {
+							$check = true;
+						}
+						?>
+						<option value="<?php echo $value; ?>" <?php echo ( $check ? 'selected="selected"' : null ); ?> >
+							<?php echo $label; ?>
+						</option>
+						<?php
 					}
-?>
-					<option value="<?php echo $value; ?>" <?php echo ( $check ? 'selected="selected"' : null ); ?> >
-						<?php echo $label; ?>
-					</option>
-					<?php
 				}
-			}
-			?>
-		</select>
-	</div>
-<?php
+				?>
+			</select>
+		</div>
+		<?php
 	}
 
 
@@ -385,26 +391,26 @@ class PrintFieldHelper {
 		if ( isset(self::$field->id) && !(self::$field instanceof \Kaleidoscope\Factotum\ContentField) ) {
 			$id = self::$field->id;
 		}
-?>
+		?>
 		<div class="form-control" style="border: none; box-shadow: none;">
-<?php
+			<?php
 			$index = 0;
 			foreach ( $options as $value => $label ) { ?>
 				<input type="radio" id="<?php echo $id . '_' . $index; ?>"
 					   name="<?php echo self::$field->name; ?>"
-					    <?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
-					    <?php self::print_data_attrs(); ?>
+					<?php echo ( isset(self::$field->readonly) && self::$field->readonly ? ' readonly ' : ''); ?>
+					<?php self::print_data_attrs(); ?>
 					   value="<?php echo $value; ?>"
 					<?php echo ( self::$field->mandatory ? 'required' : '' ); ?>
 					<?php echo ( (isset(self::$default) && self::$default == $value) || ( old(self::$field->name) == $value)  ? ' checked="checked"' : '' ); ?>>
 				<label for="<?php echo self::$field->name . '_' . $index; ?>"><?php echo $label; ?></label>
-<?php
+				<?php
 				$index++;
 			}
-?>
+			?>
 
 		</div>
-<?php
+		<?php
 	}
 
 
@@ -414,7 +420,7 @@ class PrintFieldHelper {
 		if ( self::$field->mandatory ) {
 			$required = ( !self::$default ? 'required' : '' );
 		}
-?>
+		?>
 
 		<div class="needsclick dropzone_cont"
 			 data-max-files="1"
@@ -429,17 +435,17 @@ class PrintFieldHelper {
 
 			<div class="fallback">
 				<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
-                       type="file" class="form-control"
+					   type="file" class="form-control"
 					   name="<?php echo self::$field->name; ?>" <?php echo $required; ?> autofocus>
 			</div>
 
-<?php
+			<?php
 			if ( isset(self::$default) && is_array(self::$default) && count(self::$default) > 0 ) {
 				$ext = substr(self::$default['filename'], strlen(self::$default['filename'])-3, 3);
-?>
+				?>
 				<script type="text/javascript">
-                    var mockFile<?php echo self::$field->name; ?> = new Array();
-                    mockFile<?php echo self::$field->name; ?>.push({
+					var mockFile<?php echo self::$field->name; ?> = new Array();
+					mockFile<?php echo self::$field->name; ?>.push({
 						name: '<?php echo self::$default['filename']; ?>',
 						size: <?php echo Storage::size( self::$default['url'] ); ?>,
 						type: '<?php echo self::$default['mime_type']; ?>',
@@ -455,7 +461,7 @@ class PrintFieldHelper {
 			   name="<?php echo self::$field->name; ?>_hidden"
 			   value="<?php echo ( isset(self::$default) && is_array(self::$default) ? self::$default['id'] : '' ); ?>" />
 
-<?php
+		<?php
 	}
 
 
@@ -466,7 +472,7 @@ class PrintFieldHelper {
 			$required = ( !self::$default ? 'required' : '' );
 		}
 
-?>
+		?>
 
 		<div class="needsclick dropzone_cont"
 			 data-max-files="1"
@@ -481,7 +487,7 @@ class PrintFieldHelper {
 
 			<div class="fallback">
 				<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
-                       type="file" class="form-control" accept="image/*" multiple
+					   type="file" class="form-control" accept="image/*" multiple
 					   name="<?php echo self::$field->name; ?>" <?php echo $required; ?> autofocus>
 			</div>
 
@@ -489,11 +495,11 @@ class PrintFieldHelper {
 			if ( isset(self::$default) && is_array(self::$default) && count(self::$default) > 0 ) {
 				$filename = substr( self::$default['url'], 0, strlen(self::$default['url']) - 4) . '-thumb';
 				$ext = substr( self::$default['url'], strlen(self::$default['url']) - 3, 3);
-			?>
+				?>
 
 				<script type="text/javascript">
-                    var mockFile<?php echo self::$field->name; ?> = new Array();
-                    mockFile<?php echo self::$field->name; ?>.push({
+					var mockFile<?php echo self::$field->name; ?> = new Array();
+					mockFile<?php echo self::$field->name; ?>.push({
 						name: '<?php echo self::$default['filename']; ?>',
 						size: <?php echo Storage::size( self::$default['url'] ); ?>,
 						type: '<?php echo self::$default['mime_type']; ?>',
@@ -509,7 +515,7 @@ class PrintFieldHelper {
 
 		</div>
 
-<?php
+		<?php
 
 	}
 
@@ -523,58 +529,58 @@ class PrintFieldHelper {
 
 		$tmpIDs = array();
 
-?>
+		?>
 
-	<div class="needsclick dropzone_cont"
-		 data-max-files="999"
-		 data-field_id="<?php echo self::$field->id; ?>"
-		 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
-		 data-mockfile="mockFile<?php echo self::$field->name; ?>"
-		 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
+		<div class="needsclick dropzone_cont"
+			 data-max-files="999"
+			 data-field_id="<?php echo self::$field->id; ?>"
+			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
+			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
+			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
 
-		<div class="dz-message needsclick">
-			Drop files here or click to upload.
-		</div>
+			<div class="dz-message needsclick">
+				Drop files here or click to upload.
+			</div>
 
-		<div class="fallback">
-			<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
-                   type="file" class="form-control" accept="image/*" multiple
-				   name="<?php echo self::$field->name; ?>[]" <?php echo $required; ?> autofocus>
-		</div>
+			<div class="fallback">
+				<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
+					   type="file" class="form-control" accept="image/*" multiple
+					   name="<?php echo self::$field->name; ?>[]" <?php echo $required; ?> autofocus>
+			</div>
 
-		<?php if ( isset(self::$default) && is_array(self::$default) && count(self::$default) > 0 ) { ?>
-			<script type="text/javascript">
-				var mockFile<?php echo self::$field->name; ?> = new Array();
-			</script>
+			<?php if ( isset(self::$default) && is_array(self::$default) && count(self::$default) > 0 ) { ?>
+				<script type="text/javascript">
+					var mockFile<?php echo self::$field->name; ?> = new Array();
+				</script>
 
 			<?php
 			foreach ( self::$default as $image ) {
-				$filename = substr( $image['url'], 0, strlen($image['url']) - 4) . '-thumb';
-				$ext = substr( $image['url'], strlen($image['url']) - 3, 3);
+			$filename = substr( $image['url'], 0, strlen($image['url']) - 4) . '-thumb';
+			$ext = substr( $image['url'], strlen($image['url']) - 3, 3);
 			?>
-			<script type="text/javascript">
-				mockFile<?php echo self::$field->name; ?>.push({
-					name: '<?php echo $image['filename']; ?>',
-					size: <?php echo Storage::size( $image['url'] ); ?>,
-					type: '<?php echo $image['mime_type']; ?>',
-					thumb: '<?php echo asset( $filename . '.' . $ext ); ?>'
-				});
-			</script>
+				<script type="text/javascript">
+					mockFile<?php echo self::$field->name; ?>.push({
+						name: '<?php echo $image['filename']; ?>',
+						size: <?php echo Storage::size( $image['url'] ); ?>,
+						type: '<?php echo $image['mime_type']; ?>',
+						thumb: '<?php echo asset( $filename . '.' . $ext ); ?>'
+					});
+				</script>
 
-			<?php
+				<?php
 				$tmpIDs[] = $image['id'];
 			}
-			?>
+				?>
 
-		<?php } ?>
+			<?php } ?>
 
-		<input type="hidden" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>_hidden"
-			   name="<?php echo self::$field->name; ?>_hidden"
-			   value="<?php echo ( count($tmpIDs) > 0 ? join(';', $tmpIDs) : '' ); ?>" />
+			<input type="hidden" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>_hidden"
+				   name="<?php echo self::$field->name; ?>_hidden"
+				   value="<?php echo ( count($tmpIDs) > 0 ? join(';', $tmpIDs) : '' ); ?>" />
 
-	</div>
+		</div>
 
-<?php
+		<?php
 	}
 
 	private static function print_linked_content()
@@ -604,7 +610,7 @@ class PrintFieldHelper {
 			}
 		}
 
-?>
+		?>
 
 		<div class="row clearfix">
 
@@ -639,7 +645,7 @@ class PrintFieldHelper {
 		<input id="field_<?php echo self::$field->id; ?>" type="hidden"
 			   name="<?php echo self::$field->name; ?>"
 			   value="<?php echo old( self::$field->name, (isset(self::$default) ? $tmpIDs : null)); ?>">
-<?php
+		<?php
 	}
 
 	private static function print_multiple_linked_categories()
@@ -650,11 +656,11 @@ class PrintFieldHelper {
 	private static function print_errors()
 	{
 		if ( isset( self::$field->show_errors ) && self::$field->show_errors && self::$errors->has( self::$field->name )) {
-?>
+			?>
 			<span class="help-block error">
 				<strong><?php echo self::$errors->first( self::$field->name ); ?></strong>
             </span>
-<?php
+			<?php
 		}
 	}
 

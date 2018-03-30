@@ -4,6 +4,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Admin\Role;
 
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 use Kaleidoscope\Factotum\Role;
 use Kaleidoscope\Factotum\User;

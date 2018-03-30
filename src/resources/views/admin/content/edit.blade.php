@@ -41,6 +41,7 @@
 									$absUrl->mandatory   = true;
 									$absUrl->type        = 'hidden';
 									$absUrl->readonly    = true;
+									$absUrl->maxlength   = 191;
 									$absUrl->data_attrs  = array(
 										'baseurl' => url( ( $currentLanguage != config('factotum.main_site_language') ? $currentLanguage : '') )
 									);
@@ -61,6 +62,7 @@
 								$url->mandatory   = true;
 								$url->type        = 'text';
 								$url->show_errors = true;
+								$url->maxlength   = 191;
 								PrintField::print_field( $url, $errors, old('url', (isset($content) ? $content->url : null)) );
 								?>
 							</div>

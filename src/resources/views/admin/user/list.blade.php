@@ -15,13 +15,14 @@
 			<div class="col-xs-12">
 				<table class="table">
 					<thead>
-						<tr>
-							<th width="10%">#</th>
-							<th width="15%">@lang('factotum::user.first_name')</th>
-							<th width="15%">@lang('factotum::user.last_name')</th>
-							<th width="40%">Email</th>
-							<th width="20%">@lang('factotum::user.actions')</th>
-						</tr>
+					<tr>
+						<th width="10%">#</th>
+						<th width="10%">@lang('factotum::user.first_name')</th>
+						<th width="10%">@lang('factotum::user.last_name')</th>
+						<th width="10%">@lang('factotum::user.role')</th>
+						<th width="40%">Email</th>
+						<th width="20%">@lang('factotum::user.actions')</th>
+					</tr>
 					</thead>
 
 					@foreach ($users as $user)
@@ -29,13 +30,14 @@
 							<th scope="row">{{ $user->id }}</th>
 							<td  width="50px">{{ $user->profile->first_name }}</td>
 							<td>{{ $user->profile->last_name }}</td>
+							<td>{{ $user->role->role }}</td>
 							<td  width="50px">
 								@if ( $user->editable || (!$user->editable && auth()->user()->isAdmin()) )
 									<a href="{{ url('/admin/user/edit/' . $user->id) }}">{{ $user->email }}</a>
 								@else
 									{{ $user->email }}
 								@endif
-								
+
 							</td>
 							<td>
 								@if ( $user->editable || (!$user->editable && auth()->user()->isAdmin()) )

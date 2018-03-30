@@ -8,7 +8,10 @@ class ReadController extends Controller
 {
 	public function index()
 	{
-		$contentTypes = ContentType::with('content_fields')->get();
+		$contentTypes = ContentType::with(array('content_fields' => function($query) {
+			$query->orderBy('order_no', 'ASC');
+		}))->get();
+
 		return view('factotum::admin.content_field.list')->with('contentTypes', $contentTypes);
 	}
 }

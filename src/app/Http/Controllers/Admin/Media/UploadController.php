@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Admin\Media;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,6 +46,7 @@ class UploadController extends Controller
 			$filename = Media::filenameAvailable($filename, $filename);
 
 			$media = new Media;
+			$media->user_id   = Auth::user()->id;
 			$media->filename  = $filename;
 			$media->mime_type = $file->getMimeType();
 			$media->save();
@@ -83,7 +85,7 @@ class UploadController extends Controller
 			}
 
 			if ( $field->max_file_size ) {
-				$tmp[] = 'max:' . $field->max_file_size;
+				$tmp[] = 'max_mb:' . $field->max_file_size;
 			}
 
 			if ($field->allowed_types != '*') {
@@ -102,7 +104,7 @@ class UploadController extends Controller
 
 		} else {
 			$rules = array(
-				'media' => 'image|max:3000'
+				'media' => 'image|max_mb:3'
 			);
 		}
 

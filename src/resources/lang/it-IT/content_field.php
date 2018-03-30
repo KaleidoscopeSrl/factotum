@@ -15,7 +15,7 @@ return [
 	'mandatory'                    => 'Obbligatorio',
 	'title'                        => 'Titolo',
 	'actions'                      => 'Azioni',
-	'max_size'                     => 'Dimensione massima (in KB)',
+	'max_size'                     => 'Dimensione massima (in MB)',
 	'allowed_types'                => 'Tipi di file permessi (.jpg,.png,.gif)',
 	'min_width'                    => 'Larghezza Minima',
 	'min_height'                   => 'Altezza Minima',

@@ -56,7 +56,7 @@ class Content extends Model
 	{
 		$query = Content::where( 'content_type_id', '=', $contentTypeId )
 						->whereNull( 'parent_id' )
-						//->orderBy('order_no', 'ASC')
+						->orderBy('order_no', 'ASC')
 						->orderBy('title', 'ASC');
 
 		if ( $language != '' ) {

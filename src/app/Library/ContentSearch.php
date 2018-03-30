@@ -68,7 +68,7 @@ class ContentSearch {
 		if ($fieldName == 'id') {
 			$fieldName = 'contents.id';
 		}
-		if ( $condition == 'in' ) {
+		if ( strtolower($condition) == 'in' ) {
 			$this->_query->whereIn( $fieldName, $value);
 		} else {
 			$this->_query->where( $fieldName, $condition, $value);
@@ -79,7 +79,8 @@ class ContentSearch {
 
 	public function addOrderBy( $orderBy, $sort )
 	{
-		$this->_query->orderBy( 'contents.' . $orderBy, $sort );
+		$cols = array_diff( explode(',', $this->_cols ), array_keys( $this->_fields ) );
+		$this->_query->orderBy( (in_array($orderBy, $cols ) ? 'contents.' : '' ) . $orderBy , $sort );
 		return $this;
 	}
 

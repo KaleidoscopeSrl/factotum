@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'add_new_content_field'        => 'Add New',
+	'add_new_content_field'        => 'Add New Content Field',
 	'edit_content_field'           => 'Edit Content Field',
 	'field'                        => 'Field',
 	'content_field'                => 'Content Field',
@@ -15,7 +15,7 @@ return [
 	'mandatory'                    => 'Mandatory',
 	'title'                        => 'Title',
 	'actions'                      => 'Actions',
-	'max_size'                     => 'Max File Size (in KB)',
+	'max_size'                     => 'Max File Size (in MB)',
 	'allowed_types'                => 'Allowed Types (.jpg,.png,.gif)',
 	'min_width'                    => 'Min Width Size',
 	'min_height'                   => 'Min Height Size',

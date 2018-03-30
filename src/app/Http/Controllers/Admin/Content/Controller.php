@@ -118,11 +118,13 @@ class Controller extends MainAdminController
 	{
 		$data = $request->all();
 
-		$user = Auth::user();
-
 		$contentType = ContentType::find($content->content_type_id);
 
-		$content->user_id   = $user->id;
+		if ( !$content->user_id ) {
+			$user = Auth::user();
+			$content->user_id = $user->id;
+		}
+
 		$content->status    = $data['status'];
 		$content->parent_id = (isset($data['parent_id']) ? $data['parent_id'] : null);
 		$content->title     = $data['title'];
