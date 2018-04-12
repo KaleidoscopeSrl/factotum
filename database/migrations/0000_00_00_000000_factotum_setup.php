@@ -145,7 +145,7 @@ class FactotumSetup extends Migration
 			$table->string('link_title', 255)->nullable(true);
 			$table->string('link_open_in', 16)->nullable(true);
 			$table->string('seo_title', 60)->nullable(true);
-			$table->string('seo_description', 160)->nullable(true);
+			$table->text('seo_description')->nullable(true);
 			$table->string('seo_canonical_url', 255)->nullable(true);
 			$table->string('seo_robots_indexing', 10)->default('index')->nullable(true);
 			$table->string('seo_robots_following', 10)->default('follow')->nullable(true);

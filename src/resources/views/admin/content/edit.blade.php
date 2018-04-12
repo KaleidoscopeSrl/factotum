@@ -289,7 +289,7 @@
 								$seoDescription->mandatory   = false;
 								$seoDescription->type        = 'text';
 								$seoDescription->show_errors = true;
-								$seoDescription->maxlength   = 160;
+								$seoDescription->maxlength   = 300;
 								PrintField::print_field( $seoDescription, $errors, old('seo_description', (isset($content) ? $content->seo_description : null)) );
 								?>
 							</div>

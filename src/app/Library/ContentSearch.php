@@ -77,6 +77,12 @@ class ContentSearch {
 		return $this;
 	}
 
+	public function addWhereNull( $fieldName )
+	{
+		$this->_query->whereNull( $fieldName );
+		return $this;
+	}
+
 	public function addOrderBy( $orderBy, $sort )
 	{
 		$cols = array_diff( explode(',', $this->_cols ), array_keys( $this->_fields ) );
