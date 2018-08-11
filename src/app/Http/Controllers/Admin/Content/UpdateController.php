@@ -60,7 +60,7 @@ class UpdateController extends Controller
 
 	public function sortContents( Request $request )
 	{
-		$newOrder = json_decode( $request->input('new_order') );
+		$newOrder = json_decode( $request->input('new_order'), true );
 		if ( count($newOrder) > 0 ) {
 			foreach ( $newOrder as $contentID => $order ) {
 				$content = Content::find($contentID);

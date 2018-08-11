@@ -39,12 +39,12 @@ class FrontController extends Controller
 
 			$checkLang = $this->uriParts[0];
 			if ( strlen($checkLang) == 5 &&
-				 in_array( $checkLang, array_keys( config('factotum.factotum.site_languages') ) ) &&
-				 $checkLang != $this->currentLanguage ) {
-
+				in_array( $checkLang, array_keys( config('factotum.factotum.site_languages') ) )  ) {
 				$this->currentLanguage = $checkLang;
 				$request->session()->put('currentLanguage', $checkLang);
 				App::setLocale( $checkLang );
+			} else {
+				$this->currentLanguage = config('factotum.factotum.main_site_language');
 			}
 
 			View::share( 'currentLanguage', $this->currentLanguage );
