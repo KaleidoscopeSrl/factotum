@@ -77,6 +77,7 @@ class FactotumServiceProvider extends ServiceProvider
 		// Policies
 		$this->registerPolicies($gate);
 
+
 		// Resources and Public
 		$this->publishes([
 			__DIR__ . '/resources/assets'         => resource_path('assets'),

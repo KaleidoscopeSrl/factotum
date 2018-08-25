@@ -14,6 +14,7 @@ class PrintMenuHelper {
 						->whereParentId(null)
 						->whereLang($currentLanguage)
 						->whereShowInMenu( 1 )
+						->orderBy('order_no', 'ASC')
 						->get();
 
 		if ( $menu->count() > 0 ) {
@@ -40,15 +41,23 @@ class PrintMenuHelper {
 					}
 
 				} else {
-					$html .= '<a href="' . $item->abs_url . '"'
-						. (Request::url() == $item->abs_url ? ' class="active"' : '') . '>' . $item->title . '</a>' . "\n";
-				}
-				$html .= '</li>' . "\n";
-			}
+					$active = false;
+					$currUrl  = trim( Request::url(), '/' );
+					$checkUrl = trim( $item->abs_url, '/' );
+					if ( $currUrl == $checkUrl || ( strstr( $currUrl, $checkUrl) && $checkUrl != url('')) ) {
+						$active = true;
+					}
 
-			if ( $item->childs->count() > 0 ) {
-				$level++;
-				$html .= self::print_menu_items( $item->childs, $level, true );
+					$html .= '<a href="' . $item->abs_url . '"'
+						. ($active ? ' class="active"' : '') . '>' . $item->title . '</a>' . "\n";
+				}
+
+				if ( $item->childs->count() > 0 ) {
+					$level++;
+					$html .= self::print_menu_items( $item->childs, $level, true );
+				}
+
+				$html .= '</li>' . "\n";
 			}
 
 		}

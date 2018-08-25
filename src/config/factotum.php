@@ -55,4 +55,7 @@ return [
 
 	'analytics_client_id' => '',
 	'analytics_site_id'   => '',
+
+	'css_version' => '1.0.0',
+	'js_version'  => '1.0.0'
 ];

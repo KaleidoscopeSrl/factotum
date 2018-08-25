@@ -1,9 +1,7 @@
-// Fonts
-$fa-font-path: "/assets/fonts/factotum/" !default;
-@import "./bower_components/font-awesome/scss/font-awesome";
-
 // Variables
 @import "variables";
+@import './node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
+@import './node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins';
 
 // Mixins
 @import "mixins";
@@ -13,10 +11,6 @@ $fa-font-path: "/assets/fonts/factotum/" !default;
 
 @import "common";
 
-
-// Vendors
-@import "vendor/dropzone";
-@import "vendor/bootstrap";
 
 // Components
 @import "components/alert";
@@ -28,6 +22,7 @@ $fa-font-path: "/assets/fonts/factotum/" !default;
 @import "components/resize_media_bar";
 @import "components/scrollbar";
 @import "components/three_bars_btn";
+@import "components/media_thumb";
 
 // Layouts parts
 @import "layouts/footer";
@@ -37,8 +32,8 @@ $fa-font-path: "/assets/fonts/factotum/" !default;
 @import "layouts/tables";
 
 
-
 @import "pages/dashboard";
 @import "pages/login";
 @import "pages/page";
+@import "pages/upload";
 

@@ -6,36 +6,53 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Lang;
 
-use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Media;
+
 
 class UploadController extends Controller
 {
+	public function showUpload( Request $request, $contentFieldName )
+	{
+		$field = $this->_getField($contentFieldName);
+
+		if ( $field->type == 'image_upload' || $field->type == 'gallery' ) {
+			$media = $this->_getImagesPaginated( 0 );
+		} else {
+			$media = $this->_getMediaPaginated( 0, $field->allowed_types );
+		}
+
+		foreach ($media as $i => $m ) {
+			$media[ $i ] = $this->_parseMedia( $m , $field->name );
+		}
+
+		$btnLabel = ( $field->type == 'image_upload' || $field->type == 'gallery' ? Lang::get('factotum::media.insert_image') : Lang::get('factotum::media.insert_media') );
+
+		$selected = $request->input('selected', null);
+
+		if ( $selected ) {
+			$selected = Utility::convertOptionsTextToArray($selected);
+		}
+
+		return view('factotum::admin.media.upload')
+					->with('media', $media)
+					->with('mediaOffset', count($media))
+					->with('field', $field)
+					->with('selected', $selected)
+					->with('btnLabel', $btnLabel)
+					->with('maxFiles', ($field->type == 'gallery' ? 999 : 1 ))
+					->with('required', $field->mandatory);
+	}
 
 	public function upload( Request $request )
 	{
 		$data = $request->all();
 
-		$fieldID = $request->input('field_id');
+		$fieldName = $request->input('field_name');
 
-		$field = null;
-		if ( $fieldID != 'undefined' ) {
-			if ( $fieldID == 'fb_image' ) {
-				$field = new \stdClass();
-				$field->type            = 'image_upload';
-				$field->mandatory       = false;
-				$field->image_operation = 'fit';
-				$field->max_file_size   = 2000;
-				$field->allowed_types   = '.jpg,.png';
-				$field->min_width_size  = 200;
-				$field->min_height_size = 200;
-				$field->image_bw        = false;
-				$field->resizes         = null;
-			} else {
-				$field = ContentField::find($fieldID);
-			}
-		}
+		$field = $this->_getField($fieldName);
 
 		$validation = $this->validator( $request, $data, $field );
 
@@ -66,7 +83,8 @@ class UploadController extends Controller
 			}
 
 			if ( $media->id ) {
-				return response()->json( [ 'status' => 'ok', 'id' => $media->id, 'link' => asset($media->url) ]);
+				return response()->json( [ 'status' => 'ok', 'media' => $this->_parseMedia([ $media ]) ]);
+				// 'id' => $media->id, 'link' => asset($media->url)
 			} else {
 				return response()->json( [ 'status' => 'ko' ], 400);
 			}

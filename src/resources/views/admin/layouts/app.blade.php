@@ -10,4 +10,6 @@
 	@yield('content')
 </div>
 
+@include('factotum::admin.layouts.partials.bottom_bar')
+
 @include('factotum::admin.layouts.partials.footer')

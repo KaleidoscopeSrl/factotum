@@ -5,13 +5,23 @@
     "dev": "gulp watch"
   },
   "devDependencies": {
-    "bootstrap-sass": "^3.3.7",
     "gulp": "^3.9.1",
-    "jquery": "^3.1.0",
     "laravel-elixir": "^6.0.0-9",
     "lodash": "^4.14.0"
   },
   "dependencies": {
-    "codemirror": "^5.22.0"
+    "bootstrap-confirmation2": "^2.4.0",
+    "bootstrap-sass": "^3.3.7",
+    "chart.js": "1.0.2",
+    "codemirror": "^5.22.0",
+    "dropzone": "^4.3.0",
+    "font-awesome": "^4.0.0",
+    "froala-editor": "^2.8.4",
+    "jquery": "^3.1.0",
+    "jquery-datetimepicker": "^2.5.4",
+    "jquery-ui": "^1.12.1",
+    "lity": "^2.3.1",
+    "moment": "^2.22.2",
+    "select2": "^4.0.3"
   }
 }

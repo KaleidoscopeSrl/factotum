@@ -5,9 +5,9 @@ namespace Kaleidoscope\Factotum\Library;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-use Factotum\ContentType;
+use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Library\ContentListParser;
-use Factotum\ContentCategory;
+use Kaleidoscope\Factotum\ContentCategory;
 
 class ContentSearch {
 

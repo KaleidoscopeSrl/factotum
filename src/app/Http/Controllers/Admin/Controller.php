@@ -8,8 +8,10 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
-use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Library\Utility;
 
 class Controller extends BaseController
 {
@@ -29,6 +31,51 @@ class Controller extends BaseController
 		});
 	}
 
+	protected function _parseMedia($media, $fieldName)
+	{
+		$ext   = strtolower( substr( $media['url'],strlen($media['url'])-4 ) );
+		$thumb = substr( $media['url'], 0, strlen($media['url'])-4 ) . '-thumb' . $ext;
+
+		if ( $ext != '.jpg' && $ext != '.png' && $ext != '.gif' ) {
+			$thumb = null;
+		} else {
+			$thumb = url( $thumb );
+		}
+
+		$icon  = 'iconfile-' . str_replace('.', '', $ext);
+
+		if ( $media['updated_at'] instanceof Carbon ) {
+			$updatedAt = date('d/m/Y H:i', $media['updated_at']->timestamp);
+		} else {
+			$updatedAt = substr( Utility::convertHumanDateTimeToIso($media['updated_at']), 0 ,16 );
+		}
+
+		if ( !is_numeric($fieldName) ) {
+			$tmp = array(
+				'field_id'   => $fieldName,
+				'id'         => $media['id'],
+				'url'        => url( $media['url'] ),
+				'thumb'      => $thumb,
+				'icon'       => $icon,
+				'filename'   => $media['filename'],
+				'size'       => Utility::formatBytes( Storage::size($media['url']) ),
+				'updated_at' => $updatedAt
+			);
+		} else {
+			$tmp = array(
+				'id'         => $media['id'],
+				'url'        => url( $media['url'] ),
+				'thumb'      => $thumb,
+				'icon'       => $icon,
+				'filename'   => $media['filename'],
+				'size'       => Utility::formatBytes( Storage::size($media['url']) ),
+				'updated_at' => $updatedAt
+			);
+		}
+
+		return $tmp;
+	}
+
 	protected function guard()
 	{
 		return Auth::guard();
@@ -39,6 +86,7 @@ class Controller extends BaseController
 		$clientId = (config('factotum.factotum.analytics_client_id') != '' ? config('factotum.factotum.analytics_client_id') : false );
 		$siteId   = (config('factotum.factotum.analytics_site_id') != '' ? config('factotum.factotum.analytics_site_id') : false );
 		return view('factotum::admin.index')
+				->with('dashboardAssets', true)
 				->with('clientId', $clientId)
 				->with('siteId', $siteId);
 	}

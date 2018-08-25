@@ -1,3 +1,4 @@
+/*
 .dropzone_cont {
 	position: relative;
 	box-sizing: border-box;
@@ -294,3 +295,100 @@
 		}
 	}
 }
+*/
+
+
+
+
+
+#dz_template {
+	display: none;
+}
+
+.dropzone_cont {
+	position: relative;
+	width: 100%;
+	padding: 65% 0 0;
+	box-sizing: content-box;
+	border: 1px $dropzoneBorderColor solid;
+	background: transparent;
+
+	&:hover {
+		border: 1px $dropzoneHoverBorderColor solid;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	&.dz-clickable {
+		cursor: pointer;
+		* {
+			cursor: default;
+		}
+		.dz-message,
+		.dz-message * {
+			cursor: pointer;
+		}
+	}
+
+	&.dz-drag-hover {
+		border-style: solid;
+		background-color: rgba(255, 236, 25, 0.5);
+
+		.dz-message {
+			opacity: 0.5;
+		}
+	}
+
+	.specs,
+	.dz-filename {
+		margin: 5px auto;
+		color: $primary;
+		font-size: 14px;
+		font-weight: 400;
+	}
+
+	.title {
+		margin: 0;
+		color: $primary;
+		font-size: 18px;
+		font-weight: 700;
+	}
+
+	.dz-message {
+		@include centered;
+		width: 190px;
+		font-size: 20px;
+		text-align: center;
+
+		.default_msg {
+			margin: 0;
+			color: $textColor;
+			font-size: 14px;
+			font-weight: 600;
+		}
+	}
+
+	// Main States
+	&.dz-started {
+		.dz-message {
+			display: none;
+		}
+		.dz-preview {
+			display: block;
+		}
+	}
+
+}
+
+
+@import "dropzone/image";
+@import "dropzone/error";
+@import "dropzone/remove";
+@import "dropzone/progress";
+@import "dropzone/overlay";
+@import "dropzone/confirm_delete";
+
+@import "dropzone/preview";
+

@@ -18,6 +18,7 @@ class CreateController extends Controller
 		$contentType = ContentType::find($contentTypeId);
 
 		return view('factotum::admin.content.edit')
+					->with('editor', true)
 					->with('title', Lang::get('factotum::content.add_new') . ' ' . $contentType->content_type)
 					->with('postUrl', url('/admin/content/store/' . $contentTypeId) )
 					->with('contentType', $contentType)

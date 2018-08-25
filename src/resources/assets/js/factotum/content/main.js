@@ -112,25 +112,31 @@ $.datetimepicker.setLocale('it');
 
 $(function() {
 
-	$('input.date').datetimepicker({
-		timepicker:false,
-		format:'d/m/Y'
-	});
+	if ( $('input.date').length > 0 ) {
+		$('input.date').datetimepicker({
+			timepicker:false,
+			format:'d/m/Y'
+		});
+	}
 
-	$('input.datetime').datetimepicker({
-		format:'d/m/Y H:i:s'
-	});
+	if ( $('input.datetime').length > 0 ) {
+		$('input.datetime').datetimepicker({
+			format: 'd/m/Y H:i:s'
+		});
+	}
 
-	$('textarea.wysiwyg').froalaEditor({
-		height: 300,
-		imageManagerDeleteParams: { _token: window.Laravel.csrfToken },
-		imageManagerDeleteURL: deleteMediaURL,
-		imageUploadParam: 'media',
-		imageUploadParams: { _token: window.Laravel.csrfToken },
-		imageUploadURL: uploadMediaURL,
-		imageManagerLoadURL: getMediaURL,
-		videoInsertButtons: [ 'videoBack', '|', 'videoByURL', 'videoEmbed' ]
-	});
+	if ( $('textarea.wysiwyg').length > 0 ) {
+		$('textarea.wysiwyg').froalaEditor({
+			height: 300,
+			imageManagerDeleteParams: { _token: window.Laravel.csrfToken },
+			imageManagerDeleteURL: deleteMediaURL,
+			imageUploadParam: 'media',
+			imageUploadParams: { _token: window.Laravel.csrfToken },
+			imageUploadURL: uploadMediaURL,
+			imageManagerLoadURL: getMediaURL,
+			videoInsertButtons: [ 'videoBack', '|', 'videoByURL', 'videoEmbed' ]
+		});
+	}
 
 });
 
@@ -203,6 +209,7 @@ $('#content_type_to_list').on('change', function() {
 	}
 }).trigger('change');
 
+var uploadMediaLightbox = null;
 
 $(function() {
 
@@ -278,137 +285,126 @@ $(function() {
 		width: '100%'
 	});
 
-	Dropzone.options.imageUpload = {
-		sending: function(file, xhr, formData) {
-			formData.append('_token', window.Laravel.csrfToken );
-		}
-	};
+	$('.open_media_upload').on('click', function(e) {
+		e.preventDefault();
 
-	if ( $('.dropzone_cont').length > 0 ) {
-		$('.dropzone_cont').each(function(index, item) {
+		var fieldName = $(this).data('field_name');
+		var val = $(this).closest('.form-group').find('input[type=hidden]').val();
+		uploadMediaLightbox = lity( uploadMediaURL + '/' + fieldName + '?selected=' + val );
+	});
 
-			var $item = $(item),
-				maxFiles = $item.data('max-files'),
-				acceptedFiles = ( $item.data('accepted-files') == '*' ? null : $item.data('accepted-files') ),
-				mockFile = undefined;
 
-			try {
-				mockFile = eval( $item.data('mockfile') );
-			} catch (ex) { }
+	$('.delete_media')
+		.on('click', function(e) {
+			e.preventDefault();
+			$(this).confirmation('show');
+		})
+		.on('confirmed.bs.confirmation', function () {
 
-			$item.dropzone({
-				url: uploadMediaURL,
-				paramName: 'media',
-				addRemoveLinks: true,
-				maxFiles: maxFiles,
-				acceptedFiles: acceptedFiles,
-				init: function () {
-					if ( typeof mockFile !== "undefined" ) {
-						if (typeof mockFile.length !== "undefined") {
-							for (var i = 0; i < mockFile.length; i++) {
-								this.emit('addedfile', mockFile[i]);
-								this.emit('complete', mockFile[i]);
-								this.options.maxFiles = this.options.maxFiles - 1;
-								this.options.thumbnail.call(this, mockFile[i], mockFile[i].thumb);
-								this.files.push(mockFile[i]);
-								mockFile[i].previewElement.classList.add('dz-success');
-								mockFile[i].previewElement.classList.add('dz-complete');
-							}
-						}
+			var $trigger = $(this),
+				fN = $trigger.data('filename');
+
+			$.ajax({
+				url: deleteMediaURL + '/' + fN,
+				method: 'POST',
+				data: {
+					_token: window.Laravel.csrfToken,
+					filename: fN
+				},
+				success: function(data) {
+					if (data.result == 'ok') {
+						$trigger.closest('.media_thumb').remove();
 					}
-					this.on('removedfile', function (file) {
-						this.options.maxFiles = this.options.maxFiles + 1;
-						$('#' + $item.data('fillable-hidden')).val('');
-					});
 				},
-				sending: function (file, xhr, formData) {
-					formData.append( 'field_id', $($(this)[0].element).data('field_id') );
-					formData.append( '_token', window.Laravel.csrfToken );
-				},
-				removedfile: function(file) {
-					$.ajax({
-						url: deleteMediaURL + '/' + file.name,
-						method: 'POST',
-						data: {
-							_token: window.Laravel.csrfToken,
-							filename: file.name
-						},
-						success: function(data) {
-							if (data.result == 'ok') {
-								$(file.previewElement).remove();
-								if ( $item.data('max-files') == 0 ) {
-									$item.attr('data-max-files', 1);
-								}
-							}
-						}
-					});
-				},
-				complete: function (file) {
-					var hiddenField = $($(this)[0].element).data('fillable-hidden'),
-						maxFiles    = $($(this)[0].element).data('max-files');
-
-					if ( typeof file.xhr !== "undefined" ) {
-						var response = JSON.parse(file.xhr.response);
-						var $hiddenField = $('input[name="' + hiddenField + '"]');
-
-						if ( maxFiles == 1 ) {
-							$hiddenField.val('');
-						}
-
-						if ( response.status == 'ok' && $hiddenField.length > 0 ) {
-							var val = $hiddenField.val();
-
-							if (val != '') {
-								val = val.split(';');
-								val.push(response.id);
-								val = val.join(';');
-							} else {
-								val = response.id;
-							}
-							$hiddenField.val( val );
-
-							if (file.previewElement) {
-								return file.previewElement.classList.add('dz-complete');
-							}
-						}
-					}
+				error: function() {
+					alert('Error on deleting media.');
 				}
 			});
+
+		});
+
+
+	$('body').on('click', '.remove_media', function(e) {
+		e.preventDefault();
+
+		var $trigger = $(e.target),
+			$field = $trigger.closest('.form-group'),
+			mediaId = $trigger.data('media_id');
+
+		$trigger.closest('.media_thumb').remove();
+		$field.find('.open_media_upload').removeAttr('style');
+
+		var val = $field.find('input[type="hidden"]').val().split(',');
+
+		if ( val.length > 0 ) {
+			for ( var i = 0; i < val.length; i++ ) {
+				if ( mediaId == val[i] ) {
+					val.splice( i, 1 );
+				}
+			}
+		}
+
+		$field.find('input[type="hidden"]').val('');
+
+	});
+
+	if ( typeof mediaPopulated !== "undefined" ) {
+		$.each(mediaPopulated, function(index, item) {
+			if ( Array.isArray(item) ) {
+				var tmpFid = item[0].field_id;
+				_parseMediaOnEdit( tmpFid, item );
+			} else {
+				if ( typeof item.field_id !== "undefined" ) {
+					_parseMediaOnEdit( item.field_id, [ item ] );
+				}
+			}
 		});
 	}
 
-	$('a#preview').on('click', function(event) {
-		event.preventDefault();
+});
 
-		var url = $('#edit_content_form').attr('action');
-		var data = $('#edit_content_form').serializeArray();
-		var objToSend = {};
-		$.each(data, function(index, item) {
-			objToSend[item.name] = item.value;
-		});
+function _parseMediaOnEdit( fieldId, values ) {
 
-		$.ajax({
-			url: url,
-			method: 'POST',
-			data: objToSend,
-			success: function(data) {
-				if ( data.result == 'ok' ) {
-					var win = window.open(data.redirect_url, '_blank');
-					if ( win ) {
-						win.focus();
-					}
-				}
-			},
-			error: function(error, other) {
-				var data = error.responseJSON;
-				var html = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
-				for (var er in data) {
-					html += '<strong>' + er.toUpperCase() + '</strong> ' + data[er] + '<br>';
-				}
-				html += '</div>';
-				$('body').prepend(html);
+	var $trigger   = $('button[data-field_name="' + fieldId + '"]'),
+		isMultiple = ( $trigger.data('type') == 'image_upload' || $trigger.data('type') == 'file_upload' ? false : true ),
+		showIcons  = ( $trigger.data('type') == 'file_upload' ? true : false ),
+		oldVal     = $('#' + fieldId + '_hidden').val().split(';'),
+		val        = [];
+
+
+	$.each( values, function( index, media ) {
+		val.push( media.id );
+
+		if ( oldVal.indexOf( media.id ) == -1 ) {
+			var $m = $( template( 'media_thumb_template', {
+				MEDIA_ID:          media.id,
+				MEDIA_ICON:        media.icon,
+				MEDIA_FILENAME:    media.filename,
+				MEDIA_SIZE:        media.size,
+				MEDIA_LAST_UPLOAD: media.last_upload,
+				MEDIA_URL:         media.url
+			}) );
+
+			if ( showIcons ) {
+				$m.find('img').remove();
+				$m.find('.icon_container').removeClass('hidden');
+			} else {
+				$m.find('img').attr('src', media.thumb);
 			}
-		});
+
+			$trigger.closest('.form-group').find('.media_thumb_container').append( $m );
+		}
 	});
 
-});
+	$('#' + fieldId + '_hidden').val( val.join(';') );
+
+	if ( !isMultiple ) {
+		$trigger.hide();
+	}
+}
+
+function setMediaFieldValue( fieldId, values ) {
+	_parseMediaOnEdit( fieldId, values );
+
+	uploadMediaLightbox.close();
+}

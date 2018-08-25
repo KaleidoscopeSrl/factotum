@@ -2,8 +2,10 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Admin\Media;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use Kaleidoscope\Factotum\ContentField;
 use Kaleidoscope\Factotum\Media;
 
 class ReadController extends Controller
@@ -11,7 +13,8 @@ class ReadController extends Controller
 
 	public function index()
 	{
-		$media = DB::table('media')->paginate(25);
+		$media = DB::table('media')
+				   ->paginate(25);
 		return view('factotum::admin.media.list')->with('media', $media);
 	}
 
@@ -24,18 +27,30 @@ class ReadController extends Controller
 						->get()
 						->toArray();
 
-		$tmp = array();
-		if ( count($images) > 0 ) {
-			foreach ( $images as $file ) {
-				$tmp[] = array(
-					'id'    => $file['id'],
-					'url'   => url( $file['url'] ),
-					'thumb' => url( $file['url'] ),
-					'name'  => $file['filename']
-				);
-			}
+
+		return response()->json( $this->_parseMedia($images) );
+	}
+
+
+	public function getMediaPaginated(Request $request)
+	{
+		$offset    = $request->input('offset');
+		$fieldName = $request->input('field_name', null);
+
+		$field = $this->_getField( $fieldName );
+
+		if ( $field->type == 'image_upload' || $field->type == 'gallery' ) {
+			$media = $this->_getImagesPaginated( $offset );
+		} else {
+			$media = $this->_getMediaPaginated( $offset );
 		}
-		return response()->json($tmp);
+
+		foreach ( $media as $i => $m ) {
+			$media[$i] = $this->_parseMedia( $m, $fieldName );
+		}
+
+		return response()->json( $media );
+
 	}
 
 }

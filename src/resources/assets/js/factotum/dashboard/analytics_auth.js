@@ -1,4 +1,4 @@
-if (typeof gapi !== "undefined") {
+if (typeof gapi !== "undefined" && typeof analyticsClientId !== "undefined") {
 
 	gapi.analytics.ready(function () {
 

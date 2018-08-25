@@ -1,0 +1,37 @@
+.dropzone_cont {
+
+	.dz-error-message {
+		color: $error;
+		font-size: 14px;
+		font-weight: 700;
+		text-transform: uppercase;
+	}
+
+	&.dz-error {
+		border-color: $error;
+
+		.dz-preview {
+
+			.title,
+			.dz-remove,
+			.dz-progress,
+			.dz-size,
+			.view,
+			.last_upload {
+				display: none;
+			}
+
+			.dz-details {
+				.dz-remove {
+					display: block;
+				}
+			}
+
+			&.dz-error {
+				//border-color: $red;
+			}
+
+		}
+	}
+
+}

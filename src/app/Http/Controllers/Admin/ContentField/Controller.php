@@ -4,6 +4,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Admin\ContentField;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 
 use Kaleidoscope\Factotum\Http\Controllers\Admin\Controller as MainAdminController;
 use Kaleidoscope\Factotum\ContentField;
@@ -64,6 +65,13 @@ class Controller extends MainAdminController
 	protected $messages = [
 		'allowed_types'  => 'The field :attribute is not in the right format.',
 	];
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		View::share( 'contentFieldAssets', true );
+	}
 
 	protected function _save( Request $request, $contentField )
 	{

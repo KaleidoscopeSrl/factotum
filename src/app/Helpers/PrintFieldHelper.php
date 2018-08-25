@@ -420,48 +420,22 @@ class PrintFieldHelper {
 		if ( self::$field->mandatory ) {
 			$required = ( !self::$default ? 'required' : '' );
 		}
-		?>
+?>
 
-		<div class="needsclick dropzone_cont"
-			 data-max-files="1"
-			 data-field_id="<?php echo self::$field->id; ?>"
-			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
-			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
-			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
+		<button class="btn open_media_upload"
+				data-type="file_upload"
+				data-field_name="<?php echo self::$field->name; ?>">
+			<i class="fa fa-image"></i>
+			<?php echo Lang::get('factotum::media.add_media'); ?>
+		</button>
+		<div class="media_thumb_container clearfix"></div>
 
-			<div class="dz-message needsclick">
-				Drop files here or click to upload.
-			</div>
-
-			<div class="fallback">
-				<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
-					   type="file" class="form-control"
-					   name="<?php echo self::$field->name; ?>" <?php echo $required; ?> autofocus>
-			</div>
-
-			<?php
-			if ( isset(self::$default) && is_array(self::$default) && count(self::$default) > 0 ) {
-				$ext = substr(self::$default['filename'], strlen(self::$default['filename'])-3, 3);
-				?>
-				<script type="text/javascript">
-					var mockFile<?php echo self::$field->name; ?> = new Array();
-					mockFile<?php echo self::$field->name; ?>.push({
-						name: '<?php echo self::$default['filename']; ?>',
-						size: <?php echo Storage::size( self::$default['url'] ); ?>,
-						type: '<?php echo self::$default['mime_type']; ?>',
-						thumb: '<?php echo asset( 'factotum/images/' . $ext . '.png' ); ?>'
-					});
-				</script>
-
-			<?php } ?>
-
-		</div>
-
-		<input type="hidden" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>_hidden"
-			   name="<?php echo self::$field->name; ?>_hidden"
+		<input type="hidden" id="<?php echo self::$field->name; ?>_hidden"
+			   name="<?php echo self::$field->name; ?>_hidden" <?php echo ($required ? ' required' : ''); ?>
 			   value="<?php echo ( isset(self::$default) && is_array(self::$default) ? self::$default['id'] : '' ); ?>" />
 
-		<?php
+<?php
+
 	}
 
 
@@ -472,50 +446,21 @@ class PrintFieldHelper {
 			$required = ( !self::$default ? 'required' : '' );
 		}
 
-		?>
+?>
 
-		<div class="needsclick dropzone_cont"
-			 data-max-files="1"
-			 data-field_id="<?php echo self::$field->id; ?>"
-			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
-			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
-			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
+		<button class="btn open_media_upload"
+				data-type="image_upload"
+				data-field_name="<?php echo self::$field->name; ?>">
+			<i class="fa fa-image"></i>
+			<?php echo Lang::get('factotum::media.add_media'); ?>
+		</button>
+		<div class="media_thumb_container clearfix"></div>
 
-			<div class="dz-message needsclick">
-				Drop files here or click to upload.
-			</div>
+		<input type="hidden" id="<?php echo self::$field->name; ?>_hidden"
+			   name="<?php echo self::$field->name; ?>_hidden" <?php echo ($required ? ' required' : ''); ?>
+			   value="<?php echo ( isset(self::$default) && is_array(self::$default) ? self::$default['id'] : '' ); ?>" />
 
-			<div class="fallback">
-				<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
-					   type="file" class="form-control" accept="image/*" multiple
-					   name="<?php echo self::$field->name; ?>" <?php echo $required; ?> autofocus>
-			</div>
-
-			<?php
-			if ( isset(self::$default) && is_array(self::$default) && count(self::$default) > 0 ) {
-				$filename = substr( self::$default['url'], 0, strlen(self::$default['url']) - 4) . '-thumb';
-				$ext = substr( self::$default['url'], strlen(self::$default['url']) - 3, 3);
-				?>
-
-				<script type="text/javascript">
-					var mockFile<?php echo self::$field->name; ?> = new Array();
-					mockFile<?php echo self::$field->name; ?>.push({
-						name: '<?php echo self::$default['filename']; ?>',
-						size: <?php echo Storage::size( self::$default['url'] ); ?>,
-						type: '<?php echo self::$default['mime_type']; ?>',
-						thumb: '<?php echo asset( $filename . '.' . $ext ); ?>'
-					});
-				</script>
-
-			<?php } ?>
-
-			<input type="hidden" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>_hidden"
-				   name="<?php echo self::$field->name; ?>_hidden"
-				   value="<?php echo ( isset(self::$default) && is_array(self::$default) ? self::$default['id'] : '' ); ?>" />
-
-		</div>
-
-		<?php
+<?php
 
 	}
 
@@ -529,58 +474,26 @@ class PrintFieldHelper {
 
 		$tmpIDs = array();
 
-		?>
-
-		<div class="needsclick dropzone_cont"
-			 data-max-files="999"
-			 data-field_id="<?php echo self::$field->id; ?>"
-			 data-accepted-files="<?php echo self::$field->allowed_types; ?>"
-			 data-mockfile="mockFile<?php echo self::$field->name; ?>"
-			 data-fillable-hidden="<?php echo self::$field->name; ?>_hidden">
-
-			<div class="dz-message needsclick">
-				Drop files here or click to upload.
-			</div>
-
-			<div class="fallback">
-				<input id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>"
-					   type="file" class="form-control" accept="image/*" multiple
-					   name="<?php echo self::$field->name; ?>[]" <?php echo $required; ?> autofocus>
-			</div>
-
-			<?php if ( isset(self::$default) && is_array(self::$default) && count(self::$default) > 0 ) { ?>
-				<script type="text/javascript">
-					var mockFile<?php echo self::$field->name; ?> = new Array();
-				</script>
-
-			<?php
-			foreach ( self::$default as $image ) {
-			$filename = substr( $image['url'], 0, strlen($image['url']) - 4) . '-thumb';
-			$ext = substr( $image['url'], strlen($image['url']) - 3, 3);
-			?>
-				<script type="text/javascript">
-					mockFile<?php echo self::$field->name; ?>.push({
-						name: '<?php echo $image['filename']; ?>',
-						size: <?php echo Storage::size( $image['url'] ); ?>,
-						type: '<?php echo $image['mime_type']; ?>',
-						thumb: '<?php echo asset( $filename . '.' . $ext ); ?>'
-					});
-				</script>
-
-				<?php
+		if ( isset(self::$default) && is_array(self::$default) && count(self::$default) > 0 ) {
+			foreach (self::$default as $image) {
 				$tmpIDs[] = $image['id'];
 			}
-				?>
+		}
+?>
 
-			<?php } ?>
+		<button class="btn open_media_upload"
+				data-type="gallery"
+				data-field_name="<?php echo self::$field->name; ?>">
+			<i class="fa fa-image"></i>
+			<?php echo Lang::get('factotum::media.add_media'); ?>
+		</button>
+		<div class="media_thumb_container clearfix"></div>
 
-			<input type="hidden" id="<?php echo (isset(self::$field->id) ? self::$field->id : self::$field->name); ?>_hidden"
-				   name="<?php echo self::$field->name; ?>_hidden"
-				   value="<?php echo ( count($tmpIDs) > 0 ? join(';', $tmpIDs) : '' ); ?>" />
+		<input type="hidden" id="<?php echo self::$field->name; ?>_hidden"
+			   name="<?php echo self::$field->name; ?>_hidden" <?php echo ($required ? ' required' : ''); ?>
+			   value="<?php echo ( count($tmpIDs) > 0 ? join(';', $tmpIDs) : '' ); ?>" />
 
-		</div>
-
-		<?php
+<?php
 	}
 
 	private static function print_linked_content()

@@ -38,8 +38,15 @@ class FactotumInstallation extends Command
     public function handle()
     {
 		$this->call('vendor:publish');
-		$this->call('migrate');
+
+		$this->info('Migration running...');
+		//$this->call('migrate');
+		$this->info('Migration done.');
+
+		$this->info('Seeding running...');
 		$this->call('db:seed');
+		$this->info('Seeding done.');
+
 		$this->call('factotum:storage');
 		$this->call('factotum:symlinks');
     }

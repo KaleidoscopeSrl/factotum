@@ -28,6 +28,9 @@ $line-height-base: 1.6;
 $body-bg: #F8F8F8;
 $textColor: #666;
 $text-color: #666;
+$primary: #FFEC19;
+$primaryDark: #F1C81C;
+$error: #C00;
 
 
 // STATUS BAR COLORS
@@ -70,7 +73,9 @@ $buttonBackgroundColor: #FFEC19;
 $buttonHoverBackgroundColor: #F1C81C;
 
 // DROPZONE
-$dropzoneBorderColor: #FFEC19;
+$dropzoneHoverBorderColor: #FFEC19;
+$dropzoneBorderColor: rgba(1255, 236, 25, 0.5);
+
 
 // TABLES
 $tableTitleColor: #FFEC19;

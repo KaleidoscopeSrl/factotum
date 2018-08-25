@@ -13,58 +13,72 @@ const elixir = require('laravel-elixir');
 
 elixir(function(mix) {
 
+	/**
+	 *
+	 * SCRIPTS
+	 *
+	 */
+
+	// Vendors (just jQuery and Bootstrap)
 	mix.scripts([
-		// jQuery + Bootstrap
-		'./bower_components/jquery/dist/jquery.min.js',
-		'./bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+		'./node_modules/jquery/dist/jquery.min.js',
+		'./node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+		'./node_modules/moment/min/moment-with-locales.js',
+	], './public/assets/js/factotum/vendor.js');
 
-		// Froala
-		'./bower_components/froala-wysiwyg-editor/js/froala_editor.min.js',
+	// Vendors UI (all the UI stuff)
+	mix.scripts([
+		'./node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js',
+		'./node_modules/jquery-ui/ui/widget.js',
+		'./node_modules/jquery-ui/ui/data.js',
+		'./node_modules/jquery-ui/ui/scroll-parent.js',
+		'./node_modules/jquery-ui/ui/widgets/mouse.js',
+		'./node_modules/jquery-ui/ui/widgets/sortable.js',
+		//'./node_modules/jquery-ui/ui/widgets/selectable.js',
+		'./node_modules/jquery-ui/ui/widgets/progressbar.js',
+
+		'./node_modules/select2/dist/js/select2.js',
+		'./node_modules/dropzone/dist/dropzone.js',
+		'./node_modules/bootstrap-confirmation2/bootstrap-confirmation.js',
+		'./node_modules/lity/dist/lity.js',
+	], './public/assets/js/factotum/vendor-ui.js');
+
+	// Froala (editor)
+	mix.scripts([
+		'./node_modules/froala-editor/js/froala_editor.min.js',
 		'./node_modules/codemirror/lib/codemirror.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/align.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/char_counter.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/code_beautifier.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/code_view.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/colors.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/emoticons.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/entities.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/file.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/font_family.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/font_size.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/fullscreen.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/image.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/image_manager.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/inline_style.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/line_breaker.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/link.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/lists.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/paragraph_format.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/paragraph_style.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/quick_insert.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/quote.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/table.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/save.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/url.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/plugins/video.min.js',
-		'./bower_components/froala-wysiwyg-editor/js/languages/it.js',
-
-		// jQuery Plugins
-		'./bower_components/datetimepicker/build/jquery.datetimepicker.full.min.js',
-		'./bower_components/jquery-ui/ui/widget.js',
-		'./bower_components/jquery-ui/ui/data.js',
-		'./bower_components/jquery-ui/ui/scroll-parent.js',
-		'./bower_components/jquery-ui/ui/widgets/mouse.js',
-		'./bower_components/jquery-ui/ui/widgets/sortable.js',
-		'./bower_components/jquery-ui/ui/widgets/progressbar.js',
-		// './bower_components/searchable-list/sol-2.0.0.js',
-		'./bower_components/select2/dist/js/select2.js',
-		'./bower_components/dropzone/dist/dropzone.js',
-		'./bower_components/bootstrap-confirmation2/bootstrap-confirmation.js',
+		'./node_modules/froala-editor/js/plugins/align.min.js',
+		'./node_modules/froala-editor/js/plugins/char_counter.min.js',
+		'./node_modules/froala-editor/js/plugins/code_beautifier.min.js',
+		'./node_modules/froala-editor/js/plugins/code_view.min.js',
+		'./node_modules/froala-editor/js/plugins/colors.min.js',
+		'./node_modules/froala-editor/js/plugins/emoticons.min.js',
+		'./node_modules/froala-editor/js/plugins/entities.min.js',
+		'./node_modules/froala-editor/js/plugins/file.min.js',
+		'./node_modules/froala-editor/js/plugins/font_family.min.js',
+		'./node_modules/froala-editor/js/plugins/font_size.min.js',
+		'./node_modules/froala-editor/js/plugins/fullscreen.min.js',
+		'./node_modules/froala-editor/js/plugins/image.min.js',
+		'./node_modules/froala-editor/js/plugins/image_manager.min.js',
+		'./node_modules/froala-editor/js/plugins/inline_style.min.js',
+		'./node_modules/froala-editor/js/plugins/line_breaker.min.js',
+		'./node_modules/froala-editor/js/plugins/link.min.js',
+		'./node_modules/froala-editor/js/plugins/lists.min.js',
+		'./node_modules/froala-editor/js/plugins/paragraph_format.min.js',
+		'./node_modules/froala-editor/js/plugins/paragraph_style.min.js',
+		'./node_modules/froala-editor/js/plugins/quick_insert.min.js',
+		'./node_modules/froala-editor/js/plugins/quote.min.js',
+		'./node_modules/froala-editor/js/plugins/table.min.js',
+		'./node_modules/froala-editor/js/plugins/save.min.js',
+		'./node_modules/froala-editor/js/plugins/url.min.js',
+		'./node_modules/froala-editor/js/plugins/video.min.js',
+		'./node_modules/froala-editor/js/languages/it.js',
+	], './public/assets/js/factotum/editor.js');
 
 
-		// Dashboard
-		'./bower_components/Chart.js/Chart.js',
-		'./bower_components/moment/min/moment-with-locales.js',
+	// Dashboard
+	mix.scripts([
+		'./node_modules/chart.js/Chart.js',
 		'factotum/dashboard/analytics_utility.js',
 		'factotum/dashboard/analytics_auth.js',
 		'factotum/dashboard/analytics_week_over_week.js',
@@ -73,19 +87,27 @@ elixir(function(mix) {
 		'factotum/dashboard/analytics_top_countries.js',
 		'factotum/dashboard/analytics_active_users.js',
 		'factotum/dashboard/main.js',
+	], './public/assets/js/factotum/dashboard.js');
 
-		// Content Type
-		'resources/assets/js/factotum/content-type/main.js',
-
-		// Content Field
+	// Content Field
+	mix.scripts([
 		'factotum/content-field/main.js',
 		'factotum/content-field/options.js',
 		'factotum/content-field/files.js',
 		'factotum/content-field/images.js',
 		'factotum/content-field/linked-content.js',
+	], './public/assets/js/factotum/content-field.js');
+
+	// All the other scripts
+	mix.scripts([
+		// Content Type
+		'resources/assets/js/factotum/content-type/main.js',
 
 		// Content
 		'factotum/content/main.js',
+
+		// Media
+		'factotum/media/upload.js',
 
 		// Category
 		'factotum/category/main.js',
@@ -98,36 +120,76 @@ elixir(function(mix) {
 
 	], './public/assets/js/factotum/main.js');
 
-	mix.copy( './bower_components/font-awesome/fonts/**', 'public/assets/fonts/factotum/');
-	mix.copy( './bower_components/jquery-ui/themes/base/images/**', 'public/assets/css/factotum/images/');
-	mix.copy( './resources/assets/media/factotum/**/*', 'public/assets/media/factotum/img/');
-	mix.copy( './resources/assets/fonts/factotum/**/*', 'public/assets/fonts/factotum/');
+	// All the other scripts
+	mix.scripts([
+		// Media
+		'factotum/media/upload.js',
 
-	mix.sass( 'factotum/main.scss', 'resources/assets/css/factotum/main.css')
+		// Utilities
+		'factotum/utility.js'
 
-	.styles([
-		// Froala
-		'./bower_components/froala-wysiwyg-editor/css/froala_editor.css',
-		'./bower_components/froala-wysiwyg-editor/css/froala_style.css',
+	], './public/assets/js/factotum/upload.js');
+
+
+	// Assets to copy
+	mix.copy( './node_modules/font-awesome/fonts/**',           'public/assets/fonts/factotum/');
+	mix.copy( './node_modules/jquery-ui/themes/base/images/**', 'public/assets/css/factotum/images/');
+	mix.copy( './resources/assets/media/factotum/**/*',         'public/assets/media/factotum/img/');
+	mix.copy( './resources/assets/fonts/factotum/**/*',         'public/assets/fonts/factotum/');
+
+
+
+
+
+
+
+	/**
+	 *
+	 * STYLES
+	 *
+	 */
+
+
+	// Vendor (just Bootstrap v3)
+	mix.sass( 'factotum/vendor.scss', 'public/assets/css/factotum/vendor.css');
+
+
+	// Vendor UI
+	mix
+		.sass( 'factotum/vendor-ui.scss', 'resources/assets/css/factotum/vendor-ui.css')
+		.styles([
+			// UI Stuff
+			'./node_modules/jquery-datetimepicker/build/jquery.datetimepicker.min.css',
+			'./node_modules/select2/dist/css/select2.css',
+			'./node_modules/lity/dist/lity.css',
+
+			// VENDORS MODIFIED
+			'resources/assets/css/factotum/vendor-ui.css'
+		], 'public/assets/css/factotum/vendor-ui.css');
+
+
+	// Froala (the editor)
+	mix	.styles([
+		'./node_modules/froala-editor/css/froala_editor.css',
+		'./node_modules/froala-editor/css/froala_style.css',
 		'./node_modules/codemirror/lib/codemirror.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/char_counter.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/code_view.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/colors.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/emoticons.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/file.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/fullscreen.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/image.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/image_manager.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/line_breaker.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/quick_insert.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/table.css',
-		'./bower_components/froala-wysiwyg-editor/css/plugins/video.css',
+		'./node_modules/froala-editor/css/plugins/char_counter.css',
+		'./node_modules/froala-editor/css/plugins/code_view.css',
+		'./node_modules/froala-editor/css/plugins/colors.css',
+		'./node_modules/froala-editor/css/plugins/emoticons.css',
+		'./node_modules/froala-editor/css/plugins/file.css',
+		'./node_modules/froala-editor/css/plugins/fullscreen.css',
+		'./node_modules/froala-editor/css/plugins/image.css',
+		'./node_modules/froala-editor/css/plugins/image_manager.css',
+		'./node_modules/froala-editor/css/plugins/line_breaker.css',
+		'./node_modules/froala-editor/css/plugins/quick_insert.css',
+		'./node_modules/froala-editor/css/plugins/table.css',
+		'./node_modules/froala-editor/css/plugins/video.css'
+	], 'public/assets/css/factotum/editor.css');
 
-		// Bootstrap and Plugins
-		'./bower_components/datetimepicker/build/jquery.datetimepicker.min.css',
-		'./bower_components/select2/dist/css/select2.css',
 
-		'factotum/main.css'
-	], 'public/assets/css/factotum/main.css');
+	// Main
+	mix.sass( 'factotum/main.scss', 'public/assets/css/factotum/main.css');
+
 
 });

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Media;
 
 
@@ -24,15 +25,18 @@ class UpdateController extends Controller
 		}
 
 		$this->_prepareContentFields( $content->content_type_id, $id );
+
 		$contentType = ContentType::find( $content->content_type_id );
 
 		return view('factotum::admin.content.edit')
+					->with('editor', true)
 					->with('content', $content)
 					->with('title', Lang::get('factotum::content.edit') . ' ' . $contentType->content_type )
 					->with('statuses', $this->statuses)
 					->with('contentType', $contentType)
 					->with('contentFields', $this->_contentFields)
 					->with('contentsTree', $this->_contents)
+					->with('mediaPopulated', $this->_prepareMediaPopulated( array_merge($content->toArray(), (array)$this->_additionalValues) ) )
 					->with('additionalValues', $this->_additionalValues)
 					->with('contentCategories', $this->_contentCategories)
 					->with('postUrl', url('/admin/content/update/' . $id) )
@@ -42,6 +46,7 @@ class UpdateController extends Controller
 	public function update(Request $request, $id)
 	{
 		$data = $request->all();
+
 		$this->validator( $request, $data, $id )->validate();
 
 		$content = Content::find($id);

@@ -400,8 +400,29 @@
 
 </form>
 
+<div id="media_thumb_template" class="hidden">
+	<div class="media_thumb col col-xs-12 col-sm-6 col-md-4 col-lg-3 media_thumb_%MEDIA_ID%">
+		<img src="/assets/media/factotum/img/trans.gif" alt="" />
+		<div class="icon_container hidden">
+			<span class="%MEDIA_ICON%"></span>
+		</div>
+
+		<div class="specs">
+			<span class="filename">%MEDIA_FILENAME%</span>
+			<span class="size">%MEDIA_SIZE%</span>
+			<span class="last_upload">Last upload %MEDIA_LAST_UPLOAD%</span>
+		</div>
+
+		<div class="links">
+			<a class="view_media" href="%MEDIA_URL%" data-lity>VIEW</a> |
+			<a class="remove_media" href="javascript:void(0);" data-media_id="%MEDIA_ID%">REMOVE</a>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
 	var editingContent = <?php echo (isset($content) ? 'true' : 'false'); ?>;
+	var mediaPopulated = <?php echo json_encode($mediaPopulated); ?>;
 </script>
 
 @endsection

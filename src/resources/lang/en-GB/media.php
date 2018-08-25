@@ -14,4 +14,7 @@ return [
 	'actions'                 => 'Actions',
 	'success_update_media'    => 'Successfully updated media!',
 	'success_delete_media'    => 'Successfully deleted media!',
+	'add_media'               => 'Add Media',
+	'insert_media'            => 'Insert Media',
+	'insert_image'            => 'Insert Image',
 ];

@@ -14,4 +14,7 @@ return [
 	'actions'                 => 'Azioni',
 	'success_update_media'    => 'Media aggiornato con successo!',
 	'success_delete_media'    => 'Media cancellato con successo!',
+	'add_media'               => 'Aggiungi Media',
+	'insert_media'            => 'Inserisci Media',
+	'insert_image'            => 'Inserisci Immagine',
 ];

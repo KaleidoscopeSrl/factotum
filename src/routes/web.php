@@ -62,7 +62,7 @@ Route::group([
 
 
 	// Factotum - Capability Routes - Logged In
-	Route::get('/capability', function() { return redirect('/admin/capability/list'); });
+	//Route::get('/capability', function() { return redirect('/admin/capability/list'); });
 	Route::get('/capability/list', 'Capability\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\Capability');
 	Route::get('/capability/create', 'Capability\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\Capability');
 	Route::post('/capability/store', 'Capability\CreateController@store')->middleware('can:create,Kaleidoscope\Factotum\Capability');
@@ -71,7 +71,7 @@ Route::group([
 	Route::get('/capability/delete/{id}', 'Capability\DeleteController@delete')->middleware('can:delete,Kaleidoscope\Factotum\Capability');
 
 	// Factotum - Content Type Routes - Logged In
-	Route::get('/content-type', function() { return redirect('/admin/content-type/list'); });
+	//Route::get('/content-type', function() { return redirect('/admin/content-type/list'); });
 	Route::get('/content-type/list', 'ContentType\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\ContentType');
 	Route::get('/content-type/create', 'ContentType\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\ContentType');
 	Route::post('/content-type/store', 'ContentType\CreateController@store')->middleware('can:create,Kaleidoscope\Factotum\ContentType');
@@ -80,7 +80,7 @@ Route::group([
 	Route::get('/content-type/delete/{id}', 'ContentType\DeleteController@delete')->middleware('can:delete,Kaleidoscope\Factotum\ContentType,id');
 
 	// Factotum - Content Fields Routes - Logged In
-	Route::get('/content-field', function() { return redirect('/admin/content-field/list'); });
+	//Route::get('/content-field', function() { return redirect('/admin/content-field/list'); });
 	Route::get('/content-field/list', 'ContentField\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\ContentField');
 	Route::post('/content-field/sort', 'ContentField\UpdateController@sortFields')->middleware('can:view,Kaleidoscope\Factotum\ContentField');
 	Route::get('/content-field/create/{content_type_id}', 'ContentField\CreateController@create')->middleware('can:create,Kaleidoscope\Factotum\ContentField,content_type_id');
@@ -91,15 +91,17 @@ Route::group([
 
 	// Factotum - Media Routes - Logged In
 	Route::get('/media/list', 'Media\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\Media,id');
-	Route::get('/media/get-images', 'Media\ReadController@getImages')->middleware('can:view,Kaleidoscope\Factotum\Media,id');
-	Route::get('/media/delete/{id}', 'Media\DeleteController@delete')->middleware('can:delete,Kaleidoscope\Factotum\Media,id');
-	Route::post('/media/delete/{filename}', 'Media\DeleteController@delete')->middleware('can:delete,Kaleidoscope\Factotum\Media,filename');
-	Route::post('/media/upload', 'Media\UploadController@upload')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
-	Route::get('/media/edit/{id}', 'Media\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\Media,id');
-	Route::post('/media/update/{id}', 'Media\UpdateController@update')->middleware('can:update,Kaleidoscope\Factotum\Media,id');
+	Route::get('/media/get-images',                 'Media\ReadController@getImages')->middleware('can:view,Kaleidoscope\Factotum\Media,id');
+	Route::get('/media/get-media-paginated',        'Media\ReadController@getMediaPaginated')->middleware('can:view,Kaleidoscope\Factotum\Media,id');
+	Route::get('/media/delete/{id}',                'Media\DeleteController@delete')->middleware('can:delete,Kaleidoscope\Factotum\Media,id');
+	Route::post('/media/delete/{filename}',         'Media\DeleteController@delete')->middleware('can:delete,Kaleidoscope\Factotum\Media,filename');
+	Route::get('/media/upload/{content_field_id}',  'Media\UploadController@showUpload')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
+	Route::post('/media/upload',                    'Media\UploadController@upload')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
+	Route::get('/media/edit/{id}',                  'Media\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\Media,id');
+	Route::post('/media/update/{id}',               'Media\UpdateController@update')->middleware('can:update,Kaleidoscope\Factotum\Media,id');
 
 	// Factotum - Categories Routes - Logged In
-	Route::get('/category', function() { return redirect('/admin/category/list'); });
+	//Route::get('/category', function() { return redirect('/admin/category/list'); });
 	Route::get('/category/list', 'Category\ReadController@index')->middleware('can:view,Kaleidoscope\Factotum\Category');
 	Route::post('/category/get-by-content-type', 'Category\ReadController@getContentTypeCategories')->middleware('can:view,Kaleidoscope\Factotum\Category');
 	Route::post('/category/sort', 'Category\UpdateController@sortCategories')->middleware('can:view,Kaleidoscope\Factotum\Category');

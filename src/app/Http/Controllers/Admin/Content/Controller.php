@@ -30,6 +30,31 @@ class Controller extends MainAdminController
 	protected $_contentCategories;
 	protected $_additionalValues;
 
+	protected function _prepareMediaPopulated($content)
+	{
+		$tmp = [];
+
+		if ( $this->_contentFields->count() > 0 ) {
+			foreach ( $this->_contentFields as $cf ) {
+
+				if ( $cf['type'] == 'image_upload' || $cf['type'] == 'file_upload'  ) {
+					$tmp[$cf['name']] = $this->_parseMedia( $content[$cf['name']], $cf['name'] );
+				} elseif ( $cf['type'] == 'gallery' ) {
+					foreach ( $content[$cf['name']] as $i => $m ) {
+						$content[$cf['name']][$i] = $this->_parseMedia( $m, $cf['name'] );
+					}
+					$tmp[$cf['name']] = $content[$cf['name']];
+				}
+			}
+		}
+
+		if ( $content['fb_image'] ) {
+			$tmp['fb_image'] = $this->_parseMedia( $content['fb_image'], 'fb_image' );
+		}
+
+		return $tmp ;
+	}
+
 	protected function _prepareContentFields( $contentTypeID, $contentID = null )
 	{
 		$this->statuses = array(
@@ -77,6 +102,7 @@ class Controller extends MainAdminController
 							}
 						}
 					} else if ( $field->type == 'gallery' ) {
+
 						if ( isset($this->_additionalValues->{$field->name}) ) {
 							$media = Media::findMany( Utility::convertOptionsTextToArray( $this->_additionalValues->{$field->name} ) );
 							if ( $media ) {
@@ -389,6 +415,17 @@ class Controller extends MainAdminController
 			}
 		}
 
+		$validator = Validator::make($data, $rules);
+
+//		if ( $validator->fails() ) {
+//			echo '<pre>'; print_r($validator->errors() );
+//			die;
+////			return redirect('post/create')
+////				->withErrors($validator)
+////				->withInput();
+//		}
+//
+//		die;
 		return Validator::make($data, $rules);
 	}
 }
