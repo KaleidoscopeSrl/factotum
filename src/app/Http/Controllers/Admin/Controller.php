@@ -31,7 +31,7 @@ class Controller extends BaseController
 		});
 	}
 
-	protected function _parseMedia($media, $fieldName)
+	protected function _parseMedia($media, $fieldName = null)
 	{
 		$ext   = strtolower( substr( $media['url'],strlen($media['url'])-4 ) );
 		$thumb = substr( $media['url'], 0, strlen($media['url'])-4 ) . '-thumb' . $ext;
@@ -50,7 +50,7 @@ class Controller extends BaseController
 			$updatedAt = substr( Utility::convertHumanDateTimeToIso($media['updated_at']), 0 ,16 );
 		}
 
-		if ( !is_numeric($fieldName) ) {
+		if ( isset($fieldName) && !is_numeric($fieldName) ) {
 			$tmp = array(
 				'field_id'   => $fieldName,
 				'id'         => $media['id'],

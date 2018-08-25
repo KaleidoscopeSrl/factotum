@@ -27,8 +27,11 @@ class ReadController extends Controller
 						->get()
 						->toArray();
 
+		foreach ( $images as $i => $m ) {
+			$images[$i] = $this->_parseMedia($m);
+		}
 
-		return response()->json( $this->_parseMedia($images) );
+		return response()->json( $images );
 	}
 
 
