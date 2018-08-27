@@ -572,7 +572,6 @@ $(function() {
 	});
 
 	function inputStatusChange( $input ) {
-
 		$('.media_thumb').removeClass('checked');
 
 		$('input:checked').each(function(index, item) {
@@ -650,13 +649,6 @@ $(function() {
 		}
 	}
 
-	if ( $('#media_list_container').length > 0 ) {
-		$(window).on('scroll', function() {
-			loadMedia();
-		});
-	}
-
-
 	function showListTab() {
 		$('.upload_wrapper a[href="#media_list"]').tab('show');
 	}
@@ -702,6 +694,14 @@ $(function() {
 			parent.setMediaFieldValue( fN, getValues() );
 		}
 	});
+
+	if ( $('#media_list_container').length > 0 ) {
+		checkInsertButton();
+
+		$(window).on('scroll', function() {
+			loadMedia();
+		});
+	}
 
 });
 function generateCategoryName(str) {

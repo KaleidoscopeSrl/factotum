@@ -36,7 +36,7 @@ class UpdateController extends Controller
 					->with('contentType', $contentType)
 					->with('contentFields', $this->_contentFields)
 					->with('contentsTree', $this->_contents)
-					->with('mediaPopulated', $this->_prepareMediaPopulated( array_merge($content->toArray(), (array)$this->_additionalValues) ) )
+					->with('mediaPopulated', $this->_prepareMediaPopulated( array_merge( (array)$this->_additionalValues , $content->toArray() ) ) )
 					->with('additionalValues', $this->_additionalValues)
 					->with('contentCategories', $this->_contentCategories)
 					->with('postUrl', url('/admin/content/update/' . $id) )

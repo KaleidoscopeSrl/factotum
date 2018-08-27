@@ -37,13 +37,17 @@ class Controller extends MainAdminController
 		if ( $this->_contentFields->count() > 0 ) {
 			foreach ( $this->_contentFields as $cf ) {
 
-				if ( $cf['type'] == 'image_upload' || $cf['type'] == 'file_upload'  ) {
+				if ( isset($content[$cf['name']]) && ( $cf['type'] == 'image_upload' || $cf['type'] == 'file_upload' ) ) {
+
 					$tmp[$cf['name']] = $this->_parseMedia( $content[$cf['name']], $cf['name'] );
-				} elseif ( $cf['type'] == 'gallery' ) {
+
+				} elseif ( isset($content[$cf['name']]) && $cf['type'] == 'gallery' ) {
+
 					foreach ( $content[$cf['name']] as $i => $m ) {
 						$content[$cf['name']][$i] = $this->_parseMedia( $m, $cf['name'] );
 					}
 					$tmp[$cf['name']] = $content[$cf['name']];
+
 				}
 			}
 		}
