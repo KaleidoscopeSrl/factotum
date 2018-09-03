@@ -262,7 +262,12 @@ class Controller extends MainAdminController
 							$data[ $field->name ] = $this->_saveMedia( $file, $field );
 						}
 					} else {
-						$data[ $field->name ] = ( isset($data[ $field->name . '_hidden' ]) ? $data[ $field->name . '_hidden' ] : '' );
+						if ( isset($data[ $field->name . '_hidden' ]) ) {
+							$data[ $field->name ] = $data[ $field->name . '_hidden' ];
+							$data[ $field->name ] = $this->_checkImage( $data[ $field->name ], $field );
+						} else {
+							$data[ $field->name ] = '';
+						}
 					}
 				}
 
@@ -285,7 +290,17 @@ class Controller extends MainAdminController
 						}
 
 					} else {
-						$data[ $field->name ] = $data[ $field->name . '_hidden' ];
+						if ( isset($data[ $field->name . '_hidden' ]) ) {
+							$data[ $field->name ] = $data[ $field->name . '_hidden' ];
+							$files = explode(';', $data[ $field->name ]);
+							$tmp2 = [];
+							foreach ( $files as $file ) {
+								$tmp2[] = $this->_checkImage( $file, $field );
+							}
+							$data[ $field->name ] = join(';', $tmp2);
+						} else {
+							$data[ $field->name ] = '';
+						}
 					}
 				}
 
@@ -313,6 +328,15 @@ class Controller extends MainAdminController
 		}
 
 		return $content;
+	}
+
+	private function _checkImage( $mediaId, $field )
+	{
+		$media = Media::find($mediaId);
+		if ( Media::checkImageSizesNotExist( $field, $media ) ) {
+			Media::saveImage( $field, $media->url );
+		}
+		return $mediaId;
 	}
 
 	private function _saveMedia( $file, $field )

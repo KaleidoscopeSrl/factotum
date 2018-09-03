@@ -422,7 +422,7 @@
 
 <script type="text/javascript">
 	var editingContent = <?php echo (isset($content) ? 'true' : 'false'); ?>;
-	var mediaPopulated = <?php echo json_encode($mediaPopulated); ?>;
+	var mediaPopulated = <?php echo ( isset($mediaPopulated) ? json_encode($mediaPopulated) : json_encode( [] ) ); ?>;
 </script>
 
 @endsection

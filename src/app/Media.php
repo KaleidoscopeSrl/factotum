@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 use Image;
 
 use Kaleidoscope\Factotum\Library\Utility;
@@ -28,6 +29,26 @@ class Media extends Model
 			return self::filenameAvailable($filename, $origFilename, $counter);
 		}
 		return $filename;
+	}
+
+	public static function checkImageSizesNotExist( $field, $media )
+	{
+		$filename      = str_replace( 'jpeg', 'jpg', $media->url );
+		$ext           = substr( $filename, strlen($filename) - 3, 3 );
+		$origFilename  = substr( $filename, 0, -4 );
+		$sizesNotExist = false;
+
+		if ( $field->resizes ) {
+			$resizes = Utility::convertOptionsTextToAssocArray( $field->resizes );
+			foreach ($resizes as $width => $height) {
+				$newFilename = $origFilename . '-' . $width .'x' . $height . '.' . $ext;
+				if ( !File::exists($newFilename) ) {
+					$sizesNotExist = true;
+					break;
+				}
+			}
+		}
+		return $sizesNotExist;
 	}
 
 	public static function saveImage( $field, $filename )
