@@ -12,7 +12,7 @@
 			<a href="#upload" aria-controls="upload_media" role="tab" data-toggle="tab">Upload</a>
 		</li>
 		<li role="presentation" class="active">
-			<a href="#list" aria-controls="list_media" role="tab" data-toggle="tab">Lista</a>
+			<a href="#media_list" aria-controls="list_media" role="tab" data-toggle="tab">Lista</a>
 		</li>
 	</ul>
 

@@ -83,8 +83,7 @@ class UploadController extends Controller
 			}
 
 			if ( $media->id ) {
-				return response()->json( [ 'status' => 'ok', 'media' => $this->_parseMedia([ $media ]) ]);
-				// 'id' => $media->id, 'link' => asset($media->url)
+				return response()->json( [ 'status' => 'ok', 'media' => [ $this->_parseMedia( $media->toArray() ) ] ]);
 			} else {
 				return response()->json( [ 'status' => 'ko' ], 400);
 			}

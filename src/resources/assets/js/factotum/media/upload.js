@@ -158,20 +158,20 @@ $(function() {
 		}
 	});
 
-	function inputStatusChange( $input ) {
+	function inputStatusChange() {
 		$('.media_thumb').removeClass('checked');
 
-		$('input:checked').each(function(index, item) {
-			if ( $(this).is(':checked') ) {
-				$(this).closest('.media_thumb').addClass('checked');
+		$('input').each(function(index, item) {
+			if ( $(item).is(':checked') ) {
+				$(item).closest('.media_thumb').addClass('checked');
 			}
 		});
 
 		checkInsertButton();
 	}
 
-	$( '#media_list_container input' ).on('change', function() {
-		inputStatusChange( $(this) );
+	$( 'body' ).on('change', '#media_list_container input', function() {
+		inputStatusChange();
 	});
 
 
@@ -196,10 +196,8 @@ $(function() {
 			}
 
 
-
 			if ( forceCheck ) {
 				$m.find('input').prop('checked', 'checked');
-				inputStatusChange( $m.find('input') );
 			}
 
 			if ( prepend ) {
@@ -207,6 +205,10 @@ $(function() {
 			} else {
 				$('#media_list_container').append($m);
 			}
+		}
+
+		if ( forceCheck ) {
+			inputStatusChange();
 		}
 	}
 

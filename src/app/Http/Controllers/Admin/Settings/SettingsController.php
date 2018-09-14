@@ -61,6 +61,11 @@ class SettingsController extends Controller
 	{
 		$request->session()->put('currentLanguage', $language);
 		App::setLocale( $language );
-		return redirect()->back();
+
+		if ( strstr( url()->previous(), 'edit' ) ) {
+			return redirect('admin');
+		} else {
+			return redirect()->back();
+		}
 	}
 }

@@ -354,7 +354,7 @@ $(function() {
 				var tmpFid = item[0].field_id;
 				_parseMediaOnEdit( tmpFid, item );
 			} else {
-				if ( typeof item.field_id !== "undefined" ) {
+				if ( item && typeof item.field_id !== "undefined" ) {
 					_parseMediaOnEdit( item.field_id, [ item ] );
 				}
 			}

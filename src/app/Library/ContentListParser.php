@@ -122,7 +122,9 @@ class ContentListParser {
 						}
 						if ( count($this->_contentList) > 0 ) {
 							foreach ( $this->_contentList as $index => $content ) {
-								$this->_contentList[$index]->categories = $tmp[$content->id];
+								if ( isset($this->_contentList[$index]) && isset($tmp[$content->id]) ) {
+									$this->_contentList[$index]->categories = $tmp[$content->id];
+								}
 							}
 						}
 					}

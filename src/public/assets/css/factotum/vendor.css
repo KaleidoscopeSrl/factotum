@@ -3265,6 +3265,10 @@
   content: "\f127";
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   font-family: 'Roboto', helvetica, arial, sans-serif;
   color: #666;

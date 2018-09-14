@@ -431,7 +431,7 @@ class Controller extends MainAdminController
 				}
 
 
-				if ( $field->type == 'gallery' ) {
+				if ( $field->type == 'gallery' && $request->file( $field->name ) ) {
 					$nbr = count( $request->file( $field->name ) ) - 1;
 					foreach(range(0, $nbr) as $index) {
 						$rules[ $field->name .  '.' . $index ] = join( '|', $tmp );
@@ -443,17 +443,6 @@ class Controller extends MainAdminController
 			}
 		}
 
-		$validator = Validator::make($data, $rules);
-
-//		if ( $validator->fails() ) {
-//			echo '<pre>'; print_r($validator->errors() );
-//			die;
-////			return redirect('post/create')
-////				->withErrors($validator)
-////				->withInput();
-//		}
-//
-//		die;
 		return Validator::make($data, $rules);
 	}
 }

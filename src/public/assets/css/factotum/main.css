@@ -241,6 +241,10 @@
   content: "\f127";
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   font-family: 'Roboto', helvetica, arial, sans-serif;
   color: #666;
@@ -1888,13 +1892,18 @@ table th[class*="col-"] {
 
 @media only screen and (min-width: 1px) {
   .upload_wrapper {
+    height: 100%;
     padding: 30px;
   }
   .upload_wrapper h3 {
     margin-top: 0;
   }
   .upload_wrapper .tab-pane {
+    height: 100%;
     padding: 20px 0;
+  }
+  .upload_wrapper .tab-content {
+    height: calc(100% - 100px);
   }
   .upload_wrapper .bnt_container {
     position: fixed;
