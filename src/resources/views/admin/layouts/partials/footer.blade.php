@@ -28,6 +28,38 @@
 
 <script src="{{ url('/assets/js/factotum/main.js') }}?v={{ config('factotum.factotum.js_version') }}"></script>
 
+<script>
+     $( function () {
+
+         $("#filter_sortable_source").on('input',function(e){
+             var text = $(this).val().toUpperCase();
+             var listInput = $('.connectedSortable.source');
+             var listChildren = listInput.children();
+             listChildren.each(function( index ) {
+                 if( ! $( this ).text().toUpperCase().includes( text ) ){
+                     $( this ).hide();
+                 }else {
+                     $( this ).show();
+                 }
+             });
+         });
+         $("#filter_sortable_destination").on('input',function(e){
+             var text = $(this).val().toUpperCase();
+             var listInput = $('.connectedSortable.destination');
+             var listChildren = listInput.children();
+             listChildren.each(function( index ) {
+                 if( ! $( this ).text().toUpperCase().includes( text ) ){
+                     $( this ).hide();
+                 }else {
+                     $( this ).show();
+                 }
+             });
+         });
+
+
+     })
+
+</script>
 
 </body>
 </html>

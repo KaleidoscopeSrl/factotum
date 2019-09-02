@@ -81,7 +81,7 @@ $(function() {
 						progressElement.style.width = progress + '%';
 						progressElement.querySelector('.progress-text').textContent = parseInt(progress) + '%';
 						if ( parseInt(progress) == 100 ) {
-							progressElement.querySelector('.progress-text').textContent = 'working...';
+							progressElement.querySelector('.progress-text').textContent = 'Done.';
 						}
 					}
 				},
@@ -176,7 +176,8 @@ $(function() {
 
 
 	function _parseMedia( mediaList, prepend, forceCheck ) {
-		for ( var i = 0; i < mediaList.length; i++ ) {
+
+		for ( var i = 0; mediaList && i < mediaList.length; i++ ) {
 			var media = mediaList[i];
 
 			var $m = $( template( 'single_media_template', {
@@ -184,7 +185,7 @@ $(function() {
 				MEDIA_ICON:        media.icon,
 				MEDIA_FILENAME:    media.filename,
 				MEDIA_SIZE:        media.size,
-				MEDIA_LAST_UPLOAD: media.last_upload,
+				MEDIA_LAST_UPLOAD: media.updated_at,
 				MEDIA_URL:         media.url
 			}) );
 

@@ -16,6 +16,24 @@
 				</div> 
 			</div>
 			<div class="col-sm-6">
+
+				<div class="panel">
+				    <div class="panel-heading">Media</div>
+				    <div class="panel-body">
+				        {{ csrf_field() }}
+				        <?php
+				        $caption = new stdClass();
+				        $caption->name      = 'filename';
+				        $caption->label     = 'Filename';
+				        $caption->mandatory = false;
+				        $caption->type      = 'text';
+				        PrintField::print_field( $caption, $errors, $media->filename );
+
+				        ?>
+
+				    </div>
+				</div>
+
 				<div class="panel">
 					<div class="panel-heading">@lang('factotum::media.media_metadata')</div>
 					<div class="panel-body">
@@ -37,6 +55,7 @@
 						?>
 					</div>
 				</div>
+
 			</div>
 
 			<div class="col-sm-12">

@@ -26,8 +26,8 @@ class Controller extends MainAdminController
 				$field->image_operation = 'fit';
 				$field->max_file_size   = 2000;
 				$field->allowed_types   = '.jpg,.png';
-				$field->min_width_size  = 200;
-				$field->min_height_size = 200;
+				$field->min_width_size  = 100;
+				$field->min_height_size = 100;
 				$field->image_bw        = false;
 				$field->resizes         = null;
 			} else {
@@ -45,6 +45,20 @@ class Controller extends MainAdminController
 		$media->caption     = $data['caption'];
 		$media->alt_text    = $data['alt_text'];
 		$media->description = $data['description'];
+
+		if ( isset($data['filename']) ){
+            $tmpUrl = $media->url;
+            $tmpUrl = explode('/', $tmpUrl);
+            $tmpUrl[count($tmpUrl)-1] = $data['filename'];
+            $tmpUrl = implode('/', $tmpUrl);
+            if(file_exists($media->url)){
+                if (rename($media->url,$tmpUrl)){
+                    $media->url = $tmpUrl;
+                    $media->filename = $data['filename'];
+                }
+            }
+        }
+
 		$media->save();
 		return $media;
 	}

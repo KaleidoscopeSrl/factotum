@@ -42,7 +42,7 @@ class UploadController extends Controller
 					->with('field', $field)
 					->with('selected', $selected)
 					->with('btnLabel', $btnLabel)
-					->with('maxFiles', ($field->type == 'gallery' ? 999 : 1 ))
+					->with('maxFiles', ($field->type == 'gallery' ? 999 : 999 ))
 					->with('required', $field->mandatory);
 	}
 

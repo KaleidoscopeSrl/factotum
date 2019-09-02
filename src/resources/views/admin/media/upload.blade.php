@@ -25,6 +25,7 @@
 			?>
 
 			<div class="needsclick dropzone_cont"
+                		 id="dropzone_file"
 				 data-max-files="{{ $maxFiles }}"
 				 data-field_name="{{ $field->name }}"
 				 data-accepted-files="{{ $field->allowed_types }}"
@@ -171,7 +172,12 @@
 
 <div id="single_media_template" class="hidden">
 
-	<label for="media_id_%MEDIA_ID%" class="col col-xs-6 col-sm-3 media_thumb">
+    <label for="media_id_%MEDIA_ID%"
+           class="col col-xs-6 col-sm-3 media_thumb"
+           data-filename="%MEDIA_FILENAME%"
+           data-size="%MEDIA_SIZE%"
+           data-last_upload="%MEDIA_LAST_UPLOAD%"
+           data-url="%MEDIA_URL%">
 		<img src="/assets/media/factotum/img/trans.gif" alt="" id="media_thumb_%MEDIA_ID%" />
 		<div class="icon_container hidden">
 			<span class="%MEDIA_ICON%"></span>
@@ -185,7 +191,8 @@
 
 		<div class="links">
 			<a class="view_media" href="%MEDIA_URL%" data-lity>VIEW</a> |
-			<a class="delete_media" href="javascript:void(0);"
+			<a href="javascript:void(0);" class="delete_media"
+			   data-filename="%MEDIA_FILENAME%"
 			   data-toggle="confirmation"
 			   data-title="{{ Lang::get('factotum::generic.are_sure') }}"
 			   data-btn-ok-label="{{ Lang::get('factotum::generic.yes') }}"

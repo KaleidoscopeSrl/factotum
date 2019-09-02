@@ -9,6 +9,9 @@
                 <div class="btn-group" role="group">
                     <a href="{{ url('/admin/tools/resize-media') }}" class="btn btn-default btn-info">@lang('factotum::tools/resize_media.tool_name')</a>
                 </div>
+                <div class="btn-group" role="group">
+                    <a href="{{ url('/admin/tools/sitemap-settings') }}" class="btn btn-default btn-info">@lang('factotum::tools/sitemap_settings.tool_name')</a>
+                </div>
             </div>
         </div>
     </div>

@@ -117,11 +117,13 @@ Route::group([
 	Route::get('/settings/set-language/{language}', 'Settings\SettingsController@setLanguage')->middleware('can:manage-settings,Kaleidoscope\Factotum\Role');
 
 	// Factotum - Tools
-	Route::get('/tools', 'Tools\ReadController@index');
-	Route::get('/tools/resize-media', 'Tools\ResizeMediaController@index')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
-	Route::get('/tools/do-resize-media', 'Tools\ResizeMediaController@resize')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
-	Route::post('/tools/do-resize-media', 'Tools\ResizeMediaController@resize')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
-	Route::post('/tools/make-resize-media', 'Tools\ResizeMediaController@resizeMedia')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
+	Route::get( '/tools', 'Tools\ReadController@index');
+	Route::get( '/tools/sitemap-settings', 			'Tools\SitemapController@index')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
+	Route::post('/tools/save-sitemap-preference/', 	'Tools\SitemapController@saveSitemapPreference')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
+	Route::get( '/tools/resize-media', 				'Tools\ResizeMediaController@index')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
+	Route::get( '/tools/do-resize-media', 			'Tools\ResizeMediaController@resize')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
+	Route::post('/tools/do-resize-media', 			'Tools\ResizeMediaController@resize')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
+	Route::post('/tools/make-resize-media', 		'Tools\ResizeMediaController@resizeMedia')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
 
 	// Factotum - Content Routes - Logged In
 	Route::get('/content/list/{content_type_id}', 'Content\ReadController@indexList')->middleware('can:view,Kaleidoscope\Factotum\Content,content_type_id');
@@ -136,6 +138,7 @@ Route::group([
 
 
 Route::group(['middleware' => ['web', 'language']], function () {
+	Route::get('/sitemap', 'Kaleidoscope\Factotum\Http\Controllers\Admin\Tools\SitemapController@generate');
 	Route::get('/{uri?}', 'Kaleidoscope\Factotum\Http\Controllers\FrontController@index')->where('uri', '.*');
 	Route::post('/{uri?}', 'Kaleidoscope\Factotum\Http\Controllers\FrontController@index')->where('uri', '.*');
 });

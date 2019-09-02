@@ -66,14 +66,19 @@ class FrontController extends Controller
 	protected function _getContentByURI($uri)
 	{
 		$contentSearch = new ContentSearch( $this->pageContentType );
+
 		$content = $contentSearch->addWhereCondition( 'abs_url', '=', url('') . '/' . $uri )
 								 ->onlyPublished()
 								 ->addLimit(1)
 								 ->search();
+		if($content){
 
 		$content =  ( $content->count() > 0 ? $content[0] : null );
+		
+		} 
 
 		if ( !$content ) {
+
 			$uriParts = explode( '/' , $uri );
 			$uri = $uriParts[ count($uriParts) - 1 ];
 
@@ -230,6 +235,15 @@ class FrontController extends Controller
 				// Page or content exist
 				if ( $content ) {
 					$data = $this->_switchContent( $content );
+
+					//if lavori aggiungo lista clienti
+                    if ( $uri == 'lavori' ){
+                        $clientType = ContentType::whereContentType('client')->first()->toArray();
+                        $contentSearch = new ContentSearch($clientType);
+                        $contentSearch->onlyPublished();
+                        $data['data']['clientList'] = $contentSearch->search()->toArray();
+                    }
+
 				} else {
 					// Check if is a series of categories
 					$data = $this->reparseUri();
