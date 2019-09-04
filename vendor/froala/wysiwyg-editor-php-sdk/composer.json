@@ -1,0 +1,47 @@
+{
+  "name": "froala/wysiwyg-editor-php-sdk",
+  "version": "1.0.1",
+  "description": "PHP SDK for Froala WYSIWYG Editor",
+  "type": "php-plugin",
+  "keywords": [
+    "froala",
+    "editor",
+    "php",
+    "sdk",
+    "froala",
+    "html",
+    "text",
+    "editor",
+    "wysiwyg",
+    "rich editor",
+    "rich text editor",
+    "rte",
+    "php wysiwyg",
+    "php rich text editor",
+    "php rte"
+  ],
+  "homepage": "https://www.froala.com/wysiwyg-editor",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Froala Labs",
+      "role": "Maintainer"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-0": {
+        "FroalaEditor": "lib/"
+    },
+    "psr-4": {
+        "FroalaEditor\\": "lib/FroalaEditor"
+    }
+  },
+  "support": {
+    "issues": "https://github.com/froala/froala-editor-php-sdk/issues",
+    "source": "https://www.froala.com/wysiwyg-editor"
+  },
+  "extra": {
+    "installer-name": "FroalaEditor"
+  }
+}

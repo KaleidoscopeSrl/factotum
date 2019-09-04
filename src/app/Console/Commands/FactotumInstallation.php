@@ -40,13 +40,14 @@ class FactotumInstallation extends Command
 		$this->call('vendor:publish');
 
 		$this->info('Migration running...');
-		//$this->call('migrate');
+		$this->call('migrate');
 		$this->info('Migration done.');
 
 		$this->info('Seeding running...');
 		$this->call('db:seed');
 		$this->info('Seeding done.');
 
+		$this->call('passport:install');
 		$this->call('factotum:storage');
 		$this->call('factotum:symlinks');
     }

@@ -1,4 +1,4 @@
-# Factotum
+# Factotum 1
 Factotum is a Laravel-based open source CMS, that follow a simple rule:
 _We love KISSing the DRY PIE_.
 

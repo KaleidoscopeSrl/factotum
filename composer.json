@@ -1,5 +1,5 @@
 {
-    "name": "kaleidoscope/factotum",
+    "name": "kaleidoscope/dev-factotum",
     "description": "Laravel-based CMS baked by Kaleidoscope Srl",
     "keywords": ["cms", "laravel"],
     "license": "MIT",
@@ -10,7 +10,8 @@
         "doctrine/dbal": "^2.8",
         "intervention/image": "^2.4.2",
         "froala/wysiwyg-editor-php-sdk" : "1.0.1",
-        "barryvdh/laravel-debugbar": "^3.1.5"
+        "barryvdh/laravel-debugbar": "^3.1.5",
+        "laravel/passport": "7.4.*"
     },
     "autoload": {
         "classmap": [
