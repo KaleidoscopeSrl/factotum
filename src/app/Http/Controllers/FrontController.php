@@ -71,7 +71,7 @@ class FrontController extends Controller
 								 ->addLimit(1)
 								 ->search();
 
-		$content =  ( $content->count() > 0 ? $content[0] : null );
+		$content =  ( $content && $content->count() > 0 ? $content[0] : null );
 
 		if ( !$content ) {
 			$uriParts = explode( '/' , $uri );
@@ -90,6 +90,7 @@ class FrontController extends Controller
 										 ->onlyPublished()
 										 ->loadCategories(true)
 										 ->search();
+
 				if ($content) {
 					return $content[0];
 				} else {
@@ -140,7 +141,7 @@ class FrontController extends Controller
 								$contentSearch->filterByCategories( $category );
 							}
 							$contentSearch->addWhereCondition('lang', '=', $this->currentLanguage);
-							$contentSearch->addOrderBy($orderBy, $sort);
+							$contentSearch->addOrderBy( $orderBy, $sort);
 
 							if ($content->content_list_pagination) {
 								$contentSearch->addPagination($content->content_list_pagination);
@@ -218,13 +219,18 @@ class FrontController extends Controller
 	protected function extractContentOnIndex( $uri = '' )
 	{
 		$uri = trim($uri, '/');
+
 		if ( $uri != '' ) {
 			$checkLang = $this->uriParts[0];
+
+
 			if ( strlen($uri) == 5 && strlen($checkLang) == 5 ) {
 				if ( in_array( $checkLang, array_keys( config('factotum.factotum.site_languages') ) ) ) {
 					$data = $this->_getHomepage( $checkLang );
 				}
-			} else {
+			}
+
+			if ( !isset($data) ) {
 				$content = $this->_getContentByURI( $uri );
 
 				// Page or content exist
@@ -235,6 +241,7 @@ class FrontController extends Controller
 					$data = $this->reparseUri();
 				}
 			}
+
 		} else {
 			$data = $this->_getHomepage( config('factotum.factotum.main_site_language') );
 		}

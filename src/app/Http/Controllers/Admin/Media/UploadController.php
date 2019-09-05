@@ -46,7 +46,7 @@ class UploadController extends Controller
 					->with('required', $field->mandatory);
 	}
 
-	public function upload( Request $request )
+	private function _saveMedia(Request $request)
 	{
 		$data = $request->all();
 
@@ -83,13 +83,25 @@ class UploadController extends Controller
 			}
 
 			if ( $media->id ) {
-				return response()->json( [ 'status' => 'ok', 'media' => [ $this->_parseMedia( $media->toArray() ) ] ]);
+				return $this->_parseMedia( $media->toArray() );
 			} else {
 				return response()->json( [ 'status' => 'ko' ], 400);
 			}
 		} else {
 			return response()->json( [ 'status' => 'ko', 'error' => $validation['error'] ], 400);
 		}
+	}
+
+	public function upload( Request $request )
+	{
+		$media = $this->_saveMedia( $request );
+		return response()->json( [ 'status' => 'ok', 'media' => [ $media ] ]);
+	}
+
+	public function uploadEditor( Request $request )
+	{
+		$media = $this->_saveMedia( $request );
+		return response()->json( [ 'link' => $media['url'] ]);
 	}
 
 

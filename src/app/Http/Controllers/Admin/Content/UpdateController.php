@@ -70,7 +70,7 @@ class UpdateController extends Controller
 			foreach ( $newOrder as $contentID => $order ) {
 				$content = Content::find($contentID);
 				Content::$FIRE_EVENTS = false;
-				$content->order_no = $order;
+				$content->order_no = count($newOrder) - $order;
 				$content->save();
 			}
 			return response()->json( [ 'status' => 'ok' ]);

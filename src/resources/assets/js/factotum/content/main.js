@@ -132,7 +132,7 @@ $(function() {
 			imageManagerDeleteURL: deleteMediaURL,
 			imageUploadParam: 'media',
 			imageUploadParams: { _token: window.Laravel.csrfToken },
-			imageUploadURL: uploadMediaURL,
+			imageUploadURL: uploadMediaEditorURL,
 			imageManagerLoadURL: getMediaURL,
 			videoInsertButtons: [ 'videoBack', '|', 'videoByURL', 'videoEmbed' ]
 		});

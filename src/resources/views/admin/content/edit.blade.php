@@ -257,7 +257,7 @@
 							<div class="col-xs-6 btn_container">
 								<button type="submit" class="btn btn-primary" name="_save" value="save">@lang('factotum::generic.save')</button>
 								<?php if ( isset($content) ) { ?>
-								<a class="btn btn-primary" id="preview">@lang('factotum::generic.preview')</a>
+								<a href="<?php echo $content->abs_url; ?>" target="_blank" class="btn btn-primary" id="preview">@lang('factotum::generic.preview')</a>
 								<?php } ?>
 							</div>
 						</div>

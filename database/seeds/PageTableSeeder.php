@@ -114,14 +114,14 @@ class PageTableSeeder extends Seeder
 		$contentField->type  = 'select';
 
 		$operations = array(
-			'id-asc'              => 'BY ID ASC',
-			'id-desc'             => 'BY ID DESC',
-			'created_at-asc'      => 'BY DATA CREATION ASC',
-			'created_at-desc'     => 'BY DATA CREATION DESC',
-			'order_no-asc'        => 'BY ORDER No. ASC',
-			'order_no-desc'       => 'BY ORDER No. DESC',
-			'title-asc'           => 'BY TITLE ASC',
-			'title-desc'          => 'BY TITLE DESC',
+			'contents.id-asc'              => 'BY ID ASC',
+			'contents.id-desc'             => 'BY ID DESC',
+			'contents.created_at-asc'      => 'BY DATA CREATION ASC',
+			'contents.created_at-desc'     => 'BY DATA CREATION DESC',
+			'contents.order_no-asc'        => 'BY ORDER No. ASC',
+			'contents.order_no-desc'       => 'BY ORDER No. DESC',
+			'contents.title-asc'           => 'BY TITLE ASC',
+			'contents.title-desc'          => 'BY TITLE DESC',
 		);
 		$tmp = array();
 		foreach ($operations as $value => $label) {

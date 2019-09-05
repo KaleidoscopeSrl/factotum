@@ -5,7 +5,8 @@
 		getMediaPaginatedURL        = '{{ url('/admin/media/get-media-paginated/') }}',
 		getMediaByURL               = '{{ url('/admin/media/get-media-by-id/') }}',
         uploadMediaURL              = '{{ url('/admin/media/upload/') }}',
-        deleteMediaURL              = '{{ url('/admin/media/delete/') }}',
+		uploadMediaEditorURL        = '{{ url('/admin/media/upload-editor/') }}',
+		deleteMediaURL              = '{{ url('/admin/media/delete/') }}',
         resizeMediaBaseURL          = '{{ url('/admin/tools/do-resize-media') }}',
         resizeMediaURL              = '{{ url('/admin/tools/make-resize-media') }}';
 </script>

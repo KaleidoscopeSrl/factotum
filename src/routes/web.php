@@ -97,6 +97,7 @@ Route::group([
 	Route::post('/media/delete/{filename}',         'Media\DeleteController@delete')->middleware('can:delete,Kaleidoscope\Factotum\Media,filename');
 	Route::get('/media/upload/{content_field_id}',  'Media\UploadController@showUpload')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
 	Route::post('/media/upload',                    'Media\UploadController@upload')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
+	Route::post('/media/upload-editor',             'Media\UploadController@uploadEditor')->middleware('can:create,Kaleidoscope\Factotum\Media,id');
 	Route::get('/media/edit/{id}',                  'Media\UpdateController@edit')->middleware('can:update,Kaleidoscope\Factotum\Media,id');
 	Route::post('/media/update/{id}',               'Media\UpdateController@update')->middleware('can:update,Kaleidoscope\Factotum\Media,id');
 

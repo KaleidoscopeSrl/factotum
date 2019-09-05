@@ -21,14 +21,16 @@ class ContentSearch {
 	private $_loadCategories;
 
 	private $_cols = array(
-		'contents.id', 'contents.content_type_id', 'user_id', 'status', 'parent_id',
+		'contents.id', 'contents.content_type_id', 'contents.user_id', 'status', 'parent_id',
 		'title', 'content', 'url', 'abs_url', 'lang',
 		'show_in_menu', 'is_home',
 		'order_no',
 		'link', 'link_title', 'link_open_in',
 		'seo_title', 'seo_description', 'seo_canonical_url', 'seo_robots_indexing', 'seo_robots_following',
 		'fb_title', 'fb_description', 'fb_image',
-		'created_at', 'updated_at'
+		'contents.created_at', 'contents.updated_at',
+		'profiles.first_name', 'profiles.last_name',
+		'users.email', 'users.avatar'
 	);
 
 	public function __construct( array $contentType )
@@ -45,6 +47,8 @@ class ContentSearch {
 		$this->_query = DB::table('contents')
 							->select( DB::raw( $this->_cols ) )
 							->leftJoin( $contentType['content_type'], 'contents.id', '=', $contentType['content_type'] . '.content_id')
+							->leftJoin( 'users', 'users.id', '=', 'contents.user_id')
+							->leftJoin( 'profiles', 'profiles.user_id', '=', 'users.id')
 							->where( 'contents.content_type_id', '=', $contentType['id']);
 
 		$this->_loadCategories = false;
@@ -85,8 +89,7 @@ class ContentSearch {
 
 	public function addOrderBy( $orderBy, $sort )
 	{
-		$cols = array_diff( explode(',', $this->_cols ), array_keys( $this->_fields ) );
-		$this->_query->orderBy( (in_array($orderBy, $cols ) ? 'contents.' : '' ) . $orderBy , $sort );
+		$this->_query->orderBy( $orderBy , $sort );
 		return $this;
 	}
 

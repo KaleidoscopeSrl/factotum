@@ -11,6 +11,7 @@ class ReadController extends Controller
 	{
 		$contents = Content::treeChildsObjects( $contentTypeId, 50, $this->currentLanguage );
 
+		//echo '<pre>'; print_r( $contents->toArray() );
 		return view('factotum::admin.content.list')
 					->with('contentTypeId', $contentTypeId)
 					->with('contentType', ContentType::find($contentTypeId))

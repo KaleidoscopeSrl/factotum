@@ -49,7 +49,7 @@ class UpdateController extends Controller
 
 	public function sortFields(Request $request)
 	{
-		$newOrder = json_decode( $request->input('new_order') );
+		$newOrder = json_decode( $request->input('new_order'), true );
 		if ( count($newOrder) > 0 ) {
 			foreach ( $newOrder as $contentFieldID => $order ) {
 				$contentField = ContentField::find($contentFieldID);

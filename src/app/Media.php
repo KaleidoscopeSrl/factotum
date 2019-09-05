@@ -16,8 +16,12 @@ class Media extends Model
 
 	public static function filenameAvailable($filename, $origFilename, $counter = '')
 	{
+		$ext      = substr( $filename, strlen($filename) - 3, 3 );
+		$filename = str_slug( substr( $filename, 0, -4 ) ) . '.' . $ext;
 		$filename = str_replace('jpeg', 'jpg', $filename);
+
 		$mediaExist = Media::where('filename', $filename)->get();
+
 		if ( $mediaExist->count() > 0 ) {
 			if (!$counter) {
 				$counter = 1;
@@ -82,7 +86,7 @@ class Media extends Model
 						$constraint->upsize();
 					});
 				}
-				$image->save( $newFilename, 90 );
+				$image->save( $newFilename, 100 );
 				$image->destroy();
 			}
 		}
@@ -93,7 +97,7 @@ class Media extends Model
 			$constraint->upsize();
 		});
 
-		$origImage->save( $thumbFilename );
+		$origImage->save( $thumbFilename, 90 );
 		$origImage->destroy();
 
 		return $origImage;
