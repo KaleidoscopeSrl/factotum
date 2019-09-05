@@ -47,6 +47,7 @@ class FactotumInstallation extends Command
 		$this->call('db:seed');
 		$this->info('Seeding done.');
 
+		$this->call('passport:install');
 		$this->call('factotum:storage');
 		$this->call('factotum:symlinks');
     }

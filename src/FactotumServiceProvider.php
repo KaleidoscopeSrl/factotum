@@ -2,12 +2,15 @@
 
 namespace Kaleidoscope\Factotum;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+
+use Laravel\Passport\Passport;
 
 use Kaleidoscope\Factotum\Policies\UserPolicy;
 use Kaleidoscope\Factotum\Policies\RolePolicy;
@@ -51,23 +54,26 @@ class FactotumServiceProvider extends ServiceProvider
 			__DIR__ . '/config/factotum.php' => config_path('factotum/factotum.php'),
 			__DIR__ . '/config/view.php'     => config_path('factotum/view.php'),
 		], 'config');
-		$this->app['config']['auth'] = Config::get('factotum.auth');
+//		$this->app['config']['auth'] = Config::get('factotum.auth');
 
 
 		// Migrations & Seeds
 		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
 
+
 		// Routes
-		$this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+//		$this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+		$this->loadRoutesFrom(__DIR__ . '/routes/api.php');
 
 
 		// Translations
 		$this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'factotum');
 
-
 		// Middlewares
-		app('router')->aliasMiddleware('language', 'Kaleidoscope\Factotum\Http\Middleware\Language');
+//		app('router')->aliasMiddleware('language', 'Kaleidoscope\Factotum\Http\Middleware\Language');
+		app('router')->aliasMiddleware('preflight', 'Kaleidoscope\Factotum\Http\Middleware\PreflightResponse');
+		app('router')->aliasMiddleware('start_session', '\Illuminate\Session\Middleware\StartSession');
 
 
 		// View
@@ -75,7 +81,7 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		// Policies
-		$this->registerPolicies($gate);
+//		$this->registerPolicies($gate);
 
 
 		// Resources and Public
@@ -137,7 +143,11 @@ class FactotumServiceProvider extends ServiceProvider
 		Content::observe(ContentObserver::class);
 		Category::observe(CategoryObserver::class);
 
+
+		Passport::routes();
+		Passport::enableImplicitGrant();
     }
+
 
 	public function registerPolicies(GateContract $gate)
 	{
