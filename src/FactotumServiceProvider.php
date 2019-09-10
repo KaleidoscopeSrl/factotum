@@ -48,36 +48,55 @@ class FactotumServiceProvider extends ServiceProvider
     {
 		Schema::defaultStringLength(191);
 
-    	// Publish Configurations
-		$this->publishes([
-			__DIR__ . '/config/auth.php'     => config_path('factotum/auth.php'),
-			__DIR__ . '/config/factotum.php' => config_path('factotum/factotum.php'),
-			__DIR__ . '/config/view.php'     => config_path('factotum/view.php'),
-		], 'config');
-//		$this->app['config']['auth'] = Config::get('factotum.auth');
-
-
 		// Migrations & Seeds
 		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
 
 
-		// Routes
-//		$this->loadRoutesFrom(__DIR__ . '/routes/web.php');
-		$this->loadRoutesFrom(__DIR__ . '/routes/api.php');
+		// Configurations
+		$this->app['config']->set( 'auth', array_merge(
+			$this->app['config']->get('auth', []), require __DIR__ . '/config/auth.php'
+		));
+
+		$this->app['config']->set( 'mail', array_merge(
+			$this->app['config']->get('mail', []), require __DIR__ . '/config/mail.php'
+		));
+
+		$this->app['config']->set( 'view', array_merge(
+			$this->app['config']->get('view', []), require __DIR__ . '/config/view.php'
+		));
+
+		$this->app['config']->set( 'filesystems', array_merge(
+			$this->app['config']->get('filesystems', []), require __DIR__ . '/config/filesystems.php'
+		));
+
+
+    	// Publish Configurations
+		$this->publishes([
+			__DIR__ . '/config/factotum.php' => config_path('factotum.php'),
+		], 'config');
+
+
+
+		// Middlewares
+		app('router')->aliasMiddleware('language', 'Kaleidoscope\Factotum\Http\Middleware\Language');
+		app('router')->aliasMiddleware('preflight', 'Kaleidoscope\Factotum\Http\Middleware\PreflightResponse');
+		app('router')->aliasMiddleware('start_session', '\Illuminate\Session\Middleware\StartSession');
+
+
+
+
+
 
 
 		// Translations
 		$this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'factotum');
 
-		// Middlewares
-//		app('router')->aliasMiddleware('language', 'Kaleidoscope\Factotum\Http\Middleware\Language');
-		app('router')->aliasMiddleware('preflight', 'Kaleidoscope\Factotum\Http\Middleware\PreflightResponse');
-		app('router')->aliasMiddleware('start_session', '\Illuminate\Session\Middleware\StartSession');
 
 
 		// View
 		$this->loadViewsFrom(__DIR__ . '/resources/views', 'factotum');
+
 
 
 		// Policies
@@ -92,6 +111,7 @@ class FactotumServiceProvider extends ServiceProvider
 		], 'public');
 
 
+
 		if ($this->app->runningInConsole()) {
 			$this->commands([
 				CreateStorageFolders::class,
@@ -100,6 +120,48 @@ class FactotumServiceProvider extends ServiceProvider
 			]);
 		}
 
+
+		// Models
+		ContentType::observe(ContentTypeObserver::class);
+		ContentField::observe(ContentFieldObserver::class);
+		Content::observe(ContentObserver::class);
+		Category::observe(CategoryObserver::class);
+
+
+		// Routes
+		//$this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+		Route::group([
+			'prefix'     => 'api/v1',
+			'middleware' => [ 'api', 'preflight', 'start_session' ],
+			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Api'
+		], function ($router) {
+			require __DIR__ . '/routes/api/api.php';
+			require __DIR__ . '/routes/api/auth.php';
+			require __DIR__ . '/routes/api/media.php';
+			require __DIR__ . '/routes/api/role.php';
+			require __DIR__ . '/routes/api/user.php';
+			require __DIR__ . '/routes/api/content-type.php';
+			require __DIR__ . '/routes/api/content-field.php';
+			require __DIR__ . '/routes/api/category.php';
+		});
+
+		Passport::routes();
+		Passport::enableImplicitGrant();
+
+
+		// Final pieces and boobs
+		$this->_addValidators();
+
+		if ( env('FACTOTUM_INSTALLED') ) {
+			$contentTypes = ContentType::all();
+			View::share('contentTypes', $contentTypes);
+		}
+
+    }
+
+
+    private function _addValidators()
+	{
 		Validator::extend('allowed_types', function($attribute, $value, $parameters, $validator) {
 			if ($value == '*') {
 				return true;
@@ -132,21 +194,7 @@ class FactotumServiceProvider extends ServiceProvider
 		Validator::replacer('max_mb', function($message, $attribute, $rule, $parameters) {
 			return str_replace(array(':attribute', ':max'), array($attribute, $parameters[0]), $message);
 		});
-
-		if ( env('FACTOTUM_INSTALLED') ) {
-			$contentTypes = ContentType::all();
-			View::share('contentTypes', $contentTypes);
-		}
-
-		ContentType::observe(ContentTypeObserver::class);
-		ContentField::observe(ContentFieldObserver::class);
-		Content::observe(ContentObserver::class);
-		Category::observe(CategoryObserver::class);
-
-
-		Passport::routes();
-		Passport::enableImplicitGrant();
-    }
+	}
 
 
 	public function registerPolicies(GateContract $gate)
@@ -159,6 +207,6 @@ class FactotumServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //
     }
+
 }

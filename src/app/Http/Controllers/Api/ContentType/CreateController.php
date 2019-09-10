@@ -12,12 +12,12 @@ class CreateController extends Controller
 
     public function create(Request $request)
     {
-        $this->validator( $request, $request->all() )->validate();
+		$this->_validate( $request );
 
         $contentType = new ContentType;
-        $this->_save( $request, $contentType );
+		$contentType = $this->_save( $request, $contentType );
 
-        return response()->json( [ 'result' => 'ok', 'contentType'  => $contentType->toArray() ] );
+        return response()->json( [ 'result' => 'ok', 'content_type'  => $contentType->toArray() ] );
     }
 
 }

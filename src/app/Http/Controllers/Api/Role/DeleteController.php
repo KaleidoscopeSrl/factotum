@@ -12,7 +12,6 @@ class DeleteController extends Controller
 
     public function remove(Request $request, $id)
     {
-
         $this->validate($request, $this->deleteRoleRules, $this->messages);
 
         $reassigningRole = $request->input('reassigned_role');

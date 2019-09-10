@@ -21,7 +21,7 @@ class DeleteController extends Controller
         if ( $contentType ) {
             $deletedRows = ContentField::where('content_type_id', $id)->delete();
 
-            if ($deletedRows >= 0) {
+            if ( $deletedRows >= 0 ) {
 
                 ContentType::destroy($id);
 

@@ -13,13 +13,14 @@ class UpdateController extends Controller
 
 	public function update(Request $request, $id)
 	{
-		$this->validator($request->all(), $id)->validate();
+		$this->_validate( $request );
 
 		$user = User::find($id);
 		$profile = $user->profile;
 
-		$this->_save( $request, $user, $profile );
+		$user = $this->_save( $request, $user, $profile );
 
-        return response()->json( [ 'result' => 'ok', 'role'  => $user->toArray() ] );
+        return response()->json( [ 'result' => 'ok', 'user'  => $user->toArray() ] );
 	}
+
 }

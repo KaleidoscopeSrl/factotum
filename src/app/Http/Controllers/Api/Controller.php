@@ -144,4 +144,10 @@ class Controller extends BaseController
 				->with('clientId', $clientId)
 				->with('siteId', $siteId);
 	}
+
+	public function optionsRequest()
+	{
+		return response('OK', 200);
+	}
+
 }

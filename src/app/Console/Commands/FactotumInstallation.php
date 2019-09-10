@@ -44,6 +44,7 @@ class FactotumInstallation extends Command
 		$this->info('Migration done.');
 
 		$this->info('Seeding running...');
+		// TODO: attenzione, potrebbe essere che va lanciato il composer dump-autoload (verificare se esiste un compando di laravel che lo fa in auto
 		$this->call('db:seed');
 		$this->info('Seeding done.');
 

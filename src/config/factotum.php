@@ -2,7 +2,7 @@
 
 return [
 
-	'prohibited_content_types' => array(
+	'prohibited_content_types' => [
 		'users', 'user',
 		'profiles', 'profile',
 		'roles', 'role',
@@ -16,9 +16,35 @@ return [
 		'pages', 'page',
 		'categories', 'category',
 		'content_categories', 'content_category',
-	),
+	],
 
-	'prohibited_content_field_names' => array(
+
+	'content_fields' => [
+		'text'                       => 'Text',
+		'textarea'                   => 'Textarea',
+		'wysiwyg'                    => 'Wysiwyg Editor',
+		'select'                     => 'Select',
+		'multiselect'                => 'Multi Select',
+		'checkbox'                   => 'Checkbox',
+		'multicheckbox'              => 'Multi Checkbox',
+		'radio'                      => 'Radio',
+		'date'                       => 'Date',
+		'datetime'                   => 'Date and Time',
+		'file_upload'                => 'File Upload',
+		'image_upload'               => 'Image Upload',
+		'gallery'                    => 'Gallery',
+		'linked_content'             => 'Linked Content',
+		'multiple_linked_content'    => 'Multiple Linked Content',
+	],
+
+	'image_operations' => [
+		'null'   => 'None',
+		'resize' => 'Resize',
+		'crop'   => 'Crop',
+		'fit'    => 'Fit'
+	],
+
+	'prohibited_content_field_names' => [
 		'id',
 		'parent_id',
 		'content_type_id',
@@ -40,22 +66,23 @@ return [
 		'fb_image',
 		'created_at',
 		'updated_at'
-	),
+	],
 
-	'thumb_size' => array(
+	'thumb_size' => [
 		'width'  => 200,
 		'height' => 200
-	),
+	],
+
 
 	'main_site_language' => 'en-GB',
-	'site_languages' => array(
+	'site_languages' => [
 		'en-GB' => 'English',
 		'it-IT' => 'Italiano'
-	),
+	],
 
 	'analytics_client_id' => '',
 	'analytics_site_id'   => '',
 
 	'css_version' => '1.0.0',
-	'js_version'  => '1.0.0'
+	'js_version'  => '1.0.0',
 ];

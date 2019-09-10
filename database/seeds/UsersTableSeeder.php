@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
 
 		DB::table('users')->insert([
 			'email'    => 'factotum@kaleidoscope.it',
-			'password' => bcrypt('123456'),
+			'password' => bcrypt('12345678'),
 			'role_id'  => $adminRole->id,
 			'editable' => false
 		]);

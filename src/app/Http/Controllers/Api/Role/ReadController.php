@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 
 class ReadController extends Controller
 {
+
     public function getList()
     {
         $roles = Role::get();
 
         return response()->json( [ 'result' => 'ok', 'roles' => $roles ]);
     }
+
 
     public function getDetail(Request $request, $id)
     {
@@ -24,4 +26,5 @@ class ReadController extends Controller
 
         return $this->_sendJsonError('Ruolo non trovato.');
     }
+
 }

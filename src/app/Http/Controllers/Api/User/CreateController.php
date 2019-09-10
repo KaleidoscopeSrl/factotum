@@ -13,19 +13,17 @@ use Kaleidoscope\Factotum\Profile;
 class CreateController extends Controller
 {
 
-    public function create(Request $request)
-    {
-        $this->validator($request->all())->validate();
+	public function create(Request $request)
+	{
+		$this->_validate( $request );
 
-        $user = new User;
-        $user->editable = true;
-        $profile = new Profile;
-        $user = $this->_save( $request, $user, $profile );
+		$user = new User;
+		$user->editable = true;
 
-        // TODO: ??
-        // event(new Registered($user));
+		$profile = new Profile;
+		$user = $this->_save( $request, $user, $profile );
 
-        return response()->json( [ 'result' => 'ok', 'role'  => $user->toArray() ] );
-    }
+		return response()->json( [ 'result' => 'ok', 'user'  => $user->toArray() ] );
+	}
 
 }

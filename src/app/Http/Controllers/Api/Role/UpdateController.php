@@ -10,6 +10,8 @@ class UpdateController extends Controller
 {
     public function update(Request $request, $id)
     {
+		$this->roleRules['role'] = 'required|unique:roles,role,' . $id;
+
         $this->_validate( $request );
 
         $role = Role::find( $id );

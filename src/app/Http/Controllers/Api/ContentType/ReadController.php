@@ -11,18 +11,20 @@ class ReadController extends Controller
     {
         $contentTypes = ContentType::get();
 
-        return response()->json( [ 'result' => 'ok', 'contentTypes' => $contentTypes ]);
+        return response()->json( [ 'result' => 'ok', 'content_types' => $contentTypes ]);
     }
+
 
     public function getDetail(Request $request, $id)
     {
         $contentType = ContentType::find($id);
 
         if ( $contentType ) {
-            return response()->json( [ 'result' => 'ok', 'contentType' => $contentType ]);
+            return response()->json( [ 'result' => 'ok', 'content_type' => $contentType ]);
         }
 
         return $this->_sendJsonError('Tipo di Contenuto non trovato.');
     }
+
 }
 

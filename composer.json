@@ -18,10 +18,11 @@
             "database"
         ],
         "psr-4": {
-            "Kaleidoscope\\Factotum\\": "src",
-            "Kaleidoscope\\Factotum\\Library\\": "src/app/Library",
-            "Kaleidoscope\\Factotum\\Helpers\\": "src/app/Helpers",
-            "Kaleidoscope\\Factotum\\Http\\Middleware\\": "src/app/Http/Middleware"
+            "Kaleidoscope\\Factotum\\":                   "src",
+            "Kaleidoscope\\Factotum\\Library\\":          "src/app/Library",
+            "Kaleidoscope\\Factotum\\Helpers\\":          "src/app/Helpers",
+            "Kaleidoscope\\Factotum\\Http\\Middleware\\": "src/app/Http/Middleware",
+            "Kaleidoscope\\Factotum\\Mail\\":             "src/app/Mail"
         },
         "files": [
             "src/app/Library/ContentSearch.php",

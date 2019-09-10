@@ -3,152 +3,82 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Auth;
 
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\RedirectsUsers;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-
-use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
 
 class LoginController extends Controller
 {
-	use RedirectsUsers, ThrottlesLogins;
-
 	/**
-	 * Where to redirect users after login.
-	 *
-	 * @var string
-	 */
-	//protected $redirectTo = '/admin/pages/';
-	protected $redirectTo = '/admin';
-
-	public function index()
-	{
-		return view('factotum::admin.auth.login');
-	}
-
-
-	public function login(Request $request)
-	{
-		$this->validateLogin($request);
-
-		// If the class is using the ThrottlesLogins trait, we can automatically throttle
-		// the login attempts for this application. We'll key this by the username and
-		// the IP address of the client making these requests into this application.
-		if ($this->hasTooManyLoginAttempts($request)) {
-			$this->fireLockoutEvent($request);
-
-			return $this->sendLockoutResponse($request);
-		}
-
-		$credentials = $this->credentials($request);
-
-		if ($this->guard()->attempt($credentials, $request->has('remember'))) {
-
-			$user = $this->guard()->user();
-
-			if ( $user->role->backend_access ) {
-				return $this->sendLoginResponse($request);
-			} else {
-				$this->guard()->logout();
-				$request->session()->flush();
-				$request->session()->regenerate();
-
-				return $this->sendNotAuthLoginResponse($request);
-			}
-
-		}
-
-		// If the login attempt was unsuccessful we will increment the number of attempts
-		// to login and redirect the user back to the login form. Of course, when this
-		// user surpasses their maximum number of attempts they will get locked out.
-		$this->incrementLoginAttempts($request);
-
-		return $this->sendFailedLoginResponse($request);
-	}
-
-
-	/**
-	 * Validate the user login request.
+	 * Handle a login request to the application.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @return void
+	 * @return \Illuminate\Http\Response
 	 */
-	protected function validateLogin(Request $request)
+	public function login(Request $request)
 	{
-		$this->validate($request, [
-			$this->username() => 'required', 'password' => 'required',
+		$this->messages['exist'] = 'Non esiste nessun utente con questa :attribute.';
+
+		if ( $request->input('email') ) {
+			$request->request->add([ 'email' => $request->input('email') ]);
+		}
+
+		$validator = Validator::make( $request->all() , [
+			'email'       => 'required|exists:users',
+			'password'    => 'required|min:8'
+		], $this->messages);
+
+		if ($validator->fails()) {
+			$errors = $validator->errors()->all();
+
+			return $this->_sendJsonError( $errors[0] );
+		}
+
+		$email = $request->input('email');
+
+
+		$credentials = [
+			'email'     => $email,
+			'password'  => request('password')
+		];
+
+
+
+		if ( !Auth::attempt($credentials) ) {
+			return $this->_sendJsonError( 'La password non è corretta per questo account o l\'utente ha effettuato troppi tentativi.', 401 );
+		}
+
+		$user = Auth::user();
+		$user->load('profile');
+
+		$token = $user->createToken('Factotum')->accessToken;
+
+		return response()->json([
+			'result'     => 'ok',
+			'user'       => $user->toArray(),
+			'token'      => $token
 		]);
 	}
 
-	/**
-	 * Get the needed authorization credentials from the request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return array
-	 */
-	protected function credentials(Request $request)
-	{
-		return $request->only($this->username(), 'password');
-	}
+
 
 	/**
-	 * Send the response after the user was authenticated.
+	 * Get the Closure which is used to build the password reset notification.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
+	 * @return \Closure
 	 */
-	protected function sendLoginResponse(Request $request)
-	{
-		$request->session()->regenerate();
-		$this->clearLoginAttempts($request);
-		return $this->authenticated($request, $this->guard()->user()) ? : redirect()->intended($this->redirectPath());
-	}
+	protected function resetNotifier() { }
 
 	/**
-	 * The user has been authenticated.
+	 * Get the broker to be used during password reset.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  mixed  $user
-	 * @return mixed
+	 * @return \Illuminate\Contracts\Auth\PasswordBroker
 	 */
-	protected function authenticated(Request $request, $user)
+	public function _broker()
 	{
-		$request->session()->put('currentLanguage', config('factotum.factotum.main_site_language') );
-	}
-
-	/**
-	 * Get the failed login response instance.
-	 *
-	 * @param \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	protected function sendFailedLoginResponse(Request $request)
-	{
-		return redirect()->back()
-			->withInput($request->only($this->username(), 'remember'))
-			->withErrors([
-				$this->username() => Lang::get('factotum::auth.failed'),
-			]);
-	}
-
-	protected function sendNotAuthLoginResponse(Request $request)
-	{
-		return redirect()->back()
-			->withInput($request->only($this->username(), 'remember'))
-			->withErrors([
-				$this->username() => Lang::get('factotum::auth.not_auth'),
-			]);
-	}
-
-	/**
-	 * Get the login username to be used by the controller.
-	 *
-	 * @return string
-	 */
-	public function username()
-	{
-		return 'email';
+		return Password::broker();
 	}
 
 }

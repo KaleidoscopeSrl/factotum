@@ -2,31 +2,36 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\ContentField;
 
+use Illuminate\Http\Request;
+
 use Kaleidoscope\Factotum\ContentField;
 use Kaleidoscope\Factotum\ContentType;
-use Illuminate\Http\Request;
+
 
 class ReadController extends Controller
 {
+
     public function getList()
     {
-        $contentTypes = ContentType::with(array('content_fields' => function($query) {
+        $contentFields = ContentType::with( ['content_fields' => function($query) {
             $query->orderBy('order_no', 'ASC');
-        }))->get();
+        }])->get();
 
-        return response()->json( [ 'result' => 'ok', 'contentTypes' => $contentTypes ]);
+        return response()->json( [ 'result' => 'ok', 'content_fields' => $contentFields ]);
     }
+
 
     public function getDetail(Request $request, $id)
     {
         $contentField = ContentField::find($id);
 
         if ( $contentField ) {
-            return response()->json( [ 'result' => 'ok', 'contentField' => $contentField ]);
+            return response()->json( [ 'result' => 'ok', 'content_field' => $contentField ]);
         }
 
-        return $this->_sendJsonError('Categoria non trovata.');
+        return $this->_sendJsonError('Campo non trovato.');
     }
+
 
 }
 

@@ -86,7 +86,6 @@ class FactotumSetup extends Migration
 			$table->integer('role_id')->unsigned();
 			$table->foreign('role_id')->references('id')->on('roles');
 			$table->boolean('editable')->default(true);
-			$table->string('filename', 50)->nullable(true);
 			$table->string('avatar', 255)->nullable(true);
 			$table->rememberToken();
 			$table->timestamps();

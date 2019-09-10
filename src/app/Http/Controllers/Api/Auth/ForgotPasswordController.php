@@ -2,99 +2,60 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Auth;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
-
-use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+
+use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
+use Kaleidoscope\Factotum\Mail\AuthForgottenPassword;
+use Kaleidoscope\Factotum\User;
 
 
 class ForgotPasswordController extends Controller
 {
-	protected $redirectTo = '/admin';
 
-	public function index()
+    use SendsPasswordResetEmails;
+
+
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
+
+	public function forgottenPassword(Request $request)
 	{
-		return view('factotum::admin.auth.passwords.email');
-	}
+		$validator = Validator::make( $request->all() , [
+			'email' => 'required|max:255|exists:users',
+		], $this->messages);
 
-	public function broker()
-	{
-		return Password::broker();
-	}
-
-	public function sendResetLinkEmail(Request $request)
-	{
-		$this->validate($request, ['email' => 'required|email']);
-
-		$response = $this->broker()->sendResetLink(
-			$request->only('email')
-		);
-
-		if ($response === Password::RESET_LINK_SENT) {
-			return back()->with('status', trans($response));
+		if ( $validator->fails() ) {
+			$errors = $validator->errors()->all();
+			return $this->_sendJsonError( $errors[0] );
 		}
-	}
 
-	public function reset(Request $request, $token = null)
-	{
-		return view('factotum::admin.auth.passwords.reset')->with(
-			['token' => $token, 'email' => $request->email]
-		);
-	}
+		$user = User::with('profile')->where('email', $request->input('email') )->first();
 
-	public function resetUserPassword(Request $request)
-	{
-		$this->validate($request, [
-			'token'    => 'required',
-			'email'    => 'required|email',
-			'password' => 'required|confirmed|min:6',
-		]);
+		if ( $user ) {
+			$newPassword    = Str::random(8);
+			$user->password = Hash::make( $newPassword );
+			$user->save();
 
-		$response = $this->broker()->reset(
-			$this->credentials($request), function ($user, $password) {
-			$this->resetPassword($user, $password);
-		});
+			Mail::to( $user->email )
+				->send( new AuthForgottenPassword( $user, $newPassword ) );
 
-		return $response == Password::PASSWORD_RESET
-			? $this->sendResetResponse($response)
-			: $this->sendResetFailedResponse($request, $response);
-	}
+			// check for failures
+			if ( Mail::failures() ) {
+				$response = Mail::failures();
+			} else {
+				return response()->json( [ 'result' => 'ok' ]);
+			}
+		}
 
-	protected function credentials(Request $request)
-	{
-		return $request->only(
-			'email', 'password', 'password_confirmation', 'token'
-		);
-	}
+		return $this->_sendJsonError( 'Impossibile recuperare la password' );
 
-	protected function resetPassword($user, $password)
-	{
-		$user->forceFill([
-			'password' => bcrypt($password),
-			'remember_token' => Str::random(60),
-		])->save();
-
-		$this->guard()->login($user);
-	}
-
-	protected function sendResetResponse($response)
-	{
-		return redirect( $this->redirectPath() )->with('status', trans($response));
-	}
-
-	protected function sendResetFailedResponse(Request $request, $response)
-	{
-		return redirect()->back()
-			->withInput($request->only('email'))
-			->withErrors(['email' => trans($response)]);
-	}
-
-	public function redirectPath()
-	{
-		return property_exists($this, 'redirectTo') ? $this->redirectTo : '/admin/auth/login';
 	}
 }
-
-
-

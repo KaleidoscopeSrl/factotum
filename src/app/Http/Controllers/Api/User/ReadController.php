@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 
 class ReadController extends Controller
 {
+
     public function getList()
     {
         $users = User::with('profile')->with('role')->get();
 
         return response()->json( [ 'result' => 'ok', 'users' => $users ]);
     }
+
 
     public function getDetail(Request $request, $id)
     {
@@ -25,4 +27,5 @@ class ReadController extends Controller
 
         return $this->_sendJsonError('Utente non trovato.');
     }
+
 }

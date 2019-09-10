@@ -12,11 +12,13 @@ class UpdateController extends Controller
 
 	public function update(Request $request, $id)
 	{
-		$data = $request->all();
-		$this->validator( $request, $data, $id )->validate();
+		$this->contentTypeRules['content_type'] .= ',content_type,' . $id;
+
+		$this->_validate( $request );
 
 		$contentType = ContentType::find($id);
 		$contentType->old_content_type = $contentType->content_type;
+
 		$contentType = $this->_save( $request, $contentType );
 
         return response()->json( [ 'result' => 'ok', 'contentType'  => $contentType->toArray() ] );

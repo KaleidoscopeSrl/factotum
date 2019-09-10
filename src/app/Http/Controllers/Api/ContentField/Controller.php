@@ -13,6 +13,7 @@ use Kaleidoscope\Factotum\Library\Utility;
 
 class Controller extends ApiBaseController
 {
+
 	protected $fieldTypes = array(
 		'text'                       => 'Text',
 		'textarea'                   => 'Textarea',
@@ -65,12 +66,6 @@ class Controller extends ApiBaseController
 		'allowed_types'  => 'The field :attribute is not in the right format.',
 	];
 
-	/*public function __construct()
-	{
-		parent::__construct();
-
-		View::share( 'contentFieldAssets', true );
-	}*/
 
 	protected function _save( Request $request, $contentField )
 	{
@@ -92,6 +87,7 @@ class Controller extends ApiBaseController
 		return $contentField;
 	}
 
+
 	private function _setUploadableData($data, $contentField)
 	{
 		if ($data['type'] == 'file_upload' || $data['type'] == 'image_upload' || $data['type'] == 'gallery') {
@@ -104,6 +100,7 @@ class Controller extends ApiBaseController
 
 		return $contentField;
 	}
+
 
 	private function _setImageData($data, $contentField)
 	{
@@ -129,6 +126,7 @@ class Controller extends ApiBaseController
 		return $contentField;
 	}
 
+
 	private function _setOptionsData($data, $contentField)
 	{
 		if ( in_array($data['type'], array('select', 'multiselect', 'checkbox', 'multicheckbox', 'radio') ) ) {
@@ -151,6 +149,7 @@ class Controller extends ApiBaseController
 
 		return $contentField;
 	}
+
 
 	private function _setLinkedContentData($data, $contentField)
 	{
@@ -213,4 +212,5 @@ class Controller extends ApiBaseController
 		}
 		return $rules;
 	}
+
 }
