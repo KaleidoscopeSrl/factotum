@@ -2,11 +2,21 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 
-use Kaleidoscope\Factotum\ContentType;
+use Illuminate\Http\Request;
+
 use Kaleidoscope\Factotum\Content;
 
 class ReadController extends Controller
 {
+	public function getList(Request $request)
+	{
+		$contentTypeId = $request->input('contentTypeId');
+
+		$contents = Content::where('content_type_id', $contentTypeId)->get();
+
+		return response()->json( [ 'result' => 'ok', 'contents' => $contents ]);
+	}
+
 	public function indexList($contentTypeId = null)
 	{
 		$contents = Content::treeChildsObjects( $contentTypeId, 50, $this->currentLanguage );

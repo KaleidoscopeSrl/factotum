@@ -25,7 +25,7 @@ class Utility
 		$result = array();
 		$options = explode(';', $options);
 		foreach ($options as $opt) {
-			if ($opt) {
+			if ( $opt && str_contains($opt,':') ) {
 				list($value, $label) = explode(':', $opt);
 				$result[$value] = $label;
 			}

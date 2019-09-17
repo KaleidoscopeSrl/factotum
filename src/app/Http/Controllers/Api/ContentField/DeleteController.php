@@ -16,6 +16,7 @@ class DeleteController extends Controller
         $contentField = ContentField::find( $id );
 
         if ( $contentField ) {
+
             $deletedRows = $contentField->delete();
 
             if ( $deletedRows > 0 ) {

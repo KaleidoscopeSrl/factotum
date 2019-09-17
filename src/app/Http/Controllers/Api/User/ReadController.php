@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 class ReadController extends Controller
 {
 
-    public function getList()
+    public function getList( Request $request )
     {
-        $users = User::with('profile')->with('role')->get();
+    	$limit  = $request->input('limit');
+		$offset = $request->input('offset');
+
+        $users = User::with('profile')->with('role')->skip($offset)->take($limit)->get();
 
         return response()->json( [ 'result' => 'ok', 'users' => $users ]);
     }

@@ -140,6 +140,7 @@ class FactotumServiceProvider extends ServiceProvider
 			require __DIR__ . '/routes/api/media.php';
 			require __DIR__ . '/routes/api/role.php';
 			require __DIR__ . '/routes/api/user.php';
+			require __DIR__ . '/routes/api/content.php';
 			require __DIR__ . '/routes/api/content-type.php';
 			require __DIR__ . '/routes/api/content-field.php';
 			require __DIR__ . '/routes/api/category.php';

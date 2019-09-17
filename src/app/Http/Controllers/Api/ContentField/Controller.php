@@ -108,10 +108,10 @@ class Controller extends ApiBaseController
 			$contentField->min_width_size   = $data['min_width_size'];
 			$contentField->min_height_size  = $data['min_height_size'];
 			$contentField->image_operation  = ( $data['image_operation'] == 'null' ? null : $data['image_operation'] );
-
-			if ( isset($data['width_resize']) && isset($data['height_resize']) &&
-				$data['width_resize'] != '' && $data['height_resize'] != '' ) {
-				$contentField->resizes = Utility::convertOptionsAssocArrayToString( $data['width_resize'], $data['height_resize'] );
+			
+			if ( isset($data['image_operation_width']) && isset($data['image_operation_height']) &&
+				$data['image_operation_width'] != '' && $data['image_operation_height'] != '' ) {
+				$contentField->resizes = Utility::convertOptionsAssocArrayToString( [ $data['image_operation_width'] ], [ $data['image_operation_height'] ] );
 			} else {
 				$contentField->resizes = '';
 			}
@@ -187,18 +187,19 @@ class Controller extends ApiBaseController
 		if ( $data['type'] == 'image_upload' || $data['type'] == 'gallery' ) {
 			$rules = array_merge($rules, $this->imageRules);
 
-			if ( isset($data['width_resize']) && isset($data['height_resize']) &&
-				$data['width_resize'] != '' && $data['height_resize'] != '' ) {
-				$rules['width_resize'] = 'required_if:type,image_upload,gallery';
-				$rules['height_resize'] = 'required_if:type,image_upload,gallery';
+			if ( isset($data['image_operation_width']) && isset($data['image_operation_height']) &&
+				$data['image_operation_width'] != '' && $data['image_operation_height'] != '' ) {
+				$rules['image_operation_width'] = 'required_if:type,image_upload,gallery';
+				$rules['image_operation_height'] = 'required_if:type,image_upload,gallery';
 			}
+
 		}
 		return $rules;
 	}
 
 	private function _setNameRules( $data, $rules, $id = null )
 	{
-		$rules['name'] .= '|not_in:' . join(',', config('app.prohibited_content_field_names'));
+		$rules['name'] .= '|not_in:' . join(',', config('factotum.factotum.prohibited_content_field_names'));
 
 		if ($id) {
 			$contentField = ContentField::where('name', $data['name'])

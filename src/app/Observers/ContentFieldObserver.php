@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\ContentField;
+use mysql_xdevapi\Exception;
 
 class ContentFieldObserver
 {
@@ -71,12 +72,14 @@ class ContentFieldObserver
 			$table = null;
 			$oldContentField = $contentField->old_content_field;
 
-			// Alter relative table
-			Schema::table( $contentType->content_type, function (Blueprint $table)  use ( $oldContentField, $contentField) {
-				if ( $oldContentField != '' && $contentField->name != $oldContentField ) {
-					$table->renameColumn( $oldContentField, $contentField->name );
-				}
-			});
+			if ( $oldContentField !== $contentField->name ) {
+				// Alter relative table
+				Schema::table( $contentType->content_type, function (Blueprint $table)  use ( $oldContentField, $contentField) {
+					if ( $oldContentField != '' && $contentField->name != $oldContentField ) {
+						$table->renameColumn( $oldContentField, $contentField->name );
+					}
+				});
+			}
 		}
 	}
 
@@ -85,36 +88,41 @@ class ContentFieldObserver
 		if ( $contentField::$FIRE_EVENTS ) {
 			$contentType = ContentType::find($contentField->content_type_id);
 
-			// Alter relative table
-			Schema::table( $contentType->content_type, function (Blueprint $table)  use ( $contentField ) {
-				if ( $contentField->type == 'text' ||
-					$contentField->type == 'select' || $contentField->type == 'multiselect' ||
-					$contentField->type == 'checkbox' || $contentField->type == 'multicheckbox' ||
-					$contentField->type == 'radio' ||
-					$contentField->type == 'file_upload' || $contentField->type == 'image_upload' ||
-					$contentField->type == 'multiple_linked_content' ) {
-					$table->string( $contentField->name, 255 )->nullable( !$contentField->mandatory )->change();
-				}
+			try {
 
-				if ( $contentField->type == 'date' ) {
-					$table->date( $contentField->name )->nullable( !$contentField->mandatory )->change();
-				}
+				// Alter relative table
+				Schema::table( $contentType->content_type, function (Blueprint $table)  use ( $contentField ) {
+					if ( $contentField->type == 'text' ||
+						$contentField->type == 'select' || $contentField->type == 'multiselect' ||
+						$contentField->type == 'checkbox' || $contentField->type == 'multicheckbox' ||
+						$contentField->type == 'radio' ||
+						$contentField->type == 'file_upload' || $contentField->type == 'image_upload' ||
+						$contentField->type == 'multiple_linked_content' ) {
+						$table->string( $contentField->name, 255 )->nullable( !$contentField->mandatory )->change();
+					}
 
-				if ( $contentField->type == 'datetime' ) {
-					$table->dateTime( $contentField->name )->nullable( !$contentField->mandatory )->change();
-				}
+					if ( $contentField->type == 'date' ) {
+						$table->date( $contentField->name )->nullable( !$contentField->mandatory )->change();
+					}
 
-				if ( $contentField->type == 'textarea' ||
-					$contentField->type == 'wysiwyg' ||
-					$contentField->type == 'gallery' ) {
-					$table->text( $contentField->name )->nullable( !$contentField->mandatory )->change();
-				}
+					if ( $contentField->type == 'datetime' ) {
+						$table->dateTime( $contentField->name )->nullable( !$contentField->mandatory )->change();
+					}
 
-				if ( $contentField->type == 'linked_content' ) {
-					$table->integer( $contentField->name )->nullable( !$contentField->mandatory )->change();
-				}
-			});
-			$this->_saveJsonModel( $contentType );
+					if ( $contentField->type == 'textarea' ||
+						$contentField->type == 'wysiwyg' ||
+						$contentField->type == 'gallery' ) {
+						$table->text( $contentField->name )->nullable( !$contentField->mandatory )->change();
+					}
+
+					if ( $contentField->type == 'linked_content' ) {
+						$table->integer( $contentField->name )->nullable( !$contentField->mandatory )->change();
+					}
+				});
+				$this->_saveJsonModel( $contentType );
+
+			} catch ( Exception $exception ) { print_r('err0r'); }
+
 		}
 	}
 
