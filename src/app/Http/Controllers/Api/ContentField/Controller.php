@@ -199,7 +199,7 @@ class Controller extends ApiBaseController
 
 	private function _setNameRules( $data, $rules, $id = null )
 	{
-		$rules['name'] .= '|not_in:' . join(',', config('factotum.factotum.prohibited_content_field_names'));
+		$rules['name'] .= '|not_in:' . join(',', config('factotum.prohibited_content_field_names'));
 
 		if ($id) {
 			$contentField = ContentField::where('name', $data['name'])
