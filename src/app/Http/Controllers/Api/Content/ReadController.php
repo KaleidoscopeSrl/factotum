@@ -4,7 +4,9 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
 use Kaleidoscope\Factotum\Content;
+use Kaleidoscope\Factotum\ContentType;
 
 class ReadController extends Controller
 {
@@ -15,16 +17,6 @@ class ReadController extends Controller
 		$contents = Content::where('content_type_id', $contentTypeId)->get();
 
 		return response()->json( [ 'result' => 'ok', 'contents' => $contents ]);
-	}
-
-	public function indexList($contentTypeId = null)
-	{
-		$contents = Content::treeChildsObjects( $contentTypeId, 50, $this->currentLanguage );
-
-		return view('factotum::admin.content.list')
-					->with('contentTypeId', $contentTypeId)
-					->with('contentType', ContentType::find($contentTypeId))
-					->with('contents', $contents);
 	}
 
 	public function getContentsByType($contentTypeID)
@@ -42,6 +34,23 @@ class ReadController extends Controller
 		}
 
 		return response()->json( [ 'status' => 'ko' ]);
+	}
+
+
+	public function getDetail(Request $request, $id)
+	{
+		$content = Content::find($id);
+
+		if ( $content ) {
+
+			$content_type = ContentType::find( $content->content_type_id );
+
+			$dataContent = DB::table( $content_type->content_type )->where( 'content_id', $content->id )->where( 'content_type_id', $content_type->id)->first();
+
+			return response()->json( [ 'result' => 'ok', 'content' => $content, 'data' => $dataContent ]);
+		}
+
+		return $this->_sendJsonError('Campo non trovato.');
 	}
 }
 
