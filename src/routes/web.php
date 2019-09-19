@@ -137,7 +137,7 @@
 //
 //
 Route::group(['middleware' => ['web', 'language']], function () {
-	Route::get('/sitemap', 'Kaleidoscope\Factotum\Http\Controllers\Admin\Tools\SitemapController@generate');
+	Route::get('/sitemap', 'Kaleidoscope\Factotum\Http\Controllers\Api\Tools\SitemapController@generate');
 //	Route::get('/{uri?}', 'Kaleidoscope\Factotum\Http\Controllers\FrontController@index')->where('uri', '.*');
 //	Route::post('/{uri?}', 'Kaleidoscope\Factotum\Http\Controllers\FrontController@index')->where('uri', '.*');
 });

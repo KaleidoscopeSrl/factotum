@@ -31,28 +31,20 @@ class SitemapController extends Controller
 	public function generate()
 	{
 
-		$contentTypes = ContentType::all();
+		$contentTypes = ContentType::where('sitemap_in',1)->get();
 		$listData = [];
-		//
-		$settings = Setting::where('setting_key','sitemap_settings')->first();
-		$sitemapSettings = [];
-		if ( $settings ){
-			$sitemapSettings = json_decode($settings->setting_value);
-		} else {
+
+		if ( !$contentTypes || $contentTypes->count() == 0 ){
 			$homepage = new ContentType;
 			$homepage->abs_url      = url('/').'';
 			$homepage->updated_at   = now();
-			$listData['test'] = $homepage;
+			$listData['default'] = array(0 => $homepage);
 		}
 
-		//TODO: come rimuovere pagina come  https://www.kaleidoscope.it/save-contact  ?
 		foreach ($contentTypes as $contentType) {
-			if ( in_array( $contentType->content_type, $sitemapSettings ) ){
-				$tmpType = ContentType::whereContentType($contentType->content_type)->first()->toArray();
-				$contentSearch = new ContentSearch($tmpType);
-				$contentSearch->onlyPublished();
-				$listData[$contentType->content_type] = $contentSearch->search()->toArray();
-			}
+			$contentSearch = new ContentSearch($contentType->toArray());
+			$contentSearch->onlyPublished();
+			$listData[$contentType->content_type] = $contentSearch->search()->toArray();
 		}
 		
 		$content = View::make('factotum::frontend.sitemap', ['listData' => $listData]);
