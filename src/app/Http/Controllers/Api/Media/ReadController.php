@@ -20,6 +20,8 @@ class ReadController extends Controller
     {
         $media = Media::find($id);
 
+        $media->url = ( $media->url ? url( $media->url ) : null );
+
         if ( $media ) {
             return response()->json( [ 'result' => 'ok', 'media' => $media ]);
         }

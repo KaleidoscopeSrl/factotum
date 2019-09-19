@@ -131,4 +131,9 @@ class Media extends Model
 		return null;
 	}
 
+	/*public function getUrlAttribute($value)
+	{
+		return ( $value ? url( $value ) : null );
+	}*/
+
 }

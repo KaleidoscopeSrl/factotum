@@ -46,15 +46,15 @@ class Controller extends ApiBaseController
 		$media->alt_text    = $data['alt_text'];
 		$media->description = $data['description'];
 
-		if ( isset($data['filename']) ){
+		if ( isset($data['filename']) && $data['filename'] != pathinfo($media->filename, PATHINFO_FILENAME) ){
             $tmpUrl = $media->url;
             $tmpUrl = explode('/', $tmpUrl);
-            $tmpUrl[count($tmpUrl)-1] = $data['filename'];
+            $tmpUrl[count($tmpUrl)-1] = $data['filename'] . '.' . pathinfo($media->filename, PATHINFO_EXTENSION);
             $tmpUrl = implode('/', $tmpUrl);
-            if(file_exists($media->url)){
+            if( file_exists($media->url) ){
                 if (rename($media->url,$tmpUrl)){
                     $media->url = $tmpUrl;
-                    $media->filename = $data['filename'];
+                    $media->filename = $data['filename'] . '.' . pathinfo($media->filename, PATHINFO_EXTENSION);
                 }
             }
         }

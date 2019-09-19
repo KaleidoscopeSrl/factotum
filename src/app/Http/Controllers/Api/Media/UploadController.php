@@ -58,13 +58,14 @@ class UploadController extends Controller
 		$validation = $this->validator( $request, $data, $field );
 
 		if ( $validation['status'] == 'ok' ) {
-			$file = $request->file('media');
+			$file = $request->file('files');
 
 			$filename = $file->getClientOriginalName();
 			$filename = Media::filenameAvailable($filename, $filename);
 
 			$media = new Media;
-			$media->user_id   = Auth::user()->id;
+			// TODO: Auth::user()->id;
+			$media->user_id   = 1;
 			$media->filename  = $filename;
 			$media->mime_type = $file->getMimeType();
 			$media->save();
