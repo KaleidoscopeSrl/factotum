@@ -144,6 +144,7 @@ class FactotumServiceProvider extends ServiceProvider
 			require __DIR__ . '/routes/api/content-type.php';
 			require __DIR__ . '/routes/api/content-field.php';
 			require __DIR__ . '/routes/api/category.php';
+			require __DIR__ . '/routes/api/tool.php';
 		});
 
 		Passport::routes();

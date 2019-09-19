@@ -3,9 +3,11 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Tools;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Media;
 
 class ResizeMediaController extends Controller
@@ -38,10 +40,16 @@ class ResizeMediaController extends Controller
 
 	public function resizeMedia( Request $request )
 	{
+
 		$startTime = microtime(true);
 
+		$contentTypeId = $request->input('contentTypeId');
+
+		$contentType = ContentType::find($contentTypeId);
+
+		$contentFieldsImages = ContentField::whereIn( 'type', array( 'image_upload', 'gallery' ) )->where('content_type_id', $contentTypeId)->get();
+
 		$thumbSize = config('factotum.factotum.thumb_size');
-		$contentFieldsImages = ContentField::whereIn( 'type', array( 'image_upload', 'gallery' ) )->get();
 
 		$resizes = array();
 		$resizes[] = $thumbSize['width'] . ':' . $thumbSize['height'];
@@ -49,27 +57,37 @@ class ResizeMediaController extends Controller
 		$resizes = array_unique( $resizes );
 
 		@error_reporting( 0 ); // Don't break the JSON result
-		$mediaID = $request->input('id');
-		$media = Media::find( $mediaID );
 
-		if ( !Storage::disk('local')->exists( $media->url ) ) {
-			return response()->json( [ 'status' => 'ko', 'error' => 'The originally uploaded image file cannot be found.' ], 400 );
-		}
+		foreach ( $contentFieldsImages as $contentFieldsImage ) {
 
-		// 5 minutes per image should be PLENTY
-		@set_time_limit( 900 );
+			$tmpImages = DB::table( $contentType->content_type )->pluck( $contentFieldsImage->name )->all();
 
-		if ( count($contentFieldsImages) > 0 ) {
-			foreach ( $contentFieldsImages as $field ) {
-				Media::saveImage( $field, $media->url );
+			foreach ( $tmpImages as $mediaID ) {
+
+				if ( !$mediaID || $mediaID == "" ){
+					continue;
+				}
+
+				$media = Media::find( $mediaID );
+
+				if ( $media && !Storage::disk('local')->exists( $media->url ) ) {
+					return response()->json( [ 'status' => 'ko', 'error' => 'The originally uploaded image file cannot be found.' ], 400 );
+				}
+
+				// 5 minutes per image should be PLENTY
+				@set_time_limit( 900 );
+
+				Media::saveImage( $contentFieldsImage, $media->url );
+
 			}
-		}
 
+		}
 		$endTime = microtime(true);
+
 		return response()->json( [
 			'status'   => 'ok',
-			'id'       => $mediaID,
-			'filename' => $media->filename,
+//			'id'       => $mediaID,
+//			'filename' => $media->filename,
 			'time'     => round( $endTime - $startTime, 2 )
 		]);
 	}

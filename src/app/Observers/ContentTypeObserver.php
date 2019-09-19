@@ -57,15 +57,21 @@ class ContentTypeObserver
 	 */
 	public function updated(ContentType $contentType)
 	{
-		Schema::rename( $contentType->old_content_type, $contentType->content_type);
-		$oldFilename = 'models/' . $contentType->old_content_type . '.json';
-		$newFilename = 'models/' . $contentType->content_type . '.json';
 
-		if ( !Storage::disk('local')->exists( $oldFilename ) ) {
-			Storage::disk('local')->put( $newFilename, '' );
-		} else if ( Storage::disk('local')->exists( $oldFilename ) ) {
-			Storage::move( $oldFilename, $newFilename );
+		if ( !request()->input('setNoUpdateSchema') ) {
+
+			Schema::rename( $contentType->old_content_type, $contentType->content_type);
+			$oldFilename = 'models/' . $contentType->old_content_type . '.json';
+			$newFilename = 'models/' . $contentType->content_type . '.json';
+
+			if ( !Storage::disk('local')->exists( $oldFilename ) ) {
+				Storage::disk('local')->put( $newFilename, '' );
+			} else if ( Storage::disk('local')->exists( $oldFilename ) ) {
+				Storage::move( $oldFilename, $newFilename );
+			}
+
 		}
+
 	}
 
 

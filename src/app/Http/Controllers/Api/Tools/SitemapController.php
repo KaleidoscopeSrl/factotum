@@ -60,25 +60,33 @@ class SitemapController extends Controller
 
 	}
 
-	public function saveSitemapPreference( Request $request )
+	public function savePreference( Request $request )
 	{
-		$preferences_input = $request->all();
+		$preferences_input = $request->input('contentTypes');
+
 		$preferences = [];
 		foreach ($preferences_input as $key => $value) {
-			if (strpos($key, 'contentType') !== false) {
-				$preferences[] = $value;
+			if ($value) {
+				$preferences[] = $key;
 			}
 		}
-		$settings = Setting::where('setting_key','sitemap_settings')->first();
-		if ( $settings ){
-			$settings->setting_value = json_encode($preferences);
-		} else {
-			$settings = new Setting;
-			$settings->setting_key   = 'sitemap_settings';
-			$settings->setting_value = json_encode($preferences);
+		$contentTypes = ContentType::get();
+
+		foreach ( $contentTypes as $contentType ){
+
+			request()->request->add(['setNoUpdateSchema'=> true]);
+
+			if ( in_array( $contentType->content_type, $preferences ) ) {
+				$contentType->sitemap_in = 1;
+			} else {
+				$contentType->sitemap_in = 0;
+			}
+
+			$contentType->save();
+
 		}
-		$settings->save();
-		return redirect()->back();
+
+		return response()->json( [ 'result' => 'ok', 'contentTypes' => $contentTypes ]);
 
 	}
 
