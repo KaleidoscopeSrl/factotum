@@ -31,28 +31,20 @@ class SitemapController extends Controller
 	public function generate()
 	{
 
-		$contentTypes = ContentType::all();
+		$contentTypes = ContentType::where('sitemap_in',1)->get();
 		$listData = [];
-		//
-		$settings = Setting::where('setting_key','sitemap_settings')->first();
-		$sitemapSettings = [];
-		if ( $settings ){
-			$sitemapSettings = json_decode($settings->setting_value);
-		} else {
+
+		if ( !$contentTypes || $contentTypes->count() == 0 ){
 			$homepage = new ContentType;
 			$homepage->abs_url      = url('/').'';
 			$homepage->updated_at   = now();
-			$listData['test'] = $homepage;
+			$listData['default'] = array(0 => $homepage);
 		}
 
-		//TODO: come rimuovere pagina come  https://www.kaleidoscope.it/save-contact  ?
 		foreach ($contentTypes as $contentType) {
-			if ( in_array( $contentType->content_type, $sitemapSettings ) ){
-				$tmpType = ContentType::whereContentType($contentType->content_type)->first()->toArray();
-				$contentSearch = new ContentSearch($tmpType);
-				$contentSearch->onlyPublished();
-				$listData[$contentType->content_type] = $contentSearch->search()->toArray();
-			}
+			$contentSearch = new ContentSearch($contentType->toArray());
+			$contentSearch->onlyPublished();
+			$listData[$contentType->content_type] = $contentSearch->search()->toArray();
 		}
 		
 		$content = View::make('factotum::frontend.sitemap', ['listData' => $listData]);
@@ -60,25 +52,33 @@ class SitemapController extends Controller
 
 	}
 
-	public function saveSitemapPreference( Request $request )
+	public function savePreference( Request $request )
 	{
-		$preferences_input = $request->all();
+		$preferences_input = $request->input('contentTypes');
+
 		$preferences = [];
 		foreach ($preferences_input as $key => $value) {
-			if (strpos($key, 'contentType') !== false) {
-				$preferences[] = $value;
+			if ($value) {
+				$preferences[] = $key;
 			}
 		}
-		$settings = Setting::where('setting_key','sitemap_settings')->first();
-		if ( $settings ){
-			$settings->setting_value = json_encode($preferences);
-		} else {
-			$settings = new Setting;
-			$settings->setting_key   = 'sitemap_settings';
-			$settings->setting_value = json_encode($preferences);
+		$contentTypes = ContentType::get();
+
+		foreach ( $contentTypes as $contentType ){
+
+			request()->request->add(['setNoUpdateSchema'=> true]);
+
+			if ( in_array( $contentType->content_type, $preferences ) ) {
+				$contentType->sitemap_in = 1;
+			} else {
+				$contentType->sitemap_in = 0;
+			}
+
+			$contentType->save();
+
 		}
-		$settings->save();
-		return redirect()->back();
+
+		return response()->json( [ 'result' => 'ok', 'contentTypes' => $contentTypes ]);
 
 	}
 

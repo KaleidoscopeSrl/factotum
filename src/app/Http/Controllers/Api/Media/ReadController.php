@@ -10,15 +10,21 @@ class ReadController extends Controller
 
 	public function getList( Request $request )
 	{
-        $media = Media::get();
+		$mediaList = Media::get();
  //       $pagination = Media::paginate(25);
 
-        return response()->json( [ 'result' => 'ok', 'media' => $media ]);
+		foreach ( $mediaList as $media ){
+			$media->url = ( $media->url ? url( $media->url ) : null );
+		}
+
+        return response()->json( [ 'result' => 'ok', 'media' => $mediaList ]);
 	}
 
     public function getDetail(Request $request, $id)
     {
         $media = Media::find($id);
+
+        $media->url = ( $media->url ? url( $media->url ) : null );
 
         if ( $media ) {
             return response()->json( [ 'result' => 'ok', 'media' => $media ]);

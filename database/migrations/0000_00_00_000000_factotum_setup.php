@@ -21,6 +21,7 @@ class FactotumSetup extends Migration
 			$table->string('old_content_type', 32)->nullable(true);
 			$table->boolean('editable')->default(true);
 			$table->integer('order_no')->unsigned()->nullable(true);
+			$table->integer('sitemap_in')->unsigned()->default(0);
 			$table->timestamps();
 		});
 

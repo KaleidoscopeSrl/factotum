@@ -129,7 +129,7 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		// Routes
-		//$this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+		$this->loadRoutesFrom(__DIR__ . '/routes/web.php');
 		Route::group([
 			'prefix'     => 'api/v1',
 			'middleware' => [ 'api', 'preflight', 'start_session' ],
@@ -147,7 +147,7 @@ class FactotumServiceProvider extends ServiceProvider
 			require __DIR__ . '/routes/api/setting.php';
 			require __DIR__ . '/routes/api/user.php';
 			require __DIR__ . '/routes/api/utility.php';
-
+			require __DIR__ . '/routes/api/tool.php';
 		});
 
 		Passport::routes();
