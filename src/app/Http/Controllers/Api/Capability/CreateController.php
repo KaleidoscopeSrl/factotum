@@ -3,35 +3,20 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Capability;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\Capability;
-use Kaleidoscope\Factotum\Role;
-use Kaleidoscope\Factotum\ContentType;
 
 class CreateController extends Controller
 {
 
-	public function create()
+	public function create(Request $request)
 	{
-		$roles = Role::all();
-		$contentTypes = ContentType::all();
-		return view('factotum::admin.capability.edit')
-					->with('title', Lang::get('factotum::capability.add_new_capability'))
-					->with('postUrl', url('/admin/capability/store') )
-					->with('roles', $roles)
-					->with('contentTypes', $contentTypes);
-	}
-
-	public function store(Request $request)
-	{
-		$this->validator($request->all())->validate();
+		$this->_validate($request);
 
 		$capability = new Capability;
-		$this->_save( $request, $capability );
+		$capability = $this->_save($request, $capability);
 
-		return redirect('admin/capability/list')
-					->with('message', Lang::get('factotum::capability.success_create_capability'));
+		return response()->json(['result' => 'ok', 'capability' => $capability->toArray()]);
 	}
 
 }

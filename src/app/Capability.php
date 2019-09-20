@@ -8,14 +8,21 @@ class Capability extends Model
 {
 
 	protected $fillable = [
-		'role_id', 'content_type_id', 'configure', 'edit', 'publish'
+		'role_id', 'content_type_id',
+		'configure', 'edit', 'publish'
 	];
 
-	public function content_type() {
+	protected $hidden = [
+		'created_at', 'updated_at', 'deleted_at'
+	];
+
+	public function content_type()
+	{
 		return $this->belongsTo('Kaleidoscope\Factotum\ContentType');
 	}
 
-	public function role() {
+	public function role()
+	{
 		return $this->belongsTo('Kaleidoscope\Factotum\Role');
 	}
 }
