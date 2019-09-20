@@ -35,14 +35,14 @@ class Controller extends ApiBaseController
 			$password = $request->input('password', null);
 
 			if ( isset($password) && $password != '') {
-				$rules['password'] = 'required|min:8';
+				$this->userRules['password'] = 'required|min:8';
 			}
 		}
 
 		$avatar = $request->input('avatar', null);
 
 		if ( isset( $avatar ) && $avatar != '' ) {
-			$rules['avatar'] = 'required|image';
+			$this->userRules['avatar'] = 'required|image';
 		}
 
 		return $this->validate( $request, $this->userRules, $this->messages );
