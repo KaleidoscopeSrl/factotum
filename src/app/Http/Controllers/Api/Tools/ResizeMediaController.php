@@ -20,22 +20,43 @@ class ResizeMediaController extends Controller
 					->with( 'postUrl', url('/admin/tools/do-resize-media') );
 	}
 
-	public function resize( Request $request )
+	public function getResize( Request $request )
 	{
-		if ( $request->method() == 'POST' ) {
-			$media = Media::whereIn( 'mime_type', array( 'image/jpeg', 'image/png', 'image/gif' ))->get();
 
-			$ids = array();
-			foreach ( $media as $image ) {
-				$ids[] = $image->id;
+		$contentTypeId = $request->input('contentTypeId');
+
+		$contentType = ContentType::find($contentTypeId);
+
+		$contentFieldsImages = ContentField::whereIn( 'type', array( 'image_upload', 'gallery' ) )->where('content_type_id', $contentTypeId)->get();
+
+		$mediaList = [];
+
+		foreach ( $contentFieldsImages as $contentFieldsImage ) {
+
+			$tmpImages = DB::table($contentType->content_type)->pluck($contentFieldsImage->name)->all();
+
+			foreach ( $tmpImages as $mediaID ) {
+
+				if ( !$mediaID || $mediaID == '' ) {
+					continue;
+				}
+
+				if ( isset($mediaList[$mediaID] ) ) {
+
+					if ( !in_array( $contentFieldsImage->id,$mediaList[$mediaID] ) ) {
+						$mediaList[$mediaID][] = $contentFieldsImage->id;
+					}
+
+				} else {
+					$mediaList[$mediaID] = [ $contentFieldsImage->id ];
+				}
+
 			}
-			$ids = join( ',', $ids );
-			return view('factotum::admin.tools.do_resize_media')
-						->with( 'resizableMedia', $ids )
-						->with( 'count', $media->count() );
-		} else {
-			return redirect('admin/tools/resize-media');
+
 		}
+
+		return response()->json( [ 'result'   => 'ok', 'mediaFields'    => $mediaList ] );
+
 	}
 
 	public function resizeMedia( Request $request )
@@ -43,11 +64,10 @@ class ResizeMediaController extends Controller
 
 		$startTime = microtime(true);
 
-		$contentTypeId = $request->input('contentTypeId');
+		$mediaId        = $request->input('mediaId');
+		$media          = Media::find( $mediaId );
 
-		$contentType = ContentType::find($contentTypeId);
-
-		$contentFieldsImages = ContentField::whereIn( 'type', array( 'image_upload', 'gallery' ) )->where('content_type_id', $contentTypeId)->get();
+		$contentFieldIds  = $request->input('contentFieldIds');
 
 		$thumbSize = config('factotum.factotum.thumb_size');
 
@@ -58,36 +78,25 @@ class ResizeMediaController extends Controller
 
 		@error_reporting( 0 ); // Don't break the JSON result
 
-		foreach ( $contentFieldsImages as $contentFieldsImage ) {
+		foreach ( $contentFieldIds as $contentFieldId ) {
 
-			$tmpImages = DB::table( $contentType->content_type )->pluck( $contentFieldsImage->name )->all();
+			$contentField = ContentField::find( $contentFieldId );
 
-			foreach ( $tmpImages as $mediaID ) {
-
-				if ( !$mediaID || $mediaID == "" ){
-					continue;
-				}
-
-				$media = Media::find( $mediaID );
-
-				if ( $media && !Storage::disk('local')->exists( $media->url ) ) {
-					return response()->json( [ 'status' => 'ko', 'error' => 'The originally uploaded image file cannot be found.' ], 400 );
-				}
-
-				// 5 minutes per image should be PLENTY
-				@set_time_limit( 900 );
-
-				Media::saveImage( $contentFieldsImage, $media->url );
-
+			if ( $media && !Storage::disk('local')->exists( $media->url ) ) {
+				return response()->json( [ 'result' => 'ko', 'error' => 'The originally uploaded image file cannot be found.' ], 400 );
 			}
 
+			@set_time_limit( 900 );
+			Media::saveImage( $contentField, $media->url );
+
 		}
+
 		$endTime = microtime(true);
 
 		return response()->json( [
-			'status'   => 'ok',
-//			'id'       => $mediaID,
-//			'filename' => $media->filename,
+			'result'   => 'ok',
+			'id'       => $mediaId,
+			'filename' => $media->filename,
 			'time'     => round( $endTime - $startTime, 2 )
 		]);
 	}
