@@ -34,7 +34,7 @@ class Controller extends BaseController
 		$this->middleware(function ($request, $next) {
 			$this->currentLanguage = $request->session()->get('currentLanguage');
 
-			View::share( 'availableLanguages', config('factotum.factotum.site_languages') );
+			View::share( 'availableLanguages', config('factotum.site_languages') );
 			View::share( 'currentLanguage', $this->currentLanguage );
 
 			return $next($request);
@@ -137,8 +137,8 @@ class Controller extends BaseController
 
 	public function index()
 	{
-		$clientId = (config('factotum.factotum.analytics_client_id') != '' ? config('factotum.factotum.analytics_client_id') : false );
-		$siteId   = (config('factotum.factotum.analytics_site_id') != '' ? config('factotum.factotum.analytics_site_id') : false );
+		$clientId = (config('factotum.analytics_client_id') != '' ? config('factotum.analytics_client_id') : false );
+		$siteId   = (config('factotum.analytics_site_id') != '' ? config('factotum.analytics_site_id') : false );
 		return view('factotum::admin.index')
 				->with('dashboardAssets', true)
 				->with('clientId', $clientId)

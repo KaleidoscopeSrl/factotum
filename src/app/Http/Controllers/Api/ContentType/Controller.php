@@ -17,7 +17,7 @@ class Controller extends ApiBaseController
 
 	protected function _validate( $request )
 	{
-		$this->contentTypeRules['content_type'] .= '|not_in:' . join(',', config('factotum.factotum.prohibited_content_types') );
+		$this->contentTypeRules['content_type'] .= '|not_in:' . join(',', config('factotum.prohibited_content_types') );
 
 		return $this->validate($request, $this->contentTypeRules, $this->messages);
 	}

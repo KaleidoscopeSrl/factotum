@@ -12,22 +12,22 @@
 </script>
 
 <!-- Scripts -->
-<script src="{{ url('/assets/js/factotum/vendor.js') }}?v={{ config('factotum.factotum.js_version') }}"></script>
-<script src="{{ url('/assets/js/factotum/vendor-ui.js') }}?v={{ config('factotum.factotum.js_version') }}"></script>
+<script src="{{ url('/assets/js/factotum/vendor.js') }}?v={{ config('factotum.js_version') }}"></script>
+<script src="{{ url('/assets/js/factotum/vendor-ui.js') }}?v={{ config('factotum.js_version') }}"></script>
 
 @if ( isset($editor) )
-<script src="{{ url('/assets/js/factotum/editor.js') }}?v={{ config('factotum.factotum.js_version') }}"></script>
+<script src="{{ url('/assets/js/factotum/editor.js') }}?v={{ config('factotum.js_version') }}"></script>
 @endif
 
 @if ( isset($contentFieldAssets) )
-<script src="{{ url('/assets/js/factotum/content-field.js') }}?v={{ config('factotum.factotum.js_version') }}"></script>
+<script src="{{ url('/assets/js/factotum/content-field.js') }}?v={{ config('factotum.js_version') }}"></script>
 @endif
 
 @if ( isset($dashboardAssets) )
-<script src="{{ url('/assets/js/factotum/dashboard.js') }}?v={{ config('factotum.factotum.js_version') }}"></script>
+<script src="{{ url('/assets/js/factotum/dashboard.js') }}?v={{ config('factotum.js_version') }}"></script>
 @endif
 
-<script src="{{ url('/assets/js/factotum/main.js') }}?v={{ config('factotum.factotum.js_version') }}"></script>
+<script src="{{ url('/assets/js/factotum/main.js') }}?v={{ config('factotum.js_version') }}"></script>
 
 
 </body>

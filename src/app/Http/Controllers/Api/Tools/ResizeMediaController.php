@@ -69,7 +69,7 @@ class ResizeMediaController extends Controller
 
 		$contentFieldIds  = $request->input('contentFieldIds');
 
-		$thumbSize = config('factotum.factotum.thumb_size');
+		$thumbSize = config('factotum.thumb_size');
 
 		$resizes = array();
 		$resizes[] = $thumbSize['width'] . ':' . $thumbSize['height'];

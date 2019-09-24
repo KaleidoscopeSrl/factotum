@@ -27,7 +27,7 @@ class FrontController extends Controller
 		$this->middleware(function ($request, $next) {
 			$this->currentLanguage = $request->session()->get('currentLanguage');
 
-			View::share( 'availableLanguages', config('factotum.factotum.site_languages') );
+			View::share( 'availableLanguages', config('factotum.site_languages') );
 
 			$uri = $request->path();
 			$this->uri = trim($uri, '/');
@@ -39,12 +39,12 @@ class FrontController extends Controller
 
 			$checkLang = $this->uriParts[0];
 			if ( strlen($checkLang) == 5 &&
-				in_array( $checkLang, array_keys( config('factotum.factotum.site_languages') ) )  ) {
+				in_array( $checkLang, array_keys( config('factotum.site_languages') ) )  ) {
 				$this->currentLanguage = $checkLang;
 				$request->session()->put('currentLanguage', $checkLang);
 				App::setLocale( $checkLang );
 			} else {
-				$this->currentLanguage = config('factotum.factotum.main_site_language');
+				$this->currentLanguage = config('factotum.main_site_language');
 			}
 
 			View::share( 'currentLanguage', $this->currentLanguage );
@@ -225,7 +225,7 @@ class FrontController extends Controller
 
 
 			if ( strlen($uri) == 5 && strlen($checkLang) == 5 ) {
-				if ( in_array( $checkLang, array_keys( config('factotum.factotum.site_languages') ) ) ) {
+				if ( in_array( $checkLang, array_keys( config('factotum.site_languages') ) ) ) {
 					$data = $this->_getHomepage( $checkLang );
 				}
 			}
@@ -243,7 +243,7 @@ class FrontController extends Controller
 			}
 
 		} else {
-			$data = $this->_getHomepage( config('factotum.factotum.main_site_language') );
+			$data = $this->_getHomepage( config('factotum.main_site_language') );
 		}
 		return $data;
 	}

@@ -43,7 +43,7 @@ class ContentObserver
 
 		if ( $content->content_type_id == $contentType->id ) {
 
-			$lang = ( $content->lang != config('factotum.factotum.main_site_language') ? $content->lang : '' );
+			$lang = ( $content->lang != config('factotum.main_site_language') ? $content->lang : '' );
 
 			// Generating pages
 			if ( $content->parent_id ) {

@@ -17,7 +17,7 @@ class ReadController extends Controller
 
 	public function resizeMedia( Request $request )
 	{
-		$thumbSize = config('factotum.factotum.thumb_size');
+		$thumbSize = config('factotum.thumb_size');
 		$contentFieldsImages = ContentField::whereIn( 'type', array( 'image_upload', 'gallery' ) )->get()->toArray();
 
 		$resizes = array();

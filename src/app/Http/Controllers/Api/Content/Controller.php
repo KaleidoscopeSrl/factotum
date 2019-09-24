@@ -168,7 +168,7 @@ class Controller extends ApiBaseController
 		$content->lang = $request->session()->get('currentLanguage');
 
 		$content->abs_url = url('') . '/'
-						  . ( $content->lang != config('factotum.factotum.main_site_language') ? $content->lang . '/' : '' )
+						  . ( $content->lang != config('factotum.main_site_language') ? $content->lang . '/' : '' )
 						  . $data['url'];
 
 		$content->show_in_menu = (isset($data['show_in_menu']) ? $data['show_in_menu'] : false );

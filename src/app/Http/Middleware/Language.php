@@ -18,7 +18,7 @@ class Language
 		$language = $request->session()->get('currentLanguage');
 
 		if ( !$language ) {
-			$language = config('factotum.factotum.main_site_language');
+			$language = config('factotum.main_site_language');
 			$request->session()->put('currentLanguage', $language);
 		}
 

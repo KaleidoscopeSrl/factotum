@@ -91,7 +91,7 @@ class Media extends Model
 			}
 		}
 
-		$thumbSize = config('factotum.factotum.thumb_size');
+		$thumbSize = config('factotum.thumb_size');
 		$thumbFilename = $origFilename . '-thumb.' . $ext;
 		$origImage->fit( $thumbSize['width'], $thumbSize['height'], function ($constraint) {
 			$constraint->upsize();
