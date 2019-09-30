@@ -17,6 +17,27 @@ class ReadController extends Controller
 										->orderBy('order_no', 'ASC')
 										->get();
 
+    	foreach ( $contentFields as $key => $contentField ){
+
+    		if ( $contentField['options'] ) {
+
+				$tmpOptions = [];
+
+				foreach ( explode(';', $contentField['options'] ) as $tmpOption ) {
+
+					$tmpData = explode( ':', $tmpOption );
+					$tmpOptions[] = [
+						'name'  => $tmpData[0],
+						'label' => $tmpData[1]
+					];
+
+				}
+
+				$contentFields[$key]['options'] = $tmpOptions;
+
+			}
+		}
+
 		return response()->json( [ 'result' => 'ok', 'content_fields' => $contentFields ]);
 	}
 

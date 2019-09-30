@@ -10,8 +10,10 @@ Route::group([
 	'namespace' => 'Tools'
 ], function () {
 
-	Route::post('/get-resize',           'ResizeMediaController@getResize');
-	Route::post('/resize-media',         'ResizeMediaController@resizeMedia');
-	Route::post('/save-sitemap',         'SitemapController@savePreference');
+	Route::post('/get-resize',                 'ResizeMediaController@getResize');
+	Route::post('/do-resize',                  'ResizeMediaController@doResize');
+	Route::post('/resize-media/{mediaId}',     'ResizeMediaController@resizeMedia');
+
+	Route::post('/save-sitemap',               'SitemapController@savePreference');
 
 });

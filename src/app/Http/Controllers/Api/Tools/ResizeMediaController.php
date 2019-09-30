@@ -59,7 +59,7 @@ class ResizeMediaController extends Controller
 
 	}
 
-	public function resizeMedia( Request $request )
+	public function doResize( Request $request )
 	{
 
 		$startTime = microtime(true);
@@ -99,6 +99,50 @@ class ResizeMediaController extends Controller
 			'filename' => $media->filename,
 			'time'     => round( $endTime - $startTime, 2 )
 		]);
+	}
+
+	public function resizeMedia( Request $request, $mediaId )
+	{
+		$startTime = microtime(true);
+
+		$media         = Media::find( $mediaId );
+
+		$contentTypes  = ContentType::all();
+
+		// ContentFields con questo mediaId
+		$listContentFields = [];
+
+		foreach ( $contentTypes as $contentType ) {
+
+			$contentFieldsImages = ContentField::whereIn( 'type', array( 'image_upload', 'gallery' ) )->where('content_type_id', $contentType->id)->get();
+
+			foreach ( $contentFieldsImages as $contentFieldsImage ) {
+
+				$tmpRecords = DB::table($contentType->content_type)->where($contentFieldsImage->name, $mediaId)->first();
+
+				if ( $tmpRecords ){
+					$listContentFields[] = $contentFieldsImage;
+				}
+
+			}
+
+		}
+
+		foreach ( $listContentFields as $listContentField ) {
+
+			Media::saveImage( $listContentField, $media->url );
+
+		}
+
+		$endTime = microtime(true);
+
+		return response()->json( [
+			'result'   => 'ok',
+			'id'       => $mediaId,
+			'filename' => $media->filename,
+			'time'     => round( $endTime - $startTime, 2 )
+		]);
+
 	}
 
 }
