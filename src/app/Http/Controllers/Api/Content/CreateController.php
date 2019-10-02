@@ -11,7 +11,11 @@ use Kaleidoscope\Factotum\ContentType;
 class CreateController extends Controller
 {
 
-	public function create( $contentTypeId )
+	public function create( Request $request ){
+		print_r('test'); die;
+	}
+
+	public function createOld( $contentTypeId )
 	{
 		$this->_prepareContentFields( $contentTypeId );
 

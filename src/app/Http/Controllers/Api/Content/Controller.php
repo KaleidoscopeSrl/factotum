@@ -161,11 +161,13 @@ class Controller extends ApiBaseController
 		$content->url       = $data['url'];
 		$content->content   = $data['content'];
 
-		if ( $data['created_at'] ) {
-			$content->created_at = Utility::convertHumanDateTimeToIso( $data['created_at'] );
-		}
+		// TODO: fix
+		/*if ( $data['created_at'] ) {
+			$content->created_at = $data['created_at']; // U tility::convert HumanDateTimeToIso( $data['created_at'] );
+		}*/
 
-		$content->lang = $request->session()->get('currentLanguage');
+		// TODO: $request->session()->get('currentLanguage'); empty
+		$content->lang = 'en-GB'; //$request->session()->get('currentLanguage');
 
 		$content->abs_url = url('') . '/'
 						  . ( $content->lang != config('factotum.main_site_language') ? $content->lang . '/' : '' )

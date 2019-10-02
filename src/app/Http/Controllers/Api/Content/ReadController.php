@@ -14,7 +14,15 @@ class ReadController extends Controller
 	{
 		$contentTypeId = $request->input('contentTypeId');
 
-		$contents = Content::where('content_type_id', $contentTypeId)->get();
+		$contentId = $request->input('contentId');
+
+		$query = Content::where('content_type_id', $contentTypeId);
+
+		if ( $contentId ) {
+			$query = $query->where('id', '<>' , $contentId);
+		}
+
+		$contents = $query->get();
 
 		return response()->json( [ 'result' => 'ok', 'contents' => $contents ]);
 	}

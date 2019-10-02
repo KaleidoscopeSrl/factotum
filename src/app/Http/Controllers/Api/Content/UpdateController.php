@@ -43,7 +43,19 @@ class UpdateController extends Controller
 					->with('categoriesTree', $this->_categories);
 	}
 
-	public function update(Request $request, $id)
+	public function update( Request $request, $id ){
+		$data = $request->all();
+
+		$this->validator( $request, $data, $id )->validate();
+
+		$content = Content::find($id);
+		$this->_save( $request, $content );
+
+		return response()->json( [ 'status' => 'ok', 'data' => $data ]);
+//		print_r('test'); die;
+	}
+
+	public function updateOld(Request $request, $id)
 	{
 		$data = $request->all();
 
