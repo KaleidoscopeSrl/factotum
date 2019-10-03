@@ -158,7 +158,7 @@ class Controller extends ApiBaseController
 		$content->status    = $data['status'];
 		$content->parent_id = (isset($data['parent_id']) ? $data['parent_id'] : null);
 		$content->title     = $data['title'];
-		$content->url       = $data['url'];
+		$content->url       = str_slug($data['url'], "-");
 		$content->content   = $data['content'];
 
 		// TODO: fix

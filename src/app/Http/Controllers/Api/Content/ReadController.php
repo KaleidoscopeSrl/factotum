@@ -5,7 +5,9 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
+use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
+use Kaleidoscope\Factotum\ContentCategory;
 use Kaleidoscope\Factotum\ContentType;
 
 class ReadController extends Controller
@@ -41,7 +43,7 @@ class ReadController extends Controller
 			return response()->json( [ 'status' => 'ok', 'data' => $tmp ]);
 		}
 
-		return response()->json( [ 'status' => 'ko' ]);
+		return response()->json( [ 'status' => 'ko' ] );
 	}
 
 
@@ -51,11 +53,13 @@ class ReadController extends Controller
 
 		if ( $content ) {
 
+			$content_categories = ContentCategory::where( 'content_id', $id )->pluck('category_id')->all();
+
 			$content_type = ContentType::find( $content->content_type_id );
 
 			$dataContent = DB::table( $content_type->content_type )->where( 'content_id', $content->id )->where( 'content_type_id', $content_type->id)->first();
 
-			return response()->json( [ 'result' => 'ok', 'content' => $content, 'data' => $dataContent ]);
+			return response()->json( [ 'result' => 'ok', 'content' => $content, 'data' => $dataContent, 'content_categories' => $content_categories ]);
 		}
 
 		return $this->_sendJsonError('Campo non trovato.');
