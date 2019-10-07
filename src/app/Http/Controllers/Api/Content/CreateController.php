@@ -12,7 +12,15 @@ class CreateController extends Controller
 {
 
 	public function create( Request $request ){
-		print_r('test'); die;
+		$data = $request->all();
+
+		$this->validator( $request, $data )->validate();
+
+		$content = new Content();
+		$content->content_type_id = $request->input('content_type_id');
+		$this->_save( $request, $content );
+
+		return response()->json( [ 'status' => 'ok', 'data' => $data ]);
 	}
 
 	public function createOld( $contentTypeId )

@@ -13,6 +13,18 @@ use Kaleidoscope\Factotum\Media;
 
 class UpdateController extends Controller
 {
+
+	public function update( Request $request, $id ){
+		$data = $request->all();
+
+		$this->validator( $request, $data, $id )->validate();
+
+		$content = Content::find($id);
+		$this->_save( $request, $content );
+
+		return response()->json( [ 'status' => 'ok', 'data' => $data ]);
+	}
+
 	public function edit( $id )
 	{
 		$content = Content::find($id);
@@ -41,18 +53,6 @@ class UpdateController extends Controller
 					->with('contentCategories', $this->_contentCategories)
 					->with('postUrl', url('/admin/content/update/' . $id) )
 					->with('categoriesTree', $this->_categories);
-	}
-
-	public function update( Request $request, $id ){
-		$data = $request->all();
-
-		$this->validator( $request, $data, $id )->validate();
-
-		$content = Content::find($id);
-		$this->_save( $request, $content );
-
-		return response()->json( [ 'status' => 'ok', 'data' => $data ]);
-//		print_r('test'); die;
 	}
 
 	public function updateOld(Request $request, $id)

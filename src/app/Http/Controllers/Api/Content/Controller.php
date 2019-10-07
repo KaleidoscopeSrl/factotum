@@ -151,8 +151,9 @@ class Controller extends ApiBaseController
 		$contentType = ContentType::find($content->content_type_id);
 
 		if ( !$content->user_id ) {
-			$user = Auth::user();
-			$content->user_id = $user->id;
+			// TODO:
+			// $user = Auth::user();
+			$content->user_id = 1; // $user->id;
 		}
 
 		$content->status    = $data['status'];
@@ -348,6 +349,9 @@ class Controller extends ApiBaseController
 
 		$media = new Media;
 		$media->filename  = $filename;
+		// TODO:
+		// $user = Auth::user();
+		$media->user_id  = 1; // $user->id;
 		$media->mime_type = $file->getMimeType();
 		$media->save();
 
@@ -408,7 +412,6 @@ class Controller extends ApiBaseController
 				$tmp = array();
 
 				if ( $field->mandatory ) {
-
 					if (count($data) > 0 && ( $field->type == 'file_upload' || $field->type == 'image_upload'  || $field->type == 'gallery' )) {
 						if ( !isset($data[ $field->name . '_hidden' ]) ||
 							 (isset($data[ $field->name . '_hidden' ]) && $data[ $field->name . '_hidden' ] == '' ) ) {
@@ -420,7 +423,7 @@ class Controller extends ApiBaseController
 				}
 
 				if ( $field->type == 'file_upload' || $field->type == 'image_upload' || $field->type == 'gallery' ) {
-					$tmp[] = 'max:' . $field->max_file_size;
+					$tmp[] = 'max:' . $field->max_file_size*1000;
 					if ($field->allowed_types != '*') {
 						$field->allowed_types = str_replace('jpg', 'jpeg', $field->allowed_types);
 						$field->allowed_types = str_replace('.', '', $field->allowed_types);

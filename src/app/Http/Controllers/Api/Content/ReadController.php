@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\ContentCategory;
+use Kaleidoscope\Factotum\ContentField;
 use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Media;
 
 class ReadController extends Controller
 {
@@ -58,6 +60,18 @@ class ReadController extends Controller
 			$content_type = ContentType::find( $content->content_type_id );
 
 			$dataContent = DB::table( $content_type->content_type )->where( 'content_id', $content->id )->where( 'content_type_id', $content_type->id)->first();
+
+			$content_fields = ContentField::where( 'content_type_id', $content_type->id )->whereIn( 'type', array( 'image_upload' ) )->get();
+
+			if ( $content_fields && sizeof($content_fields) > 0 ) {
+				foreach ( $content_fields as $content_field ){
+
+					$tmpMedia = Media::find($dataContent->{$content_field->name});
+
+					$dataContent->{$content_field->name} = url($tmpMedia->url);
+
+				}
+			}
 
 			return response()->json( [ 'result' => 'ok', 'content' => $content, 'data' => $dataContent, 'content_categories' => $content_categories ]);
 		}
