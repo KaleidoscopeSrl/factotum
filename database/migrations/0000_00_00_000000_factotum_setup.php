@@ -112,11 +112,16 @@ class FactotumSetup extends Migration
 		// Create media table
 		Schema::create('media', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('filename', 50)->unique();
+			$table->string('filename', 150)->unique();
 			$table->string('url', 255)->nullable(true);
 			$table->integer('user_id')->unsigned();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->string('mime_type', 50);
+
+			$table->integer('width')->nullable(true);
+			$table->integer('height')->nullable(true);
+			$table->integer('size')->nullable(true);
+
 			$table->text('caption')->nullable(true);
 			$table->string('alt_text', 255)->nullable(true);
 			$table->text('description')->nullable(true);

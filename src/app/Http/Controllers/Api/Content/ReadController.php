@@ -11,6 +11,7 @@ use Kaleidoscope\Factotum\ContentCategory;
 use Kaleidoscope\Factotum\ContentField;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Media;
+use stdClass;
 
 class ReadController extends Controller
 {
@@ -26,7 +27,7 @@ class ReadController extends Controller
 			$query = $query->where('id', '<>' , $contentId);
 		}
 
-		$contents = $query->get();
+		$contents = $query->orderBy('id','DESC')->get();
 
 		return response()->json( [ 'result' => 'ok', 'contents' => $contents ]);
 	}
@@ -61,14 +62,41 @@ class ReadController extends Controller
 
 			$dataContent = DB::table( $content_type->content_type )->where( 'content_id', $content->id )->where( 'content_type_id', $content_type->id)->first();
 
-			$content_fields = ContentField::where( 'content_type_id', $content_type->id )->whereIn( 'type', array( 'image_upload' ) )->get();
+//			$content_fields = ContentField::where( 'content_type_id', $content_type->id )->whereIn( 'type', array( 'image_upload' ) )->get();
+			$content_fields = ContentField::where( 'content_type_id', $content_type->id )->get();
+
+			if ( !$dataContent ) {
+				$dataContent = new stdClass();
+			}
 
 			if ( $content_fields && sizeof($content_fields) > 0 ) {
 				foreach ( $content_fields as $content_field ){
 
-					$tmpMedia = Media::find($dataContent->{$content_field->name});
+					if ( $content_field->type == 'image_upload') {
 
-					$dataContent->{$content_field->name} = url($tmpMedia->url);
+						$tmpMedia = Media::find($dataContent->{$content_field->name});
+						if ( $tmpMedia ) {
+							$tmpMedia->url = $tmpMedia->url ? url( $tmpMedia->url ) : null;
+						}
+						$dataContent->{$content_field->name} = [ $tmpMedia ];
+
+					} elseif ( $content_field->type == 'gallery') {
+
+						$tmpListMedia = $dataContent->{$content_field->name};
+						$tmpListMedia = explode( ',', $tmpListMedia );
+
+						foreach ( $tmpListMedia as $index => $tmpMedia ) {
+							$tmpListMedia[$index] = Media::find($tmpMedia);
+							$tmpListMedia[$index]->url = ( $tmpListMedia[$index]->url ? url( $tmpListMedia[$index]->url ) : null );
+						}
+						$dataContent->{$content_field->name} = $tmpListMedia;
+
+					} else {
+
+						$dataContent->{$content_field->name} = isset( $dataContent->{$content_field->name} ) ? $dataContent->{$content_field->name} : '';
+
+					}
+
 
 				}
 			}

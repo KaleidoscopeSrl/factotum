@@ -25,36 +25,6 @@ class UpdateController extends Controller
 		return response()->json( [ 'status' => 'ok', 'data' => $data ]);
 	}
 
-	public function edit( $id )
-	{
-		$content = Content::find($id);
-
-		if ( $content->fb_image ) {
-			$fbImage = Media::find($content->fb_image);
-			if ($fbImage) {
-				$content->fb_image = $fbImage->toArray();
-			}
-		}
-
-		$this->_prepareContentFields( $content->content_type_id, $id );
-
-		$contentType = ContentType::find( $content->content_type_id );
-
-		return view('factotum::admin.content.edit')
-					->with('editor', true)
-					->with('content', $content)
-					->with('title', Lang::get('factotum::content.edit') . ' ' . $contentType->content_type )
-					->with('statuses', $this->statuses)
-					->with('contentType', $contentType)
-					->with('contentFields', $this->_contentFields)
-					->with('contentsTree', $this->_contents)
-					->with('mediaPopulated', $this->_prepareMediaPopulated( array_merge( (array)$this->_additionalValues , $content->toArray() ) ) )
-					->with('additionalValues', $this->_additionalValues)
-					->with('contentCategories', $this->_contentCategories)
-					->with('postUrl', url('/admin/content/update/' . $id) )
-					->with('categoriesTree', $this->_categories);
-	}
-
 	public function updateOld(Request $request, $id)
 	{
 		$data = $request->all();

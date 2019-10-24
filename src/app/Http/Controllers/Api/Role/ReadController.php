@@ -10,7 +10,7 @@ class ReadController extends Controller
 
     public function getList()
     {
-        $roles = Role::get();
+        $roles = Role::orderBy('id','DESC')->get();
 
         return response()->json( [ 'result' => 'ok', 'roles' => $roles ]);
     }

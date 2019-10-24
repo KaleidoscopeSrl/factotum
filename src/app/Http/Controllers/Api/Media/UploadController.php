@@ -14,38 +14,6 @@ use Kaleidoscope\Factotum\Media;
 
 class UploadController extends Controller
 {
-	public function showUpload( Request $request, $contentFieldName )
-	{
-		$field = $this->_getField($contentFieldName);
-
-		if ( $field->type == 'image_upload' || $field->type == 'gallery' ) {
-			$media = $this->_getImagesPaginated( 0 );
-		} else {
-			$media = $this->_getMediaPaginated( 0, $field->allowed_types );
-		}
-
-		foreach ($media as $i => $m ) {
-			$media[ $i ] = $this->_parseMedia( $m , $field->name );
-		}
-
-		$btnLabel = ( $field->type == 'image_upload' || $field->type == 'gallery' ? Lang::get('factotum::media.insert_image') : Lang::get('factotum::media.insert_media') );
-
-		$selected = $request->input('selected', null);
-
-		if ( $selected ) {
-			$selected = Utility::convertOptionsTextToArray($selected);
-		}
-
-		return view('factotum::admin.media.upload')
-					->with('media', $media)
-					->with('mediaOffset', count($media))
-					->with('field', $field)
-					->with('selected', $selected)
-					->with('btnLabel', $btnLabel)
-					->with('maxFiles', ($field->type == 'gallery' ? 999 : 999 ))
-					->with('required', $field->mandatory);
-	}
-
 
 	public function upload( Request $request )
 	{
@@ -68,6 +36,17 @@ class UploadController extends Controller
 			$media->user_id   = 1;
 			$media->filename  = $filename;
 			$media->mime_type = $file->getMimeType();
+
+			if ( str_contains( $media->mime_type, 'image/' )  ) {
+				$imageSize = getimagesize( $file->path() );
+
+				$media->width  = $imageSize[0];
+				$media->height = $imageSize[1];
+
+			}
+
+			$media->size = filesize( $file->path() );
+
 			$media->save();
 
 			$mediaDir = 'media/' . $media->id;

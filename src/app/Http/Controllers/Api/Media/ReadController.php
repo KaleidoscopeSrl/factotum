@@ -10,8 +10,23 @@ class ReadController extends Controller
 
 	public function getList( Request $request )
 	{
-		$mediaList = Media::get();
+
+		$query = Media::orderBy('id','DESC');
  //       $pagination = Media::paginate(25);
+
+		if ( $request->input('filter') ) {
+
+			$filters = $request->input('filter');
+
+			$query->where( 'filename', null );
+			foreach ( explode(',', $filters) as $ext ) {
+				$query->orWhere( 'filename', 'like', '%' . trim($ext) );
+			}
+
+		}
+
+		$mediaList = $query->get();
+
 
 		foreach ( $mediaList as $media ){
 			$media->url = ( $media->url ? url( $media->url ) : null );
@@ -39,6 +54,7 @@ class ReadController extends Controller
 		$images = Media::where( 'mime_type', '=', 'image/jpeg' )
 						->orWhere( 'mime_type', '=', 'image/png' )
 						->orWhere( 'mime_type', '=', 'image/gif' )
+						->orderBy('id','DESC')
 						->get()
 						->toArray();
 

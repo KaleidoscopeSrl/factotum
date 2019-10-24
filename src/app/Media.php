@@ -11,6 +11,7 @@ use Kaleidoscope\Factotum\Library\Utility;
 class Media extends Model
 {
 	protected $fillable = [
+		'width', 'height', 'size',
 		'caption', 'alt_text', 'description'
 	];
 

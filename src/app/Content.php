@@ -8,6 +8,10 @@ class Content extends Model
 {
 	public static $FIRE_EVENTS = true;
 
+	protected $fillable = [
+		'parent_id'
+	];
+
 	public function parent() {
 		return $this->belongsTo( 'Kaleidoscope\Factotum\Content', 'parent_id');
 	}

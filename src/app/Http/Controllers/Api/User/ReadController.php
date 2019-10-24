@@ -13,7 +13,7 @@ class ReadController extends Controller
     	$limit  = $request->input('limit');
 		$offset = $request->input('offset');
 
-        $users = User::with('profile')->with('role')->skip($offset)->take($limit)->get();
+        $users = User::with('profile')->with('role')->orderBy('id','DESC')->skip($offset)->take($limit)->get();
 
         return response()->json( [ 'result' => 'ok', 'users' => $users ]);
     }

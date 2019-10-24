@@ -157,10 +157,14 @@ class Controller extends ApiBaseController
 		}
 
 		$content->status    = $data['status'];
-		$content->parent_id = (isset($data['parent_id']) ? $data['parent_id'] : null);
+		$content->parent_id = $request->has('parent_id') ? $request->input('parent_id') : 0;
 		$content->title     = $data['title'];
 		$content->url       = str_slug($data['url'], "-");
 		$content->content   = $data['content'];
+
+		print_r('teat');
+		print_r($content);
+		die;
 
 		// TODO: fix
 		/*if ( $data['created_at'] ) {
@@ -195,24 +199,24 @@ class Controller extends ApiBaseController
 		}
 
 		// SEO Fields
-		$content->seo_title            = $data['seo_title'];
-		$content->seo_description      = $data['seo_description'];
-		$content->seo_canonical_url    = $data['seo_canonical_url'];
-		$content->seo_robots_indexing  = $data['seo_robots_indexing'];
-		$content->seo_robots_following = $data['seo_robots_following'];
+		$content->seo_title            = $data['seo_title'] ? $data['seo_title'] : '';
+		$content->seo_description      = $data['seo_description'] ? $data['seo_description'] : '';
+		$content->seo_canonical_url    = $data['seo_canonical_url'] ? $data['seo_canonical_url'] : '';
+		$content->seo_robots_indexing  = $data['seo_robots_indexing'] ? $data['seo_robots_indexing'] : '';
+		$content->seo_robots_following = $data['seo_robots_following'] ? $data['seo_robots_following'] : '';
 
 		// FB Fields
-		$content->fb_title       = $data['fb_title'];
-		$content->fb_description = $data['fb_description'];
+		$content->fb_title       = $data['fb_title'] ? $data['fb_title'] : '';
+		$content->fb_description = $data['fb_description'] ? $data['fb_description'] : '';
 		$content->fb_image       = (isset($data['fb_image_hidden']) && $data['fb_image_hidden'] != '' ? $data['fb_image_hidden'] : null);
 
 		$content->save();
 
 		// Categories
-		if ( isset($data['categories']) && count($data['categories']) > 0 ) {
+		if ( isset($data['categories']) ) {
 			ContentCategory::whereContentId($content->id)->delete();
 
-			foreach ( $data['categories'] as $categoryID ) {
+			foreach ( explode( ',' , $data['categories'] )  as $categoryID ) {
 				$contentCategory = new ContentCategory;
 				$contentCategory->content_id = $content->id;
 				$contentCategory->category_id = $categoryID;
@@ -246,66 +250,34 @@ class Controller extends ApiBaseController
 					}
 				}
 
-				// Date-time fields
+				// Date fields
 				if ( isset( $data[ $field->name ] ) && $field->type == 'date' && $data[$field->name] != '' ) {
 					$data[$field->name] = Utility::convertHumanDateToIso($data[$field->name]);
 				}
 
+				// Date-time fields
 				if ( isset( $data[ $field->name ] ) && $field->type == 'datetime' && $data[$field->name] != '' ) {
 					$data[$field->name] = Utility::convertHumanDateTimeToIso($data[$field->name]);
 				}
 
 				// Save generic file upload (file or image)
-				$file = null;
-				if ( $field->type == 'file_upload' || $field->type == 'image_upload' ) {
-					if ($request->hasFile( $field->name )) {
-						if ($request->file( $field->name )->isValid()) {
-							$file = $request->file( $field->name );
-							$data[ $field->name ] = '';
-							$data[ $field->name ] = $this->_saveMedia( $file, $field );
-						}
-					} else {
-						if ( isset($data[ $field->name . '_hidden' ]) ) {
-							$data[ $field->name ] = $data[ $field->name . '_hidden' ];
-							$data[ $field->name ] = $this->_checkImage( $data[ $field->name ], $field );
-						} else {
-							$data[ $field->name ] = '';
-						}
-					}
-				}
-
-				if ( $field->type == 'gallery' ) {
-					$tmp = array();
-
-					if ( isset( $data[ $field->name . '_hidden' ] ) && $data[ $field->name . '_hidden' ] != '' ) {
-						$tmp = Utility::convertOptionsTextToArray( $data[ $field->name . '_hidden' ] );
-					}
-
-					if ($request->hasFile( $field->name )) {
-						$files = $request->file( $field->name );
-						if ( count($files) > 0 ) {
-							foreach ( $files as $file ) {
-								if ( $file->isValid() ) {
-									$tmp[] = $this->_saveMedia( $file, $field );
-								}
-							}
-							$data[ $field->name ] = join(';', $tmp);
-						}
-
-					} else {
-						if ( isset($data[ $field->name . '_hidden' ]) ) {
-							$data[ $field->name ] = $data[ $field->name . '_hidden' ];
-							$files = explode(';', $data[ $field->name ]);
-							$tmp2 = [];
-							foreach ( $files as $file ) {
-								$tmp2[] = $this->_checkImage( $file, $field );
-							}
-							$data[ $field->name ] = join(';', $tmp2);
-						} else {
-							$data[ $field->name ] = '';
-						}
-					}
-				}
+//				$file = null;
+//				if ( $field->type == 'file_upload' || $field->type == 'image_upload' ) {
+//					if ($request->hasFile( $field->name )) {
+//						if ($request->file( $field->name )->isValid()) {
+//							$file = $request->file( $field->name );
+//							$data[ $field->name ] = '';
+//							$data[ $field->name ] = $this->_saveMedia( $file, $field );
+//						}
+//					} else {
+//						if ( isset($data[ $field->name . '_hidden' ]) ) {
+//							$data[ $field->name ] = $data[ $field->name . '_hidden' ];
+//							$data[ $field->name ] = $this->_checkImage( $data[ $field->name ], $field );
+//						} else {
+//							$data[ $field->name ] = '';
+//						}
+//					}
+//				}
 
 				if ( $field->type == 'multiple_linked_categories' ) {
 					if ( isset( $data[ $field->name ] ) ) {
@@ -422,28 +394,32 @@ class Controller extends ApiBaseController
 					}
 				}
 
-				if ( $field->type == 'file_upload' || $field->type == 'image_upload' || $field->type == 'gallery' ) {
-					$tmp[] = 'max:' . $field->max_file_size*1000;
-					if ($field->allowed_types != '*') {
-						$field->allowed_types = str_replace('jpg', 'jpeg', $field->allowed_types);
-						$field->allowed_types = str_replace('.', '', $field->allowed_types);
-						$tmp[] = 'mimes:' . $field->allowed_types;
-					}
-				}
+//				if ( $request->input( $field->name ) &&
+//					( $field->type == 'file_upload' || $field->type == 'image_upload' || $field->type == 'gallery' )
+//				) {
+//					$tmp[] = 'max:' . $field->max_file_size*1000;
+//					if ($field->allowed_types != '*') {
+//						$field->allowed_types = str_replace('jpg', 'jpeg', $field->allowed_types);
+//						$field->allowed_types = str_replace('.', '', $field->allowed_types);
+//						$tmp[] = 'mimes:' . $field->allowed_types;
+//					}
+//				}
 
-				if ( $field->type == 'image_upload' || $field->type == 'gallery' ) {
-					$tmp[] = 'dimensions:min_width=' . $field->min_width_size . ',min_height=' . $field->min_height_size;
-				}
+//				if ( $request->input( $field->name ) &&
+//					( $field->type == 'image_upload' || $field->type == 'gallery' )
+//				) {
+//					$tmp[] = 'dimensions:min_width=' . $field->min_width_size . ',min_height=' . $field->min_height_size;
+//				}
 
 
-				if ( $field->type == 'gallery' && $request->file( $field->name ) ) {
-					$nbr = count( $request->file( $field->name ) ) - 1;
-					foreach(range(0, $nbr) as $index) {
-						$rules[ $field->name .  '.' . $index ] = join( '|', $tmp );
-					}
-				} else {
-					$rules[ $field->name ] = join( '|', $tmp );
-				}
+//				if ( $field->type == 'gallery' && $request->file( $field->name ) ) {
+//					$nbr = count( $request->file( $field->name ) ) - 1;
+//					foreach(range(0, $nbr) as $index) {
+//						$rules[ $field->name .  '.' . $index ] = join( '|', $tmp );
+//					}
+//				} else {
+//					$rules[ $field->name ] = join( '|', $tmp );
+//				}
 
 			}
 		}
