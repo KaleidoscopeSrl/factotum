@@ -7,7 +7,7 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "laravel-elixir": "^6.0.0-18",
-    "lodash": "^4.14.0"
+    "lodash": "^4.17.13"
   },
   "dependencies": {
     "bootstrap-confirmation2": "^2.4.0",
