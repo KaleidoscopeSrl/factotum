@@ -4,19 +4,21 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Role;
 
 use Illuminate\Http\Request;
 
+use Kaleidoscope\Factotum\Http\Requests\StoreRole;
 use Kaleidoscope\Factotum\Role;
 
 class UpdateController extends Controller
 {
-    public function update(Request $request, $id)
-    {
-		$this->roleRules['role'] = 'required|unique:roles,role,' . $id;
 
-        $this->_validate( $request );
+    public function update(StoreRole $request, $id)
+    {
+		$data = $request->all();
 
         $role = Role::find( $id );
-        $role = $this->_save($request, $role);
+		$role->fill($data);
+		$role->save();
 
         return response()->json( [ 'result' => 'ok', 'role'  => $role->toArray() ] );
     }
+
 }

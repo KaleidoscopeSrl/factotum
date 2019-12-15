@@ -4,16 +4,15 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Role;
 
 use Illuminate\Http\Request;
 
+use Kaleidoscope\Factotum\Http\Requests\DeleteRole;
 use Kaleidoscope\Factotum\Role;
 use Kaleidoscope\Factotum\User;
 
 class DeleteController extends Controller
 {
 
-    public function remove(Request $request, $id)
+    public function remove(DeleteRole $request, $id)
     {
-        $this->validate($request, $this->deleteRoleRules, $this->messages);
-
         $reassigningRole = $request->input('reassigned_role');
 
         User::where('role_id', $id)
@@ -28,6 +27,7 @@ class DeleteController extends Controller
             if ( $deletedRows > 0 ) {
                 return response()->json( [ 'result' => 'ok' ]);
             }
+
             return $this->_sendJsonError( 'Errore in fase di cancellazione.' );
         }
 

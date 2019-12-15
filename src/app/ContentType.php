@@ -8,6 +8,10 @@ class ContentType extends Model
 {
 	protected $fillable = [
 		'content_type',
+		'old_content_type',
+		'editable',
+		'order_no',
+		'sitemap_in'
 	];
 
 	public function content_fields() {

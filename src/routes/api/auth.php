@@ -30,10 +30,6 @@ Route::group([
 	Route::post('/login',                'LoginController@login');
 	Route::post('/forgotten-password',   'ForgotPasswordController@forgottenPassword');
 
-	Route::get('/mailable', function () {
-		return new Kaleidoscope\Factotum\Mail\AuthForgottenPassword( new Kaleidoscope\Factotum\User, 'test' );
-	});
-
 });
 
 

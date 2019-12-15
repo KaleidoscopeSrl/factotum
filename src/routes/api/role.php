@@ -12,11 +12,10 @@ Route::group([
 	'namespace'  => 'Role'
 ], function () {
 
-	Route::post('/create',              'CreateController@create');
-	Route::post('/list',                'ReadController@getList');
-	Route::post('/full-list',           'ReadController@getFullList');
-	Route::post('/detail/{id}',         'ReadController@getDetail');
-	Route::post('/update/{id}',         'UpdateController@update');
-	Route::post('/delete/{id}',         'DeleteController@remove');
+	Route::post('/create',             'CreateController@create');
+	Route::get('/list',                'ReadController@getList');
+	Route::get('/detail/{id}',         'ReadController@getDetail');
+	Route::put('/update/{id}',         'UpdateController@update');
+	Route::delete('/delete/{id}',      'DeleteController@remove');
 
 });

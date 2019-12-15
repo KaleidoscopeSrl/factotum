@@ -3,19 +3,20 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\ContentType;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Http\Requests\StoreContentType;
 
 class CreateController extends Controller
 {
 
-    public function create(Request $request)
+    public function create(StoreContentType $request)
     {
-		$this->_validate( $request );
+    	$data = $request->all();
 
         $contentType = new ContentType;
-		$contentType = $this->_save( $request, $contentType );
+        $contentType->fill($data);
+		$contentType->save();
 
         return response()->json( [ 'result' => 'ok', 'content_type'  => $contentType->toArray() ] );
     }

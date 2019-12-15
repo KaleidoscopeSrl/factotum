@@ -17,9 +17,10 @@ class DeleteController extends Controller
 
 			$deletedRows = $capability->delete();
 
-			if ($deletedRows > 0) {
+			if ( $deletedRows > 0 ) {
 				return response()->json(['result' => 'ok']);
 			}
+
 			return $this->_sendJsonError('Errore in fase di cancellazione.');
 		}
 

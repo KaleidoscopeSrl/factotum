@@ -79,6 +79,7 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		// Middlewares
+		app('router')->aliasMiddleware('auth', 'Kaleidoscope\Factotum\Http\Middleware\Authenticate');
 		app('router')->aliasMiddleware('language', 'Kaleidoscope\Factotum\Http\Middleware\Language');
 		app('router')->aliasMiddleware('preflight', 'Kaleidoscope\Factotum\Http\Middleware\PreflightResponse');
 		app('router')->aliasMiddleware('start_session', '\Illuminate\Session\Middleware\StartSession');
@@ -132,7 +133,12 @@ class FactotumServiceProvider extends ServiceProvider
 		$this->loadRoutesFrom(__DIR__ . '/routes/web.php');
 		Route::group([
 			'prefix'     => 'api/v1',
-			'middleware' => [ 'api', 'preflight', 'start_session' ],
+			'middleware' => [
+				'api',
+				'preflight',
+				'start_session',
+				'auth'
+			],
 			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Api'
 		], function ($router) {
 			require __DIR__ . '/routes/api/api.php';

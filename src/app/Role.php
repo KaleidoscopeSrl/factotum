@@ -8,11 +8,15 @@ class Role extends Model
 {
 	protected $fillable = [
 		'role',
+
 		'backend_access',
 		'manage_content_types',
 		'manage_users',
-		'manage_content_categories'
+		'manage_categories',
+		'manage_media',
+		'manage_settings',
 	];
+
 
 	protected $hidden = [
 		'editable',

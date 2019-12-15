@@ -13,9 +13,9 @@ Route::group([
 ], function () {
 
 	Route::post('/create',              'CreateController@create');
-	Route::post('/list',                'ReadController@getList');
-	Route::post('/detail/{id}',         'ReadController@getDetail');
-	Route::post('/update/{id}',         'UpdateController@update');
-	Route::post('/delete/{id}',         'DeleteController@remove');
+	Route::get('/list',                 'ReadController@getList');
+	Route::get('/detail/{id}',          'ReadController@getDetail');
+	Route::put('/update/{id}',          'UpdateController@update');
+	Route::delete('/delete/{id}',       'DeleteController@remove');
 
 });

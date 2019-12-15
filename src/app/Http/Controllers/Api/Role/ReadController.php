@@ -2,8 +2,10 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Role;
 
-use Kaleidoscope\Factotum\Role;
 use Illuminate\Http\Request;
+
+use Kaleidoscope\Factotum\Role;
+
 
 class ReadController extends Controller
 {

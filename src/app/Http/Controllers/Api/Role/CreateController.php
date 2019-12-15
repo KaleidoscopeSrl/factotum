@@ -5,17 +5,19 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 
+use Kaleidoscope\Factotum\Http\Requests\StoreRole;
 use Kaleidoscope\Factotum\Role;
 
 class CreateController extends Controller
 {
 
-    public function create(Request $request)
+    public function create(StoreRole $request)
     {
-        $this->_validate( $request );
+    	$data = $request->all();
 
         $role = new Role;
-        $role = $this->_save( $request, $role );
+        $role->fill($data);
+        $role->save();
 
         return response()->json( [ 'result' => 'ok', 'role'  => $role->toArray() ] );
     }

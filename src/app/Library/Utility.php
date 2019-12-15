@@ -1,6 +1,8 @@
 <?php
 namespace Kaleidoscope\Factotum\Library;
 
+use Image;
+
 class Utility
 {
 	public static function debug($x)
@@ -96,5 +98,18 @@ class Utility
 		} else {
 			return $size;
 		}
+	}
+
+	public static function saveAvatar( $path )
+	{
+		$filename = array_reverse( explode('/', $path) )[0];
+		$image = Image::make( $path );
+		$image->fit( 100, 100, function ($constraint) {
+			$constraint->upsize();
+		});
+		$filename = str_replace( 'jpeg', 'jpg', $filename );
+		$image->save( storage_path('app/public/avatars/') . $filename, 90 );
+
+		return $filename;
 	}
 }

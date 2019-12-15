@@ -7,6 +7,11 @@ use Kaleidoscope\Factotum\Notifications\AdminResetPassword as AdminResetPassword
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Image;
+use Kaleidoscope\Factotum\Library\Utility;
+
 
 class User extends Authenticatable
 {
@@ -44,11 +49,6 @@ class User extends Authenticatable
 		return ($this->role->role == 'admin' ? true : false);
 	}
 
-	public function getAvatarAttribute($value)
-	{
-		return ($value ? url( '/storage/users/' . $this->id . '/' . $value ) : '' );
-	}
-
 
 	public function canConfigure($contentTypeID)
 	{
@@ -74,6 +74,29 @@ class User extends Authenticatable
 								->where('content_type_id', $contentTypeID)
 								->first();
 		return ($capability && $capability->publish ? true : false);
+	}
+
+
+	public function setAvatar($request)
+	{
+		if ( $request->hasFile('avatar') && $request->file('avatar')->isValid() ) {
+
+			$path           = $request->file('avatar')->store('avatars');
+			$path           = storage_path( 'app/' . $path);
+			$this->avatar   = url( 'avatars/' . Utility::saveAvatar( $path ) );
+
+		} else if ( $request->input('avatar') ) {
+
+			$avatar       = $request->input('avatar');
+			$imageData    = base64_decode( substr( $avatar, strpos( $avatar, ',') + 1) );
+			$jpgName      = Str::random(8) . '.jpg';
+			$path         = storage_path('app/public/avatars/' . $jpgName);
+
+			Storage::disk('avatars')->put( $jpgName, $imageData, 'public');
+
+			$this->avatar = url( 'storage/avatars/' . Utility::saveAvatar( $path ) );
+
+		}
 	}
 
 

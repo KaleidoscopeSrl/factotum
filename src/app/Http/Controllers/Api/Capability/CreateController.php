@@ -5,16 +5,18 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Capability;
 use Illuminate\Http\Request;
 
 use Kaleidoscope\Factotum\Capability;
+use Kaleidoscope\Factotum\Http\Requests\StoreCapability;
 
 class CreateController extends Controller
 {
 
-	public function create(Request $request)
+	public function create(StoreCapability $request)
 	{
-		$this->_validate($request);
+		$data = $request->all();
 
 		$capability = new Capability;
-		$capability = $this->_save($request, $capability);
+		$capability->fill($data);
+		$capability->save();
 
 		return response()->json(['result' => 'ok', 'capability' => $capability->toArray()]);
 	}

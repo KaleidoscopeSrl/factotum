@@ -13,6 +13,7 @@ class ReadController extends Controller
 	public function getList()
 	{
 		$capabilities = Capability::with('role')->with('content_type')->get();
+
 		return response()->json(['result' => 'ok', 'capabilities' => $capabilities]);
 	}
 
@@ -21,7 +22,7 @@ class ReadController extends Controller
 	{
 		$capability = Capability::find($id);
 
-		if ($capability) {
+		if ( $capability ) {
 			return response()->json(['result' => 'ok', 'capability' => $capability]);
 		}
 

@@ -2,24 +2,22 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\ContentType;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
-
 use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Http\Requests\StoreContentType;
 
 class UpdateController extends Controller
 {
 
-	public function update(Request $request, $id)
+	public function update(StoreContentType $request, $id)
 	{
-		$this->contentTypeRules['content_type'] .= ',content_type,' . $id;
-
-		$this->_validate( $request );
+		$data = $request->all();
 
 		$contentType = ContentType::find($id);
-		$contentType->old_content_type = $contentType->content_type;
+		$contentType->fill($data);
 
-		$contentType = $this->_save( $request, $contentType );
+		if ( $contentType->old_content_type != $contentType->content_type ) {
+			$contentType->save();
+		}
 
         return response()->json( [ 'result' => 'ok', 'contentType'  => $contentType->toArray() ] );
 	}

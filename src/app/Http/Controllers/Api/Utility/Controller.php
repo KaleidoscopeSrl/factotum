@@ -18,24 +18,23 @@ class Controller extends ApiBaseController
 		]);
 	}
 
+
 	public function getPagesByLanguage()
 	{
 		$contentType = ContentType::whereContentType('page')->first();
 		$languages   = config('factotum.site_languages');
 		$tmp         = [];
+
 		foreach ( $languages as $lang => $label ) {
 
 			$tmp[ $lang ] = Content::whereNull('parent_id')
 									->where( 'content_type_id', $contentType->id)
-									->where( 'lang', $lang )
+									->where( 'lang',            $lang )
 									->get();
 
 		}
 
-		return response()->json([
-			'result'  => 'ok',
-			'pages'   => $tmp
-		]);
+		return response()->json([ 'result' => 'ok', 'pages' => $tmp ]);
 
 	}
 
