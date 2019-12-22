@@ -20,7 +20,6 @@ class DeleteController extends Controller
 		Content::where('user_id', $id)
 				->update(['user_id' => $reassigningUser]);
 
-
 		$user = User::find( $id );
 
 		if ( $user ) {

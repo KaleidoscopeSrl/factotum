@@ -26,8 +26,9 @@ class PreflightResponse
 		}
 
 		if ( $request->getMethod() === 'OPTIONS' && isset($headers) ) {
-			return response('OK', 200, $headers);
+			return response( 'OK', 200, $headers );
 		} else {
+
 			if ( isset($_SERVER['HTTP_ORIGIN']) ) {
 				header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
 				header('Access-Control-Allow-Headers: Content-Type, Origin, Authorization');

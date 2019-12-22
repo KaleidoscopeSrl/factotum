@@ -21,9 +21,10 @@ class UpdateController extends Controller
 		$user->setAvatar( $request );
 		$user->save();
 
-		$this->_saveProfile( $request, $user );
+		$profile = Profile::where( 'user_id', $user->id )->first();
+		$profile->fill( $data );
+		$profile->save();
 
-		// $user = $this->_save( $request, $user, $profile );
 
         return response()->json( [ 'result' => 'ok', 'user'  => $user->toArray() ] );
 	}

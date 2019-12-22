@@ -13,6 +13,7 @@ use Kaleidoscope\Factotum\Profile;
 class Controller extends ApiBaseController
 {
 
+	// TODO: check per rimozione
 	private function _removeMedia( $filename )
 	{
 		$filename = parse_url($filename, PHP_URL_PATH);
@@ -23,21 +24,5 @@ class Controller extends ApiBaseController
 		}
 	}
 
-
-	protected function _saveProfile( StoreUser $request, $user )
-	{
-		$data = $request->all();
-
-		$profile = Profile::where( 'user_id', $user->id )->first();
-
-		if ( !$profile ) {
-			$profile = new Profile;
-		}
-
-		$profile->first_name = $data['first_name'];
-		$profile->last_name  = $data['last_name'];
-		$profile->user_id    = $user->id;
-		$profile->save();
-	}
 
 }

@@ -30,6 +30,8 @@ use Kaleidoscope\Factotum\Console\Commands\CreateStorageFolders;
 use Kaleidoscope\Factotum\Console\Commands\CreateSymbolicLinks;
 use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
 
+use Kaleidoscope\Factotum\Http\Middleware\PreflightResponse;
+
 
 class FactotumServiceProvider extends ServiceProvider
 {
@@ -44,9 +46,11 @@ class FactotumServiceProvider extends ServiceProvider
 		Category::class      => CategoryPolicy::class,
 	];
 
+
     public function boot(GateContract $gate)
     {
 		Schema::defaultStringLength(191);
+
 
 		// Migrations & Seeds
 		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
@@ -79,14 +83,10 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		// Middlewares
-		app('router')->aliasMiddleware('auth', 'Kaleidoscope\Factotum\Http\Middleware\Authenticate');
-		app('router')->aliasMiddleware('language', 'Kaleidoscope\Factotum\Http\Middleware\Language');
-		app('router')->aliasMiddleware('preflight', 'Kaleidoscope\Factotum\Http\Middleware\PreflightResponse');
-		app('router')->aliasMiddleware('start_session', '\Illuminate\Session\Middleware\StartSession');
-
-
-
-
+		// \Illuminate\Session\Middleware\StartSession::class
+		$this->getRouter()->pushMiddlewareToGroup('session_start', \Illuminate\Session\Middleware\StartSession::class);
+		$this->getRouter()->pushMiddlewareToGroup('language', \Kaleidoscope\Factotum\Http\Middleware\Language::class);
+		$this->getRouter()->pushMiddlewareToGroup('preflight', \Kaleidoscope\Factotum\Http\Middleware\PreflightResponse::class);
 
 
 
@@ -131,17 +131,33 @@ class FactotumServiceProvider extends ServiceProvider
 
 		// Routes
 		$this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+
+
 		Route::group([
 			'prefix'     => 'api/v1',
 			'middleware' => [
 				'api',
+				'session_start',
 				'preflight',
-				'start_session',
-				'auth'
+				'language'
 			],
 			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Api'
 		], function ($router) {
-			require __DIR__ . '/routes/api/api.php';
+			require __DIR__ . '/routes/api/public/api.php';
+			require __DIR__ . '/routes/api/public/auth.php';
+		});
+
+		Route::group([
+			'prefix'     => 'api/v1',
+			'middleware' => [
+				'api',
+				'auth:api',
+				'session_start',
+				'preflight',
+				'language'
+			],
+			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Api'
+		], function ($router) {
 			require __DIR__ . '/routes/api/auth.php';
 			require __DIR__ . '/routes/api/capability.php';
 			require __DIR__ . '/routes/api/category.php';
@@ -155,6 +171,7 @@ class FactotumServiceProvider extends ServiceProvider
 			require __DIR__ . '/routes/api/utility.php';
 			require __DIR__ . '/routes/api/tool.php';
 		});
+
 
 		Passport::routes();
 		Passport::enableImplicitGrant();
@@ -177,16 +194,17 @@ class FactotumServiceProvider extends ServiceProvider
 			if ($value == '*') {
 				return true;
 			}
-			$formats = explode(',', $value);
-			if (count($formats) > 0) {
+
+			if (count($value) > 0) {
 				$error = false;
-				foreach ($formats as $format) {
+				foreach ($value as $format) {
 					if (strlen($format) < 3) {
 						$error = true;
 					}
 				}
 				return !$error;
 			}
+
 			return $value == 'foo';
 		});
 
@@ -220,4 +238,15 @@ class FactotumServiceProvider extends ServiceProvider
     {
     }
 
+
+
+	/**
+	 * Get the active router.
+	 *
+	 * @return Router
+	 */
+	protected function getRouter()
+	{
+		return $this->app['router'];
+	}
 }

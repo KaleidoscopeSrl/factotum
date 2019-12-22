@@ -14,23 +14,24 @@
 
 
 
-
 /**
  * ========================================
  *
- *   PROTECTED ROUTES
+ *   AUTH PUBLIC ROUTES
  *
  * ========================================
  */
 
 Route::group([
-	'prefix'     => 'auth',
-	'namespace'  => 'Auth',
+	'prefix'    => 'auth',
+	'namespace' => 'Auth'
 ], function() {
 
-	Route::post('/logout',             'LogoutController@logout');
+	Route::post('/login',                'LoginController@login');
+	Route::post('/forgotten-password',   'ForgotPasswordController@forgottenPassword');
 
 });
+
 
 
 

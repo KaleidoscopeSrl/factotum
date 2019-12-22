@@ -21,7 +21,10 @@ class CreateController extends Controller
 		$user->setAvatar( $request );
 		$user->save();
 
-		$this->_saveProfile( $request, $user );
+		$data['user_id'] = $user->id;
+		$profile = new Profile;
+		$profile->fill( $data );
+		$profile->save();
 
 		return response()->json( [ 'result' => 'ok', 'user'  => $user->toArray() ] );
 	}

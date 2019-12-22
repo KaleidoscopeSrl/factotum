@@ -6,6 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Storage;
@@ -145,9 +146,24 @@ class Controller extends BaseController
 				->with('siteId', $siteId);
 	}
 
-	public function optionsRequest()
+	public function optionsRequest( Request $request )
 	{
-		return response('OK', 200);
+		if ( isset($_SERVER['HTTP_ORIGIN']) ) {
+			// ALLOW OPTIONS METHOD
+			$headers = [
+				'Access-Control-Allow-Origin'      => $_SERVER['HTTP_ORIGIN'],
+				'Access-Control-Allow-Methods'     => 'POST, GET, OPTIONS, PUT, DELETE',
+				'Access-Control-Allow-Headers'     => 'Accept, Content-Type, Origin, Authorization',
+				'Access-Control-Allow-Credentials' => 'true'
+			];
+		}
+
+		if ( $request->getMethod() === 'OPTIONS' && isset($headers) ) {
+			return response('OK', 200, $headers);
+		} else {
+			return response('OK', 200);
+		}
+
 	}
 
 }

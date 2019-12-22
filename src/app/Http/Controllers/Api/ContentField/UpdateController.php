@@ -2,23 +2,20 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\ContentField;
 
-use Illuminate\Http\Request;
-
+use Kaleidoscope\Factotum\Http\Requests\StoreContentField;
 use Kaleidoscope\Factotum\ContentField;
+
 
 class UpdateController extends Controller
 {
 
-    public function update(Request $request, $id)
+    public function update(StoreContentField $request, $id)
     {
-        $this->validator( $request->all(), $id )->validate();
+		$data = $request->all();
 
-        // TODO: ??
-        $oldContentField = ContentField::find( $id );
-        $contentField = ContentField::find($id);
-
-        $contentField->old_content_field = $oldContentField->name;
-        $contentField = $this->_save( $request, $contentField );
+		$contentField = ContentField::find( $id );
+		$contentField->fill( $data );
+		$contentField->save();
 
         return response()->json( [ 'result' => 'ok', 'contentField'  => $contentField->toArray() ] );
     }
