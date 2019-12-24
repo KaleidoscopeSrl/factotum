@@ -9,7 +9,7 @@
 
 namespace League\OAuth2\Server\Entities;
 
-use DateTimeImmutable;
+use DateTime;
 
 interface RefreshTokenEntityInterface
 {
@@ -30,16 +30,16 @@ interface RefreshTokenEntityInterface
     /**
      * Get the token's expiry date time.
      *
-     * @return DateTimeImmutable
+     * @return DateTime
      */
     public function getExpiryDateTime();
 
     /**
      * Set the date time when the token expires.
      *
-     * @param DateTimeImmutable $dateTime
+     * @param DateTime $dateTime
      */
-    public function setExpiryDateTime(DateTimeImmutable $dateTime);
+    public function setExpiryDateTime(DateTime $dateTime);
 
     /**
      * Set the access token that the refresh token was associated with.

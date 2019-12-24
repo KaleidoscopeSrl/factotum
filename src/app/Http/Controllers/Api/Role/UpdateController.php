@@ -2,8 +2,6 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Role;
 
-use Illuminate\Http\Request;
-
 use Kaleidoscope\Factotum\Http\Requests\StoreRole;
 use Kaleidoscope\Factotum\Role;
 

@@ -2,20 +2,19 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Category;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
-
 use Kaleidoscope\Factotum\Category;
+use Kaleidoscope\Factotum\Http\Requests\StoreCategory;
 
 class CreateController extends Controller
 {
 
-    public function create(Request $request)
+    public function create(StoreCategory $request)
     {
-        $this->validator( $request, $request->all() )->validate();
+		$data = $request->all();
 
         $category = new Category;
-        $category = $this->_save( $request, $category );
+		$category->fill($data);
+		$category->save();
 
         return response()->json( [ 'result' => 'ok', 'category'  => $category->toArray() ] );
     }

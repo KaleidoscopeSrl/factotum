@@ -22,7 +22,7 @@ interface UserRepositoryInterface extends RepositoryInterface
      * @param string                $grantType    The grant type used
      * @param ClientEntityInterface $clientEntity
      *
-     * @return UserEntityInterface|null
+     * @return UserEntityInterface
      */
     public function getUserEntityByUserCredentials(
         $username,

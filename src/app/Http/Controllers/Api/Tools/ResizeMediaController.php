@@ -13,13 +13,6 @@ use Kaleidoscope\Factotum\Media;
 class ResizeMediaController extends Controller
 {
 
-	public function index()
-	{
-		return view('factotum::admin.tools.resize_media')
-					->with( 'title', 'Resize Media' )
-					->with( 'postUrl', url('/admin/tools/do-resize-media') );
-	}
-
 	public function getResize( Request $request )
 	{
 

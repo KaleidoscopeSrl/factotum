@@ -11,7 +11,6 @@ namespace League\OAuth2\Server\Exception;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
 class OAuthServerException extends Exception
@@ -40,11 +39,6 @@ class OAuthServerException extends Exception
      * @var array
      */
     private $payload;
-
-    /**
-     * @var ServerRequestInterface
-     */
-    private $serverRequest;
 
     /**
      * Throw a new exception.
@@ -102,16 +96,6 @@ class OAuthServerException extends Exception
     }
 
     /**
-     * Set the server request that is responsible for generating the exception
-     *
-     * @param ServerRequestInterface $serverRequest
-     */
-    public function setServerRequest(ServerRequestInterface $serverRequest)
-    {
-        $this->serverRequest = $serverRequest;
-    }
-
-    /**
      * Unsupported grant type error.
      *
      * @return static
@@ -145,17 +129,13 @@ class OAuthServerException extends Exception
     /**
      * Invalid client error.
      *
-     * @param ServerRequestInterface $serverRequest
-     *
      * @return static
      */
-    public static function invalidClient(ServerRequestInterface $serverRequest)
+    public static function invalidClient()
     {
-        $exception = new static('Client authentication failed', 4, 'invalid_client', 401);
+        $errorMessage = 'Client authentication failed';
 
-        $exception->setServerRequest($serverRequest);
-
-        return $exception;
+        return new static($errorMessage, 4, 'invalid_client', 401);
     }
 
     /**
@@ -308,9 +288,7 @@ class OAuthServerException extends Exception
             $response = $response->withHeader($header, $content);
         }
 
-        $responseBody = json_encode($payload, $jsonOptions) ?: 'JSON encoding of payload failed';
-
-        $response->getBody()->write($responseBody);
+        $response->getBody()->write(json_encode($payload, $jsonOptions));
 
         return $response->withStatus($this->getHttpStatusCode());
     }
@@ -335,8 +313,8 @@ class OAuthServerException extends Exception
         // include the "WWW-Authenticate" response header field
         // matching the authentication scheme used by the client.
         // @codeCoverageIgnoreStart
-        if ($this->errorType === 'invalid_client' && $this->serverRequest->hasHeader('Authorization') === true) {
-            $authScheme = strpos($this->serverRequest->getHeader('Authorization')[0], 'Bearer') === 0 ? 'Bearer' : 'Basic';
+        if ($this->errorType === 'invalid_client' && array_key_exists('HTTP_AUTHORIZATION', $_SERVER) !== false) {
+            $authScheme = strpos($_SERVER['HTTP_AUTHORIZATION'], 'Bearer') === 0 ? 'Bearer' : 'Basic';
 
             $headers['WWW-Authenticate'] = $authScheme . ' realm="OAuth"';
         }

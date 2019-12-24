@@ -9,17 +9,17 @@
 
 namespace League\OAuth2\Server\Entities;
 
+use Lcobucci\JWT\Token;
 use League\OAuth2\Server\CryptKey;
 
 interface AccessTokenEntityInterface extends TokenInterface
 {
     /**
-     * Set a private key used to encrypt the access token.
+     * Generate a JWT from the access token
+     *
+     * @param CryptKey $privateKey
+     *
+     * @return Token
      */
-    public function setPrivateKey(CryptKey $privateKey);
-
-    /**
-     * Generate a string representation of the access token.
-     */
-    public function __toString();
+    public function convertToJWT(CryptKey $privateKey);
 }

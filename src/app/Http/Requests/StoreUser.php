@@ -34,6 +34,10 @@ class StoreUser extends CustomFormRequest
 			$this->request->remove('password_confirmation');
 		}
 
+		if ( isset($data['avatar']) && $data['avatar'] == 'null' ) {
+			$data['avatar'] = null;
+		}
+
 		$this->merge($data);
 
 		return parent::getValidatorInstance();
@@ -56,7 +60,8 @@ class StoreUser extends CustomFormRequest
 
 		$data = $this->all();
 
-		if ( isset($data['avatar']) && $data['avatar'] != '' ) {
+		if ( isset($data['avatar']) && $data['avatar'] != ''
+			&& request()->hasFile('avatar') && request()->file('avatar')->isValid() ) {
 
 			$rules['avatar'] = 'required|image';
 

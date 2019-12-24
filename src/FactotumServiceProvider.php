@@ -30,7 +30,6 @@ use Kaleidoscope\Factotum\Console\Commands\CreateStorageFolders;
 use Kaleidoscope\Factotum\Console\Commands\CreateSymbolicLinks;
 use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
 
-use Kaleidoscope\Factotum\Http\Middleware\PreflightResponse;
 
 
 class FactotumServiceProvider extends ServiceProvider

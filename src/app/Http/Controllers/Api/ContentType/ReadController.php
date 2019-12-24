@@ -9,7 +9,7 @@ class ReadController extends Controller
 {
     public function getList()
     {
-        $contentTypes = ContentType::get();
+        $contentTypes = ContentType::withCount('content_fields')->get();
 
         return response()->json( [ 'result' => 'ok', 'content_types' => $contentTypes ]);
     }

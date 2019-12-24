@@ -2,11 +2,9 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\User;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
-
 use Kaleidoscope\Factotum\Http\Requests\StoreUser;
 use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Profile;
 
 
 class UpdateController extends Controller
@@ -18,7 +16,13 @@ class UpdateController extends Controller
 
 		$user = User::find($id);
 		$user->fill( $data );
-		$user->setAvatar( $request );
+
+		if ( isset($data['avatar']) && $data['avatar'] != ''
+			&& request()->hasFile('avatar') && request()->file('avatar')->isValid() ) {
+
+			$user->setAvatar( $request );
+
+		}
 		$user->save();
 
 		$profile = Profile::where( 'user_id', $user->id )->first();

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
 
+use Kaleidoscope\Factotum\Http\Requests\StoreContent;
 use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\ContentField;
@@ -30,121 +31,7 @@ class Controller extends ApiBaseController
 	protected $_contentCategories;
 	protected $_additionalValues;
 
-	protected function _prepareMediaPopulated($content)
-	{
-		$tmp = [];
-
-		if ( $this->_contentFields->count() > 0 ) {
-			foreach ( $this->_contentFields as $cf ) {
-
-				if ( isset($content[$cf['name']]) && ( $cf['type'] == 'image_upload' || $cf['type'] == 'file_upload' ) ) {
-
-					$tmp[$cf['name']] = $this->_parseMedia( $content[$cf['name']], $cf['name'] );
-
-				} elseif ( isset($content[$cf['name']]) && $cf['type'] == 'gallery' ) {
-
-					foreach ( $content[$cf['name']] as $i => $m ) {
-						$content[$cf['name']][$i] = $this->_parseMedia( $m, $cf['name'] );
-					}
-					$tmp[$cf['name']] = $content[$cf['name']];
-
-				}
-			}
-		}
-
-		if ( $content['fb_image'] ) {
-			$tmp['fb_image'] = $this->_parseMedia( $content['fb_image'], 'fb_image' );
-		}
-
-		return $tmp ;
-	}
-
-	protected function _prepareContentFields( $contentTypeID, $contentID = null )
-	{
-		$this->statuses = array(
-			'draft' => Lang::get('factotum::content.draft')
-		);
-
-		if ( $this->guard()->user()->canPublish( $contentTypeID) ) {
-			$this->statuses = array(
-				'publish' => Lang::get('factotum::content.publish'),
-				'draft'   => Lang::get('factotum::content.draft'),
-			);
-		}
-
-		$this->_contentType   = ContentType::find( $contentTypeID );
-		$this->_contents      = Content::treeChildsArray( $this->_contentType->id, null, $this->currentLanguage, $contentID );
-		$this->_categories    = Category::treeChildsArray( $this->_contentType->id );
-		$this->_contentFields = ContentField::where( 'content_type_id', '=', $contentTypeID )
-											->orderBy('order_no', 'asc')
-											->get();
-
-		if ( $contentID ) {
-			$this->_additionalValues = DB::table( $this->_contentType->content_type )
-												->where( 'content_type_id', $this->_contentType->id )
-												->where( 'content_id', $contentID )
-												->first();
-			$contentCategories = ContentCategory::whereContentId( $contentID )->get()->toArray();
-			$tmp = array();
-			if ( count($contentCategories) > 0 ) {
-				foreach ( $contentCategories as $cc ) {
-					$tmp[] = $cc['category_id'];
-				}
-			}
-			$this->_contentCategories = $tmp;
-		}
-
-		if ( $this->_contentFields->count() > 0 ) {
-			foreach ( $this->_contentFields as $field ) {
-				if ( $contentID ) {
-
-					if ( $field->type == 'file_upload' || $field->type == 'image_upload' ) {
-						if ( isset($this->_additionalValues->{$field->name}) ) {
-							$media = Media::find( $this->_additionalValues->{$field->name} );
-							if ( $media ) {
-								$this->_additionalValues->{$field->name} = $media->toArray();
-							}
-						}
-					} else if ( $field->type == 'gallery' ) {
-
-						if ( isset($this->_additionalValues->{$field->name}) ) {
-							$media = Media::findMany( Utility::convertOptionsTextToArray( $this->_additionalValues->{$field->name} ) );
-							if ( $media ) {
-								$this->_additionalValues->{$field->name} = $media->toArray();
-							}
-						}
-					}
-
-				}
-
-				if ( $field->type == 'linked_content' || $field->type == 'multiple_linked_content' ) {
-					$field->options = Content::treeChildsArray( $field->linked_content_type_id );
-				}
-
-				if ( $field->name == 'content_type_to_list' ) {
-					$options = ContentType::where('content_type', '<>', 'page')->get();
-					$tmp = array(
-						'null:Select content type'
-					);
-					foreach ( $options as $opt ) {
-
-						$tmp[] = $opt->id . ':' . $opt->content_type;
-					}
-					$tmp = join(';', $tmp);
-					$field->options = $tmp;
-				}
-
-				if ( $field->type == 'multiple_linked_categories' ) {
-					$field->options = Category::treeChildsArray( $contentTypeID );
-				}
-			}
-		}
-
-
-	}
-
-
-	protected function _save( Request $request, $content )
+	protected function _save( StoreContent $request, $content )
 	{
 		$data = $request->all();
 
@@ -260,25 +147,6 @@ class Controller extends ApiBaseController
 					$data[$field->name] = Utility::convertHumanDateTimeToIso($data[$field->name]);
 				}
 
-				// Save generic file upload (file or image)
-//				$file = null;
-//				if ( $field->type == 'file_upload' || $field->type == 'image_upload' ) {
-//					if ($request->hasFile( $field->name )) {
-//						if ($request->file( $field->name )->isValid()) {
-//							$file = $request->file( $field->name );
-//							$data[ $field->name ] = '';
-//							$data[ $field->name ] = $this->_saveMedia( $file, $field );
-//						}
-//					} else {
-//						if ( isset($data[ $field->name . '_hidden' ]) ) {
-//							$data[ $field->name ] = $data[ $field->name . '_hidden' ];
-//							$data[ $field->name ] = $this->_checkImage( $data[ $field->name ], $field );
-//						} else {
-//							$data[ $field->name ] = '';
-//						}
-//					}
-//				}
-
 				if ( $field->type == 'multiple_linked_categories' ) {
 					if ( isset( $data[ $field->name ] ) ) {
 						if ( is_array( $data[ $field->name ] ) ) {
@@ -305,125 +173,5 @@ class Controller extends ApiBaseController
 		return $content;
 	}
 
-	private function _checkImage( $mediaId, $field )
-	{
-		$media = Media::find($mediaId);
-		if ( Media::checkImageSizesNotExist( $field, $media ) ) {
-			Media::saveImage( $field, $media->url );
-		}
-		return $mediaId;
-	}
 
-	private function _saveMedia( $file, $field )
-	{
-		$filename = $file->getClientOriginalName();
-		$filename = Media::filenameAvailable($filename, $filename);
-
-		$media = new Media;
-		$media->filename  = $filename;
-		// TODO:
-		// $user = Auth::user();
-		$media->user_id  = 1; // $user->id;
-		$media->mime_type = $file->getMimeType();
-		$media->save();
-
-		$mediaDir = 'media/' . $media->id;
-		Storage::makeDirectory( $mediaDir );
-
-		$path = $file->storeAs( $mediaDir, $filename );
-
-		$media->url = $path;
-		$media->save();
-
-		if ( $file && ( $field->type == 'image_upload' || $field->type == 'gallery' ) ) {
-			Media::saveImage( $field, $media->url );
-		}
-
-		return $media->id;
-	}
-
-
-	protected function validator(Request $request, array $data, $id = null)
-	{
-		$rules = array(
-			'title'   => 'required',
-			'url'     => 'required',
-			'status'  => 'required'
-		);
-
-		if ($id) {
-			$content = Content::find($id);
-			if ( $data['url'] != $content->url ) {
-				$alreadyExist = Content::where('url', '=', $data['url'])
-									   ->where( 'content_type_id', '=', $content->content_type_id )
-									   ->count();
-				if ($alreadyExist > 0) {
-					$rules['url'] .= '|unique:contents';
-				}
-			}
-
-			$contentFields = ContentField::where( 'content_type_id', '=', $content->content_type_id )->get();
-
-		} else {
-			$rules['content_type_id'] = 'required';
-
-			$alreadyExist = Content::where('url', '=', $data['url'])
-								   ->where( 'content_type_id', '=', $data['content_type_id'] )
-								   ->count();
-			if ($alreadyExist > 0) {
-				$rules['url'] .= '|unique:contents';
-			}
-
-			$contentFields = ContentField::where( 'content_type_id', '=', $data['content_type_id'] )->get();
-		}
-
-
-		// Additional Fields
-		if ( $contentFields->count() > 0 ) {
-			foreach ( $contentFields as $field ) {
-				$tmp = array();
-
-				if ( $field->mandatory ) {
-					if (count($data) > 0 && ( $field->type == 'file_upload' || $field->type == 'image_upload'  || $field->type == 'gallery' )) {
-						if ( !isset($data[ $field->name . '_hidden' ]) ||
-							 (isset($data[ $field->name . '_hidden' ]) && $data[ $field->name . '_hidden' ] == '' ) ) {
-							$tmp[] = 'required';
-						}
-					} else {
-						$tmp[] = 'required';
-					}
-				}
-
-//				if ( $request->input( $field->name ) &&
-//					( $field->type == 'file_upload' || $field->type == 'image_upload' || $field->type == 'gallery' )
-//				) {
-//					$tmp[] = 'max:' . $field->max_file_size*1000;
-//					if ($field->allowed_types != '*') {
-//						$field->allowed_types = str_replace('jpg', 'jpeg', $field->allowed_types);
-//						$field->allowed_types = str_replace('.', '', $field->allowed_types);
-//						$tmp[] = 'mimes:' . $field->allowed_types;
-//					}
-//				}
-
-//				if ( $request->input( $field->name ) &&
-//					( $field->type == 'image_upload' || $field->type == 'gallery' )
-//				) {
-//					$tmp[] = 'dimensions:min_width=' . $field->min_width_size . ',min_height=' . $field->min_height_size;
-//				}
-
-
-//				if ( $field->type == 'gallery' && $request->file( $field->name ) ) {
-//					$nbr = count( $request->file( $field->name ) ) - 1;
-//					foreach(range(0, $nbr) as $index) {
-//						$rules[ $field->name .  '.' . $index ] = join( '|', $tmp );
-//					}
-//				} else {
-//					$rules[ $field->name ] = join( '|', $tmp );
-//				}
-
-			}
-		}
-
-		return Validator::make($data, $rules);
-	}
 }

@@ -19,7 +19,7 @@ use LogicException;
 trait CryptTrait
 {
     /**
-     * @var string|Key|null
+     * @var string|Key
      */
     protected $encryptionKey;
 
@@ -39,13 +39,9 @@ trait CryptTrait
                 return Crypto::encrypt($unencryptedData, $this->encryptionKey);
             }
 
-            if (is_string($this->encryptionKey)) {
-                return Crypto::encryptWithPassword($unencryptedData, $this->encryptionKey);
-            }
-
-            throw new LogicException('Encryption key not set when attempting to encrypt');
+            return Crypto::encryptWithPassword($unencryptedData, $this->encryptionKey);
         } catch (Exception $e) {
-            throw new LogicException($e->getMessage(), 0, $e);
+            throw new LogicException($e->getMessage(), null, $e);
         }
     }
 
@@ -65,13 +61,9 @@ trait CryptTrait
                 return Crypto::decrypt($encryptedData, $this->encryptionKey);
             }
 
-            if (is_string($this->encryptionKey)) {
-                return Crypto::decryptWithPassword($encryptedData, $this->encryptionKey);
-            }
-
-            throw new LogicException('Encryption key not set when attempting to decrypt');
+            return Crypto::decryptWithPassword($encryptedData, $this->encryptionKey);
         } catch (Exception $e) {
-            throw new LogicException($e->getMessage(), 0, $e);
+            throw new LogicException($e->getMessage(), null, $e);
         }
     }
 

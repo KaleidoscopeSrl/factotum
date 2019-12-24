@@ -14,29 +14,32 @@ class Controller extends ApiBaseController
 {
 	protected $_limit = 12;
 
-	protected function _getField($fieldName)
-	{
-		$field = null;
-		if ( $fieldName != 'undefined' ) {
-			if ( $fieldName == 'fb_image' ) {
-				$field = new \stdClass();
-				$field->name            = 'fb_image';
-				$field->type            = 'image_upload';
-				$field->mandatory       = false;
-				$field->image_operation = 'fit';
-				$field->max_file_size   = 2000;
-				$field->allowed_types   = '.jpg,.png';
-				$field->min_width_size  = 100;
-				$field->min_height_size = 100;
-				$field->image_bw        = false;
-				$field->resizes         = null;
-			} else {
-				$field = ContentField::whereName($fieldName)->first();
-			}
-		}
 
-		return $field;
-	}
+	// TODO: Non metto limiti al caricamento dell'immagine
+
+//	protected function _getField($fieldName)
+//	{
+//		$field = null;
+//		if ( $fieldName != 'undefined' ) {
+//			if ( $fieldName == 'fb_image' ) {
+//				$field = new \stdClass();
+//				$field->name            = 'fb_image';
+//				$field->type            = 'image_upload';
+//				$field->mandatory       = false;
+//				$field->image_operation = 'fit';
+//				$field->max_file_size   = 2000;
+//				$field->allowed_types   = '.jpg,.png';
+//				$field->min_width_size  = 100;
+//				$field->min_height_size = 100;
+//				$field->image_bw        = false;
+//				$field->resizes         = null;
+//			} else {
+//				$field = ContentField::whereName($fieldName)->first();
+//			}
+//		}
+//
+//		return $field;
+//	}
 
 	protected function _save( Request $request, $media )
 	{

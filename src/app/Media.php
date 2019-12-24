@@ -15,13 +15,17 @@ class Media extends Model
 		'caption', 'alt_text', 'description'
 	];
 
-	public static function filenameAvailable($filename, $origFilename, $counter = '')
+	public static function filenameAvailable($filename, $origFilename = null, $counter = '')
 	{
 		$ext      = substr( $filename, strlen($filename) - 3, 3 );
 		$filename = str_slug( substr( $filename, 0, -4 ) ) . '.' . $ext;
 		$filename = str_replace('jpeg', 'jpg', $filename);
 
 		$mediaExist = Media::where('filename', $filename)->get();
+
+		if ( !$origFilename ) {
+			$origFilename = $filename;
+		}
 
 		if ( $mediaExist->count() > 0 ) {
 			if (!$counter) {

@@ -33,11 +33,4 @@ interface ClientEntityInterface
      * @return string|string[]
      */
     public function getRedirectUri();
-
-    /**
-     * Returns true if the client is confidential.
-     *
-     * @return bool
-     */
-    public function isConfidential();
 }

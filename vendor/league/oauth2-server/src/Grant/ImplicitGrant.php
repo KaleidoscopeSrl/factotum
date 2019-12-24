@@ -10,6 +10,8 @@
 namespace League\OAuth2\Server\Grant;
 
 use DateInterval;
+use DateTime;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
@@ -124,7 +126,17 @@ class ImplicitGrant extends AbstractAuthorizeGrant
             throw OAuthServerException::invalidRequest('client_id');
         }
 
-        $client = $this->getClientEntityOrFail($clientId, $request);
+        $client = $this->clientRepository->getClientEntity(
+            $clientId,
+            $this->getIdentifier(),
+            null,
+            false
+        );
+
+        if ($client instanceof ClientEntityInterface === false) {
+            $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
+            throw OAuthServerException::invalidClient();
+        }
 
         $redirectUri = $this->getQueryStringParameter('redirect_uri', $request);
 
@@ -133,7 +145,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
         } elseif (is_array($client->getRedirectUri()) && count($client->getRedirectUri()) !== 1
             || empty($client->getRedirectUri())) {
             $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
-            throw OAuthServerException::invalidClient($request);
+            throw OAuthServerException::invalidClient();
         } else {
             $redirectUri = is_array($client->getRedirectUri())
                 ? $client->getRedirectUri()[0]
@@ -198,9 +210,9 @@ class ImplicitGrant extends AbstractAuthorizeGrant
                 $this->makeRedirectUri(
                     $finalRedirectUri,
                     [
-                        'access_token' => (string) $accessToken,
+                        'access_token' => (string) $accessToken->convertToJWT($this->privateKey),
                         'token_type'   => 'Bearer',
-                        'expires_in'   => $accessToken->getExpiryDateTime()->getTimestamp() - \time(),
+                        'expires_in'   => $accessToken->getExpiryDateTime()->getTimestamp() - (new DateTime())->getTimestamp(),
                         'state'        => $authorizationRequest->getState(),
                     ],
                     $this->queryDelimiter

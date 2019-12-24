@@ -19,58 +19,31 @@ class UploadController extends Controller
 	{
 		$data = $request->all();
 
-		$fieldName = $request->input('field_name');
+		$media = new Media();
+		$media->fill($data);
+		$media->save();
 
-		$field = $this->_getField($fieldName);
+		$mediaDir = 'media/' . $media->id;
+		Storage::makeDirectory( $mediaDir );
 
-		$validation = $this->validator( $request, $data, $field );
+		$file = request()->file('files');
+		$path = $file->storeAs( $mediaDir, $media->filename );
 
-		if ( $validation['status'] == 'ok' ) {
-			$file = $request->file('files');
+		$media->url = $path;
+		$media->save();
 
-			$filename = $file->getClientOriginalName();
-			$filename = Media::filenameAvailable($filename, $filename);
-
-			$media = new Media;
-			// TODO: Auth::user()->id;
-			$media->user_id   = 1;
-			$media->filename  = $filename;
-			$media->mime_type = $file->getMimeType();
-
-			if ( str_contains( $media->mime_type, 'image/' )  ) {
-				$imageSize = getimagesize( $file->path() );
-
-				$media->width  = $imageSize[0];
-				$media->height = $imageSize[1];
-
+		if ( $field ) {
+			if ( $file && ( $field->type == 'image_upload' || $field->type == 'gallery' ) ) {
+				Media::saveImage( $field, storage_path( 'app/' . $media->url ) );
 			}
-
-			$media->size = filesize( $file->path() );
-
-			$media->save();
-
-			$mediaDir = 'media/' . $media->id;
-			Storage::makeDirectory( $mediaDir );
-
-			$path = $file->storeAs( $mediaDir, $filename );
-
-			$media->url = $path;
-			$media->save();
-
-			if ( $field ) {
-				if ( $file && ( $field->type == 'image_upload' || $field->type == 'gallery' ) ) {
-					Media::saveImage( $field, storage_path( 'app/' . $media->url ) );
-				}
-			}
-
-			if ( $media->id ) {
-				return response()->json( [ 'status' => 'ok', 'media' => [ $this->_parseMedia( $media->toArray() ) ] ]);
-			} else {
-				return response()->json( [ 'status' => 'ko' ], 400);
-			}
-		} else {
-			return response()->json( [ 'status' => 'ko', 'error' => $validation['error'] ], 400);
 		}
+
+		if ( $media->id ) {
+			return response()->json( [ 'status' => 'ok', 'media' => [ $this->_parseMedia( $media->toArray() ) ] ]);
+		} else {
+			return response()->json( [ 'status' => 'ko' ], 400);
+		}
+
 	}
 
 

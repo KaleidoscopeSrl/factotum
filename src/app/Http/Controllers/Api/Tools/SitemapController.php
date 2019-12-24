@@ -13,21 +13,6 @@ use Kaleidoscope\Factotum\Setting;
 class SitemapController extends Controller
 {
 
-	public function index()
-	{
-		$settings = Setting::where('setting_key','sitemap_settings')->first();
-		$sitemapSettings = [];
-		if ( $settings ){
-			$sitemapSettings = json_decode($settings->setting_value);
-		} 
-		$contentTypes = ContentType::all();
-		return view('factotum::admin.tools.sitemap_settings')
-					->with( 'title', 'Sitemap Generator' )
-					->with( 'listContentType' , $contentTypes )
-					->with( 'settings' , $sitemapSettings )
-					->with( 'postUrl', url('/admin/tools/save-sitemap-preference/') );
-	}
-
 	public function generate()
 	{
 

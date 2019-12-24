@@ -8,8 +8,10 @@ class Category extends Model
 {
 	protected $fillable = [
 		'content_type_id',
+		'parent_id',
 		'name',
-		'label'
+		'label',
+		'lang'
 	];
 
 	public function content_type() {
