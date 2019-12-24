@@ -17,6 +17,29 @@ class StoreUser extends CustomFormRequest
 		return true;
 	}
 
+
+	protected function getValidatorInstance()
+	{
+		$data = $this->all();
+
+		if ( !isset($data['role_id']) ) {
+			$subscriberRole  = Role::where( 'role', 'subscriber' )->first();
+			$data['role_id'] = $subscriberRole->id;
+		}
+
+		if ( !isset($data['password']) ) {
+			unset($data['password']);
+			unset($data['password_confirmation']);
+			$this->request->remove('password');
+			$this->request->remove('password_confirmation');
+		}
+
+		$this->merge($data);
+
+		return parent::getValidatorInstance();
+	}
+
+
 	/**
 	 * Get the validation rules that apply to the request.
 	 *
@@ -66,26 +89,5 @@ class StoreUser extends CustomFormRequest
 		return $rules;
 	}
 
-
-	protected function getValidatorInstance()
-	{
-		$data = $this->all();
-
-		if ( !isset($data['role_id']) ) {
-			$subscriberRole  = Role::where( 'role', 'subscriber' )->first();
-			$data['role_id'] = $subscriberRole->id;
-		}
-
-		if ( !isset($data['password']) ) {
-			unset($data['password']);
-			unset($data['password_confirmation']);
-			$this->request->remove('password');
-			$this->request->remove('password_confirmation');
-		}
-
-		$this->merge($data);
-
-		return parent::getValidatorInstance();
-	}
 
 }

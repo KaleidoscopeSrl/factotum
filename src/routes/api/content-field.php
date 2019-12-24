@@ -14,7 +14,7 @@ Route::group([
 	Route::post('/create',                              'CreateController@create');
 	Route::get('/list/{contentTypeId}',                 'ReadController@getList');
 	Route::get('/detail/{id}',                          'ReadController@getDetail');
-	Route::put('/update/{id}',                          'UpdateController@update');
+	Route::post('/update/{id}',                         'UpdateController@update');
 	Route::delete('/delete/{id}',                       'DeleteController@remove');
 
 });

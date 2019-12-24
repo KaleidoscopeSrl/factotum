@@ -21,7 +21,6 @@ class CustomFormRequest extends FormRequest
 			];
 
 			throw new HttpResponseException(response()->json( $response, 422) );
-
 		}
 
 		parent::failedValidation($validator);
