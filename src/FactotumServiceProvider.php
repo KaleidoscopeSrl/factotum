@@ -194,7 +194,7 @@ class FactotumServiceProvider extends ServiceProvider
 				return true;
 			}
 
-			if (count($value) > 0) {
+			if ($value && count($value) > 0) {
 				$error = false;
 				foreach ($value as $format) {
 					if (strlen($format) < 3) {

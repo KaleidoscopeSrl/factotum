@@ -11,8 +11,9 @@ use Kaleidoscope\Factotum\Library\Utility;
 class Media extends Model
 {
 	protected $fillable = [
-		'width', 'height', 'size',
-		'caption', 'alt_text', 'description'
+		'width', 'height', 'size', 'filename',
+		'caption', 'alt_text', 'description', 'user_id',
+		'mime_type'
 	];
 
 	public static function filenameAvailable($filename, $origFilename = null, $counter = '')

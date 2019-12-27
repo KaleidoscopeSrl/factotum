@@ -31,11 +31,11 @@ class StoreContentField extends CustomFormRequest
 
 			'options'         => 'required_if:type,select,multiselect,checkbox,multicheckbox,radio',
 
-			'max_file_size'   => 'required_if:type,file_upload,image_upload,gallery|numeric',
-			'allowed_types'   => 'required_if:type,file_upload,image_upload,gallery|allowed_types',
+			'max_file_size'   => 'required_if:type,file_upload,image_upload,gallery|nullable|numeric',
+			'allowed_types'   => 'required_if:type,file_upload,image_upload,gallery|nullable|allowed_types',
 
-			'min_width_size'  => 'required_if:type,image_upload,gallery|numeric',
-			'min_height_size' => 'required_if:type,image_upload,gallery|numeric',
+			'min_width_size'  => 'required_if:type,image_upload,gallery|nullable|numeric',
+			'min_height_size' => 'required_if:type,image_upload,gallery|nullable|numeric',
 			'image_operation' => 'required_if:type,image_upload,gallery',
 
 		];

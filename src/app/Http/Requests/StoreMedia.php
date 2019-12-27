@@ -26,8 +26,8 @@ class StoreMedia extends CustomFormRequest
 	public function rules()
 	{
 		$rules = [
-			'label' => 'required|max:255',
-			'name'  => 'required|max:50|unique:categories',
+//			'label' => 'required|max:255',
+//			'name'  => 'required|max:50|unique:categories',
 		];
 
 		$data = $this->all();
@@ -35,7 +35,7 @@ class StoreMedia extends CustomFormRequest
 		$id = request()->route('id');
 
 		if ( $id ) {
-			$rules['name'] = 'required|unique:categories,name,' . $id;
+			$rules['filename'] = 'required|unique:media,filename,' . $id;
 		}
 
 		$this->merge($data);
@@ -45,6 +45,7 @@ class StoreMedia extends CustomFormRequest
 
 	protected function getValidatorInstance()
 	{
+
 		$data = $this->all();
 
 		// TODO: multilanguage

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
 
+use Kaleidoscope\Factotum\Http\Requests\StoreMedia;
 use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Media;
 
@@ -15,7 +16,7 @@ use Kaleidoscope\Factotum\Media;
 class UploadController extends Controller
 {
 
-	public function upload( Request $request )
+	public function upload( StoreMedia $request )
 	{
 		$data = $request->all();
 
@@ -32,11 +33,11 @@ class UploadController extends Controller
 		$media->url = $path;
 		$media->save();
 
-		if ( $field ) {
-			if ( $file && ( $field->type == 'image_upload' || $field->type == 'gallery' ) ) {
-				Media::saveImage( $field, storage_path( 'app/' . $media->url ) );
-			}
-		}
+//		if ( $field ) {
+//			if ( $file && ( $field->type == 'image_upload' || $field->type == 'gallery' ) ) {
+//				Media::saveImage( $field, storage_path( 'app/' . $media->url ) );
+//			}
+//		}
 
 		if ( $media->id ) {
 			return response()->json( [ 'status' => 'ok', 'media' => [ $this->_parseMedia( $media->toArray() ) ] ]);
