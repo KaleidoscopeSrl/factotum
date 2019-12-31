@@ -2,26 +2,35 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\ContentType;
 
 class DeleteController extends Controller
 {
-	public function delete($id)
+	public function remove(Request $request, $id)
 	{
 		$content = Content::find($id);
-		$contentType = ContentType::find( $content->content_type_id );
 
-		DB::table( $contentType->content_type )
-			->where( 'content_id', '=', $content->id)
-			->delete();
+		if ( $content ) {
 
-		Content::destroy($id);
+			$contentType = ContentType::find( $content->content_type_id );
 
-		return redirect( '/admin/content/list/' . $contentType->id )
-					->with('message', Lang::get('factotum::content.success_delete_content'));
+			$deletedRows = DB::table( $contentType->content_type )
+				->where( 'content_id', '=', $content->id )
+				->delete();
+
+			$deletedRows += $content->delete();
+
+			if ( $deletedRows > 1 ) {
+				return response()->json( [ 'result' => 'ok' ]);
+			}
+			return $this->_sendJsonError( 'Errore in fase di cancellazione.' );
+		}
+
+		return $this->_sendJsonError( 'Contenuto non trovato.' );
+
 	}
 }

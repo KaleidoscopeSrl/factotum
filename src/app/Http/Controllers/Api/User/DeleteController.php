@@ -2,9 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\User;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 use Kaleidoscope\Factotum\Http\Requests\DeleteUser;
 use Kaleidoscope\Factotum\User;
@@ -23,6 +21,13 @@ class DeleteController extends Controller
 		$user = User::find( $id );
 
 		if ( $user ) {
+
+			// Rimuovo il file dell'avatar
+			$filename = basename( $user->avatar );
+			if ( Storage::exists( 'avatars/' . $filename) ) {
+				Storage::delete( 'avatars/' . $filename);
+			}
+
 			$deletedRows = $user->delete();
 
 			if ( $deletedRows > 0 ) {

@@ -76,6 +76,24 @@ class StoreContentField extends CustomFormRequest
 
 		$id = request()->route('id');
 
+		if ( $data['options'] ) {
+			$data['options'] = json_encode( $data['options'] );
+		} else {
+			$data['options'] = null;
+		}
+
+		if ( $data['allowed_types'] ) {
+			$data['allowed_types'] = json_encode( $data['allowed_types'] );
+		} else {
+			$data['allowed_types'] = null;
+		}
+
+		if ( $data['resizes'] ) {
+			$data['resizes'] = json_encode( $data['resizes'] );
+		} else {
+			$data['resizes'] = null;
+		}
+
 		if ( $id ) {
 			$contentField              = ContentField::find($id);
 			$data['old_content_field'] = $contentField->name;

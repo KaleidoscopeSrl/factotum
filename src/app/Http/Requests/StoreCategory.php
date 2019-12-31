@@ -45,9 +45,7 @@ class StoreCategory extends CustomFormRequest
 	{
 		$data = $this->all();
 
-		// TODO: multilanguage
-		$data['lang'] = 'it';
-//      $data['lang'] = $request->session()->get('currentLanguage');
+		$data['lang'] = request()->session()->get('currentLanguage');
 
 		$this->merge($data);
 

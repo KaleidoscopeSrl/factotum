@@ -2,25 +2,28 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Auth;
 
 use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Http\Requests\StoreContent;
 
 class CreateController extends Controller
 {
 
-	public function create( Request $request ){
+	public function create( StoreContent $request ){
 		$data = $request->all();
 
-		$this->validator( $request, $data )->validate();
+		$user = Auth::user();
 
 		$content = new Content();
-		$content->content_type_id = $request->input('content_type_id');
-		$this->_save( $request, $content );
+		$content->user_id = $user->id;
+		$content->is_home = false;
+		$content->fill( $data );
+		$content->save();
 
-		return response()->json( [ 'status' => 'ok', 'data' => $data ]);
+		$this->_saveContent( $request, $content );
+
+		return response()->json( [ 'status' => 'ok', 'content' => $content->toArray() ] );
 	}
 
 

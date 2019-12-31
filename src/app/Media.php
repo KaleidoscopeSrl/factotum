@@ -18,9 +18,11 @@ class Media extends Model
 
 	public static function filenameAvailable($filename, $origFilename = null, $counter = '')
 	{
-		$ext      = substr( $filename, strlen($filename) - 3, 3 );
-		$filename = str_slug( substr( $filename, 0, -4 ) ) . '.' . $ext;
-		$filename = str_replace('jpeg', 'jpg', $filename);
+
+		$filename = str_replace('.jpeg', '.jpg', $filename);
+
+		$extension = pathinfo($filename, PATHINFO_EXTENSION);
+		$filename = str_slug( substr( $filename, 0, strlen('.' . $extension) * -1 ) ) . '.' . $extension;
 
 		$mediaExist = Media::where('filename', $filename)->get();
 
@@ -34,8 +36,7 @@ class Media extends Model
 			} else {
 				$counter++;
 			}
-			$ext      = substr( $origFilename, strlen($origFilename) -3 , 3);
-			$filename = substr( $origFilename, 0, -4 ) . '-' . $counter . '.' . $ext;
+			$filename = substr( $origFilename, 0, strlen('.' . $extension) * -1 ) . '-' . $counter . '.' . $extension;
 			return self::filenameAvailable($filename, $origFilename, $counter);
 		}
 		return $filename;
@@ -61,6 +62,16 @@ class Media extends Model
 		return $sizesNotExist;
 	}
 
+	public static function saveImageById( $field, $mediaId )
+	{
+		$media = Media::find( $mediaId );
+		if ( $media ) {
+			return self::saveImage( $field, $media->url );
+		} else {
+			return null;
+		}
+	}
+
 	public static function saveImage( $field, $filename )
 	{
 		if ( $field->image_bw ) {
@@ -69,17 +80,20 @@ class Media extends Model
 			$origImage = Image::make( $filename );
 		}
 
-		$filename = str_replace( 'jpeg', 'jpg', $filename );
+		$filename     = str_replace( '.jpeg', '.jpg', $filename );
 		$ext          = substr( $filename, strlen($filename) - 3, 3 );
 		$origFilename = substr( $filename, 0, -4 );
 
 		$operation = $field->image_operation;
 
 		if ( $field->resizes ) {
-			$resizes = Utility::convertOptionsTextToAssocArray( $field->resizes );
-			foreach ($resizes as $width => $height) {
+
+			foreach ( json_decode($field->resizes,true) as $resize ) {
+				$width  = $resize['w'];
+				$height = $resize['h'];
+
 				$newFilename = $origFilename . '-' . $width .'x' . $height . '.' . $ext;
-				$image = Image::make( $filename );
+				$image = Image::make( storage_path( 'app/' . $filename ) );
 
 				if ($operation == 'resize') {
 					$image->resize( $width, null, function ($constraint) {
@@ -137,9 +151,9 @@ class Media extends Model
 		return null;
 	}
 
-	/*public function getUrlAttribute($value)
-	{
-		return ( $value ? url( $value ) : null );
-	}*/
+//	public function getUrlAttribute($value)
+//	{
+//		return ( $value ? url( $value ) : null );
+//	}
 
 }

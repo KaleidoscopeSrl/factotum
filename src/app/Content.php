@@ -9,7 +9,41 @@ class Content extends Model
 	public static $FIRE_EVENTS = true;
 
 	protected $fillable = [
-		'parent_id'
+		'parent_id', 'user_id', 'content_type_id',
+		'status',
+		'title',
+		'content',
+		'url',
+		'lang',
+		'abs_url',
+
+		'show_in_menu',
+		'is_home',
+
+		'link',
+		'link_title',
+		'link_open_in',
+
+		'seo_title',
+		'seo_description',
+		'seo_canonical_url',
+		'seo_robots_indexing',
+		'seo_robots_following',
+
+		'fb_title',
+		'fb_description',
+		'fb_image',
+
+		'created_at',
+	];
+
+	protected $casts = [
+//		'show_in_menu'   => 'boolean',
+//		'is_home'        => 'boolean',
+
+		'fb_title'       => 'string|null',
+		'fb_description' => 'string|null',
+		'fb_image'       => 'int|null',
 	];
 
 	public function parent() {

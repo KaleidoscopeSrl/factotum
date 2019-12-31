@@ -3,8 +3,10 @@
 namespace Kaleidoscope\Factotum\Http\Requests;
 
 
+use Illuminate\Support\Carbon;
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\ContentType;
 
 class StoreContent extends CustomFormRequest
 {
@@ -118,9 +120,30 @@ class StoreContent extends CustomFormRequest
 	{
 		$data = $this->all();
 
-		// TODO: multilanguage
-		$data['lang'] = 'it';
-//      $data['lang'] = $request->session()->get('currentLanguage');
+		$data['url'] = str_slug($data['url'], "-");
+
+		$data['lang'] = request()->session()->get('currentLanguage');
+
+		// Aggiungo al path la lingua solo se è diversa da quella di default
+		// TODO: rendere personalizzabile questa scelta dalle impostazioni
+		$data['abs_url'] = url('') . '/'
+			. ( $data['lang'] != config('factotum.main_site_language') ? $data['lang'] . '/' : '' )
+			. $data['url'];
+
+		$contentType = ContentType::find($data['content_type_id']);
+		if ( $contentType->content_type !== 'page' ) {
+			$data['link']         = '';
+			$data['link_title']   = '';
+			$data['link_open_in'] = null;
+		}
+
+		if ( $data['created_at'] ) {
+			$data['created_at'] = Carbon::createFromTimeString($data['created_at']);
+		}
+
+		if ( !isset($data['show_in_menu']) ) {
+			$data['show_in_menu'] = 0;
+		}
 
 		$this->merge($data);
 

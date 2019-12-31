@@ -3,7 +3,6 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\ContentField;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\ContentField;
 

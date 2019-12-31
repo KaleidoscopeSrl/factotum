@@ -36,31 +36,31 @@ class ContentField extends Model
 
 	public function fill( $data )
 	{
-		if ( isset($data['allowed_types']) && $data['allowed_types'] != '' ) {
-
-			$data['allowed_types'] = Utility::convertOptionsArrayToText( $data['allowed_types'] );
-
-		}
-
-		if ( isset($data['resizes']) && is_array($data['resizes']) && count($data['resizes']) > 0 ) {
-
-			$tmp = [];
-			foreach ( $data['resizes'] as $r ) {
-				$tmp[] = $r['w'] . ':' . $r['h'];
-			}
-			$data['resizes'] = Utility::convertOptionsArrayToText( $tmp );
-
-		}
-
-		if ( isset($data['options']) && is_array($data['options']) && count($data['options']) > 0 ) {
-
-			$tmp = [];
-			foreach ( $data['options'] as $r ) {
-				$tmp[] = $r['value'] . ':' . $r['label'];
-			}
-			$data['options'] = Utility::convertOptionsArrayToText( $tmp );
-
-		}
+//		if ( isset($data['allowed_types']) && $data['allowed_types'] != '' ) {
+//
+//			$data['allowed_types'] = Utility::convertOptionsArrayToText( $data['allowed_types'] );
+//
+//		}
+//
+//		if ( isset($data['resizes']) && is_array($data['resizes']) && count($data['resizes']) > 0 ) {
+//
+//			$tmp = [];
+//			foreach ( $data['resizes'] as $r ) {
+//				$tmp[] = $r['w'] . ':' . $r['h'];
+//			}
+//			$data['resizes'] = Utility::convertOptionsArrayToText( $tmp );
+//
+//		}
+//
+//		if ( isset($data['options']) && is_array($data['options']) && count($data['options']) > 0 ) {
+//
+//			$tmp = [];
+//			foreach ( $data['options'] as $r ) {
+//				$tmp[] = $r['value'] . ':' . $r['label'];
+//			}
+//			$data['options'] = Utility::convertOptionsArrayToText( $tmp );
+//
+//		}
 
 		return parent::fill( $data );
 	}

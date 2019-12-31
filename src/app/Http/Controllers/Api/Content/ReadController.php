@@ -56,6 +56,13 @@ class ReadController extends Controller
 
 		if ( $content ) {
 
+			//fb image
+			$tmpMedia = Media::find($content->fb_image);
+			if ( $tmpMedia && $tmpMedia->url ) {
+				$tmpMedia->url = url( $tmpMedia->url );
+				$content->fb_image = [ $tmpMedia ];
+			}
+
 			$content_categories = ContentCategory::where( 'content_id', $id )->pluck('category_id')->all();
 
 			$content_type = ContentType::find( $content->content_type_id );
@@ -83,13 +90,16 @@ class ReadController extends Controller
 					} elseif ( $content_field->type == 'gallery') {
 
 						$tmpListMedia = $dataContent->{$content_field->name};
-						$tmpListMedia = explode( ',', $tmpListMedia );
-
-						foreach ( $tmpListMedia as $index => $tmpMedia ) {
-							$tmpListMedia[$index] = Media::find($tmpMedia);
-							$tmpListMedia[$index]->url = ( $tmpListMedia[$index]->url ? url( $tmpListMedia[$index]->url ) : null );
+						if ( !$tmpListMedia ) {
+							$dataContent->{$content_field->name} = '';
+						} else {
+							$tmpListMedia = explode( ',', $tmpListMedia );
+							foreach ( $tmpListMedia as $index => $tmpMedia ) {
+								$tmpListMedia[$index] = Media::find($tmpMedia);
+								$tmpListMedia[$index]->url = ( $tmpListMedia[$index]->url ? url( $tmpListMedia[$index]->url ) : null );
+							}
+							$dataContent->{$content_field->name} = $tmpListMedia;
 						}
-						$dataContent->{$content_field->name} = $tmpListMedia;
 
 					} else {
 

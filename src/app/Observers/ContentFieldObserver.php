@@ -26,7 +26,8 @@ class ContentFieldObserver
 
 			// Alter relative table
 			Schema::table( $contentType->content_type, function (Blueprint $table)  use ($contentField) {
-				if ( $contentField->type == 'text' ||
+				if ( $contentField->type == 'text' || $contentField->type == 'email' ||
+					$contentField->type == 'url' || $contentField->type == 'number' ||
 					$contentField->type == 'select' || $contentField->type == 'multiselect' ||
 					$contentField->type == 'checkbox' || $contentField->type == 'multicheckbox' ||
 					$contentField->type == 'radio' ||

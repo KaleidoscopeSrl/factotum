@@ -9,10 +9,10 @@ use Kaleidoscope\Factotum\ContentField;
 class CreateController extends Controller
 {
 
-	public function create(StoreContentField $request)
+	public function create( StoreContentField $request )
 	{
 		$data = $request->all();
-
+		
 		$contentField = new ContentField;
 		$contentField->fill( $data );
 		$contentField->save();

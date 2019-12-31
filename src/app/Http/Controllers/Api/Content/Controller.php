@@ -4,21 +4,14 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 
 use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\Http\Requests\StoreContent;
 use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\Media;
-use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\ContentCategory;
+use Kaleidoscope\Factotum\Media;
 
 
 class Controller extends ApiBaseController
@@ -31,79 +24,15 @@ class Controller extends ApiBaseController
 	protected $_contentCategories;
 	protected $_additionalValues;
 
-	protected function _save( StoreContent $request, $content )
+	protected function _saveContent( StoreContent $request, $content )
 	{
 		$data = $request->all();
-
-		$contentType = ContentType::find($content->content_type_id);
-
-		if ( !$content->user_id ) {
-			// TODO:
-			// $user = Auth::user();
-			$content->user_id = 1; // $user->id;
-		}
-
-		$content->status    = $data['status'];
-		$content->parent_id = $request->has('parent_id') ? $request->input('parent_id') : 0;
-		$content->title     = $data['title'];
-		$content->url       = str_slug($data['url'], "-");
-		$content->content   = $data['content'];
-
-		print_r('teat');
-		print_r($content);
-		die;
-
-		// TODO: fix
-		/*if ( $data['created_at'] ) {
-			$content->created_at = $data['created_at']; // U tility::convert HumanDateTimeToIso( $data['created_at'] );
-		}*/
-
-		// TODO: $request->session()->get('currentLanguage'); empty
-		$content->lang = 'en-GB'; //$request->session()->get('currentLanguage');
-
-		$content->abs_url = url('') . '/'
-						  . ( $content->lang != config('factotum.main_site_language') ? $content->lang . '/' : '' )
-						  . $data['url'];
-
-		$content->show_in_menu = (isset($data['show_in_menu']) ? $data['show_in_menu'] : false );
-
-		if ( !$content->id ) {
-			$content->is_home = false;
-		} else {
-			$content->is_home = ( $content->is_home ? true : false );
-		}
-
-
-
-		$content->link         = '';
-		$content->link_title   = '';
-		$content->link_open_in = null;
-
-		if ( $contentType->content_type == 'page' ) {
-			$content->link         = $data['link'];
-			$content->link_title   = $data['link_title'];
-			$content->link_open_in = $data['link_open_in'];
-		}
-
-		// SEO Fields
-		$content->seo_title            = $data['seo_title'] ? $data['seo_title'] : '';
-		$content->seo_description      = $data['seo_description'] ? $data['seo_description'] : '';
-		$content->seo_canonical_url    = $data['seo_canonical_url'] ? $data['seo_canonical_url'] : '';
-		$content->seo_robots_indexing  = $data['seo_robots_indexing'] ? $data['seo_robots_indexing'] : '';
-		$content->seo_robots_following = $data['seo_robots_following'] ? $data['seo_robots_following'] : '';
-
-		// FB Fields
-		$content->fb_title       = $data['fb_title'] ? $data['fb_title'] : '';
-		$content->fb_description = $data['fb_description'] ? $data['fb_description'] : '';
-		$content->fb_image       = (isset($data['fb_image_hidden']) && $data['fb_image_hidden'] != '' ? $data['fb_image_hidden'] : null);
-
-		$content->save();
 
 		// Categories
 		if ( isset($data['categories']) ) {
 			ContentCategory::whereContentId($content->id)->delete();
 
-			foreach ( explode( ',' , $data['categories'] )  as $categoryID ) {
+			foreach ( $data['categories'] as $categoryID ) {
 				$contentCategory = new ContentCategory;
 				$contentCategory->content_id = $content->id;
 				$contentCategory->category_id = $categoryID;
@@ -111,9 +40,13 @@ class Controller extends ApiBaseController
 			}
 		}
 
+		// TODO: Eventuali operazioni sulle immagini selezionate in base alle regole del campo
+		// es. resize oppure crop etc
+
 		// Save Additional Fields
-		$contentFields = ContentField::where( 'content_type_id', '=', $contentType->id )->get();
-		if ( $contentFields->count() > 0 ) {
+		$contentType = ContentType::find($data['content_type_id']);
+		$contentFields = ContentField::where( 'content_type_id', '=', $content->content_type_id )->get();
+		if ( $contentType && $contentFields->count() > 0 ) {
 
 			$additionalValuesExists = DB::table( $contentType->content_type )
 										->where( 'content_type_id', $contentType->id )
@@ -155,6 +88,16 @@ class Controller extends ApiBaseController
 					} else {
 						$additionalValues[ $field->name ] = '';
 					}
+				}
+
+				// Image & Gallery Operation
+				if ( $field->type == 'gallery' || $field->type == 'image_upload' ) {
+
+					// eseguo operazione di resize
+					if ( isset( $data[ $field->name ] ) ) {
+						Media::saveImageById( $field, $data[ $field->name ] );
+					}
+
 				}
 
 				$additionalValues[ $field->name ] = (isset($data[ $field->name ]) ? $data[ $field->name ] : null);

@@ -20,7 +20,10 @@ class UploadController extends Controller
 	{
 		$data = $request->all();
 
+		$user = Auth::user();
+
 		$media = new Media();
+		$media->user_id = $user->id;
 		$media->fill($data);
 		$media->save();
 
@@ -48,46 +51,46 @@ class UploadController extends Controller
 	}
 
 
-	protected function validator( Request $request, array $data, $field = null )
-	{
-		if ( $field ) {
-
-			if ( $field->mandatory ) {
-				$tmp[] = 'required';
-			}
-
-			if ( $field->max_file_size ) {
-				$tmp[] = 'max_mb:' . $field->max_file_size;
-			}
-
-			if ($field->allowed_types != '*') {
-				$field->allowed_types = str_replace('jpg', 'jpeg', $field->allowed_types);
-				$field->allowed_types = str_replace('.', '', $field->allowed_types);
-				$tmp[] = 'mimes:' . $field->allowed_types;
-			}
-
-			if ( $field->type == 'image_upload' || $field->type == 'gallery' ) {
-				$tmp[] = 'dimensions:min_width=' . $field->min_width_size . ',min_height=' . $field->min_height_size;
-			}
-
-			$rules = array(
-				'media' => join( '|', $tmp )
-			);
-
-		} else {
-			$rules = array(
-				'media' => 'image|max_mb:3'
-			);
-		}
-
-		$validation = Validator::make($data, $rules);
-
-
-		if ( $validation->fails() ) {
-			return array( 'status' => 'ko', 'error' => $validation->errors()->first() );
-		} else {
-			return array( 'status' => 'ok' );
-		}
-	}
+//	protected function validator( Request $request, array $data, $field = null )
+//	{
+//		if ( $field ) {
+//
+//			if ( $field->mandatory ) {
+//				$tmp[] = 'required';
+//			}
+//
+//			if ( $field->max_file_size ) {
+//				$tmp[] = 'max_mb:' . $field->max_file_size;
+//			}
+//
+//			if ($field->allowed_types != '*') {
+//				$field->allowed_types = str_replace('jpg', 'jpeg', $field->allowed_types);
+//				$field->allowed_types = str_replace('.', '', $field->allowed_types);
+//				$tmp[] = 'mimes:' . $field->allowed_types;
+//			}
+//
+//			if ( $field->type == 'image_upload' || $field->type == 'gallery' ) {
+//				$tmp[] = 'dimensions:min_width=' . $field->min_width_size . ',min_height=' . $field->min_height_size;
+//			}
+//
+//			$rules = array(
+//				'media' => join( '|', $tmp )
+//			);
+//
+//		} else {
+//			$rules = array(
+//				'media' => 'image|max_mb:3'
+//			);
+//		}
+//
+//		$validation = Validator::make($data, $rules);
+//
+//
+//		if ( $validation->fails() ) {
+//			return array( 'status' => 'ko', 'error' => $validation->errors()->first() );
+//		} else {
+//			return array( 'status' => 'ok' );
+//		}
+//	}
 
 }

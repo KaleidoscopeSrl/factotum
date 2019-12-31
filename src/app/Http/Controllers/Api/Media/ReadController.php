@@ -19,8 +19,15 @@ class ReadController extends Controller
 			$filters = $request->input('filter');
 
 			$query->where( 'filename', null );
-			foreach ( explode(',', $filters) as $ext ) {
-				$query->orWhere( 'filename', 'like', '%' . trim($ext) );
+
+			if ( is_array($filters) ) {
+				foreach ( $filters as $ext ) {
+					$query->orWhereRaw( "UCASE(filename) like '%" . trim($ext) . "'" );
+				}
+			} else {
+				foreach ( explode(',', $filters) as $ext ) {
+					$query->orWhereRaw( "UCASE(filename) like '%" . trim($ext) . "'" );
+				}
 			}
 
 		}

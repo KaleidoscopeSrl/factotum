@@ -194,6 +194,8 @@ class FactotumServiceProvider extends ServiceProvider
 				return true;
 			}
 
+			$value = json_decode( $value, true );
+
 			if ($value && count($value) > 0) {
 				$error = false;
 				foreach ($value as $format) {
