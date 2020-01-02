@@ -64,7 +64,10 @@ class Controller extends ApiBaseController
 
 				// Multioptions fields
 				if ( isset( $data[ $field->name ] ) &&
-					 ($field->type == 'multicheckbox' || $field->type == 'multiselect' ) ) {
+					 ( $field->type == 'multicheckbox' ||
+						 $field->type == 'multiselect' ||
+						 $field->type == 'multiple_linked_categories' ||
+						 $field->type == 'multiple_linked_content' ) ) {
 					if ( is_array($data[ $field->name ]) ) {
 						$data[ $field->name ] = Utility::convertOptionsArrayToText( $data[ $field->name ] );
 					}
@@ -78,16 +81,6 @@ class Controller extends ApiBaseController
 				// Date-time fields
 				if ( isset( $data[ $field->name ] ) && $field->type == 'datetime' && $data[$field->name] != '' ) {
 					$data[$field->name] = Utility::convertHumanDateTimeToIso($data[$field->name]);
-				}
-
-				if ( $field->type == 'multiple_linked_categories' ) {
-					if ( isset( $data[ $field->name ] ) ) {
-						if ( is_array( $data[ $field->name ] ) ) {
-							$data[ $field->name ] = Utility::convertOptionsArrayToText( $data[ $field->name ] );
-						}
-					} else {
-						$additionalValues[ $field->name ] = '';
-					}
 				}
 
 				// Image & Gallery Operation

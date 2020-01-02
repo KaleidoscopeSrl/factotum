@@ -37,6 +37,10 @@ class ContentFieldObserver
 					$table->string( $contentField->name, 255 )->nullable( !$contentField->mandatory );
 				}
 
+				if ( $contentField->type == 'time' ) {
+					$table->string( $contentField->name, 5 )->nullable( !$contentField->mandatory );
+				}
+
 				if ( $contentField->type == 'date' ) {
 					$table->date( $contentField->name )->nullable( !$contentField->mandatory );
 				}

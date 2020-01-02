@@ -81,13 +81,15 @@ class ReadController extends Controller
 
 					if ( $content_field->type == 'image_upload') {
 
-						$tmpMedia = Media::find($dataContent->{$content_field->name});
-						if ( $tmpMedia ) {
-							$tmpMedia->url = $tmpMedia->url ? url( $tmpMedia->url ) : null;
+						if ( $dataContent->{$content_field->name} ) {
+							$tmpMedia = Media::find($dataContent->{$content_field->name});
+							if ( $tmpMedia ) {
+								$tmpMedia->url = $tmpMedia->url ? url( $tmpMedia->url ) : null;
+							}
+							$dataContent->{$content_field->name} = [ $tmpMedia ];
 						}
-						$dataContent->{$content_field->name} = [ $tmpMedia ];
 
-					} elseif ( $content_field->type == 'gallery') {
+					} elseif ( $content_field->type == 'gallery' || $content_field->type == 'file_upload') {
 
 						$tmpListMedia = $dataContent->{$content_field->name};
 						if ( !$tmpListMedia ) {
@@ -99,6 +101,33 @@ class ReadController extends Controller
 								$tmpListMedia[$index]->url = ( $tmpListMedia[$index]->url ? url( $tmpListMedia[$index]->url ) : null );
 							}
 							$dataContent->{$content_field->name} = $tmpListMedia;
+						}
+
+					} elseif ( $content_field->type == 'multiselect' ) {
+
+						$tmpSelect = $dataContent->{$content_field->name};
+						if ( !$tmpSelect ) {
+							$dataContent->{$content_field->name} = '';
+						} else {
+							$dataContent->{$content_field->name} = explode( ';', $tmpSelect );
+						}
+
+					} elseif ( $content_field->type == 'checkbox' ) {
+
+						$tmpCheckbox = $dataContent->{$content_field->name};
+						$dataContent->{$content_field->name} = $tmpCheckbox == 1 || $tmpCheckbox == '1' ? true : false;
+
+					} elseif ( $content_field->type == 'multiple_linked_content') {
+
+						$tmpSelect = $dataContent->{$content_field->name};
+						if ( !$tmpSelect ) {
+							$dataContent->{$content_field->name} = '';
+						} else {
+							$tmpLinks = [];
+							foreach ( explode( ';', $tmpSelect ) as $linkId ) {
+								$tmpLinks[] = $linkId * 1;
+							}
+							$dataContent->{$content_field->name} = $tmpLinks;
 						}
 
 					} else {

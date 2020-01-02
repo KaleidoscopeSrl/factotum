@@ -46,7 +46,7 @@ class StoreContentType extends CustomFormRequest
 	{
 		$data = $this->all();
 
-		$data['content_type'] = strtolower( $data['content_type'] );
+		$data['content_type'] = $this->createSlug( $data['content_type'] );
 
 		$id = request()->route('id');
 
@@ -58,6 +58,14 @@ class StoreContentType extends CustomFormRequest
 		$this->merge($data);
 
 		return parent::getValidatorInstance();
+	}
+
+
+	private function createSlug($str, $delimiter = '_'){
+
+		$slug = strtolower(trim(preg_replace('/[\s-]+/', $delimiter, preg_replace('/[^A-Za-z0-9-]+/', $delimiter, preg_replace('/[&]/', 'and', preg_replace('/[\']/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str))))), $delimiter));
+		return $slug;
+
 	}
 
 }
