@@ -16,6 +16,12 @@ class Media extends Model
 		'mime_type'
 	];
 
+	//Add extra attribute
+	protected $attributes = ['thumb'];
+
+	//Make it available in the json response
+	protected $appends = ['thumb'];
+
 	public static function filenameAvailable($filename, $origFilename = null, $counter = '')
 	{
 
@@ -44,9 +50,10 @@ class Media extends Model
 
 	public static function checkImageSizesNotExist( $field, $media )
 	{
-		$filename      = str_replace( 'jpeg', 'jpg', $media->url );
-		$ext           = substr( $filename, strlen($filename) - 3, 3 );
-		$origFilename  = substr( $filename, 0, -4 );
+		$origImage    = Image::make( $media->url );
+		$origFilename = $origImage->dirname . '/' . $origImage->filename;
+		$ext          = $origImage->extension;
+
 		$sizesNotExist = false;
 
 		if ( $field->resizes ) {
@@ -62,6 +69,35 @@ class Media extends Model
 		return $sizesNotExist;
 	}
 
+	public static function retrieve( $mediaId, $fieldModel )
+	{
+		if ( !is_array($mediaId) ) {
+			$media = self::find($mediaId);
+
+			if ( $media ) {
+				$media = $media->toArray();
+
+				if ( isset($fieldModel->sizes) && $fieldModel->sizes != '' ) {
+					$mediaUrl = substr( $media['url'], 0, -4);
+					$ext = substr( $media['filename'], strlen($media['filename'])-3, 3 );
+
+					if ( count($fieldModel->sizes) > 0 ) {
+						$tmp = array();
+						foreach ( $fieldModel->sizes as $size ) {
+							$tmp[] = $mediaUrl . $size . '.' . $ext ;
+						}
+						$media['sizes'] = $tmp;
+					}
+				}
+				return $media;
+			}
+		} else if ( is_array($mediaId) ) {
+			return $mediaId;
+		}
+		return null;
+	}
+
+	// Dato un Campo e un MediaId, eseguo la funzione saveImage per quell'immagine
 	public static function saveImageById( $field, $mediaId )
 	{
 		$media = Media::find( $mediaId );
@@ -72,6 +108,7 @@ class Media extends Model
 		}
 	}
 
+	// Dato un Campo e un MediaUrl, eseguo tutte le operazioni creazioni crop/resize/fit per quell'immagine
 	public static function saveImage( $field, $filename )
 	{
 		if ( $field->image_bw ) {
@@ -80,9 +117,8 @@ class Media extends Model
 			$origImage = Image::make( $filename );
 		}
 
-		$filename     = str_replace( '.jpeg', '.jpg', $filename );
-		$ext          = substr( $filename, strlen($filename) - 3, 3 );
-		$origFilename = substr( $filename, 0, -4 );
+		$origFilename = $origImage->dirname . '/' . $origImage->filename;
+		$ext          = $origImage->extension;
 
 		$operation = $field->image_operation;
 
@@ -123,32 +159,40 @@ class Media extends Model
 		return $origImage;
 	}
 
-	public static function retrieve( $mediaId, $fieldModel )
-	{
-		if ( !is_array($mediaId) ) {
-			$media = self::find($mediaId);
+	public static function generateThumb( $filename ) {
 
-			if ( $media ) {
-				$media = $media->toArray();
+		if ( file_exists( storage_path( 'app/' . $filename ) ) ) {
 
-				if ( isset($fieldModel->sizes) && $fieldModel->sizes != '' ) {
-					$mediaUrl = substr( $media['url'], 0, -4);
-					$ext = substr( $media['filename'], strlen($media['filename'])-3, 3 );
+			$image = Image::make( $filename );
 
-					if ( count($fieldModel->sizes) > 0 ) {
-						$tmp = array();
-						foreach ( $fieldModel->sizes as $size ) {
-							$tmp[] = $mediaUrl . $size . '.' . $ext ;
-						}
-						$media['sizes'] = $tmp;
-					}
-				}
-				return $media;
+			// Creo la thumb se è un immagine
+			if ( $image && strpos( $image->mime, 'image/') !== false &&
+				strpos( $image->mime, 'photoshop') === false ) {
+
+				$origFilename = $image->dirname . '/' . $image->filename;
+				$ext          = $image->extension;
+				$thumbFilename = $origFilename . '-thumb.' .  $ext;
+
+				$thumbSize = config('factotum.thumb_size');
+				$image->fit( $thumbSize['width'], $thumbSize['height'], function ($constraint) {
+					$constraint->upsize();
+				});
+
+				$image->save( $thumbFilename, 90 );
+				$image->destroy();
 			}
-		} else if ( is_array($mediaId) ) {
-			return $mediaId;
+
 		}
-		return null;
+
+	}
+
+	public function getThumbAttribute()
+	{
+		$dirname = 'media/' . $this->id;
+		$origFilename  = $dirname . '/' . pathinfo( $this->filename, PATHINFO_FILENAME );
+		$ext           = pathinfo( $this->filename, PATHINFO_EXTENSION );
+		$thumbFilename = $origFilename . '-thumb.' .  $ext;
+		return url($thumbFilename);
 	}
 
 //	public function getUrlAttribute($value)

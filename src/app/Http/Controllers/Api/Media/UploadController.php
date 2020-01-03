@@ -12,6 +12,8 @@ use Kaleidoscope\Factotum\Http\Requests\StoreMedia;
 use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Media;
 
+use Image;
+
 
 class UploadController extends Controller
 {
@@ -43,6 +45,7 @@ class UploadController extends Controller
 //		}
 
 		if ( $media->id ) {
+			Media::generateThumb( $media->url );
 			return response()->json( [ 'status' => 'ok', 'media' => [ $this->_parseMedia( $media->toArray() ) ] ]);
 		} else {
 			return response()->json( [ 'status' => 'ko' ], 400);

@@ -10,7 +10,9 @@ use Kaleidoscope\Factotum\ContentField;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Media;
 
-class ResizeMediaController extends Controller
+use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
+
+class ResizeMediaController extends ApiBaseController
 {
 
 	public function getResize( Request $request )
@@ -99,6 +101,8 @@ class ResizeMediaController extends Controller
 		$startTime = microtime(true);
 
 		$media         = Media::find( $mediaId );
+
+		Media::generateThumb( $media->url );
 
 		$contentTypes  = ContentType::all();
 
