@@ -22,10 +22,16 @@ class ReadController extends Controller
 
 			if ( is_array($filters) ) {
 				foreach ( $filters as $ext ) {
+					if ( $ext === '*' ) {
+						$ext = '%';
+					}
 					$query->orWhereRaw( "UCASE(filename) like '%" . trim($ext) . "'" );
 				}
 			} else {
 				foreach ( explode(',', $filters) as $ext ) {
+					if ( $ext === '*' ) {
+						$ext = '%';
+					}
 					$query->orWhereRaw( "UCASE(filename) like '%" . trim($ext) . "'" );
 				}
 			}

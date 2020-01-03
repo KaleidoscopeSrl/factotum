@@ -2,6 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 use Kaleidoscope\Factotum\Content;
@@ -19,6 +20,9 @@ class CreateController extends Controller
 		$content->user_id = $user->id;
 		$content->is_home = false;
 		$content->fill( $data );
+		if ( !$content->created_at ) {
+			$content->created_at = Carbon::now();
+		}
 		$content->save();
 
 		$this->_saveContent( $request, $content );

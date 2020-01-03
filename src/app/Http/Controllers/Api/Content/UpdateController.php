@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\Http\Requests\StoreContent;
@@ -16,6 +17,9 @@ class UpdateController extends Controller
 
 		$content = Content::find($id);
 		$content->fill( $data );
+		if ( !$content->created_at ) {
+			$content->created_at = Carbon::now();
+		}
 		$content->save();
 
 		$this->_saveContent( $request, $content );
