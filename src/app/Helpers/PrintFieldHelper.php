@@ -529,6 +529,7 @@ class PrintFieldHelper {
 
 			<div class="col col-xs-12 col-sm-6">
 				<p><?php echo Lang::get('factotum::content.select_content'); ?></p>
+				<input id="filter_sortable_source" style="width: 100%" placeholder="filter..">
 				<ul id="sortable1_<?php echo self::$field->id; ?>" class="connectedSortable source"
 					data-field_id="<?php echo self::$field->id; ?>">
 					<?php if ( isset(self::$field->options) ) { ?>
@@ -543,7 +544,8 @@ class PrintFieldHelper {
 
 			<div class="col col-xs-12 col-sm-6">
 				<p><?php echo Lang::get('factotum::content.to_content'); ?></p>
-				<ul id="sortable2_<?php echo self::$field->id; ?>" class="connectedSortable"
+                <input id="filter_sortable_destination" style="width: 100%" placeholder="filter..">
+				<ul id="sortable2_<?php echo self::$field->id; ?>" class="connectedSortable destination"
 					data-field_id="<?php echo self::$field->id; ?>">
 					<?php if ( count($tmp) > 0 ) { ?>
 						<?php foreach ( $tmp as $opt ) { ?>

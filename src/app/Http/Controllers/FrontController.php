@@ -76,6 +76,7 @@ class FrontController extends Controller
 	protected function _getContentByURI($uri)
 	{
 		$contentSearch = new ContentSearch( $this->pageContentType );
+
 		$content = $contentSearch->addWhereCondition( 'abs_url', '=', url('') . '/' . $uri )
 								 ->onlyPublished()
 								 ->addLimit(1)
@@ -84,6 +85,7 @@ class FrontController extends Controller
 		$content =  ( $content && $content->count() > 0 ? $content[0] : null );
 
 		if ( !$content ) {
+
 			$uriParts = explode( '/' , $uri );
 			$uri = $uriParts[ count($uriParts) - 1 ];
 
