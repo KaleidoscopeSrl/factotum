@@ -40,6 +40,5 @@ class CreateStorageFolders extends Command
     {
 		Storage::makeDirectory('models');
 		Storage::makeDirectory('media');
-		Storage::makeDirectory('avatars');
     }
 }

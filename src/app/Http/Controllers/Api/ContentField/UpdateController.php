@@ -12,7 +12,6 @@ class UpdateController extends Controller
     public function update(StoreContentField $request, $id)
     {
 		$data = $request->all();
-
 		$contentField = ContentField::find( $id );
 		$contentField->fill( $data );
 		$contentField->save();

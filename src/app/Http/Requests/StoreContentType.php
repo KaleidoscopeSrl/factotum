@@ -32,7 +32,16 @@ class StoreContentType extends CustomFormRequest
 		$id = request()->route('id');
 
 		if ( $id ) {
-			$rules['content_type'] = 'required|max:32|not_in:' . join(',', config('factotum.prohibited_content_types') )
+
+			$prohibitedContentTypes = config('factotum.prohibited_content_types');
+
+			$contentType = ContentType::find( $id );
+			if ( in_array( $contentType->content_type, $prohibitedContentTypes ) ) {
+				$key = array_search( $contentType->content_type, $prohibitedContentTypes );
+				unset( $prohibitedContentTypes[ $key ] );
+			}
+
+			$rules['content_type'] = 'required|max:32|not_in:' . join(',', $prohibitedContentTypes )
 									. '|unique:content_types,content_type,' . $id;
 		}
 
@@ -48,11 +57,17 @@ class StoreContentType extends CustomFormRequest
 
 		$data['content_type'] = $this->createSlug( $data['content_type'] );
 
-		$id = request()->route('id');
+		$id    = request()->route('id');
+		$cType = request()->input('content_type');
 
 		if ( $id ) {
 			$contentType = ContentType::find($id);
-			$data['old_content_type'] = $contentType->content_type;
+
+			if ( $cType != $contentType->content_type ) {
+				$data['old_content_type'] = $contentType->content_type;
+			} else {
+				$data['setNoUpdateSchema'] = true;
+			}
 		}
 
 		$this->merge($data);

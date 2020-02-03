@@ -16,19 +16,11 @@ class UpdateController extends Controller
 
 		$user = User::find($id);
 		$user->fill( $data );
-
-		if ( isset($data['avatar']) && $data['avatar'] != ''
-			&& request()->hasFile('avatar') && request()->file('avatar')->isValid() ) {
-
-			$user->setAvatar( $request );
-
-		}
 		$user->save();
 
 		$profile = Profile::where( 'user_id', $user->id )->first();
 		$profile->fill( $data );
 		$profile->save();
-
 
         return response()->json( [ 'result' => 'ok', 'user'  => $user->toArray() ] );
 	}

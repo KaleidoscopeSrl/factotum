@@ -17,7 +17,6 @@ class ResizeMediaController extends ApiBaseController
 
 	public function getResize( Request $request )
 	{
-
 		$contentTypeId = $request->input('contentTypeId');
 
 		$contentType = ContentType::find($contentTypeId);
@@ -51,39 +50,31 @@ class ResizeMediaController extends ApiBaseController
 		}
 
 		return response()->json( [ 'result'   => 'ok', 'mediaFields'    => $mediaList ] );
-
 	}
+
 
 	public function doResize( Request $request )
 	{
-
-		$startTime = microtime(true);
-
-		$mediaId        = $request->input('mediaId');
-		$media          = Media::find( $mediaId );
-
+		$startTime        = microtime(true);
+		$mediaId          = $request->input('mediaId');
 		$contentFieldIds  = $request->input('contentFieldIds');
+		$media            = Media::find( $mediaId );
 
-		$thumbSize = config('factotum.thumb_size');
-
-		$resizes = array();
-		$resizes[] = $thumbSize['width'] . ':' . $thumbSize['height'];
-
-		$resizes = array_unique( $resizes );
-
-		@error_reporting( 0 ); // Don't break the JSON result
+		// Don't break the JSON result
+		@error_reporting( 0 );
 
 		foreach ( $contentFieldIds as $contentFieldId ) {
-
 			$contentField = ContentField::find( $contentFieldId );
 
-			if ( $media && !Storage::disk('local')->exists( $media->url ) ) {
-				return response()->json( [ 'result' => 'ko', 'error' => 'The originally uploaded image file cannot be found.' ], 400 );
+			if ( $media && !Storage::disk('media')->exists( $media->id . '/' . $media->filename ) ) {
+				return response()->json( [
+					'result' => 'ko',
+					'error'  => 'The originally uploaded image file cannot be found.'
+				], 400 );
 			}
 
 			@set_time_limit( 900 );
-			Media::saveImage( $contentField, $media->url );
-
+			Media::saveImage( $contentField, $media );
 		}
 
 		$endTime = microtime(true);
@@ -96,15 +87,15 @@ class ResizeMediaController extends ApiBaseController
 		]);
 	}
 
+
 	public function resizeMedia( Request $request, $mediaId )
 	{
-		$startTime = microtime(true);
+		$startTime    = microtime(true);
+		$media        = Media::find( $mediaId );
+		$contentTypes = ContentType::all();
 
-		$media         = Media::find( $mediaId );
+		Media::generateThumb( $media );
 
-		Media::generateThumb( $media->url );
-
-		$contentTypes  = ContentType::all();
 
 		// ContentFields con questo mediaId
 		$listContentFields = [];
@@ -126,9 +117,7 @@ class ResizeMediaController extends ApiBaseController
 		}
 
 		foreach ( $listContentFields as $listContentField ) {
-
-			Media::saveImage( $listContentField, $media->url );
-
+			Media::saveImage( $listContentField, $media );
 		}
 
 		$endTime = microtime(true);
@@ -139,7 +128,6 @@ class ResizeMediaController extends ApiBaseController
 			'filename' => $media->filename,
 			'time'     => round( $endTime - $startTime, 2 )
 		]);
-
 	}
 
 }

@@ -8,7 +8,6 @@ return [
 	'access_backend'        => 'Accesso all\'amministrazione',
 	'manage_users'          => 'Gestione Utenti',
 	'manage_media'          => 'Gestione Media',
-	'manage_categories'     => 'Gestione Categorie',
 	'manage_settings'       => 'Gestione Impostazioni',
 	'role'                  => 'Ruolo',
 	'actions'               => 'Azioni',

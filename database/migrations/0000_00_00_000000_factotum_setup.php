@@ -13,7 +13,6 @@ class FactotumSetup extends Migration
 	 */
 	public function up()
 	{
-
 		// Create content types tables
 		Schema::create('content_types', function (Blueprint $table) {
 			$table->increments('id');
@@ -21,9 +20,11 @@ class FactotumSetup extends Migration
 			$table->string('old_content_type', 32)->nullable(true);
 			$table->boolean('editable')->default(true);
 			$table->integer('order_no')->unsigned()->nullable(true);
+			$table->string('icon', 64)->nullable(true);
 			$table->integer('sitemap_in')->unsigned()->default(0);
 			$table->timestamps();
 		});
+
 
 		// Create content fields table
 		Schema::create('content_fields', function (Blueprint $table) {
@@ -43,13 +44,14 @@ class FactotumSetup extends Migration
 			$table->integer('min_height_size')->unsigned()->nullable(true);
 			$table->string('image_operation', 16)->nullable(true);
 			$table->boolean('image_bw')->nullable(true);
-			$table->string('allowed_types', 16)->nullable(true);
+			$table->string('allowed_types', 64)->nullable(true);
 			$table->text('resizes')->nullable(true);
 			$table->integer('linked_content_type_id')->unsigned()->nullable(true)->default(null);
 			$table->foreign('linked_content_type_id')->references('id')->on('content_types')->onDelete('cascade');
 			$table->unique(array('content_type_id', 'name'));
 			$table->timestamps();
 		});
+
 
 		// Create roles tables
 		Schema::create('roles', function (Blueprint $table) {
@@ -58,12 +60,12 @@ class FactotumSetup extends Migration
 			$table->boolean('backend_access');
 			$table->boolean('manage_content_types');
 			$table->boolean('manage_users');
-			$table->boolean('manage_categories');
 			$table->boolean('manage_media');
 			$table->boolean('manage_settings');
 			$table->boolean('editable')->default(true);
 			$table->timestamps();
 		});
+
 
 		// Create capabilities table
 		Schema::create('capabilities', function (Blueprint $table) {
@@ -79,6 +81,7 @@ class FactotumSetup extends Migration
 			$table->timestamps();
 		});
 
+
 		// Create users table
 		Schema::create('users', function (Blueprint $table) {
 			$table->increments('id');
@@ -87,10 +90,12 @@ class FactotumSetup extends Migration
 			$table->integer('role_id')->unsigned();
 			$table->foreign('role_id')->references('id')->on('roles');
 			$table->boolean('editable')->default(true);
-			$table->string('avatar', 255)->nullable(true);
+			$table->integer('avatar')->unsigned();
+			$table->foreign('avatar')->references('id')->on('media')->onDelete('cascade');
 			$table->rememberToken();
 			$table->timestamps();
 		});
+
 
 		// Create profiles table
 		Schema::create('profiles', function (Blueprint $table) {
@@ -102,6 +107,7 @@ class FactotumSetup extends Migration
 			$table->timestamps();
 		});
 
+
 		// Create password resets tables
 		Schema::create('password_resets', function (Blueprint $table) {
 			$table->string('email')->index();
@@ -109,10 +115,12 @@ class FactotumSetup extends Migration
 			$table->timestamp('created_at')->nullable();
 		});
 
+
 		// Create media table
 		Schema::create('media', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('filename', 150)->unique();
+			$table->string('thumb', 150)->nullable(true);
 			$table->string('url', 255)->nullable(true);
 			$table->integer('user_id')->unsigned();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -127,6 +135,7 @@ class FactotumSetup extends Migration
 			$table->text('description')->nullable(true);
 			$table->timestamps();
 		});
+
 
 		// Create contents table
 		Schema::create('contents', function (Blueprint $table) {
@@ -154,11 +163,13 @@ class FactotumSetup extends Migration
 			$table->string('seo_canonical_url', 255)->nullable(true);
 			$table->string('seo_robots_indexing', 10)->default('index')->nullable(true);
 			$table->string('seo_robots_following', 10)->default('follow')->nullable(true);
+			$table->string('seo_focus_key', 255)->nullable(true);
 			$table->string('fb_title', 255)->nullable(true);
 			$table->string('fb_description', 255)->nullable(true);
 			$table->integer('fb_image')->nullable(true);
 			$table->timestamps();
 		});
+
 
 		// Create categories tables
 		Schema::create('categories', function (Blueprint $table) {
@@ -174,8 +185,9 @@ class FactotumSetup extends Migration
 			$table->timestamps();
 		});
 
+
 		// Create content categories tables
-		Schema::create('content_categories', function (Blueprint $table) {
+		Schema::create('category_content', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('category_id')->unsigned();
 			$table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');

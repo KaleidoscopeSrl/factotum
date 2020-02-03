@@ -11,8 +11,13 @@ use Kaleidoscope\Factotum\Http\Requests\StoreContent;
 class CreateController extends Controller
 {
 
-	public function create( StoreContent $request ){
+	public function create( StoreContent $request )
+	{
 		$data = $request->all();
+
+		if ( !isset($data['created_at']) || !$data['created_at'] ) {
+			$data['created_at'] = Carbon::now();
+		}
 
 		$user = Auth::user();
 
@@ -20,9 +25,6 @@ class CreateController extends Controller
 		$content->user_id = $user->id;
 		$content->is_home = false;
 		$content->fill( $data );
-		if ( !$content->created_at ) {
-			$content->created_at = Carbon::now();
-		}
 		$content->save();
 
 		$this->_saveContent( $request, $content );

@@ -19,5 +19,4 @@ class CreateController extends Controller
         return response()->json( [ 'result' => 'ok', 'category'  => $category->toArray() ] );
     }
 
-
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Kaleidoscope\Factotum\Capability;
 use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\ContentCategory;
+use Kaleidoscope\Factotum\CategoryContent;
 use Kaleidoscope\Factotum\ContentField;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Media;
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
 		Capability::truncate();
 		Category::truncate();
 		Content::truncate();
-		ContentCategory::truncate();
+		CategoryContent::truncate();
 		ContentField::truncate();
 		ContentType::truncate();
 		Media::truncate();

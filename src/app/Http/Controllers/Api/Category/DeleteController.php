@@ -11,7 +11,6 @@ class DeleteController extends Controller
 
     public function remove(Request $request, $id)
 	{
-
         $category = Category::find( $id );
 
         if ( $category ) {
@@ -24,7 +23,6 @@ class DeleteController extends Controller
         }
 
         return $this->_sendJsonError( 'Categoria non trovata.' );
-
 	}
 
 }

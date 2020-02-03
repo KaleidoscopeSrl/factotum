@@ -14,11 +14,9 @@ class UpdateController extends Controller
 
 		$contentType = ContentType::find($id);
 		$contentType->fill($data);
-
-		if ( $contentType->old_content_type != $contentType->content_type ) {
-			$contentType->save();
-		}
+		$contentType->save();
 
         return response()->json( [ 'result' => 'ok', 'contentType'  => $contentType->toArray() ] );
 	}
+
 }

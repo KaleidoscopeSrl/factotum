@@ -8,7 +8,6 @@ use Kaleidoscope\Factotum\Http\Requests\StoreCategory;
 class UpdateController extends Controller
 {
 
-
 	public function update(StoreCategory $request, $id)
 	{
 		$data = $request->all();
@@ -19,6 +18,5 @@ class UpdateController extends Controller
 
         return response()->json( [ 'result' => 'ok', 'category'  => $category->toArray() ] );
 	}
-
 
 }

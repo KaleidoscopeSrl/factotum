@@ -41,15 +41,4 @@ class StoreCategory extends CustomFormRequest
 	}
 
 
-	protected function getValidatorInstance()
-	{
-		$data = $this->all();
-
-		$data['lang'] = request()->session()->get('currentLanguage');
-
-		$this->merge($data);
-
-		return parent::getValidatorInstance();
-	}
-
 }

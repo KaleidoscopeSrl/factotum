@@ -12,14 +12,17 @@ use Kaleidoscope\Factotum\Http\Requests\StoreContent;
 class UpdateController extends Controller
 {
 
-	public function update( StoreContent $request, $id ){
+	public function update( StoreContent $request, $id )
+	{
 		$data = $request->all();
 
-		$content = Content::find($id);
-		$content->fill( $data );
-		if ( !$content->created_at ) {
-			$content->created_at = Carbon::now();
+		$content   = Content::find($id);
+
+		if ( !$data['created_at'] ) {
+			$data['created_at'] = date('Y-m-d H:i:s', $content->created_at / 1000 );
 		}
+
+		$content->fill( $data );
 		$content->save();
 
 		$this->_saveContent( $request, $content );
@@ -27,19 +30,4 @@ class UpdateController extends Controller
 		return response()->json( [ 'status' => 'ok', 'data' => $data ]);
 	}
 
-	public function sortContents( Request $request )
-	{
-		$newOrder = json_decode( $request->input('new_order'), true );
-		if ( count($newOrder) > 0 ) {
-			foreach ( $newOrder as $contentID => $order ) {
-				$content = Content::find($contentID);
-				Content::$FIRE_EVENTS = false;
-				$content->order_no = $order;
-				$content->save();
-			}
-			return response()->json( [ 'status' => 'ok' ]);
-		} else {
-			return response()->json( [ 'status' => 'ko' ]);
-		}
-	}
 }

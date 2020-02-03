@@ -31,7 +31,7 @@ class DeleteController extends Controller
             return $this->_sendJsonError( 'Errore in fase di cancellazione.' );
         }
 
-        return $this->_sendJsonError( 'Ruolo non trovato.' );
+        return $this->_sendJsonError( 'Role not found', 404 );
     }
 
 }

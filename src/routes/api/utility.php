@@ -12,7 +12,10 @@ Route::group([
 	'namespace'  => 'Utility'
 ], function () {
 
-	Route::post('/available-languages',       'Controller@getAvailableLanguages');
-	Route::post('/pages-by-language',         'Controller@getPagesByLanguage');
+	Route::group(['middleware' => 'can:backend-access,Kaleidoscope\Factotum\Role'], function() {
+		Route::get('/available-languages',       'Controller@getAvailableLanguages');
+		Route::get('/pages-by-language',         'Controller@getPagesByLanguage');
+		Route::post('/check-seo-keyword',        'Controller@checkSeoKeyword');
+	});
 
 });

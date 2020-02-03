@@ -9,9 +9,11 @@ class ContentField extends Model
 {
 	public static $FIRE_EVENTS = true;
 
+
 	protected $fillable = [
 		'content_type_id',
 		'name', 'label', 'type', 'order_no', 'mandatory', 'hint',
+		'old_content_field',
 		'options',
 
 		'allowed_types',
@@ -33,36 +35,22 @@ class ContentField extends Model
 		return $this->belongsTo('Kaleidoscope\Factotum\ContentType');
 	}
 
+	// MUTATORS
 
-	public function fill( $data )
+	public function getOptionsAttribute($value)
 	{
-//		if ( isset($data['allowed_types']) && $data['allowed_types'] != '' ) {
-//
-//			$data['allowed_types'] = Utility::convertOptionsArrayToText( $data['allowed_types'] );
-//
-//		}
-//
-//		if ( isset($data['resizes']) && is_array($data['resizes']) && count($data['resizes']) > 0 ) {
-//
-//			$tmp = [];
-//			foreach ( $data['resizes'] as $r ) {
-//				$tmp[] = $r['w'] . ':' . $r['h'];
-//			}
-//			$data['resizes'] = Utility::convertOptionsArrayToText( $tmp );
-//
-//		}
-//
-//		if ( isset($data['options']) && is_array($data['options']) && count($data['options']) > 0 ) {
-//
-//			$tmp = [];
-//			foreach ( $data['options'] as $r ) {
-//				$tmp[] = $r['value'] . ':' . $r['label'];
-//			}
-//			$data['options'] = Utility::convertOptionsArrayToText( $tmp );
-//
-//		}
-
-		return parent::fill( $data );
+		return ( $value ? json_decode( $value, true ) : null );
 	}
+
+	public function getResizesAttribute($value)
+	{
+		return ( $value ? json_decode( $value, true ) : null );
+	}
+
+	public function getAllowedTypesAttribute($value)
+	{
+		return ( $value ? json_decode( $value, true ) : null );
+	}
+
 
 }

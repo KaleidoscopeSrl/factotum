@@ -19,18 +19,19 @@ class DeleteController extends Controller
 			$contentType = ContentType::find( $content->content_type_id );
 
 			$deletedRows = DB::table( $contentType->content_type )
-				->where( 'content_id', '=', $content->id )
-				->delete();
+								->where( 'content_id', '=', $content->id )
+								->delete();
 
 			$deletedRows += $content->delete();
 
-			if ( $deletedRows > 1 ) {
+			if ( $deletedRows > 0 ) {
 				return response()->json( [ 'result' => 'ok' ]);
 			}
+
 			return $this->_sendJsonError( 'Errore in fase di cancellazione.' );
 		}
 
-		return $this->_sendJsonError( 'Contenuto non trovato.' );
+		return $this->_sendJsonError( 'Content not found', 404 );
 
 	}
 }

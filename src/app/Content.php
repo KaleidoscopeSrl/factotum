@@ -29,6 +29,7 @@ class Content extends Model
 		'seo_canonical_url',
 		'seo_robots_indexing',
 		'seo_robots_following',
+		'seo_focus_key',
 
 		'fb_title',
 		'fb_description',
@@ -46,28 +47,38 @@ class Content extends Model
 		'fb_image'       => 'int|null',
 	];
 
+
 	public function parent() {
 		return $this->belongsTo( 'Kaleidoscope\Factotum\Content', 'parent_id');
 	}
 
+
 	public function childs() {
 		return $this->hasMany('Kaleidoscope\Factotum\Content','parent_id','id') ;
 	}
+
 
 	public function childrenRecursive()
 	{
 		return $this->childs()->with('childrenRecursive');
 	}
 
+
 	public function parentRecursive()
 	{
 		return $this->parent()->with('parentRecursive');
 	}
 
-	public function creator() {
+
+	public function user() {
 		return $this->hasOne('Kaleidoscope\Factotum\User', 'id', 'user_id');
 	}
 
+
+	public function categories()
+	{
+		return $this->belongsToMany('Kaleidoscope\Factotum\Category');
+	}
 
 
 
@@ -92,6 +103,7 @@ class Content extends Model
 		return $contents;
 	}
 
+
 	private static function _getChildContents( $contentTypeId, $pagination, $language = '' )
 	{
 		$query = Content::where( 'content_type_id', '=', $contentTypeId )
@@ -100,7 +112,7 @@ class Content extends Model
 						->orderBy('id', 'DESC');
 
 		if ( $language != '' ) {
-			$query->whereLang($language);
+			$query->where( 'lang', $language );
 		}
 
 		if ( $pagination ) {
@@ -109,6 +121,7 @@ class Content extends Model
 			return $query->get();
 		}
 	}
+
 
 	private static function _parseChildsTree( $contents )
 	{
@@ -120,5 +133,18 @@ class Content extends Model
 		}
 		return $contents;
 	}
+
+
+	// MUTATORS
+	public function getCreatedAtAttribute($value)
+	{
+		return ( $value ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->timestamp * 1000 : null );
+	}
+
+	public function getUpdatedAtAttribute($value)
+	{
+		return ( $value ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->timestamp * 1000 : null );
+	}
+
 
 }

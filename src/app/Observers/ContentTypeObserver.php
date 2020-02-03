@@ -20,6 +20,7 @@ class ContentTypeObserver
 	 */
 	public function created(ContentType $contentType)
 	{
+
 		Schema::create( $contentType->content_type, function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('content_type_id')->unsigned();
@@ -42,8 +43,8 @@ class ContentTypeObserver
 			$capability->edit            = 1;
 			$capability->publish         = 1;
 			$capability->save();
-
 		}
+
 	}
 
 

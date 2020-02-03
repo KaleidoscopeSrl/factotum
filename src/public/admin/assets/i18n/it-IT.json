@@ -1,0 +1,477 @@
+{
+	"header": {
+		"welcome": "Benvenuto"
+	},
+
+	"footer": {
+		"version": "Versione"
+	},
+
+	"menu": {
+		"list": "Lista",
+		"add": "Aggiungi",
+		"categories": "Categorie",
+
+		"users_roles": "Utenti & Ruoli",
+			"users": "Utenti",
+			"roles": "Ruoli",
+			"capabilities": "Permessi",
+
+		"tools": "Strumenti",
+			"resize_media": "Ritaglia media",
+			"sitemap": "Genera Sitemap",
+
+		"settings": "Impostazioni",
+			"general_settings": "Generali",
+			"content_types": "Tipi di contenuto",
+			"custom_fields": "Campi Personalizzati",
+
+		"languages": "Lingue"
+	},
+
+	"breadcrumbs": {
+		"auth": "Authentication",
+			"login": "Login",
+
+		"content": "Lista Contenuti",
+			"new_content": "Nuovo Contenuto",
+			"edit_content": "Modifica Contenuto",
+
+		"category": "Categorie",
+			"new_category": "Nuova Categoria",
+			"edit_category": "Modifica Categoria",
+
+		"media": "Media",
+			"edit_media": "Modifica Media",
+
+		"role": "Ruoli",
+			"new_role": "Nuovo Ruolo",
+			"edit_role": "Modifica Ruolo",
+
+		"capability": "Permessi",
+			"new_capability": "Nuovo Permesso",
+			"edit_capability": "Modifica Permesso",
+
+		"user": "Utenti",
+			"new_user": " Nuovo Utente",
+			"edit_user": "Modifica Utente",
+
+		"tool": "Strumenti",
+			"resize_media": "Ritaglia media",
+			"sitemap": "Genera Sitemap",
+
+		"setting": "Impostazioni",
+
+		"content-type": "Tipi di Contenuto",
+			"new_content_type": "Nuovo Tipo di Contenuto",
+			"edit_content_type": "Modifica Tipo di Contenuto",
+
+		"content-field": "Campi Personalizzati",
+			"new_content_field": "Nuovo Campo Personalizzato",
+			"edit_content_field": "Modifica Campo Personalizzato"
+
+	},
+
+	"deleteDialogs": {
+		"title": "Confermi Cancellazione",
+		"text": "Confermi la cancellazione?"
+	},
+
+
+	"contents": {
+		"title": "Lista di Contenuti",
+		"filter": "Filtra",
+		"content_title": "Titolo",
+		"author": "Autore",
+		"categories": "Categorie",
+		"updated_at": "Data/Ora ultimo aggiornamento",
+		"save_success": "Contenuto salvato con successo"
+	},
+
+	"content_edit": {
+		"title": "Titolo",
+		"show_in_menu": "Mostra nel menu",
+		"content": "Contenuto",
+		"status": "Stato",
+		"publish": "Pubblica",
+		"draft": "Bozza",
+		"parent": "Genitore",
+		"no_parent_content": "Non ci sono genitori",
+		"created_at": "Data/ora creazione",
+		"update_at": "Data/ora ultimo aggiornamento",
+		"seo_title": "Titolo SEO",
+		"seo_description": "Descrizione SEO",
+		"seo_canonical_url": "URL Canonical SEO",
+		"seo_robots_indexing": "Meta Robots Indexing",
+		"seo_robots_following": "Meta Robots Following",
+		"seo_focus_key": "Focus Keyword",
+		"social_sharing": "Social Sharing",
+		"sharing_title": "Titolo per Condivisione Social",
+		"sharing_description": "Descrizione per Condivisione Social",
+		"sharing_image": "Immagine per Social",
+		"category": "Categoria",
+		"no_category": "Non ci sono categorie",
+		"content_attribute": "Attributi Contenuto",
+		"categories": "Categorie",
+		"custom_fields": "Campi Personalizzati"
+	},
+
+	"deleteContentDialog": {
+		"success": "Content eliminato con successo"
+	},
+
+
+	"media": {
+		"title": "Libreria Media",
+		"filter": "Filtra",
+		"preview": "Anteprima",
+		"date": "Data",
+		"load_media": "Carica Media",
+		"loading": "Caricamento in corso",
+		"formats": "Formati",
+		"no_media": "Nessun media disponibile",
+		"operation_success": "Operazione completata",
+		"search_by_name": "Cerca per nome",
+		"media_detail_title": "Dettaglio Media Selezionato",
+		"delete_from_the_system": "Elimina definitivamente",
+		"alt_text": "Testo Alternativo",
+		"caption": "Didascalia",
+		"description": "Descrizione",
+		"save_success": "Media salvato con successo"
+	},
+
+	"deleteMediaDialog": {
+		"success": "Media eliminato con successo"
+	},
+
+
+	"categories": {
+		"title": "Categorie",
+		"category": "Categoria",
+		"category_label": "Etichetta Categoria",
+		"category_name": "Nome Categoria",
+		"parent_category": "Categoria Genitore"
+	},
+
+	"deleteCategoryDialog": {
+		"success": "Category eliminato con successo"
+	},
+
+
+
+	"capabilities": {
+		"title": "Permessi",
+		"new_capability": "Crea Permesso",
+		"edit_capability": "Modifica Permesso",
+		"role": "Ruolo",
+		"content_type": "Tipologia di Contenuto",
+		"configure": "Configura Campi Personalizzati",
+		"edit": "Inserire / Modificare il contenuto e le categorie",
+		"publish": "Pubblicare il contenuto",
+		"save_success": "Permesso salvato con successo!"
+	},
+
+	"deleteCapabilityDialog": {
+		"success": "Permesso eliminato con successo"
+	},
+
+
+
+
+
+	"roles": {
+		"title": "Ruoli",
+		"new_role": "Crea Ruolo",
+		"edit_role": "Modifica Ruolo",
+		"role": "Ruolo",
+		"backend_access": "Accesso all'amministrazione",
+		"manage_content_types": "Gestione Tipi di Contenuto",
+		"manage_users": "Gestione Utenti",
+		"manage_media": "Gestione Media",
+		"manage_settings": "Gestione Impostazioni",
+		"save_success": "Ruolo salvato con successo!"
+	},
+
+	"deleteRoleDialog": {
+		"title": "Riassegna Contenuti",
+		"success": "'Ruolo eliminato con successo'",
+		"cancel": "Operazione annullata",
+		"select_role": "Seleziona Ruolo",
+		"reassign_role": "Riassegna agli utenti che hanno il ruolo in cancellazione il ruolo seguente"
+	},
+
+
+
+	"users": {
+		"title": "Utenti",
+		"new_user": "Crea Utente",
+		"edit_user": "Modifica Utente",
+		"role": "Ruolo",
+		"password_line_1": "Password lunga almeno 8 caratteri. Se non vuoi modificare la password precedente, lascia il campo vuoto.",
+		"first_name": "Nome",
+		"last_name": "Cognome",
+		"avatar_line_1": "Dimensioni consigliate 100x100. Immagine nel formato .JPG / .PNG. Max 2MB.",
+		"save_success": "Utente salvato con successo!"
+	},
+
+	"deleteUserDialog": {
+		"title": "Riassegna Contenuti",
+		"success": "Utente eliminato con successo",
+		"cancel": "Operazione annullata",
+		"select_user": "Seleziona Utente",
+		"reassign_content": "Riassegna i contenuti di questo utente, al seguente utente"
+	},
+
+
+
+
+
+
+
+	"custom_fields": {
+		"title": "Campi Personalizzati",
+
+		"fields": "campi",
+
+		"text": "Campo di Testo",
+		"email": "Email",
+		"url": "URL",
+		"number": "Numero",
+		"textarea": "Area di Testo",
+		"wysiwyg": "Wysiwyg Editor",
+		"select": "Tendina",
+		"radio": "Selezione Singola",
+		"multiselect": "Selezione multipla",
+		"checkbox": "Spunta",
+		"date": "Data",
+		"time": "Ora",
+		"file_upload": "Caricamento File",
+		"image_upload": "Caricamento Immagine",
+		"gallery": "Gallery",
+		"linked_content": "Linked Content",
+		"multiple_linked_content": "Multiple Linked Content",
+
+		"save_success": "Campo Personalizzato salvato con successo!",
+
+		"single_title": "Campo Personalizzato",
+		"field_type": "Tipo di Campo",
+		"field_label": "Etichetta Campo",
+		"field_hint": "Suggerimenti Campo",
+		"field_id": "ID Campo",
+		"field_generate_label": "Genera da Etichetta",
+		"preview": "Anteprima",
+		"checkbox_single_option": "Il tipo selezionato accetta una sola opzione",
+		"add_option": "Aggiungi Opzione",
+		"remove_option": "Rimuovi Opzione",
+		"generate_option": "Genera da Etichetta",
+		"option_value": "Valore Opzione",
+		"option_label": "Etichetta Opzione",
+		"linked_content_type": "Tipo di Contenuto collegato",
+		"add_image_size": "Aggiungi Dimensioni",
+		"remove_image_size": "Rimuovi",
+		"image_resize_w": "Larghezza operazione",
+		"image_resize_h": "Altezza operazione",
+		"image_resize_w_hint": "Inserire la larghezza dell'immagine",
+		"image_resize_h_hint": "Inserire l'altezza dell'immagine",
+		"min_image_w": "Larghezza Minima",
+		"min_image_h": "Altezza Minima",
+		"min_image_w_hint": "Inserire la larghezza minima in pixel dell'immagine",
+		"min_image_h_hint": "Inserire l'altezza minima in pixel dell'immagine",
+		"image_operation_hint": "Selezionare l'eventuale operazione da eseguire",
+		"image_operation": "Operazioni immagine",
+		"none": "Nessuna",
+		"crop": "Ritaglia",
+		"resize": "Ridimensiona",
+		"fit": "Adatta",
+		"max_file_size": "Dimensione Massima File (in MB)",
+		"max_file_size_hint": "Inserire il valore della dimensione massima del file che un utente può caricare, il valore inserito deve comunque essere inferire a 16",
+		"allowed_types": "Tipi di estensione file accettati",
+		"allowed_types_hint": "Inserire l'elenco delle estensioni del file accettate",
+		"accepted_extensions": "Estensioni accettate..."
+	},
+
+	"deleteCustomFieldDialog": {
+		"success": "Campo eliminato con successo",
+		"cancel": "Operazione annullata"
+	},
+
+
+
+
+
+	"content_types": {
+		"title": "Tipologia di Contenuti",
+		"content_type": "Tipologia di Contenuto",
+		"icon": "Icona",
+		"only_alphanum": "Accettati solo lettere minuscole, numeri e il carattere '_'",
+		"correct": "Correggi automaticamente.",
+		"line_1": "Il singolo contenuto verrà visualizzato con un template chiamato",
+
+		"user": "Utente",
+		"content": "Contenuto Generico",
+		"news": "News",
+		"event": "Evento",
+		"rocket": "Razzo",
+		"box": "Prodotto",
+
+		"save_success": "Tipo di Contenuto salvato con successo!"
+	},
+
+	"deleteContentTypeDialog": {
+		"success": "Tipo di Contenuto eliminato con successo",
+		"cancel": "Operazione annullata"
+	},
+
+
+
+
+
+
+
+	"settings": {
+		"title": "Impostazioni",
+		"placeholder": "Scegli Homepage per la lingua"
+	},
+
+
+
+
+
+	"tools": {
+	},
+
+	"resize_media": {
+		"title": "Ridimensiona Media",
+		"line_1": "Usa questo strumento per rigenerare le thumbnail per tutte le immagini che hai caricato nel sito.",
+		"line_2": "Le vecchie thumbnail verranno mantenute per evitare immagini non funzionanti a causa di URL inseriti a mano nel codice.",
+		"line_3": "La rigenerazione delle thumbnail non è reverisbile, ma puoi ripristinare le vecchie dimensioni e ricominciare se non ti piacciono i risultati.",
+		"line_4": "Per iniziare seleziona il tipo di contenuto e premi il bottone qui in basso.",
+		"select_content_type": "Seleziona Content Type",
+		"line_5": "è stato correttamente ritagliato in",
+		"seconds": "secondi",
+		"start": "Avvia",
+		"operation_started": "Operazione avviata!",
+		"operation_running": "Operazione in corso...",
+		"no_media": "Nessun media. Operazione completata!",
+		"operation_completed": "Operazione completata!"
+	},
+
+	"sitemap": {
+		"title": "Gestione Sitemap",
+		"line_1": "Usa questo strumento per selezionare i contenuti che desideri siano presenti nel sitemap.",
+		"line_2": "Il sitemap viene generato dinamicamente in base ai contenuti scelti per essere sempre aggiornato con le tue modifiche.",
+		"line_3": "Seleziona il tipo di contenuto e salva le tue preferenze.",
+		"generate": "Genera"
+	},
+
+
+
+
+
+
+
+	"validations": {
+		"required": "Il campo è obbligatorio.",
+		"role_required": "Il campo Ruolo è obbligatorio.",
+		"email_required": "Il campo Email è obbligatorio.",
+		"email_not_valid": "Il campo Email non è nel formato corretto.",
+		"format_not_valid": "Il campo non è nel formato corretto.",
+		"password_required": "Il campo Password è obbligatorio.",
+		"password_min_length": "Il campo Password deve essere lungo almeno 8 caratteri.",
+		"first_name_required": "Il campo Nome è obbligatorio.",
+		"last_name_required": "Il campo Cognome è obbligatorio.",
+		"content_type_required": "Il campo Tipologia di Contenuto è obbligatorio.",
+		"parent_category_not_valid": "Categoria Genitore non accettata",
+		"file_not_valid_extension": "Il file non ha la corretta estensione.",
+		"file_too_big": "Il file è troppo grande."
+	},
+
+	"add": "Aggiungi",
+	"save": "Salva",
+	"cancel": "Annulla",
+	"remove": "Rimuovi",
+	"confirm": "Conferma",
+	"close": "Chiudi",
+	"load": "Carica",
+	"select": "Seleziona",
+	"copy": "Copia",
+	"upload": "Carica",
+	"upload_all": "Carica tutti",
+	"queue_progress": "Avanzamento Coda",
+	"drop_file_here": "Per caricare i file, clicca o trascina qui",
+	"name": "Nome",
+	"size": "Dimensioni",
+	"preview": "Anteprima",
+	"progress": "Avanzamento",
+	"status": "Stato",
+	"actions": "Azioni",
+	"formats": "Formati",
+
+	"mandatory": "Obbligatorio",
+	"back_to_list": "Torna alla Lista",
+
+	"paginator": {
+		"prev_page": "Pagina precedente",
+		"next_page": "Pagina successiva",
+		"items_per_page": "elementi per pagina",
+		"of": "di"
+	},
+
+	"errors": {
+		"loading": "Errore durante il caricamento."
+	},
+
+
+	"seo_analysis": {
+		"title": "Analisi SEO",
+		"good_results": "Già fatto",
+		"to_improve": "Da Migliorare",
+		"problems": "Problemi",
+		"focus_key_length": "Lunghezza della Frase Chiave",
+		"meta_description_length": "Lunghezza della Meta Description",
+		"content_length": "Lunghezza del testo",
+		"seo_title_length": "Larghezza del titolo SEO",
+		"seo_title_focus_key": "Frase Chiave nel titolo SEO",
+		"slug_focus_key": "Frase Chiave nello slug",
+		"focus_key_density": "Densità della Frase Chiave",
+		"focus_key_intro": "Frase Chiave nell'introduzione",
+		"focus_key_already_used": "Frase Chiave usata in precedenza",
+		"internal_links": "Link interni",
+		"external_links": "Link in uscita",
+		"checks": {
+			"error": {
+				"focus_key_length": "La Frase Chiave non è stata impostata per questa pagina. Imposta una frase chiave, in modo che sia possibile calcolare il punteggio SEO.",
+				"meta_description_length": "La Meta Description non è stata inserita. I motori di ricerca visualizzeranno delle parti di testo prese dalla tua pagina.",
+				"content_length": "Il testo contiene {{ REPLACE_1 }} parole. Questo è molto lontano da 300, il numero minimo di parole che ti suggeriamo per il tuo contenuto.",
+				"seo_title_focus_key": "Non tutte le parole della tua Frase Chiave '{{ REPLACE_1 }}' sono contenute nel titolo SEO",
+				"seo_title_length": "Scrivi un titolo SEO.",
+				"slug_focus_key": "La tua Frase Chiave '{{ REPLACE_1 }}' non è contenuta nello slug. Ti suggeriamo di cambiarlo!",
+				"focus_key_density": "La frase chiave è stata trovata {{ REPLACE_1 }} volte. Questo è più del massimo suggerito di 7 volte per un testo di questa lunghezza.",
+				"focus_key_intro": "La Frase Chiave che hai scelto o i suoi sinonimi non compaiono nel primo paragrafo.",
+				"focus_key_already_used": "Hai già usato questa Frase Chiave una volta. Non dovresti usare la frase chiave più di una volta.",
+				"internal_links": "Sembra che non ci siano link interni in questa pagina.",
+				"external_links": "Non ci sono link in uscita in questa pagina."
+			},
+			"warning": {
+				"focus_key_length": "La Frase Chiave è lunga {{ REPLACE_1 }} parole. È più lunga di 4, il numero di parole suggerito.",
+				"meta_description_length": "La Meta Description è troppo corta (al di sotto dei 120 caratteri). Hai a disposizione 156 caratteri. La lunghezza consigliata è tra 120 e 156 caratteri.",
+				"content_length": "Il testo contiene {{ REPLACE_1 }} parole. Questo è leggermente inferiore al numero minimo di 300 parole.",
+				"seo_title_length": "Il titolo SEO title è troppo corto.",
+				"seo_title_focus_key": "Controlla che la Frase Chiave sia all'inizio del titolo SEO o che la Frase Chiave è contenuta parzialmente nel titolo SEO."
+			},
+			"correct": {
+				"focus_key_length": "Ottimo!",
+				"meta_description_length": "Ben fatto!",
+				"content_length": "Il testo contiene {{ REPLACE_1 }} parole. Ottimo!",
+				"seo_title_length": "Il titolo SEO title è ok. Grande!",
+				"seo_title_focus_key": "La Frase Chiave '{{ REPLACE_1 }}' è presente nel titolo SEO! Ben fatto!",
+				"slug_focus_key": "La Frase Chiave '{{ REPLACE_1 }}' è presente nello slug! Ottimo!",
+				"focus_key_density": "La Frase Chiave è stata trovata {{ REPLACE_1 }} volte. Ci siamo!",
+				"focus_key_intro": "La Frase Chiave è presente nell'introduzione.",
+				"focus_key_already_used": "La Frase Chiave è usata solo su questa pagina. Fantastico!",
+				"internal_links": "Il testo contiene link interni. Bene!",
+				"external_links": "Il testo contiene link esterni. Ottimo!"
+			}
+		}
+	}
+}

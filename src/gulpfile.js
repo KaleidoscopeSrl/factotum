@@ -1,17 +1,11 @@
 var gulp         = require('gulp'),
 	sass         = require('gulp-ruby-sass'),
-	autoprefixer = require('gulp-autoprefixer'),
 	minifycss    = require('gulp-minify-css'),
-	uglify       = require('gulp-uglify'),
 	imagemin     = require('gulp-imagemin'),
 	rename       = require('gulp-rename'),
-	concat       = require('gulp-concat'),
 	notify       = require('gulp-notify'),
-	cache        = require('gulp-cache'),
 	livereload   = require('gulp-livereload'),
-	gutil        = require('gulp-util'),
-	plumber      = require('gulp-plumber'),
-	del          = require('del');
+	plumber      = require('gulp-plumber');
 
 
 var onError = function (err) {
@@ -20,22 +14,21 @@ var onError = function (err) {
 };
 
 var paths = {
-	'bootstrap': './bower_components/bootstrap-sass/assets/stylesheets/'
+	'bootstrap': './node_modules/bootstrap-sass/assets/stylesheets/'
 };
-
 
 // Fonts
 gulp.task('fonts', function() {
-	return gulp.src('resources/assets/fonts/frontend/**/*')
+	return gulp.src('resources/assets/fonts/**/*')
 		.pipe(plumber({ errorHandler: onError }))
-		.pipe(gulp.dest('public/assets/fonts/frontend'))
+		.pipe(gulp.dest('public/assets/fonts'))
 		.pipe(notify({ message: 'Fonts task complete' }));
 });
 
-// favicon
+// Favicon
 gulp.task('favicon', function() {
 	return gulp.src([
-		'resources/assets/media/frontend/favicon.ico'
+		'resources/assets/media/favicon.ico'
 	])
 		.pipe(plumber({ errorHandler: onError }))
 		.pipe(gulp.dest('public/'))
@@ -45,37 +38,36 @@ gulp.task('favicon', function() {
 
 // Styles
 gulp.task('styles', function() {
-	return sass('resources/assets/sass/frontend/main.scss', {
+	return sass('resources/assets/sass/main.scss', {
 		style: 'expanded',
 		stopOnError: true,
 		emitCompileError: true,
 		loadPath: [
-			paths.bootstrap,
-			'./bower_components/'
+			paths.bootstrap
 		]
 	})
 		.on('error', onError)
-		.pipe(gulp.dest('public/assets/css/frontend'))
+		.pipe(gulp.dest('public/assets/css'))
 		.pipe(rename({ suffix: '.min' }))
 		.pipe(minifycss())
-		.pipe(gulp.dest('public/assets/css/frontend'))
+		.pipe(gulp.dest('public/assets/css'))
 		.pipe(notify({ message: 'Styles task complete' }));
 
 });
 
 // Images
 gulp.task('images', function() {
-	return gulp.src('resources/assets/media/frontend/img/**/*')
+	return gulp.src('resources/assets/media/img/**/*')
 		.pipe(plumber({ errorHandler: onError }))
 		.pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
-		.pipe(gulp.dest('public/assets/media/frontend/img'))
+		.pipe(gulp.dest('public/assets/media/img'))
 		.pipe(notify({ message: 'Images task complete' }));
 });
 
 
 gulp.task('default', [
-	'styles',
 	'fonts',
+	'styles',
 	'images',
 	'favicon'
 ]);
@@ -84,13 +76,13 @@ gulp.task('default', [
 gulp.task('watch', function() {
 
 	// Watch .scss files
-	gulp.watch('resources/assets/sass/frontend/**/*.scss', [ 'styles' ]);
+	gulp.watch('resources/assets/sass/**/*.scss', [ 'styles' ]);
 
 	// Watch image files
-	gulp.watch('resources/assets/media/frontend/img/**/*', [ 'images' ]);
+	gulp.watch('resources/assets/media/img/**/*', [ 'images' ]);
 
 	// Watch fonts
-	gulp.watch('resources/assets/fonts/frontend/**/*', [ 'fonts' ]);
+	gulp.watch('resources/assets/fonts/**/*', [ 'fonts' ]);
 
 	// Create LiveReload server
 	livereload.listen();

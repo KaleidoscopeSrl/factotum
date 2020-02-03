@@ -24,7 +24,7 @@ class DeleteController extends Controller
 			return $this->_sendJsonError('Errore in fase di cancellazione.');
 		}
 
-		return $this->_sendJsonError('Permesso non trovato.');
+		return $this->_sendJsonError( 'Capability not found', 404 );
 	}
 
 }

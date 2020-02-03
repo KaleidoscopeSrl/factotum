@@ -44,6 +44,11 @@ class User extends Authenticatable
 	}
 
 
+	public function avatar() {
+		return $this->hasOne('Kaleidoscope\Factotum\Media', 'id', 'avatar');
+	}
+
+
 	public function isAdmin()
 	{
 		return ($this->role->role == 'admin' ? true : false);
@@ -75,29 +80,5 @@ class User extends Authenticatable
 								->first();
 		return ($capability && $capability->publish ? true : false);
 	}
-
-
-	public function setAvatar($request)
-	{
-		if ( $request->hasFile('avatar') && $request->file('avatar')->isValid() ) {
-
-			$path           = $request->file('avatar')->store('avatars');
-			$path           = storage_path( 'app/' . $path);
-			$this->avatar   = url( 'avatars/' . Utility::saveAvatar( $path ) );
-
-		} else if ( $request->input('avatar') ) {
-
-			$avatar       = $request->input('avatar');
-			$imageData    = base64_decode( substr( $avatar, strpos( $avatar, ',') + 1) );
-			$jpgName      = Str::random(8) . '.jpg';
-			$path         = storage_path('app/public/avatars/' . $jpgName);
-
-			Storage::disk('avatars')->put( $jpgName, $imageData, 'public');
-
-			$this->avatar = url( 'storage/avatars/' . Utility::saveAvatar( $path ) );
-
-		}
-	}
-
 
 }

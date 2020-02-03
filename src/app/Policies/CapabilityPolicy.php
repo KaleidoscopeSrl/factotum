@@ -10,17 +10,12 @@ class CapabilityPolicy
 {
     use HandlesAuthorization;
 
-	public function before($user)
-	{
-		return ( $user->role->backend_access && $user->role->manage_users ? true : false );
-	}
-
-	public function view(User $user)
-	{
-		return ( $user->role->backend_access && $user->role->manage_users ? true : false );
-	}
-
 	public function create(User $user)
+	{
+		return ( $user->role->backend_access && $user->role->manage_users ? true : false );
+	}
+
+	public function read(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_users ? true : false );
 	}
@@ -34,4 +29,5 @@ class CapabilityPolicy
 	{
 		return ( $user->role->backend_access && $user->role->manage_users ? true : false );
 	}
+
 }

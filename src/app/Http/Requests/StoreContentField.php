@@ -29,13 +29,13 @@ class StoreContentField extends CustomFormRequest
 			'name'            => 'required|not_in:' . join(',', config('factotum.prohibited_content_field_names')),
 			'type'            => 'required',
 
-			'options'         => 'required_if:type,select,multiselect,checkbox,multicheckbox,radio',
+			'options'         => 'required_if:type,select,multiselect,checkbox,radio',
 
-			'max_file_size'   => 'required_if:type,file_upload,image_upload,gallery|nullable|numeric',
-			'allowed_types'   => 'required_if:type,file_upload,image_upload,gallery|nullable|allowed_types',
+			'max_file_size'   => 'required_if:type,file_upload,image_upload,gallery',
+			'allowed_types'   => 'required_if:type,file_upload,image_upload,gallery',
 
-			'min_width_size'  => 'required_if:type,image_upload,gallery|nullable|numeric',
-			'min_height_size' => 'required_if:type,image_upload,gallery|nullable|numeric',
+			'min_width_size'  => 'required_if:type,image_upload,gallery',
+			'min_height_size' => 'required_if:type,image_upload,gallery',
 			'image_operation' => 'required_if:type,image_upload,gallery',
 
 		];
@@ -46,6 +46,12 @@ class StoreContentField extends CustomFormRequest
 		$name          = request()->input('name');
 		$contentTypeId = request()->input('content_type_id');
 
+		if ( in_array( $data['type'], [ 'file_upload', 'image_upload', 'gallery' ] ) ) {
+			$rules['max_file_size']   .= '|numeric';
+			$rules['min_width_size']  .= '|numeric';
+			$rules['min_height_size'] .= '|numeric';
+			$rules['allowed_types']   .= '|allowed_types';
+		}
 
 
 		if ( $id ) {
@@ -76,19 +82,19 @@ class StoreContentField extends CustomFormRequest
 
 		$id = request()->route('id');
 
-		if ( $data['options'] ) {
+		if ( isset($data['options']) && $data['options'] ) {
 			$data['options'] = json_encode( $data['options'] );
 		} else {
 			$data['options'] = null;
 		}
 
-		if ( $data['allowed_types'] ) {
+		if ( isset($data['allowed_types']) && $data['allowed_types'] ) {
 			$data['allowed_types'] = json_encode( $data['allowed_types'] );
 		} else {
 			$data['allowed_types'] = null;
 		}
 
-		if ( $data['resizes'] ) {
+		if ( isset($data['resizes']) && $data['resizes'] ) {
 			$data['resizes'] = json_encode( $data['resizes'] );
 		} else {
 			$data['resizes'] = null;

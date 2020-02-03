@@ -26,7 +26,7 @@ class ReadController extends Controller
             return response()->json( [ 'result' => 'ok', 'role' => $role ]);
         }
 
-        return $this->_sendJsonError('Ruolo non trovato.');
+        return $this->_sendJsonError( 'Role not found', 404 );
     }
 
 }

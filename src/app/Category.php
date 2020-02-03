@@ -14,22 +14,33 @@ class Category extends Model
 		'lang'
 	];
 
+
 	public function content_type() {
 		return $this->belongsTo('Kaleidoscope\Factotum\ContentType');
 	}
+
+
+	public function contents()
+	{
+		return $this->belongsToMany('Kaleidoscope\Factotum\Content');
+	}
+
 
 	public function parent() {
 		return $this->belongsTo( 'Kaleidoscope\Factotum\Category', 'parent_id');
 	}
 
+
 	public function childs() {
 		return $this->hasMany('Kaleidoscope\Factotum\Category','parent_id','id') ;
 	}
+
 
 	public function childrenRecursive()
 	{
 		return $this->childs()->with('childrenRecursive');
 	}
+
 
 	public function parentRecursive()
 	{
@@ -49,6 +60,7 @@ class Category extends Model
 		return $categories->toArray();
 	}
 
+
 	public static function treeChildsObjects( $contentTypeId, $pagination = null, $language = '' )
 	{
 		$categories = self::_getChildCategories( $contentTypeId, $pagination, $language );
@@ -58,6 +70,7 @@ class Category extends Model
 		return $categories;
 	}
 
+
 	private static function _getChildCategories( $contentTypeId, $pagination, $language = '' )
 	{
 		$query = Category::where( 'content_type_id', '=', $contentTypeId )
@@ -65,7 +78,7 @@ class Category extends Model
 						->orderBy('order_no');
 
 		if ( $language != '' ) {
-			$query->whereLang($language);
+			$query->where( 'lang', $language );
 		}
 
 		if ( $pagination ) {

@@ -1,0 +1,457 @@
+{
+	"header": {
+		"welcome": "Welcome"
+	},
+
+	"footer": {
+		"version": "Version"
+	},
+
+	"menu": {
+		"list": "List",
+		"add": "Add",
+		"categories": "Categories",
+
+		"users_roles": "Users & Roles",
+			"users": "Users",
+			"roles": "Roles",
+			"capabilities": "Capabilities",
+
+		"tools": "Tools",
+			"resize_media": "Resize Media",
+			"sitemap": "Sitemap Generator",
+
+		"settings": "Settings",
+			"general_settings": "General",
+			"content_types": "Content Types",
+			"custom_fields": "Custom Fields",
+
+		"languages": "Languages"
+	},
+
+	"breadcrumbs": {
+		"auth": "Authentication",
+			"login": "Login",
+
+		"content": "Contents List",
+			"new_content": "New Content",
+			"edit_content": "Edit Content",
+
+		"category": "Categories",
+			"new_category": "New Category",
+			"edit_category": "Edit Category",
+
+		"media": "Media",
+			"edit_media": "Edit Media",
+
+		"role": "Roles",
+			"new_role": "New Role",
+			"edit_role": "Edit Role",
+
+		"capability": "Capabilities",
+			"new_capability": "New Capability",
+			"edit_capability": "Edit Capability",
+
+		"user": "Users",
+			"new_user": " New User",
+			"edit_user": "Edit User",
+
+		"tool": "Tools",
+			"resize_media": "Resize Media",
+			"sitemap": "Sitemap Generator",
+
+		"setting": "Settings",
+
+		"content-type": "Content Types",
+			"new_content_type": "New Content Type",
+			"edit_content_type": "Edit Content Type",
+
+		"content-field": "Custom Fields",
+			"new_content_field": "New Custom Field",
+			"edit_content_field": "Edit Custom Field"
+
+	},
+
+	"deleteDialogs": {
+		"title": "Confirm Delete",
+		"text": "Confirm delete?"
+	},
+
+
+	"contents": {
+		"title": "Content List",
+		"filter": "Filter",
+		"content_title": "Title",
+		"author": "Author",
+		"categories": "Categories",
+		"update_date": "Date/Time last update",
+		"save_success": "Content successfully saved"
+	},
+
+	"content_edit": {
+		"title": "Title",
+		"show_in_menu": "Show in menu",
+		"content": "Content",
+		"status": "Status",
+		"publish": "Publish",
+		"draft": "Draft",
+		"parent": "Parent",
+		"no_parent_content": "There are no parents",
+		"created_at": "Created at",
+		"updated_at": "Last update",
+		"seo_title": "SEO Title",
+		"seo_description": "SEO Description",
+		"seo_canonical_url": "SEO Canonical URL",
+		"seo_robots_indexing": "Meta Robots Indexing",
+		"seo_robots_following": "Meta Robots Following",
+		"seo_focus_key": "Focus Keyword",
+		"social_sharing": "Social Sharing",
+		"sharing_title": "Social Sharing Title",
+		"sharing_description": "Social Sharing Description",
+		"sharing_image": "Social Sharing Image",
+		"category": "Category",
+		"no_category": "No categories",
+		"content_attribute": "Content Attributes",
+		"categories": "Categories",
+		"custom_fields": "Custom Fields"
+	},
+
+	"deleteContentDialog": {
+		"success": "Content successfully removed"
+	},
+
+
+	"media": {
+		"title": "Media Library",
+		"filter": "Filter",
+		"preview": "Preview",
+		"date": "Date",
+		"load_media": "Load Media",
+		"loading": "Loading...",
+		"formats": "Formats",
+		"no_media": "No media available",
+		"operation_success": "Operation completed",
+		"search_by_name": "Search by name",
+		"media_detail_title": "Media Details",
+		"delete_from_the_system": "Delete from the system",
+		"alt_text": "Alternative Text",
+		"caption": "Caption",
+		"description": "Description",
+		"save_success": "Media successfully saved"
+	},
+
+	"deleteMediaDialog": {
+		"success": "Media successfully removed"
+	},
+
+
+
+	"categories": {
+		"title": "Categories",
+		"category": "Category",
+		"category_label": "Category Label",
+		"category_name": "Category Name",
+		"parent_category": "Parent Category"
+	},
+
+	"deleteCategoryDialog": {
+		"success": "Category successfully removed"
+	},
+
+
+
+	"capabilities": {
+		"title": "Capabilities",
+		"new_capability": "New Capability",
+		"edit_capability": "Edit Capability",
+		"role": "Role",
+		"content_type": "Content Type",
+		"configure": "Manage Custom Fields",
+		"edit": "Create / Edit contents or categories",
+		"publish": "Publish the content",
+		"save_success": "Capability saved!"
+	},
+
+	"deleteCapabilityDialog": {
+		"success": "Capability successfully removed"
+	},
+
+
+
+	"roles": {
+		"title": "Roles",
+		"new_role": "New Role",
+		"edit_role": "Edit Role",
+		"role": "Role",
+		"backend_access": "Backend Access",
+		"manage_content_types": "Manage Content Types",
+		"manage_users": "Manage Users",
+		"manage_media": "Manage Media",
+		"manage_settings": "Manage Settings",
+		"save_success": "Role saved!"
+	},
+
+	"deleteRoleDialog": {
+		"title": "Re-assign Contents",
+		"success": "Role successfully removed",
+		"cancel": "Operation canceled",
+		"select_role": "Select Role",
+		"reassign_role": "Re-assign the role of this user to the following user's role"
+	},
+
+
+
+	"users": {
+		"title": "Users",
+		"new_user": "New User",
+		"edit_user": "Edit User",
+		"role": "Role",
+		"password_line_1": "Password length almost 8 characters. If you don't want to change the password, keep the text field empty.",
+		"first_name": "First Name",
+		"last_name": "Last Name",
+		"avatar_line_1": "Size 100x100. Format .JPG / .PNG. Max 2MB.",
+		"save_success": "User saved!"
+	},
+
+	"deleteUserDialog": {
+		"title": "Re-assign Contents",
+		"success": "User successfully removed",
+		"cancel": "Operation canceled",
+		"select_user": "Select User",
+		"reassign_content": "Re-assign the content of this user to the following user"
+	},
+
+
+
+	"custom_fields": {
+		"title": "Custom Fields",
+		"fields": "fields",
+		"text": "Text Field",
+		"email": "Email",
+		"url": "URL",
+		"number": "Number",
+		"textarea": "Textarea Field",
+		"wysiwyg": "Wysiwyg Editor",
+		"select": "Dropdown",
+		"radio": "Radio Button",
+		"multiselect": "Dropdown with multiple selection",
+		"checkbox": "Checkbox",
+		"date": "Date",
+		"time": "Time",
+		"file_upload": "File Upload",
+		"image_upload": "Image Upload",
+		"gallery": "Gallery",
+		"linked_content": "Linked Content",
+		"multiple_linked_content": "Multiple Linked Content",
+		"save_success": "Custom Field saved!",
+		"single_title": "Custom Field",
+		"field_type": "Field Type",
+		"field_label": "Field Label",
+		"field_hint": "Field Hint",
+		"field_id": "Field ID",
+		"field_generate_label": "Generate from Field Label",
+		"preview": "Preview",
+		"checkbox_single_option": "The selected type accepts only one option",
+		"add_option": "Add Option",
+		"remove_option": "Remove Option",
+		"generate_option": "Generate from Label",
+		"option_value": "Option Value",
+		"option_label": "Option Label",
+		"linked_content_type": "Linked Content Type",
+		"add_image_size": "Add Image Sizes",
+		"remove_image_size": "Remove",
+		"image_resize_w": "Operation Width",
+		"image_resize_h": "Operation Height",
+		"image_resize_w_hint": "Insert the image width",
+		"image_resize_h_hint": "Insert the image height",
+		"min_image_w": "Minimum Width",
+		"min_image_h": "Minimum Height",
+		"min_image_w_hint": "Insert the minimum width of the image in pixel",
+		"min_image_h_hint": "Insert the minimum height of the image in pixel",
+		"image_operation_hint": "Select the operation to make on upload",
+		"image_operation": "Minimum Operation",
+		"none": "None",
+		"crop": "Crop",
+		"resize": "Resize",
+		"fit": "Fit",
+		"max_file_size": "Max File Size (in MB)",
+		"max_file_size_hint": "Insert the max file size for an uploaded file, the value must be below 16",
+		"allowed_types": "Allowed Types",
+		"allowed_types_hint": "Insert the list of accepted extensions",
+		"accepted_extensions": "Allowed Types..."
+	},
+
+	"deleteCustomFieldDialog": {
+		"success": "Custom Field successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+
+
+	"content_types": {
+		"title": "Content Types",
+		"content_type": "Content Type",
+		"icon": "Icon",
+		"only_alphanum": "Only lowercase characters, numbers and the char '_'",
+		"correct": "Correct.",
+		"line_1": "The single content will be shown with the template called",
+
+		"user": "User",
+		"content": "Generic Content",
+		"news": "News",
+		"event": "Event",
+		"rocket": "Rocket",
+		"box": "Product",
+
+		"save_success": "Content Type saved!"
+	},
+
+	"deleteContentTypeDialog": {
+		"success": "Content Type successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+
+
+	"settings": {
+		"title": "Settings",
+		"placeholder": "Choose the Homepage for the language"
+	},
+
+
+
+	"resize_media": {
+		"title": "Resize Media",
+		"line_1": "Use this tool to regenerate all the thumbnails for the images uploaded on the site.",
+		"line_2": "The old thumbnails will be kept to avoid not working images.",
+		"line_3": "The regeneration of the thumbnails is not reversible, but you can re-set the previous sizes and regenerate the thumbnails again.",
+		"line_4": "To start, choose the content type and press the button below.",
+		"select_content_type": "Select Content Type",
+		"line_5": "was successfully resized in",
+		"seconds": "seconds",
+		"start": "Start",
+		"operation_started": "Operation started!",
+		"operation_running": "Operation running...",
+		"no_media": "No media. Operation completed!",
+		"operation_completed": "Operation completed!"
+	},
+
+
+
+	"sitemap": {
+		"title": "Sitemap Generator",
+		"line_1": "Use this tool to select the contents that you want to include in the sitemap.",
+		"line_2": "The sitemap is dynamically generated based on the content types choosed.",
+		"line_3": "Select the content types and save your preferences.",
+		"generate": "Generate"
+	},
+
+
+
+
+
+	"validations": {
+		"required": "The field is required.",
+		"role_required": "The field Role is required.",
+		"email_required": "The field Email is required.",
+		"email_not_valid": "The field Email is not in the right format.",
+		"format_not_valid": "The field is not in the right format.",
+		"password_required": "The field Password is required.",
+		"password_min_length": "The field Password should be at least 8 characters.",
+		"first_name_required": "The field Nome is required.",
+		"last_name_required": "The field Cognome is required.",
+		"content_type_required": "The field Content Type is required.",
+		"parent_category_not_valid": "Parent Category not valid",
+		"seo_focus_key": "The Focus Keyword is not in the right format. Only numbers, letters and spaces allowed."
+	},
+
+	"add": "Add",
+	"save": "Save",
+	"cancel": "Cancel",
+	"remove": "Remove",
+	"confirm": "Confirm",
+	"close": "Close",
+	"load": "Load",
+	"select": "Select",
+	"copy": "Copy",
+	"upload": "Upload",
+	"upload_all": "Upload All",
+	"queue_progress": "Queue Progress",
+	"drop_file_here": "Drop file here",
+	"name": "Name",
+	"size": "Size",
+	"progress": "Progress",
+	"preview": "Preview",
+	"status": "Status",
+	"actions": "Actions",
+	"formats": "Formats",
+
+	"mandatory": "Mandatory",
+	"back_to_list": "Back to List",
+
+
+	"paginator": {
+		"prev_page": "Previous Page",
+		"next_page": "Next Page",
+		"items_per_page": "items per page",
+		"of": "of"
+	},
+
+	"errors": {
+		"loading": "Loading problem?!"
+	},
+
+	"seo_analysis": {
+		"title": "SEO Analysis",
+		"good_results": "Good Results",
+		"to_improve": "To Improve",
+		"problems": "Problems",
+		"focus_key_length": "Focus Keyword Length",
+		"meta_description_length": "Meta Description Length",
+		"content_length": "Content Length",
+		"seo_title_length": "SEO Title Length",
+		"seo_title_focus_key": "Focus Keyword in SEO Title",
+		"slug_focus_key": "Focus Keyword in slug",
+		"focus_key_density": "Focus Keyword Density",
+		"focus_key_intro": "Focus Keyword in introduction",
+		"focus_key_already_used": "Focus Keyword already used",
+		"internal_links": "Internal Links",
+		"external_links": "External Links",
+		"checks": {
+			"error": {
+				"focus_key_length": "The Focus Keyword is not set on this page. Set a Focus Keyword, then we can calculate your SEO Score.",
+				"meta_description_length": "The Meta Description is not set. The search engine will show part of the text from your page.",
+				"content_length": "The Content is {{ REPLACE_1 }} words long. This is too far from 300, the minimum numbers of words for your content.",
+				"seo_title_length": "The SEO Title is not set on this page.",
+				"seo_title_focus_key": "The Focus Keyword '{{ REPLACE_1 }}' is not into the SEO Title",
+				"slug_focus_key": "The Focus Keyword '{{ REPLACE_1 }}' is not into the slug",
+				"focus_key_density": "The Focus Keyword was found {{ REPLACE_1 }} times. The maximum number of times for the Focus Keyword in the content is 7.",
+				"focus_key_intro": "The Focus Keyword was not found in the introduction.",
+				"focus_key_already_used": "The Focus Keyword was already used in another page.",
+				"internal_links": "The Content does not contain any internal links.",
+				"external_links": "The Content does not contain any external links."
+			},
+			"warning": {
+				"focus_key_length": "The Focus Keyword is {{ REPLACE_1 }} words long. It's longer than 4, the number of suggested words.",
+				"meta_description_length": "The Meta Description is too short (below 120 characters). 156 characters available. The suggested length is between 120 and 156 characters.",
+				"content_length": "The Content is {{ REPLACE_1 }} words long. This content is below the minimum of 300 words.",
+				"seo_title_length": "The SEO title is too short.",
+				"seo_title_focus_key": "Check if the Focus Keyword is at the beginning of the SEO Title or if the Focus Keyword is partially contained into the SEO Title."
+			},
+			"correct": {
+				"focus_key_length": "Well done!",
+				"meta_description_length": "Cool!",
+				"content_length": "The Content is {{ REPLACE_1 }} words long. Great!",
+				"seo_title_length": "The SEO title is ok. Great!",
+				"seo_title_focus_key": "The Focus Keyword '{{ REPLACE_1 }}' is into the SEO Title! Well done!",
+				"slug_focus_key": "The Focus Keyword '{{ REPLACE_1 }}' is into the slug! Great!",
+				"focus_key_density": "The Focus Keyword was found {{ REPLACE_1 }} times. Great!",
+				"focus_key_intro": "The Focus Keyword was found in the introduction.",
+				"focus_key_already_used": "The Focus Keyword is used only here. Fantastic!",
+				"internal_links": "The Content contains internal links. Cool!",
+				"external_links": "The Content contains external links. Cool!"
+			}
+		}
+	}
+
+}

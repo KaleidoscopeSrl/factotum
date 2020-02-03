@@ -1,0 +1,455 @@
+{
+	"header": {
+		"welcome": "¡Bienvenido!"
+	},
+
+	"footer": {
+		"version": "Versión"
+	},
+
+	"menu": {
+		"list": "Lista",
+		"add": "Añadir",
+		"categories": "Categorias",
+
+		"users_roles": "Usuarios y roles",
+			"users": "Usuarios",
+			"roles": "Roles",
+			"capabilities": "Permisos",
+
+		"tools": "Instrumentos",
+			"resize_media": "Redimensionar Media",
+			"sitemap": "Generador de Mapa del Sitio",
+
+		"settings": "Configuraciones",
+			"general_settings": "En General",
+			"content_types": "Tipos de Contenido",
+			"custom_fields": "Campos Personalizados",
+
+		"languages": "Idiomas"
+	},
+
+	"breadcrumbs": {
+		"auth": "Autenticación",
+			"login": "Login",
+
+		"content": "Lista de Contenido",
+			"new_content": "Nuevo Contenido",
+			"edit_content": "Editar Contenido",
+
+		"category": "Categorias",
+			"new_category": "Nueva Categoría",
+			"edit_category": "Editar Categoría",
+
+		"media": "Media",
+			"edit_media": "Editar Media",
+
+		"role": "Roles",
+			"new_role": "Nuevo Rol",
+			"edit_role": "Editar Rol",
+
+		"capability": "Permisos",
+			"new_capability": "Nuevo Permiso",
+			"edit_capability": "Editar Permiso",
+
+		"user": "Usuarios",
+			"new_user": " Nuevo Usuario",
+			"edit_user": "Editar Usuario",
+
+		"tool": "Instrumentos",
+			"resize_media": "Redimensionar Media",
+			"sitemap": "Generador de Mapa del Sitio",
+
+		"setting": "Configuraciones",
+
+		"content-type": "Tipos de Contenido",
+			"new_content_type": "Nuevo Tipo de Contenido",
+			"edit_content_type": "Editar Tipo de Contenido",
+
+		"content-field": "Campos Personalizados",
+			"new_content_field": "Nuevo Campo Personalizado",
+			"edit_content_field": "Editar Campo Personalizado"
+
+	},
+
+	"deleteDialogs": {
+		"title": "Confirmar Eliminación",
+		"text": "Confirmar eliminación?"
+	},
+
+
+	"contents": {
+		"title": "Lista de Contenido",
+		"filter": "Filtrar",
+		"content_title": "Título",
+		"author": "Autor",
+		"categories": "Categorias",
+		"update_date": "Fecha/Hora última actualización",
+		"save_success": "Contenido salvados con éxito"
+	},
+
+	"content_edit": {
+		"title": "Título",
+		"show_in_menu": "Mostrar en el menú",
+		"content": "Contenido",
+		"status": "Estado",
+		"publish": "Publicar",
+		"draft": "Copia borrador",
+		"parent": "Contenido Superior",
+		"no_parent_content": "No hay contenido principal",
+		"created_at": "Creado en",
+		"updated_at": "Última actualización",
+		"seo_title": "Título SEO",
+		"seo_description": "Descripción SEO",
+		"seo_canonical_url": "SEO Canonical URL",
+		"seo_robots_indexing": "Meta Robots Indexing",
+		"seo_robots_following": "Meta Robots Following",
+		"seo_focus_key": "Palabra Clave",
+		"social_sharing": "Social Media",
+		"sharing_title": "Título por Social Media",
+		"sharing_description": "Descripción por Social Media",
+		"sharing_image": "Imagen por Social Media",
+		"category": "Categoría",
+		"no_category": "No hay categorias",
+		"content_attribute": "Atributos de contenido",
+		"categories": "Categorias",
+		"custom_fields": "Campos Personalizados"
+	},
+
+	"deleteContentDialog": {
+		"success": "Contenido eliminado con éxito"
+	},
+
+
+	"media": {
+		"title": "Mediateca",
+		"filter": "Filtrar",
+		"preview": "Avance",
+		"date": "Fecha",
+		"load_media": "Cargar medios",
+		"loading": "Cargando...",
+		"formats": "Formatos",
+		"no_media": "No hay media",
+		"operation_success": "Operación completada",
+		"search_by_name": "Buscar por nombre",
+		"media_detail_title": "Detalles de medios",
+		"delete_from_the_system": "Eliminar del sistema",
+		"alt_text": "Texto alternativo",
+		"caption": "Subtítulo",
+		"description": "Descripción",
+		"save_success": "Medios salvado correctamente"
+	},
+
+	"deleteMediaDialog": {
+		"success": "Medios eliminado con éxito"
+	},
+
+
+
+	"categories": {
+		"title": "Categorias",
+		"category": "Categoría",
+		"category_label": "Etiqueta de categoría",
+		"category_name": "Nombre de la categoría",
+		"parent_category": "Categoría principal"
+	},
+
+	"deleteCategoryDialog": {
+		"success": "Categoría eliminada con éxito"
+	},
+
+
+
+	"capabilities": {
+		"title": "Permisos",
+		"new_capability": "Nuevo Permiso",
+		"edit_capability": "Editar Permiso",
+		"role": "Role",
+		"content_type": "Tipo de contenido",
+		"configure": "Administrar campos personalizados",
+		"edit": "Crear / editar contenidos o categorías",
+		"publish": "Publica el contenido",
+		"save_success": "Permiso salvado!"
+	},
+
+	"deleteCapabilityDialog": {
+		"success": "Permiso eliminado con éxito"
+	},
+
+
+
+	"roles": {
+		"title": "Roles",
+		"new_role": "Nuevo rol",
+		"edit_role": "Editar rol",
+		"role": "Rol",
+		"backend_access": "Acceso al backend",
+		"manage_content_types": "Administrar tipos de contenido",
+		"manage_users": "Administrar usuarios",
+		"manage_media": "Administrar medios",
+		"manage_settings": "Administrar configuraciones",
+		"save_success": "Rol salvado!"
+	},
+
+	"deleteRoleDialog": {
+		"title": "Reasignar contenido",
+		"success": "Rol eliminado con éxito",
+		"cancel": "Operación cancelada",
+		"select_role": "Seleccionar rol",
+		"reassign_role": "Vuelva a asignar el rol de este usuario al rol del siguiente usuario"
+	},
+
+
+	"users": {
+		"title": "Usuarios",
+		"new_user": " Nuevo Usuario",
+		"edit_user": "Editar Usuario",
+		"role": "Rol",
+		"password_line_1": "Longitud de la contraseña de casi 8 caracteres. Si no desea cambiar la contraseña, mantenga vacío el campo de texto.",
+		"first_name": "Primer nombre",
+		"last_name": "Apellido",
+		"avatar_line_1": "Tamaño 100x100. Formato .JPG / .PNG. Máx. 2MB.",
+		"save_success": "Usuario salvado!"
+	},
+
+	"deleteUserDialog": {
+		"title": "Reasignar contenido",
+		"success": "Usuario eliminado con éxito",
+		"cancel": "Operación cancelada",
+		"select_user": "Seleccionar usuario",
+		"reassign_content": "Reasignar el contenido de este usuario al siguiente usuario"
+	},
+
+
+
+	"custom_fields": {
+		"title": "Campos Personalizados",
+		"fields": "campos",
+		"text": "Campo de texto",
+		"email": "Email",
+		"url": "URL",
+		"number": "Número",
+		"textarea": "Campo Textarea",
+		"wysiwyg": "Wysiwyg Editor",
+		"select": "Desplegable",
+		"radio": "Boton de radio",
+		"multiselect": "Desplegable con selección múltiple",
+		"checkbox": "Caja",
+		"date": "Fecha",
+		"time": "Hora",
+		"file_upload": "Subir archivo",
+		"image_upload": "Carga de imagen",
+		"gallery": "Gallery",
+		"linked_content": "Contenido vinculado",
+		"multiple_linked_content": "Múltiple Contenido vinculado",
+		"save_success": "Campo Personalizado salvado!",
+		"single_title": "Campo Personalizado",
+		"field_type": "Tipo de campo",
+		"field_label": "Etiqueta de campo",
+		"field_hint": "Sugerencia de campo",
+		"field_id": "ID Campo",
+		"field_generate_label": "Generar a partir de etiqueta de campo",
+		"preview": "Avance",
+		"checkbox_single_option": "El tipo seleccionado solo acepta una opción",
+		"add_option": "Agregar opción",
+		"remove_option": "Eliminar opción",
+		"generate_option": "Generar desde etiqueta",
+		"option_value": "Valor de la opción",
+		"option_label": "Etiqueta de opción",
+		"linked_content_type": "Tipo de contenido vinculado",
+		"add_image_size": "Agregar tamaños de imagen",
+		"remove_image_size": "Eliminar",
+		"image_resize_w": "Anchura",
+		"image_resize_h": "Altura",
+		"image_resize_w_hint": "Anchura de imagen",
+		"image_resize_h_hint": "Altura de imagen",
+		"min_image_w": "Anchura Mínima",
+		"min_image_h": "Altura Mínima",
+		"min_image_w_hint": "Inserte el ancho mínimo de la imagen en píxeles",
+		"min_image_h_hint": "Inserte la altura mínima de la imagen en píxeles",
+		"image_operation_hint": "Seleccione la operación a realizar al cargar",
+		"image_operation": "Operación de Imagen",
+		"none": "Ninguna",
+		"crop": "Cortar",
+		"resize": "Redimensionar",
+		"fit": "Adecuado",
+		"max_file_size": "Tamaño máximo de archivo (en MB)",
+		"max_file_size_hint": "Inserte el tamaño máximo de archivo para un archivo cargado, el valor debe ser inferior a 16",
+		"allowed_types": "Tipos permitidos",
+		"allowed_types_hint": "Insertar la lista de extensiones aceptadas",
+		"accepted_extensions": "Tipos permitidos..."
+	},
+
+	"deleteCustomFieldDialog": {
+		"success": "Campo Personalizado eliminado con éxito",
+		"cancel": "Operación cancelada"
+	},
+
+
+
+	"content_types": {
+		"title": "Tipos de contenido",
+		"content_type": "Tipo de contenido",
+		"icon": "Icono",
+		"only_alphanum": "Solo caracteres en minúscula, números y el carácter '_'",
+		"correct": "Correcto.",
+		"line_1": "El contenido único se mostrará con la plantilla llamada",
+
+		"user": "Usuario",
+		"content": "Contenido genérico",
+		"news": "News",
+		"event": "Evento",
+		"rocket": "Cohete",
+		"box": "Producto",
+
+		"save_success": "Tipo de contenido salvado!"
+	},
+
+	"deleteContentTypeDialog": {
+		"success": "Tipo de contenido eliminado con éxito",
+		"cancel": "Operación cancelada"
+	},
+
+
+
+	"settings": {
+		"title": "Configuraciones",
+		"placeholder": "Elija la página de inicio para el idioma"
+	},
+
+
+
+	"resize_media": {
+		"title": "Redimensionar Media",
+		"line_1": "Use esta herramienta para regenerar todas las miniaturas de las imágenes cargadas en el sitio.",
+		"line_2": "Se conservarán las miniaturas antiguas para evitar imágenes que no funcionen.",
+		"line_3": "La regeneración de las miniaturas no es reversible, pero puede restablecer los tamaños anteriores y volver a generar las miniaturas.",
+		"line_4": "Para comenzar, elija el tipo de contenido y presione el botón a continuación.",
+		"select_content_type": "Seleccionar tipo de contenido",
+		"line_5": "se redimensionó con éxito en",
+		"seconds": "segundos",
+		"start": "Comienzo",
+		"operation_started": "Operación iniciada!",
+		"operation_running": "Operación en ejecución...",
+		"no_media": "Sin multimedia. Operación completada!",
+		"operation_completed": "Operación completada!"
+	},
+
+
+
+	"sitemap": {
+		"title": "Generador de Mapa del Sitio",
+		"line_1": "Use esta herramienta para seleccionar los contenidos que desea incluir en el mapa del sitio.",
+		"line_2": "El mapa del sitio se genera dinámicamente en función de los tipos de contenido elegidos.",
+		"line_3": "Seleccione los tipos de contenido y guarde sus preferencias.",
+		"generate": "Generar"
+	},
+
+
+
+
+
+	"validations": {
+		"required": "El campo es obligatorio.",
+		"role_required": "El campo Role es obligatorio.",
+		"email_required": "El campo Email es obligatorio.",
+		"email_not_valid": "El campo Email no está en el formato correcto.",
+		"format_not_valid": "El campo no está en el formato correcto.",
+		"password_required": "El campo Password es obligatorio.",
+		"password_min_length": "El campo Password debe tener al menos 8 caracteres.",
+		"first_name_required": "El campo primer nombre es obligatorio.",
+		"last_name_required": "El campo apellido es obligatorio.",
+		"content_type_required": "El campo Content Type es obligatorio.",
+		"parent_category_not_valid": "Categoría principal no está en el formato correcto",
+		"seo_focus_key": "La palabra clave no está en el formato correcto. Solo se permiten números, letras y espacios."
+	},
+
+	"add": "Añadir",
+	"save": "Salvar",
+	"cancel": "Cancelar",
+	"remove": "Eliminar",
+	"confirm": "Confirmar",
+	"close": "Cerca",
+	"load": "Carga",
+	"select": "Seleccione",
+	"copy": "Copiar",
+	"upload": "Subir",
+	"upload_all": "Subir todo",
+	"queue_progress": "Progreso de la cola",
+	"drop_file_here": "Suelta el archivo aquí",
+	"name": "Nombre",
+	"size": "Talla",
+	"progress": "Progreso",
+	"preview": "Avance",
+	"status": "Estado",
+	"actions": "Comportamiento",
+	"formats": "Formatos",
+	"mandatory": "Obligatorio",
+	"back_to_list": "Volver a la Lista",
+
+
+	"paginator": {
+		"prev_page": "Pagina anterior",
+		"next_page": "Siguiente página",
+		"items_per_page": "artículos por página",
+		"of": "de"
+	},
+
+	"errors": {
+		"loading": "Problema de carga?!"
+	},
+
+	"seo_analysis": {
+		"title": "Análisis SEO",
+		"good_results": "Buenos resultados",
+		"to_improve": "Mejorar",
+		"problems": "Problemas",
+		"focus_key_length": "Longitud de palabra clave de enfoque",
+		"meta_description_length": "Longitud de la meta descripción",
+		"content_length": "Longitud de contenido",
+		"seo_title_length": "Longitud del título de SEO",
+		"seo_title_focus_key": "Palabra clave de enfoque en el título de SEO",
+		"slug_focus_key": "Foco de palabra clave en slug",
+		"focus_key_density": "Densidad de palabras clave de enfoque",
+		"focus_key_intro": "Focus Keyword en la introducción",
+		"focus_key_already_used": "Palabra clave de enfoque ya utilizada",
+		"internal_links": "Links internos",
+		"external_links": "Links externos",
+		"checks": {
+			"error": {
+				"focus_key_length": "La palabra clave Focus no está establecida en esta página. Establezca una palabra clave de enfoque, luego podemos calcular su puntaje de SEO.",
+				"meta_description_length": "La Meta Descripción no está establecida. El motor de búsqueda mostrará parte del texto de su página.",
+				"content_length": "El contenido tiene {{ REPLACE_1 }} palabras largas. Esto está muy lejos de 300, el número mínimo de palabras para su contenido.",
+				"seo_title_length": "El título de SEO no está establecido en esta página.",
+				"seo_title_focus_key": "La palabra clave '{{ REPLACE_1 }}' no está en el título de SEO",
+				"slug_focus_key": "La palabra clave '{{ REPLACE_1 }}' no está en la barra",
+				"focus_key_density": "La palabra clave se encontró {{ REPLACE_1 }} veces. El número máximo de veces para la palabra clave en el contenido es 7.",
+				"focus_key_intro": "La palabra clave no se encontró en la introducción.",
+				"focus_key_already_used": "La palabra clave ya se usó en otra página.",
+				"internal_links": "El contenido no contiene ningún enlace interno.",
+				"external_links": "El contenido no contiene ningún enlace externo."
+			},
+			"warning": {
+				"focus_key_length": "La palabra clave tiene {{ REPLACE_1 }} palabras largas. Es más largo que 4, el número de palabras sugeridas.",
+				"meta_description_length": "La Meta Descripción es demasiado corta (menos de 120 caracteres). 156 caracteres disponibles. La longitud sugerida es entre 120 y 156 caracteres.",
+				"content_length": "El contenido tiene {{ REPLACE_1 }} palabras largas. Este contenido está por debajo del mínimo de 300 palabras.",
+				"seo_title_length": "El título de SEO es demasiado corto.",
+				"seo_title_focus_key": "Compruebe si la palabra clave está al comienzo del título de SEO o si la palabra clave está parcialmente contenida en el título SEO."
+			},
+			"correct": {
+				"focus_key_length": "Bien hecho!",
+				"meta_description_length": "Yeah!",
+				"content_length": "El contenido tiene {{ REPLACE_1 }} palabras largas. ¡Excelente!",
+				"seo_title_length": "El título de SEO está bien. ¡Excelente!",
+				"seo_title_focus_key": "¡La palabra clave '{{ REPLACE_1 }}' está en el título de SEO! ¡Bien hecho!",
+				"slug_focus_key": "¡La palabra clave '{{ REPLACE_1 }}' está en la babosa! ¡Excelente!",
+				"focus_key_density": "La palabra clave se encontró {{ REPLACE_1 }} veces. ¡Excelente!",
+				"focus_key_intro": "La palabra clave se encontró en la introducción.",
+				"focus_key_already_used": "La palabra clave solo se usa aquí. ¡Fantástico!",
+				"internal_links": "El contenido contiene enlaces internos. ¡Si!",
+				"external_links": "El contenido contiene enlaces externos. ¡Si!"
+			}
+		}
+	}
+
+}

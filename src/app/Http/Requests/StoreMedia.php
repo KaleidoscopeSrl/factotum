@@ -2,8 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Http\Requests;
 
+use Illuminate\Support\Str;
 
-use Kaleidoscope\Factotum\ContentField;
 use Kaleidoscope\Factotum\Media;
 
 class StoreMedia extends CustomFormRequest
@@ -25,10 +25,7 @@ class StoreMedia extends CustomFormRequest
 	 */
 	public function rules()
 	{
-		$rules = [
-//			'label' => 'required|max:255',
-//			'name'  => 'required|max:50|unique:categories',
-		];
+		$rules = [];
 
 		$data = $this->all();
 
@@ -48,16 +45,13 @@ class StoreMedia extends CustomFormRequest
 
 		$data = $this->all();
 
-		$data['lang'] = request()->session()->get('currentLanguage');
-
 		$file = request()->file('files');
 
-		$data['filename'] = $file->getClientOriginalName();
-		$data['filename'] = Media::filenameAvailable( $data['filename'] );
-
 		$data['mime_type'] = $file->getMimeType();
+		$data['filename']  = $file->getClientOriginalName();
+		$data['filename']  = Media::filenameAvailable( $data['filename'] );
 
-		if ( str_contains( $data['mime_type'], 'image/' )  ) {
+		if ( Str::contains( $data['mime_type'], 'image/' )  ) {
 			$imageSize = getimagesize( $file->path() );
 
 			$data['width']  = $imageSize[0];

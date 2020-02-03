@@ -2,8 +2,9 @@
 
 namespace Kaleidoscope\Factotum\Http\Requests;
 
-
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\ContentField;
 use Kaleidoscope\Factotum\ContentType;
@@ -39,10 +40,11 @@ class StoreContent extends CustomFormRequest
 
 		if ($id) {
 			$content = Content::find($id);
+
 			if ( $data['url'] != $content->url ) {
-				$alreadyExist = Content::where('url', '=', $data['url'])
-					->where( 'content_type_id', '=', $content->content_type_id )
-					->count();
+
+				$alreadyExist = Content::where('url', '=', $data['url'])->count();
+
 				if ($alreadyExist > 0) {
 					$rules['url'] .= '|unique:contents';
 				}
@@ -53,9 +55,8 @@ class StoreContent extends CustomFormRequest
 		} else {
 			$rules['content_type_id'] = 'required';
 
-			$alreadyExist = Content::where('url', '=', $data['url'])
-				->where( 'content_type_id', '=', $data['content_type_id'] )
-				->count();
+			$alreadyExist = Content::where('url', '=', $data['url'])->count();
+
 			if ($alreadyExist > 0) {
 				$rules['url'] .= '|unique:contents';
 			}
@@ -67,7 +68,7 @@ class StoreContent extends CustomFormRequest
 		// Additional Fields
 		if ( $contentFields->count() > 0 ) {
 			foreach ( $contentFields as $field ) {
-				$tmp = array();
+				$tmp = [];
 
 				if ( $field->mandatory ) {
 					if (count($data) > 0 && ( $field->type == 'file_upload' || $field->type == 'image_upload'  || $field->type == 'gallery' )) {
@@ -120,9 +121,7 @@ class StoreContent extends CustomFormRequest
 	{
 		$data = $this->all();
 
-		$data['url'] = str_slug($data['url'], "-");
-
-		$data['lang'] = request()->session()->get('currentLanguage');
+		$data['url'] = Str::slug($data['url'], "-");
 
 		// Aggiungo al path la lingua solo se è diversa da quella di default
 		// TODO: rendere personalizzabile questa scelta dalle impostazioni

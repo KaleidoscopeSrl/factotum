@@ -2,74 +2,76 @@
 
 namespace Kaleidoscope\Factotum\Policies;
 
+use Intervention\Image\Exception\NotFoundException;
 use Kaleidoscope\Factotum\User;
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\Capability;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ContentPolicy
 {
+
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view the content.
-     *
-     * @param  \Factotum\User  $user
-     * @param  \Factotum\Content  $content
-     * @return mixed
-     */
-    public function view(User $user, $contentTypeID)
-    {
+
+	private function _checkCapabilityByContentType($user, $contentTypeID)
+	{
 		$capability = Capability::where('role_id', $user->role_id)
 								->where('content_type_id', $contentTypeID)
 								->first();
 
-		return ( $capability && $capability->edit ? true : false );
-    }
+		if ( $capability ) {
+			return ( $user->role->backend_access && $capability && $capability->edit ? true : false );
+		}
 
-    /**
-     * Determine whether the user can create contents.
-     *
-     * @param  \Factotum\User  $user
-     * @return mixed
-     */
-    public function create(User $user, $contentTypeID)
+		abort(404, 'Content not found');
+	}
+
+
+	private function _checkCapabilityByContent( $user, $contentID )
+	{
+		$content = Content::find($contentID);
+
+		if ( $content ) {
+			$capability = Capability::where('role_id', $user->role_id)
+									->where('content_type_id', $content->content_type_id)
+									->first();
+			return ( $user->role->backend_access && $capability && $capability->edit ? true : false );
+		}
+
+		abort(404, 'Content not found');
+	}
+
+
+    public function create(User $user)
     {
-		$capability = Capability::where('role_id', $user->role_id)
-								->where('content_type_id', $contentTypeID)
-								->first();
-		return ( $capability && $capability->edit ? true : false );
+		$contentTypeID = request()->input('content_type_id');
+		return $this->_checkCapabilityByContentType( $user, $contentTypeID );
     }
 
-    /**
-     * Determine whether the user can update the content.
-     *
-     * @param  \Factotum\User  $user
-     * @param  \Factotum\Content  $content
-     * @return mixed
-     */
+
+	public function read(User $user, $contentTypeID)
+	{
+		return $this->_checkCapabilityByContentType( $user, $contentTypeID );
+	}
+
+
+	public function readDetail( User $user, $contentID )
+	{
+		return $this->_checkCapabilityByContent( $user, $contentID );
+	}
+
+
     public function update(User $user, $contentID)
     {
-		$content = Content::find($contentID);
-		$capability = Capability::where('role_id', $user->role_id)
-								->where('content_type_id', $content->content_type_id)
-								->first();
-		return ( $capability && $capability->edit ? true : false );
+		return $this->_checkCapabilityByContent( $user, $contentID );
     }
 
-    /**
-     * Determine whether the user can delete the content.
-     *
-     * @param  \Factotum\User  $user
-     * @param  \Factotum\Content  $content
-     * @return mixed
-     */
+
     public function delete(User $user, $contentID)
     {
-		$content = Content::find($contentID);
-		$capability = Capability::where('role_id', $user->role_id)
-								->where('content_type_id', $content->content_type_id)
-								->first();
-		return ( $capability && $capability->edit ? true : false );
+		return $this->_checkCapabilityByContent( $user, $contentID );
     }
+
 }

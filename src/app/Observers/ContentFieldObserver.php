@@ -5,70 +5,105 @@ namespace Kaleidoscope\Factotum\Observers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\ContentField;
-use mysql_xdevapi\Exception;
+
 
 class ContentFieldObserver
 {
-	/**
-	 * Listen to the ContentType created event.
-	 *
-	 * @param  ContentType  $contentType
-	 * @return void
-	 */
-	public function created(ContentField $contentField)
+
+	private function _getColumnType( $type )
 	{
-		if ( $contentField::$FIRE_EVENTS ) {
-			$contentType = ContentType::find($contentField->content_type_id);
+		switch ( $type ) {
+			case 'text':
+			case 'email':
+			case 'url':
+			case 'number':
+			case 'select':
+			case 'multiselect':
+			case 'checkbox':
+			case 'radio':
+			case 'file_upload':
+			case 'image_upload':
+			case 'multiple_linked_content':
+				return 'VARCHAR(255)';
+			break;
 
-			// Alter relative table
-			Schema::table( $contentType->content_type, function (Blueprint $table)  use ($contentField) {
-				if ( $contentField->type == 'text' || $contentField->type == 'email' ||
-					$contentField->type == 'url' || $contentField->type == 'number' ||
-					$contentField->type == 'select' || $contentField->type == 'multiselect' ||
-					$contentField->type == 'checkbox' || $contentField->type == 'multicheckbox' ||
-					$contentField->type == 'radio' ||
-					$contentField->type == 'file_upload' || $contentField->type == 'image_upload' ||
-					$contentField->type == 'multiple_linked_content' ||
-					$contentField->type == 'multiple_linked_categories' ) {
-					$table->string( $contentField->name, 255 )->nullable( !$contentField->mandatory );
-				}
+			case 'date':
+				return 'DATE';
+			break;
 
-				if ( $contentField->type == 'time' ) {
-					$table->string( $contentField->name, 5 )->nullable( !$contentField->mandatory );
-				}
+			case 'time':
+				return 'VARCHAR(5)';
+			break;
 
-				if ( $contentField->type == 'date' ) {
-					$table->date( $contentField->name )->nullable( !$contentField->mandatory );
-				}
+			case 'textarea':
+			case 'wysiwyg':
+			case 'gallery':
+				return 'TEXT';
+			break;
 
-				if ( $contentField->type == 'datetime' ) {
-					$table->dateTime( $contentField->name )->nullable( !$contentField->mandatory );
-				}
-
-				if ( $contentField->type == 'textarea' || $contentField->type == 'wysiwyg' ||
-					$contentField->type == 'gallery' ) {
-					$table->text( $contentField->name, 255 )->nullable( !$contentField->mandatory );
-				}
-
-				if ( $contentField->type == 'linked_content' ) {
-					$table->integer( $contentField->name )->nullable( !$contentField->mandatory );
-				}
-			});
-
-			$this->_saveJsonModel( $contentType );
+			case 'linked_content':
+				return 'INT(11)';
+			break;
 		}
 	}
 
-	/**
-	 * Listen to the ContentType updated event.
-	 *
-	 * @param  ContentType  $contentType
-	 * @return void
-	 */
+
+	private function _setColumnField( $contentField, $update = false )
+	{
+		$contentType = ContentType::find($contentField->content_type_id);
+
+		if ( $update ) {
+			if ( $contentField->mandatory ) {
+				DB::table( $contentType->content_type )
+					->whereNull( $contentField->name )
+					->update( [ $contentField->name => '' ] );
+			} else {
+				DB::table( $contentType->content_type )
+					->where( $contentField->name, '' )
+					->update( [ $contentField->name => null ] );
+			}
+		}
+
+		$query = 'ALTER TABLE ' . $contentType->content_type
+				. ( $update ? ' CHANGE ' : ' ADD ' ) . 'COLUMN '
+				. ( $update ? $contentField->name . ' ' . $contentField->name : $contentField->name ) . ' '
+				. $this->_getColumnType( $contentField->type )
+				. ( $contentField->mandatory ? ' NOT NULL' : ' NULL');
+
+		// ALTER TABLE `table_name` ADD COLUMN `column_name` `data_type`;
+		// ALTER TABLE `members` CHANGE COLUMN `full_names` `fullname` char(250) NOT NULL;
+
+		try {
+
+			DB::beginTransaction();
+			DB::statement( $query );
+			DB::commit();
+
+			$this->_saveJsonModel( $contentType );
+
+		} catch ( \Exception $ex) {
+			DB::rollBack();
+			echo $ex->getMessage();
+			print_r($ex->getTrace());
+			die;
+		}
+
+	}
+
+
+	public function created(ContentField $contentField)
+	{
+		if ( $contentField::$FIRE_EVENTS ) {
+			$this->_setColumnField( $contentField, false );
+		}
+	}
+
+
 	public function updating(ContentField $contentField)
 	{
 		if ( $contentField::$FIRE_EVENTS ) {
@@ -88,56 +123,15 @@ class ContentFieldObserver
 		}
 	}
 
+
 	public function updated(ContentField $contentField)
 	{
 		if ( $contentField::$FIRE_EVENTS ) {
-			$contentType = ContentType::find($contentField->content_type_id);
-
-			try {
-
-				// Alter relative table
-				Schema::table( $contentType->content_type, function (Blueprint $table)  use ( $contentField ) {
-					if ( $contentField->type == 'text' ||
-						$contentField->type == 'select' || $contentField->type == 'multiselect' ||
-						$contentField->type == 'checkbox' || $contentField->type == 'multicheckbox' ||
-						$contentField->type == 'radio' ||
-						$contentField->type == 'file_upload' || $contentField->type == 'image_upload' ||
-						$contentField->type == 'multiple_linked_content' ) {
-						$table->string( $contentField->name, 255 )->nullable( !$contentField->mandatory )->change();
-					}
-
-					if ( $contentField->type == 'date' ) {
-						$table->date( $contentField->name )->nullable( !$contentField->mandatory )->change();
-					}
-
-					if ( $contentField->type == 'datetime' ) {
-						$table->dateTime( $contentField->name )->nullable( !$contentField->mandatory )->change();
-					}
-
-					if ( $contentField->type == 'textarea' ||
-						$contentField->type == 'wysiwyg' ||
-						$contentField->type == 'gallery' ) {
-						$table->text( $contentField->name )->nullable( !$contentField->mandatory )->change();
-					}
-
-					if ( $contentField->type == 'linked_content' ) {
-						$table->integer( $contentField->name )->nullable( !$contentField->mandatory )->change();
-					}
-				});
-				$this->_saveJsonModel( $contentType );
-
-			} catch ( Exception $exception ) { print_r('err0r'); }
-
+			$this->_setColumnField( $contentField, true );
 		}
 	}
 
 
-	/**
-	 * Listen to the ContentType deleting event.
-	 *
-	 * @param  ContentType  $contentType
-	 * @return void
-	 */
 	public function deleting(ContentField $contentField)
 	{
 		if ( $contentField::$FIRE_EVENTS ) {
@@ -149,6 +143,7 @@ class ContentFieldObserver
 			});
 		}
 	}
+
 
 	public function deleted(ContentField $contentField)
 	{
@@ -162,6 +157,7 @@ class ContentFieldObserver
 	private function _saveJsonModel( $contentType )
 	{
 		$filename = 'models/' . $contentType->content_type . '.json';
+
 		if ( !Storage::disk('local')->exists( $filename ) ) {
 			Storage::disk('local')->put( $filename, '' );
 		}
@@ -202,6 +198,7 @@ class ContentFieldObserver
 					$rel[ $f->name ] = $f->linked_content_type_id;
 				}
 			}
+
 			Storage::disk('local')->put( $filename, json_encode( array(
 				'relations'       => $rel,
 				'fields'          => $obj,
@@ -209,4 +206,5 @@ class ContentFieldObserver
 			)));
 		}
 	}
+
 }

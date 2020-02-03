@@ -11,12 +11,7 @@ use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
 
 class LoginController extends Controller
 {
-	/**
-	 * Handle a login request to the application.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
+
 	public function login(Request $request)
 	{
 		$this->messages['exist'] = 'Non esiste nessun utente con questa :attribute.';
@@ -45,13 +40,15 @@ class LoginController extends Controller
 		];
 
 
-
 		if ( !Auth::attempt($credentials) ) {
 			return $this->_sendJsonError( 'La password non è corretta per questo account o l\'utente ha effettuato troppi tentativi.', 401 );
 		}
 
 		$user = Auth::user();
 		$user->load('profile');
+		$user->load('avatar');
+		$user->load('role');
+		$user->role->load('capabilities');
 
 		$token = $user->createToken('Factotum')->accessToken;
 
@@ -63,19 +60,9 @@ class LoginController extends Controller
 	}
 
 
-
-	/**
-	 * Get the Closure which is used to build the password reset notification.
-	 *
-	 * @return \Closure
-	 */
 	protected function resetNotifier() { }
 
-	/**
-	 * Get the broker to be used during password reset.
-	 *
-	 * @return \Illuminate\Contracts\Auth\PasswordBroker
-	 */
+
 	public function _broker()
 	{
 		return Password::broker();

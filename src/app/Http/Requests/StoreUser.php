@@ -51,24 +51,17 @@ class StoreUser extends CustomFormRequest
 	 */
 	public function rules()
 	{
-		$rules = array(
+		$rules = [
 			'first_name'     => 'required|max:64',
 			'last_name'      => 'required|max:64',
 			'role_id'        => 'required',
 			'email'          => 'required|email|max:128|unique:users,email',
-		);
+		];
 
 		$data = $this->all();
 
-		if ( isset($data['avatar']) && $data['avatar'] != ''
-			&& request()->hasFile('avatar') && request()->file('avatar')->isValid() ) {
-
-			$rules['avatar'] = 'required|image';
-
-			if ( substr( $data['avatar'], 0, 10) == 'data:image' ) {
-				$rules['avatar'] = 'required';
-			}
-
+		if ( isset($data['avatar']) && $data['avatar'] != '' ) {
+			$rules['avatar'] = 'required';
 		}
 
 

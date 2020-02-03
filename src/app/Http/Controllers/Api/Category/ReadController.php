@@ -10,6 +10,7 @@ use Kaleidoscope\Factotum\ContentType;
 class ReadController extends Controller
 {
 
+
 	public function getList( Request $request, $contentTypeId)
 	{
 
@@ -21,6 +22,7 @@ class ReadController extends Controller
 
 	}
 
+
 	public function getListGrouped( Request $request, $contentTypeId)
 	{
 
@@ -29,6 +31,7 @@ class ReadController extends Controller
 		return response()->json( [ 'result' => 'ok', 'categories' => $categories ]);
 
 	}
+
 
 	public function getListContentType()
 	{
@@ -43,6 +46,7 @@ class ReadController extends Controller
 		return response()->json( [ 'result' => 'ok', 'contentTypes' => $contentTypes ]);
 	}
 
+
     public function getDetail(Request $request, $id)
     {
         $category = Category::find($id);
@@ -54,11 +58,6 @@ class ReadController extends Controller
         return $this->_sendJsonError('Categoria non trovata.');
     }
 
-	/*public function getContentTypeCategories(Request $request)
-	{
-		$contentTypeID = $request->input('content_type_id');
-		return view('factotum::admin.category.get_content_type_categories')
-					->with('categoriesTree', Category::treeChildsArray( $contentTypeID, null, $this->currentLanguage ));
-	}*/
+
 }
 

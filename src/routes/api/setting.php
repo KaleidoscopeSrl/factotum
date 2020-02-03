@@ -12,6 +12,10 @@ Route::group([
 	'namespace'  => 'Setting'
 ], function () {
 
-	Route::post('/save-homepage-languages',       'Controller@saveHomepageByLanguage');
+
+	Route::group(['middleware' => 'can:manage-settings,Kaleidoscope\Factotum\Role'], function() {
+		Route::post('/save-homepage-languages',       'Controller@saveHomepageByLanguage');
+	});
+
 
 });

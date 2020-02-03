@@ -14,61 +14,63 @@ class ContentFieldPolicy
     use HandlesAuthorization;
 
 
-    /**
-     * Determine whether the user can view the contentField.
-     *
-     * @param  \Factotum\User  $user
-     * @param  \Factotum\ContentField  $contentField
-     * @return mixed
-     */
-    public function view(User $user)
-    {
-		return ( $user->role->backend_access && $user->role->manage_content_types ? true : false );
-    }
-
-    /**
-     * Determine whether the user can create contentFields.
-     *
-     * @param  \Factotum\User  $user
-     * @return mixed
-     */
-    public function create(User $user, $contentTypeID)
-    {
+	private function _checkCapabilityByContentType($user, $contentTypeID)
+	{
 		$capability = Capability::where('role_id', $user->role_id)
 								->where('content_type_id', $contentTypeID)
 								->first();
-		return ( $capability && $capability->configure ? true : false );
+
+		if ( $capability ) {
+			return ( $user->role->backend_access && $capability && $capability->configure ? true : false );
+		}
+
+		abort(404, 'Content Field not found');
+	}
+
+
+	private function _checkCapabilityByContentField( $user, $contentID )
+	{
+		$contentField = ContentField::find($contentID);
+
+		if ( $contentField ) {
+			$capability = Capability::where('role_id', $user->role_id)
+										->where('content_type_id', $contentField->content_type_id)
+										->first();
+			return ( $user->role->backend_access && $capability && $capability->configure ? true : false );
+		}
+
+		abort(404, 'Content Field not found');
+	}
+
+
+    public function create( User $user )
+    {
+		$contentTypeID = request()->input('content_type_id');
+		return $this->_checkCapabilityByContentType( $user, $contentTypeID );
     }
 
-    /**
-     * Determine whether the user can update the contentField.
-     *
-     * @param  \Factotum\User  $user
-     * @param  \Factotum\ContentField  $contentField
-     * @return mixed
-     */
-    public function update(User $user, $contentTypeID)
+
+	public function read( User $user, $contentTypeID )
+	{
+		return $this->_checkCapabilityByContentType( $user, $contentTypeID );
+	}
+
+
+	public function readDetail( User $user, $contentFieldID )
+	{
+		return $this->_checkCapabilityByContentField( $user, $contentFieldID );
+	}
+
+
+    public function update( User $user, $contentFieldID )
     {
-		$capability = Capability::where('role_id', $user->role_id)
-								 ->where('content_type_id', $contentTypeID)
-								 ->first();
-		return ( $capability && $capability->configure ? true : false );
+		return $this->_checkCapabilityByContentField( $user, $contentFieldID );
     }
 
-    /**
-     * Determine whether the user can delete the contentField.
-     *
-     * @param  \Factotum\User  $user
-     * @param  \Factotum\ContentField  $contentField
-     * @return mixed
-     */
-    public function delete(User $user, $contentFieldId)
+
+    public function delete( User $user, $contentFieldID )
     {
-		$contentField = ContentField::find( $contentFieldId );
-		$capability = Capability::where('role_id', $user->role_id)
-								->where('content_type_id', $contentField->content_type_id)
-								->first();
-		return ( $capability && $capability->configure ? true : false );
+		return $this->_checkCapabilityByContentField( $user, $contentFieldID );
     }
 
 }

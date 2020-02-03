@@ -8,7 +8,6 @@ return [
 	'access_backend'        => 'Access Backend',
 	'manage_users'          => 'Manage Users',
 	'manage_media'          => 'Manage Media',
-	'manage_categories'     => 'Manage Categories',
 	'manage_settings'       => 'Manage Settings',
 	'role'                  => 'Role',
 	'actions'               => 'Actions',

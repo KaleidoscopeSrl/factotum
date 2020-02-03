@@ -69,12 +69,13 @@ return [
 	],
 
 	'thumb_size' => [
-		'width'  => 200,
-		'height' => 200
+		'width'  => 100,
+		'height' => 100
 	],
 
 
 	'main_site_language' => 'en-GB',
+
 	'site_languages' => [
 		'en-GB' => 'English',
 		'it-IT' => 'Italiano'

@@ -22,9 +22,9 @@ class DeleteRole extends CustomFormRequest
 	 */
 	public function rules()
 	{
-		$rules = array(
+		$rules = [
 			'reassigned_role' => 'required',
-		);
+		];
 
 		return $rules;
 	}

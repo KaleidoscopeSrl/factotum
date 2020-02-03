@@ -4,31 +4,34 @@ namespace Kaleidoscope\Factotum;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Image;
 
 use Kaleidoscope\Factotum\Library\Utility;
 
 class Media extends Model
 {
+
 	protected $fillable = [
-		'width', 'height', 'size', 'filename',
-		'caption', 'alt_text', 'description', 'user_id',
+		'user_id',
+		'width', 'height',
+		'size',
+		'filename',
+		'thumb',
+		'caption', 'alt_text', 'description',
 		'mime_type'
 	];
 
-	//Add extra attribute
-	protected $attributes = ['thumb'];
+	protected $appends = ['icon'];
 
-	//Make it available in the json response
-	protected $appends = ['thumb'];
 
 	public static function filenameAvailable($filename, $origFilename = null, $counter = '')
 	{
-
 		$filename = str_replace('.jpeg', '.jpg', $filename);
 
 		$extension = pathinfo($filename, PATHINFO_EXTENSION);
-		$filename = str_slug( substr( $filename, 0, strlen('.' . $extension) * -1 ) ) . '.' . $extension;
+		$filename = Str::slug( substr( $filename, 0, strlen('.' . $extension) * -1 ) ) . '.' . $extension;
 
 		$mediaExist = Media::where('filename', $filename)->get();
 
@@ -45,8 +48,10 @@ class Media extends Model
 			$filename = substr( $origFilename, 0, strlen('.' . $extension) * -1 ) . '-' . $counter . '.' . $extension;
 			return self::filenameAvailable($filename, $origFilename, $counter);
 		}
+
 		return $filename;
 	}
+
 
 	public static function checkImageSizesNotExist( $field, $media )
 	{
@@ -69,6 +74,7 @@ class Media extends Model
 		return $sizesNotExist;
 	}
 
+
 	public static function retrieve( $mediaId, $fieldModel )
 	{
 		if ( !is_array($mediaId) ) {
@@ -82,7 +88,7 @@ class Media extends Model
 					$ext = substr( $media['filename'], strlen($media['filename'])-3, 3 );
 
 					if ( count($fieldModel->sizes) > 0 ) {
-						$tmp = array();
+						$tmp = [];
 						foreach ( $fieldModel->sizes as $size ) {
 							$tmp[] = $mediaUrl . $size . '.' . $ext ;
 						}
@@ -97,107 +103,126 @@ class Media extends Model
 		return null;
 	}
 
+
 	// Dato un Campo e un MediaId, eseguo la funzione saveImage per quell'immagine
 	public static function saveImageById( $field, $mediaId )
 	{
 		$media = Media::find( $mediaId );
-		if ( $media ) {
-			return self::saveImage( $field, $media->url );
-		} else {
-			return null;
-		}
+		return ( $media ? self::saveImage( $field, $media ) : null );
 	}
 
-	// Dato un Campo e un MediaUrl, eseguo tutte le operazioni creazioni crop/resize/fit per quell'immagine
-	public static function saveImage( $field, $filename )
-	{
-		if ( $field->image_bw ) {
-			$origImage = Image::make( $filename )->greyscale();
-		} else {
-			$origImage = Image::make( $filename );
-		}
 
+	// Dato un Campo e un MediaUrl, eseguo tutte le operazioni creazioni crop/resize/fit per quell'immagine
+	public static function saveImage( $field, $media )
+	{
+		$startingFile = storage_path( 'app/public/media/' . $media->id . '/' . $media->filename );
+		$origImage    = ( $field->image_bw ? Image::make( $startingFile )->greyscale() : Image::make( $startingFile ) );
 		$origFilename = $origImage->dirname . '/' . $origImage->filename;
 		$ext          = $origImage->extension;
-
-		$operation = $field->image_operation;
+		$operation    = $field->image_operation;
 
 		if ( $field->resizes ) {
 
 			foreach ( json_decode($field->resizes,true) as $resize ) {
+
 				$width  = $resize['w'];
 				$height = $resize['h'];
 
 				$newFilename = $origFilename . '-' . $width .'x' . $height . '.' . $ext;
-				$image = Image::make( storage_path( 'app/' . $filename ) );
+				$image       = Image::make( storage_path( 'app/public/media/' . $media->id . '/' . $media->filename ) );
 
-				if ($operation == 'resize') {
-					$image->resize( $width, null, function ($constraint) {
-						$constraint->aspectRatio();
-					});
-				} else if ($operation == 'crop') {
-					$image->crop( $width, $height );
-				} else if ($operation == 'fit') {
-					$image->fit( $width, $height, function ($constraint) {
-						$constraint->upsize();
-					});
+				switch ( $operation ) {
+
+					case 'resize':
+						$image->resize( $width, null, function ($constraint) { $constraint->aspectRatio(); });
+						break;
+
+					case 'crop':
+						$image->crop( $width, $height );
+						break;
+
+					case 'fit':
+						$image->fit( $width, $height, function ($constraint) { $constraint->upsize(); });
+						break;
+
 				}
+
 				$image->save( $newFilename, 100 );
 				$image->destroy();
 			}
+
 		}
 
-		$thumbSize = config('factotum.thumb_size');
+		$thumbSize     = config('factotum.thumb_size');
 		$thumbFilename = $origFilename . '-thumb.' . $ext;
-		$origImage->fit( $thumbSize['width'], $thumbSize['height'], function ($constraint) {
-			$constraint->upsize();
-		});
 
+		$origImage->fit( $thumbSize['width'], $thumbSize['height'], function ($constraint) { $constraint->upsize(); });
 		$origImage->save( $thumbFilename, 90 );
 		$origImage->destroy();
 
 		return $origImage;
 	}
 
-	public static function generateThumb( $filename ) {
 
-		if ( file_exists( storage_path( 'app/' . $filename ) ) ) {
+	public static function generateThumb( $media )
+	{
+		if ( File::exists( storage_path( 'app/public/media/' . $media->id . '/' . $media->filename ) ) ) {
 
-			$image = Image::make( $filename );
+			$image = Image::make( storage_path( 'app/public/media/' . $media->id . '/' . $media->filename ) );
 
 			// Creo la thumb se è un immagine
 			if ( $image && strpos( $image->mime, 'image/') !== false &&
-				strpos( $image->mime, 'photoshop') === false ) {
+							strpos( $image->mime, 'photoshop') === false ) {
 
-				$origFilename = $image->dirname . '/' . $image->filename;
-				$ext          = $image->extension;
+				$origFilename  = $image->dirname . '/' . $image->filename;
+				$ext           = $image->extension;
 				$thumbFilename = $origFilename . '-thumb.' .  $ext;
 
 				$thumbSize = config('factotum.thumb_size');
+
 				$image->fit( $thumbSize['width'], $thumbSize['height'], function ($constraint) {
 					$constraint->upsize();
 				});
 
 				$image->save( $thumbFilename, 90 );
 				$image->destroy();
+
+				$media->thumb = 'storage/media/' . $media->id . '/' . $image->filename . '.' . $ext;
+				$media->save();
 			}
 
 		}
 
+		return $media;
 	}
 
-	public function getThumbAttribute()
+
+
+	// MUTATORS
+
+	public function getUrlAttribute($value)
 	{
-		$dirname = 'media/' . $this->id;
-		$origFilename  = $dirname . '/' . pathinfo( $this->filename, PATHINFO_FILENAME );
-		$ext           = pathinfo( $this->filename, PATHINFO_EXTENSION );
-		$thumbFilename = $origFilename . '-thumb.' .  $ext;
-		return url($thumbFilename);
+		return ( $value ? url( $value ) : null );
 	}
 
-//	public function getUrlAttribute($value)
-//	{
-//		return ( $value ? url( $value ) : null );
-//	}
+	public function getThumbAttribute($value)
+	{
+		return ( $value ? url( $value ) : null );
+	}
+
+	public function getCreatedAtAttribute($value)
+	{
+		return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->timestamp * 1000;
+	}
+
+	public function getUpdatedAtAttribute($value)
+	{
+		return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->timestamp * 1000;
+	}
+
+	public function getIconAttribute($value) {
+		$tmp = explode( '/', $this->mime_type );
+		return $tmp[1];
+	}
 
 }

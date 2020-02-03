@@ -15,6 +15,7 @@ class ReadController extends Controller
 
         $users = User::with('profile')
 						->with('role')
+						->with('avatar')
 						->orderBy('id','DESC')
 						->skip($offset)
 						->take($limit)
@@ -29,11 +30,11 @@ class ReadController extends Controller
         $user = User::find($id);
 
         if ( $user ) {
-            $user->load('profile');
+            $user->load([ 'profile', 'avatar' ]);
             return response()->json( [ 'result' => 'ok', 'user' => $user ]);
         }
 
-        return $this->_sendJsonError('Utente non trovato.');
+        return $this->_sendJsonError( 'User not found', 404 );
     }
 
 }

@@ -12,19 +12,27 @@ use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
 
+
 class FrontController extends Controller
 {
+
 	protected $currentLanguage;
 	protected $uri;
 	protected $uriParts;
 	protected $origUriParts;
 	protected $pageContentType;
 
+
 	public function __construct()
 	{
-		$this->pageContentType = ContentType::whereContentType('page')->first()->toArray();
+		$this->pageContentType = ContentType::where( 'content_type', 'page')->first();
+
+		if ( $this->pageContentType ) {
+			$this->pageContentType = $this->pageContentType->toArray();
+		}
 
 		$this->middleware(function ($request, $next) {
+			// TODO: rilevare la lingua dall URI
 			$this->currentLanguage = $request->session()->get('currentLanguage');
 
 			View::share( 'availableLanguages', config('factotum.site_languages') );
@@ -41,6 +49,7 @@ class FrontController extends Controller
 			if ( strlen($checkLang) == 5 &&
 				in_array( $checkLang, array_keys( config('factotum.site_languages') ) )  ) {
 				$this->currentLanguage = $checkLang;
+				// TODO: non gestire con la sessione la lingua
 				$request->session()->put('currentLanguage', $checkLang);
 				App::setLocale( $checkLang );
 			} else {
@@ -50,10 +59,10 @@ class FrontController extends Controller
 			View::share( 'currentLanguage', $this->currentLanguage );
 
 			$menu = Content::with('childrenRecursive')
-							->whereParentId(null)
-							->whereStatus('publish')
-							->whereLang($this->currentLanguage)
-							->whereShowInMenu( 1 )
+							->whereNull( 'parent_id' )
+							->where( 'status', 'publish' )
+							->where( 'lang', $this->currentLanguage )
+							->where( 'show_in_menu', 1 )
 							->orderBy('order_no', 'ASC')
 							->get();
 
@@ -62,6 +71,7 @@ class FrontController extends Controller
 			return $next($request);
 		});
 	}
+
 
 	protected function _getContentByURI($uri)
 	{
@@ -105,12 +115,14 @@ class FrontController extends Controller
 		}
 	}
 
+
 	protected function _getCategoryByURIandContentType($uri, $contentTypeID)
 	{
 		return Category::whereName($uri)
 						->whereContentTypeId($contentTypeID)
 						->first();
 	}
+
 
 	protected function _switchContent( $content, $category = null )
 	{
@@ -125,10 +137,11 @@ class FrontController extends Controller
 					switch ($content->page_operation) {
 
 						case 'show_content':
-							return array(   'view' => 'frontend.' . $content->page_template,
-											'data' => array(
-												'content' => $content
-											));
+							return [    'view' => 'frontend.' . $content->page_template,
+										'data' => [
+											'content' => $content
+										]
+							];
 							break;
 
 						case 'content_list':
@@ -148,45 +161,45 @@ class FrontController extends Controller
 							}
 							$contentList = $contentSearch->search();
 
-							return array( 'view' => 'frontend.' . $content->page_template,
-										  'data' => array(
-												'content'     => $content,
-												'contentList' => $contentList,
-											  	'currentCategory' => ( isset($category) ? $category : null )
-										  ));
+							return [  'view' => 'frontend.' . $content->page_template,
+									  'data' => [
+											'content'     => $content,
+											'contentList' => $contentList,
+											'currentCategory' => ( isset($category) ? $category : null )
+									  ] ];
 							break;
 
 						case 'link':
-							return array(
-								'data'   => array( 'content' => $content ),
+							return [
+								'data'   => [ 'content' => $content ],
 								'link'   => $content->link
-							);
+							];
 							break;
 
 						case 'action':
-							return array(
-											'data'   => array( 'content' => $content ),
+							return [
+											'data'   => [ 'content' => $content ],
 											'action' => $content->action,
 											'view'   => 'frontend.' . $content->page_template,
-										);
+								   ];
 							break;
 					}
 
 				} else {
-					return array( 'view' => 'frontend.' . $contentType->content_type,
-								  'data' => array(
-									  'content' => $content
-								  ));
+					return [ 'view' => 'frontend.' . $contentType->content_type,
+							 'data' => [ 'content' => $content ]
+					];
 				}
 
 			} else {
-				return array( 'view' => 'errors.404' );
+				return [ 'view' => 'errors.404' ];
 			}
 
 		} else {
-			return array( 'view' => 'errors.404' );
+			return [ 'view' => 'errors.404' ];
 		}
 	}
+
 
 	// Function for parsing URIs just for categories
 	protected function reparseUri()
@@ -206,6 +219,7 @@ class FrontController extends Controller
 		}
 	}
 
+
 	protected function _getHomepage( $lang )
 	{
 		$contentSearch = new ContentSearch( $this->pageContentType );
@@ -215,6 +229,7 @@ class FrontController extends Controller
 								  ->search()[0];
 		return $this->_switchContent( $content );
 	}
+
 
 	protected function extractContentOnIndex( $uri = '' )
 	{
@@ -231,22 +246,32 @@ class FrontController extends Controller
 			}
 
 			if ( !isset($data) ) {
+
 				$content = $this->_getContentByURI( $uri );
 
 				// Page or content exist
 				if ( $content ) {
+
 					$data = $this->_switchContent( $content );
+
 				} else {
+
 					// Check if is a series of categories
 					$data = $this->reparseUri();
+
 				}
+
 			}
 
 		} else {
+
 			$data = $this->_getHomepage( config('factotum.main_site_language') );
+
 		}
+
 		return $data;
 	}
+
 
 	public function index($uri = '', Request $request)
 	{
@@ -270,4 +295,5 @@ class FrontController extends Controller
 
 		}
 	}
+
 }

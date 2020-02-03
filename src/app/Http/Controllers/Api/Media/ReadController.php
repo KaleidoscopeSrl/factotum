@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Media;
 
 use Illuminate\Http\Request;
+use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Media;
 
 class ReadController extends Controller
@@ -10,43 +11,66 @@ class ReadController extends Controller
 
 	public function getList( Request $request )
 	{
+		$limit     = $request->input('limit');
+		$offset    = $request->input('offset');
+		$sort      = $request->input('sort');
+		$direction = $request->input('direction');
+		$rules     = $request->input('rules');
 
-		$query = Media::orderBy('id','DESC');
- //       $pagination = Media::paginate(25);
+		if ( !$sort ) {
+			$sort = 'id';
+		}
 
-		if ( $request->input('filter') ) {
+		if ( !$direction ) {
+			$direction = 'DESC';
+		}
 
-			$filters = $request->input('filter');
+		$query = Media::orderBy($sort, $direction);
 
-			$query->where( 'filename', null );
+		if ( $rules ) {
 
-			if ( is_array($filters) ) {
-				foreach ( $filters as $ext ) {
-					if ( $ext === '*' ) {
-						$ext = '%';
-					}
-					$query->orWhereRaw( "UCASE(filename) like '%" . trim($ext) . "'" );
-				}
-			} else {
-				foreach ( explode(',', $filters) as $ext ) {
-					if ( $ext === '*' ) {
-						$ext = '%';
-					}
-					$query->orWhereRaw( "UCASE(filename) like '%" . trim($ext) . "'" );
+			if ( isset($rules['max_file_size']) && $rules['max_file_size'] ) {
+				$query->where( 'size', '<=', $rules['max_file_size'] * 1024 * 1024 );
+			}
+
+			if ( isset($rules['min_width_size']) && $rules['min_width_size'] ) {
+				$query->where( 'width', '>=', $rules['min_width_size'] );
+			}
+
+
+			if ( isset($rules['min_height_size']) && $rules['min_height_size'] ) {
+				$query->where( 'height', '>=', $rules['min_height_size'] );
+			}
+
+			if ( isset($rules['allowed_types']) && count($rules['allowed_types']) > 0 ) {
+				if ( !in_array( '*', $rules['allowed_types'] ) ) {
+					$query->where(function($q) use ($rules) {
+						foreach ( $rules['allowed_types'] as $ext ) {
+							$ext = strtolower( trim($ext) );
+							$q->orWhereRaw( "LCASE(filename) like '%" . $ext . "'" );
+						}
+					});
 				}
 			}
 
 		}
 
-		$mediaList = $query->get();
+		$query->skip($offset)
+				->take($limit);
 
-
-		foreach ( $mediaList as $media ){
-			$media->url = ( $media->url ? url( $media->url ) : null );
+		if ( $request->input('filter') ) {
+			$query->whereRaw( 'LCASE(filename) like "%' . $request->input('filter') . '%"' );
 		}
 
-        return response()->json( [ 'result' => 'ok', 'media' => $mediaList ]);
+		// echo Utility::getSqlQuery($query);die;
+		$mediaList = $query->get();
+
+        return response()->json( [
+        	'media' => $mediaList,
+			'total' => Media::count()
+		]);
 	}
+
 
     public function getDetail(Request $request, $id)
     {
@@ -58,7 +82,7 @@ class ReadController extends Controller
             return response()->json( [ 'result' => 'ok', 'media' => $media ]);
         }
 
-        return $this->_sendJsonError('Media non trovata.');
+        return $this->_sendJsonError( 'Media not found', 404 );
     }
 
 
@@ -97,7 +121,6 @@ class ReadController extends Controller
 		}
 
 		return response()->json( $media );
-
 	}
 
 }

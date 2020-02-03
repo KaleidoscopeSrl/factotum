@@ -11,12 +11,12 @@ class MediaPolicy
 {
     use HandlesAuthorization;
 
-	public function view(User $user)
+	public function create(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_media ? true : false );
 	}
 
-	public function create(User $user)
+	public function read(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_media ? true : false );
 	}
@@ -26,13 +26,9 @@ class MediaPolicy
 		return ( $user->role->backend_access && $user->role->manage_media ? true : false );
 	}
 
-	public function delete(User $user, $filename)
+	public function delete(User $user)
 	{
-		if ( $user->role->backend_access && $user->role->manage_media ) {
-			$media = Media::whereFilename($filename)->whereUserId($user->id)->get();
-			return ( count($media) > 0 ? true : false );
-		}
-		return false;
+		return ( $user->role->backend_access && $user->role->manage_media ? true : false );
 	}
 
 }

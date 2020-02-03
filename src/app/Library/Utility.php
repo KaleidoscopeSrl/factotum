@@ -1,16 +1,31 @@
 <?php
 namespace Kaleidoscope\Factotum\Library;
 
+use Illuminate\Support\Str;
 use Image;
 
 class Utility
 {
+
 	public static function debug($x)
 	{
 		echo '<pre>';
 		print_r($x);
 		echo '</pre>';
 	}
+
+
+	public static function getSqlQuery($query)
+	{
+		$params = array_map(function ($item) {
+			return "'{$item}'";
+		}, $query->getBindings());
+
+		$query = Str::replaceArray('?', $params, $query->toSql());
+
+		return $query;
+	}
+
 
 	public static function convertOptionsArrayToText($options)
 	{
@@ -24,10 +39,10 @@ class Utility
 
 	public static function convertOptionsTextToAssocArray($options)
 	{
-		$result = array();
+		$result = [];
 		$options = explode(';', $options);
 		foreach ($options as $opt) {
-			if ( $opt && str_contains($opt,':') ) {
+			if ( $opt && Str::contains($opt, ':') ) {
 				list($value, $label) = explode(':', $opt);
 				$result[$value] = $label;
 			}
@@ -92,7 +107,7 @@ class Utility
 		if ($size > 0) {
 			$size = (int) $size;
 			$base = log($size) / log(1024);
-			$suffixes = array(' bytes', ' KB', ' MB', ' GB', ' TB');
+			$suffixes = [ ' bytes', ' KB', ' MB', ' GB', ' TB' ];
 
 			return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
 		} else {
@@ -100,15 +115,4 @@ class Utility
 		}
 	}
 
-	public static function saveAvatar( $path )
-	{
-		$filename = array_reverse( explode('/', $path) )[0];
-		$image = Image::make( $path );
-		$image->fit( 100, 100, function ($constraint) {
-			$constraint->upsize();
-		});
-		$image->save( storage_path('app/public/avatars/') . $filename, 90 );
-
-		return $filename;
-	}
 }

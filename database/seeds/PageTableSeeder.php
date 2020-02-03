@@ -11,11 +11,7 @@ use Kaleidoscope\Factotum\Content;
 
 class PageTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+
     public function run()
     {
 		$adminRole = Role::where('role', 'admin')->first();
@@ -24,7 +20,8 @@ class PageTableSeeder extends Seeder
     	// Create content type page
 		$pageContentType = new ContentType;
 		$pageContentType->content_type = 'page';
-		$pageContentType->editable = false;
+		$pageContentType->editable     = false;
+		$pageContentType->icon         = 'content';
 		$pageContentType->save();
 
 		$capability = new Capability;
@@ -39,21 +36,18 @@ class PageTableSeeder extends Seeder
 		// Page Templates
 		$contentField = new ContentField;
 		$contentField->content_type_id = $pageContentType->id;
-		$contentField->name  = 'page_template';
-		$contentField->label = 'Page Template';
-		$contentField->type  = 'select';
-		$templates = array(
-			'basic'         => 'Basic Page Template',
-			'content_list'  => 'Content List Page Template',
-			'ajax'          => 'Ajax Page Template',
-			'contact_us'    => 'Contact Us Page Template',
-			'thankyou_page' => 'Thank You Page Template'
-		);
-		$tmp = array();
-		foreach ($templates as $value => $label) {
-			$tmp[] = $value . ':' . $label;
-		}
-		$contentField->options = join(';', $tmp);
+		$contentField->name    = 'page_template';
+		$contentField->label   = 'Page Template';
+		$contentField->type    = 'select';
+		$templates = [
+			[ 'value' => 'basic',        'label' => 'Basic Page Template' ],
+			[ 'value' => 'content_list',  'label' => 'Content List Page Template' ],
+			[ 'value' => 'ajax',          'label' => 'Ajax Page Template' ],
+			[ 'value' => 'contact_us',    'label' => 'Contact Us Page Template' ],
+			[ 'value' => 'thankyou_page', 'label' => 'Thank You Page Template' ],
+		];
+
+		$contentField->options = json_encode( $templates );
 		$contentField->save();
 
 
@@ -64,18 +58,15 @@ class PageTableSeeder extends Seeder
 		$contentField->label = 'Page Operation';
 		$contentField->type  = 'select';
 
-		$operations = array(
-			'show_content'   => 'Show Page Content',
-			'single_content' => 'Show Related Content',
-			'content_list'   => 'Show Content List',
-			'link'           => 'Link',
-			'action'         => 'Action',
-		);
-		$tmp = array();
-		foreach ($operations as $value => $label) {
-			$tmp[] = $value . ':' . $label;
-		}
-		$contentField->options = join(';', $tmp);
+		$operations = [
+			[ 'value' => 'show_content',    'label' => 'Show Page Content' ],
+			[ 'value' => 'single_content',  'label' => 'Show Related Content' ],
+			[ 'value' => 'content_list',    'label' => 'Show Content List' ],
+			[ 'value' => 'link',            'label' => 'Link' ],
+			[ 'value' => 'action',          'label' => 'Action' ],
+		];
+
+		$contentField->options = json_encode( $operations );
 		$contentField->save();
 
 
@@ -113,21 +104,18 @@ class PageTableSeeder extends Seeder
 		$contentField->label = 'Content List Order';
 		$contentField->type  = 'select';
 
-		$operations = array(
-			'contents.id-asc'              => 'BY ID ASC',
-			'contents.id-desc'             => 'BY ID DESC',
-			'contents.created_at-asc'      => 'BY DATA CREATION ASC',
-			'contents.created_at-desc'     => 'BY DATA CREATION DESC',
-			'contents.order_no-asc'        => 'BY ORDER No. ASC',
-			'contents.order_no-desc'       => 'BY ORDER No. DESC',
-			'contents.title-asc'           => 'BY TITLE ASC',
-			'contents.title-desc'          => 'BY TITLE DESC',
-		);
-		$tmp = array();
-		foreach ($operations as $value => $label) {
-			$tmp[] = $value . ':' . $label;
-		}
-		$contentField->options = join(';', $tmp);
+		$operations = [
+			[ 'value' => 'contents.id-asc',            'label' => 'BY ID ASC' ],
+			[ 'value' => 'contents.id-desc',           'label' => 'BY ID DESC' ],
+			[ 'value' => 'contents.created_at-asc',    'label' => 'BY DATA CREATION ASC' ],
+			[ 'value' => 'contents.created_at-desc',   'label' => 'BY DATA CREATION DESC' ],
+			[ 'value' => 'contents.order_no-asc',      'label' => 'BY ORDER No. ASC' ],
+			[ 'value' => 'contents.order_no-desc',     'label' => 'BY ORDER No. DESC' ],
+			[ 'value' => 'contents.title-asc',         'label' => 'BY TITLE ASC' ],
+			[ 'value' => 'contents.title-desc',        'label' => 'BY TITLE DESC' ],
+		];
+
+		$contentField->options = json_encode( $operations );
 		$contentField->save();
 
 
@@ -155,18 +143,19 @@ class PageTableSeeder extends Seeder
 		$content->is_home         = true;
 		$content->save();
 
-		$additionalValues = array(
+		$additionalValues = [
 			'content_id'       => $content->id,
 			'content_type_id'  => $pageContentType->id,
 			'page_template'    => 'home',
 			'page_operation'   => 'show_content'
-		);
+		];
 		DB::table( $pageContentType->content_type )->insert( $additionalValues );
 
 		// Create content type news
-		$contentType = new ContentType;
+		$contentType               = new ContentType;
 		$contentType->content_type = 'news';
-		$contentType->editable = false;
+		$contentType->editable     = true;
+		$contentType->icon         = 'news';
 		$contentType->save();
 
 		// Assign news capability to admin
@@ -228,7 +217,7 @@ class PageTableSeeder extends Seeder
 		$content->lang            = 'en-GB';
 		$content->save();
 
-		$additionalValues = array(
+		$additionalValues = [
 			'content_id'              => $content->id,
 			'content_type_id'         => $pageContentType->id,
 			'page_template'           => 'content_list',
@@ -236,7 +225,8 @@ class PageTableSeeder extends Seeder
 			'content_type_to_list'    => $contentType->id,
 			'content_list_pagination' => 10,
 			'content_list_order'      => 'created_at-desc'
-		);
+		];
 		DB::table( $pageContentType->content_type )->insert( $additionalValues );
     }
+
 }

@@ -41,7 +41,7 @@ class ContentObserver
 	{
 		$contentType = ContentType::where( 'content_type', '=', 'page' )->first();
 
-		if ( $content->content_type_id == $contentType->id ) {
+		if ( $contentType && $content->content_type_id == $contentType->id ) {
 
 			$lang = ( $content->lang != config('factotum.main_site_language') ? $content->lang : '' );
 

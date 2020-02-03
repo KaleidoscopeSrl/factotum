@@ -4,7 +4,7 @@
 		@include('frontend.layouts.metatags', array('content' => ( isset($content) ? $content : null)) )
 
 		<!-- Styles -->
-		<link href="/assets/css/frontend/main.css" rel="stylesheet">
+		<link href="/assets/css/main.css" rel="stylesheet">
 
 		<!-- Scripts -->
 		<script>

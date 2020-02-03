@@ -472,7 +472,7 @@ class PrintFieldHelper {
 			$required = ( !self::$default ? 'required' : '' );
 		}
 
-		$tmpIDs = array();
+		$tmpIDs = [];
 
 		if ( isset(self::$default) && is_array(self::$default) && count(self::$default) > 0 ) {
 			foreach (self::$default as $image) {
@@ -505,7 +505,7 @@ class PrintFieldHelper {
 	{
 		self::$default = Utility::convertOptionsTextToArray( self::$default );
 
-		$tmp = array();
+		$tmp    = [];
 		$tmpIDs = '';
 
 		if ( isset(self::$default) && count(self::$default) > 0 ) {

@@ -9,12 +9,12 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-	public function view(User $user)
+	public function create(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_users ? true : false );
 	}
 
-	public function create(User $user)
+	public function read(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_users ? true : false );
 	}
@@ -30,4 +30,5 @@ class UserPolicy
 		$userOnEdit = User::find($userID);
 		return ( $userOnEdit->editable || !$userOnEdit->editable && auth()->user()->isAdmin() ? true : false );
 	}
+
 }

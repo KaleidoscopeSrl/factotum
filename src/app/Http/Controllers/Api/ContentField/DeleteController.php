@@ -11,7 +11,6 @@ class DeleteController extends Controller
 
     public function remove(Request $request, $id)
     {
-
         $contentField = ContentField::find( $id );
 
         if ( $contentField ) {
@@ -24,8 +23,7 @@ class DeleteController extends Controller
             return $this->_sendJsonError( 'Errore in fase di cancellazione.' );
         }
 
-        return $this->_sendJsonError( 'Campo non trovato.' );
-
+        return $this->_sendJsonError( 'Custom Field not found.', 404 );
     }
 
 }

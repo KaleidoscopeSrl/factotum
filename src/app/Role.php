@@ -12,7 +12,6 @@ class Role extends Model
 		'backend_access',
 		'manage_content_types',
 		'manage_users',
-		'manage_categories',
 		'manage_media',
 		'manage_settings',
 	];

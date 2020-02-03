@@ -7,37 +7,106 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\ContentCategory;
+use Kaleidoscope\Factotum\CategoryContent;
 use Kaleidoscope\Factotum\ContentField;
 use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Media;
 use stdClass;
 
 class ReadController extends Controller
 {
-	public function getList(Request $request)
-	{
-		$contentTypeId = $request->input('contentTypeId');
 
+
+	public function getList( Request $request, $contentTypeId )
+	{
+		$lang      = $request->input('lang');
+		$limit     = $request->input('limit');
+		$offset    = $request->input('offset');
+		$sort      = $request->input('sort');
+		$direction = $request->input('direction');
 		$contentId = $request->input('contentId');
 
-		$query = Content::where('content_type_id', $contentTypeId);
+		if ( !$sort ) {
+			$sort = 'id';
+		}
+
+		if ( !$direction ) {
+			$direction = 'DESC';
+		}
+
+		$query = Content::with('user.profile')
+						->with('categories')
+						->where('content_type_id', $contentTypeId)
+						->orderBy($sort, $direction);
+
+		if ( $lang ) {
+			$query->where( 'lang', $lang );
+		}
+
+		if ( $limit ) {
+			$query->take($limit);
+		}
+
+		if ( $offset ) {
+			$query->skip($offset);
+		}
 
 		if ( $contentId ) {
 			$query = $query->where('id', '<>' , $contentId);
 		}
 
-		$contents = $query->orderBy('id','DESC')->get();
+		if ( $request->input('filter') ) {
+			$query->where( 'title', 'like', '%' . $request->input('filter') . '%' );
+		}
 
-		return response()->json( [ 'result' => 'ok', 'contents' => $contents ]);
+
+		$contentList = $query->get();
+
+		return response()->json( [
+			'result'   => 'ok',
+			'contents' => $contentList,
+			'total'    => Content::where('content_type_id', $contentTypeId)->count()
+		]);
 	}
 
-	public function getContentsByType($contentTypeID)
-	{
-		if ($contentTypeID) {
-			$contents = Content::where('content_type_id', '=', $contentTypeID)->get();
 
-			$tmp = array();
+	public function getListBySearch( Request $request, $contentTypeId )
+	{
+		$lang   = $request->input('lang');
+		$search = $request->input('search');
+
+		$query = Content::where('content_type_id', $contentTypeId)
+						->where( 'title', 'like', '%' . $search . '%' );
+
+		if ( $lang ) {
+			$query->where( 'lang', $lang );
+		}
+
+		$contentList = $query->get();
+
+		return response()->json( [
+			'result'   => 'ok',
+			'contents' => $contentList
+		]);
+	}
+
+
+	public function getContentsByType( Request $request, $contentTypeID )
+	{
+		if ( $contentTypeID ) {
+
+			$lang = $request->input('lang');
+
+			$query = Content::where('content_type_id', '=', $contentTypeID);
+
+			if ( $lang ) {
+				$query->where( 'lang', $lang );
+			}
+
+			$contents = $query->get();
+
+			$tmp = [];
 			if ( count($contents) > 0 ) {
 				foreach ( $contents as $content ) {
 					$tmp[$content->id] = $content->title;
@@ -52,98 +121,80 @@ class ReadController extends Controller
 
 	public function getDetail(Request $request, $id)
 	{
-		$content = Content::find($id);
+		$content = Content::with('categories')->where( 'id', $id )->first();
 
 		if ( $content ) {
 
-			//fb image
+			// fb image
 			$tmpMedia = Media::find($content->fb_image);
-			if ( $tmpMedia && $tmpMedia->url ) {
-				$tmpMedia->url = url( $tmpMedia->url );
+			if ( $tmpMedia ) {
 				$content->fb_image = [ $tmpMedia ];
 			}
 
-			$content_categories = ContentCategory::where( 'content_id', $id )->pluck('category_id')->all();
+			$contentType   = ContentType::find( $content->content_type_id );
+			$contentFields = ContentField::where( 'content_type_id', $contentType->id )->get();
+			$dataContent   = DB::table( $contentType->content_type )
+								->where( 'content_id',      $content->id )
+								->where( 'content_type_id', $contentType->id)
+								->first();
 
-			$content_type = ContentType::find( $content->content_type_id );
 
-			$dataContent = DB::table( $content_type->content_type )->where( 'content_id', $content->id )->where( 'content_type_id', $content_type->id)->first();
+			if ( $contentFields && $contentFields->count() > 0 ) {
 
-//			$content_fields = ContentField::where( 'content_type_id', $content_type->id )->whereIn( 'type', array( 'image_upload' ) )->get();
-			$content_fields = ContentField::where( 'content_type_id', $content_type->id )->get();
 
-			if ( !$dataContent ) {
-				$dataContent = new stdClass();
-			}
+				foreach ( $contentFields as $contentField ) {
 
-			if ( $content_fields && sizeof($content_fields) > 0 ) {
-				foreach ( $content_fields as $content_field ){
+					switch ( $contentField->type ) {
 
-					if ( $content_field->type == 'image_upload') {
+						case 'image_upload':
+						case 'file_upload':
+							$content->{$contentField->name} = ( isset( $dataContent->{$contentField->name} ) ? [ Media::find($dataContent->{$contentField->name}) ] : '' );
+						break;
 
-						if ( $dataContent->{$content_field->name} ) {
-							$tmpMedia = Media::find($dataContent->{$content_field->name});
-							if ( $tmpMedia ) {
-								$tmpMedia->url = $tmpMedia->url ? url( $tmpMedia->url ) : null;
+						case 'gallery':
+							$tmpListMedia = ( isset($dataContent->{$contentField->name}) ? $dataContent->{$contentField->name} : null );
+							if ( !$tmpListMedia ) {
+								$content->{$contentField->name} = '';
+							} else {
+								$content->{$contentField->name} = Media::whereIn( 'id', explode( ',', $tmpListMedia ) )->get();
 							}
-							$dataContent->{$content_field->name} = [ $tmpMedia ];
-						}
+						break;
 
-					} elseif ( $content_field->type == 'gallery' || $content_field->type == 'file_upload') {
-
-						$tmpListMedia = $dataContent->{$content_field->name};
-						if ( !$tmpListMedia ) {
-							$dataContent->{$content_field->name} = '';
-						} else {
-							$tmpListMedia = explode( ',', $tmpListMedia );
-							foreach ( $tmpListMedia as $index => $tmpMedia ) {
-								$tmpListMedia[$index] = Media::find($tmpMedia);
-								$tmpListMedia[$index]->url = ( $tmpListMedia[$index]->url ? url( $tmpListMedia[$index]->url ) : null );
+						case 'linked_content':
+						case 'multiple_linked_content':
+							$tmpLinkedContent = ( isset($dataContent->{$contentField->name}) ? $dataContent->{$contentField->name} : null );
+							if ( !$tmpLinkedContent ) {
+								$content->{$contentField->name} = '';
+							} else {
+								$content->{$contentField->name} = Content::whereIn( 'id', explode( ',', $tmpLinkedContent ) )->get();
 							}
-							$dataContent->{$content_field->name} = $tmpListMedia;
-						}
+						break;
 
-					} elseif ( $content_field->type == 'multiselect' ) {
+						case 'multiselect':
+							$content->{$contentField->name} = ( isset($dataContent->{$contentField->name}) ? explode( ';', $dataContent->{$contentField->name} ) : '' );
+						break;
 
-						$tmpSelect = $dataContent->{$content_field->name};
-						if ( !$tmpSelect ) {
-							$dataContent->{$content_field->name} = '';
-						} else {
-							$dataContent->{$content_field->name} = explode( ';', $tmpSelect );
-						}
+						case 'checkbox':
+							$content->{$contentField->name} = ( isset($dataContent->{$contentField->name}) && ($dataContent->{$contentField->name} == 1 || $dataContent->{$contentField->name} == '1') ? true : false );
+						break;
 
-					} elseif ( $content_field->type == 'checkbox' ) {
-
-						$tmpCheckbox = $dataContent->{$content_field->name};
-						$dataContent->{$content_field->name} = $tmpCheckbox == 1 || $tmpCheckbox == '1' ? true : false;
-
-					} elseif ( $content_field->type == 'multiple_linked_content') {
-
-						$tmpSelect = $dataContent->{$content_field->name};
-						if ( !$tmpSelect ) {
-							$dataContent->{$content_field->name} = '';
-						} else {
-							$tmpLinks = [];
-							foreach ( explode( ';', $tmpSelect ) as $linkId ) {
-								$tmpLinks[] = $linkId * 1;
-							}
-							$dataContent->{$content_field->name} = $tmpLinks;
-						}
-
-					} else {
-
-						$dataContent->{$content_field->name} = isset( $dataContent->{$content_field->name} ) ? $dataContent->{$content_field->name} : '';
+						default:
+							$content->{$contentField->name} = ( isset( $dataContent->{$contentField->name} ) ? $dataContent->{$contentField->name} : '' );
+						break;
 
 					}
 
-
 				}
+
 			}
 
-			return response()->json( [ 'result' => 'ok', 'content' => $content, 'data' => $dataContent, 'content_categories' => $content_categories ]);
+			return response()->json([
+				'content'    => $content
+			]);
 		}
 
-		return $this->_sendJsonError('Campo non trovato.');
+		return $this->_sendJsonError( 'Content not found', 404 );
 	}
+
 }
 

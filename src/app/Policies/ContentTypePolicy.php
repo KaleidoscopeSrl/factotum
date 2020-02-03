@@ -11,14 +11,14 @@ class ContentTypePolicy
     use HandlesAuthorization;
 
 
-	public function view(User $user)
+	public function create(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_content_types ? true : false );
 	}
 
-	public function create(User $user)
+	public function read(User $user)
 	{
-		return ( $user->role->backend_access && $user->role->manage_content_types ? true : false );
+		return ( $user->role->backend_access ? true : false );
 	}
 
 	public function update(User $user, $contentTypeID)
@@ -32,4 +32,5 @@ class ContentTypePolicy
 		$contentType = ContentType::find($contentTypeID);
 		return ( $contentType->editable || !$contentType->editable && auth()->user()->isAdmin() ? true : false );
 	}
+
 }

@@ -8,6 +8,7 @@ use Kaleidoscope\Factotum\Http\Requests\DeleteUser;
 use Kaleidoscope\Factotum\User;
 use Kaleidoscope\Factotum\Content;
 
+
 class DeleteController extends Controller
 {
 
@@ -22,12 +23,6 @@ class DeleteController extends Controller
 
 		if ( $user ) {
 
-			// Rimuovo il file dell'avatar
-			$filename = basename( $user->avatar );
-			if ( Storage::exists( 'avatars/' . $filename) ) {
-				Storage::delete( 'avatars/' . $filename);
-			}
-
 			$deletedRows = $user->delete();
 
 			if ( $deletedRows > 0 ) {
@@ -37,7 +32,7 @@ class DeleteController extends Controller
 			return $this->_sendJsonError( 'Errore in fase di cancellazione.' );
 		}
 
-		return $this->_sendJsonError( 'Utente non trovato.' );
+		return $this->_sendJsonError( 'User not found', 404 );
 	}
 
 }

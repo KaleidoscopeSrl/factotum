@@ -3,7 +3,6 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Media;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 
 use Kaleidoscope\Factotum\Media;
@@ -17,7 +16,7 @@ class DeleteController extends Controller
 
 		$this->_removeMedia($media);
 
-		return response()->json(array('result' => 'ok'));
+		return response()->json( ['result' => 'ok' ] );
 
 	}
 
@@ -28,4 +27,5 @@ class DeleteController extends Controller
 			return Media::destroy( $media->id );
 		}
 	}
+
 }

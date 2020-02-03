@@ -10,20 +10,20 @@ use Kaleidoscope\Factotum\Library\ContentSearch;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Setting;
 
+
 class SitemapController extends Controller
 {
 
 	public function generate()
 	{
-
 		$contentTypes = ContentType::where('sitemap_in',1)->get();
-		$listData = [];
+		$listData     = [];
 
 		if ( !$contentTypes || $contentTypes->count() == 0 ){
-			$homepage = new ContentType;
+			$homepage               = new ContentType;
 			$homepage->abs_url      = url('/').'';
 			$homepage->updated_at   = now();
-			$listData['default'] = array(0 => $homepage);
+			$listData['default'] = [ $homepage ];
 		}
 
 		foreach ($contentTypes as $contentType) {
@@ -33,20 +33,22 @@ class SitemapController extends Controller
 		}
 		
 		$content = View::make('factotum::frontend.sitemap', ['listData' => $listData]);
-		return Response::make($content)->header('Content-Type', 'text/xml;charset=utf-8');
 
+		return Response::make($content)->header('Content-Type', 'text/xml;charset=utf-8');
 	}
+
 
 	public function savePreference( Request $request )
 	{
-		$preferences_input = $request->input('contentTypes');
+		$preferencesInput = $request->input('contentTypes');
+		$preferences      = [];
 
-		$preferences = [];
-		foreach ($preferences_input as $key => $value) {
-			if ($value) {
+		foreach ( $preferencesInput as $key => $value ) {
+			if ( $value ) {
 				$preferences[] = $key;
 			}
 		}
+
 		$contentTypes = ContentType::get();
 
 		foreach ( $contentTypes as $contentType ){
@@ -64,7 +66,6 @@ class SitemapController extends Controller
 		}
 
 		return response()->json( [ 'result' => 'ok', 'contentTypes' => $contentTypes ]);
-
 	}
 
 }

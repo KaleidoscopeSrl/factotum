@@ -22,7 +22,8 @@
             "Kaleidoscope\\Factotum\\Library\\":          "src/app/Library",
             "Kaleidoscope\\Factotum\\Helpers\\":          "src/app/Helpers",
             "Kaleidoscope\\Factotum\\Http\\Middleware\\": "src/app/Http/Middleware",
-            "Kaleidoscope\\Factotum\\Mail\\":             "src/app/Mail"
+            "Kaleidoscope\\Factotum\\Mail\\":             "src/app/Mail",
+            "Kaleidoscope\\Factotum\\Filters\\":          "src/app/Filters"
         },
         "files": [
             "src/app/Library/ContentSearch.php",

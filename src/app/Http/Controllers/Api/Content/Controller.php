@@ -10,7 +10,7 @@ use Kaleidoscope\Factotum\Http\Requests\StoreContent;
 use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\ContentCategory;
+use Kaleidoscope\Factotum\CategoryContent;
 use Kaleidoscope\Factotum\Media;
 
 
@@ -21,7 +21,7 @@ class Controller extends ApiBaseController
 	protected $_contentFields;
 	protected $_contents;
 	protected $_categories;
-	protected $_contentCategories;
+	protected $_categoriesContent;
 	protected $_additionalValues;
 
 	protected function _saveContent( StoreContent $request, $content )
@@ -30,13 +30,13 @@ class Controller extends ApiBaseController
 
 		// Categories
 		if ( isset($data['categories']) ) {
-			ContentCategory::whereContentId($content->id)->delete();
+			CategoryContent::where( 'content_id', $content->id )->delete();
 
 			foreach ( $data['categories'] as $categoryID ) {
-				$contentCategory = new ContentCategory;
-				$contentCategory->content_id = $content->id;
-				$contentCategory->category_id = $categoryID;
-				$contentCategory->save();
+				$categoryContent = new CategoryContent;
+				$categoryContent->content_id  = $content->id;
+				$categoryContent->category_id = $categoryID;
+				$categoryContent->save();
 			}
 		}
 
@@ -44,8 +44,9 @@ class Controller extends ApiBaseController
 		// es. resize oppure crop etc
 
 		// Save Additional Fields
-		$contentType = ContentType::find($data['content_type_id']);
+		$contentType   = ContentType::find($data['content_type_id']);
 		$contentFields = ContentField::where( 'content_type_id', '=', $content->content_type_id )->get();
+
 		if ( $contentType && $contentFields->count() > 0 ) {
 
 			$additionalValuesExists = DB::table( $contentType->content_type )
@@ -101,7 +102,8 @@ class Controller extends ApiBaseController
 					->where( 'id', $additionalValuesExists->id )
 					->update( $additionalValues );
 			} else {
-				DB::table( $contentType->content_type )->insert( $additionalValues );
+				DB::table( $contentType->content_type )
+					->insert( $additionalValues );
 			}
 
 		}

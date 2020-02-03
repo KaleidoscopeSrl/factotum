@@ -20,5 +20,4 @@ class CreateController extends Controller
 		return response()->json( [ 'result' => 'ok', 'content_field'  => $contentField->toArray() ] );
 	}
 
-
 }

@@ -12,10 +12,23 @@ Route::group([
 	'namespace'  => 'User'
 ], function () {
 
-	Route::post('/create',              'CreateController@create');
-	Route::get('/list',                 'ReadController@getList');
-	Route::get('/detail/{id}',          'ReadController@getDetail');
-	Route::post('/update/{id}',         'UpdateController@update');
-	Route::delete('/delete/{id}',       'DeleteController@remove');
+
+	Route::group(['middleware' => 'can:create,Kaleidoscope\Factotum\User'], function() {
+		Route::post('/create',              'CreateController@create');
+	});
+
+	Route::group(['middleware' => 'can:read,Kaleidoscope\Factotum\User'], function() {
+		Route::get('/list',                 'ReadController@getList');
+		Route::get('/detail/{id}',          'ReadController@getDetail');
+	});
+
+	Route::group(['middleware' => 'can:update,Kaleidoscope\Factotum\User,id'], function() {
+		Route::post('/update/{id}',         'UpdateController@update');
+	});
+
+	Route::group(['middleware' => 'can:delete,Kaleidoscope\Factotum\User,id'], function() {
+		Route::delete('/delete/{id}',       'DeleteController@remove');
+	});
+
 
 });

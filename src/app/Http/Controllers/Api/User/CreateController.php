@@ -6,6 +6,7 @@ use Kaleidoscope\Factotum\Http\Requests\StoreUser;
 use Kaleidoscope\Factotum\Profile;
 use Kaleidoscope\Factotum\User;
 
+
 class CreateController extends Controller
 {
 
@@ -15,7 +16,6 @@ class CreateController extends Controller
 
 		$user = new User;
 		$user->fill( $data );
-		$user->setAvatar( $request );
 		$user->save();
 
 		$data['user_id'] = $user->id;
