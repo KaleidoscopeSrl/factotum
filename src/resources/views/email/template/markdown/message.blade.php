@@ -1,7 +1,7 @@
-@component('factotum::email.template.markdown.layout')
+@component('email.template.markdown.layout')
     {{-- Header --}}
     @slot('header')
-        @component('factotum::email.template.markdown.header', ['url' => config('app.url')])
+        @component('email.template.markdown.header', ['url' => config('app.url')])
             {{ config('app.name') }}
         @endcomponent
     @endslot
@@ -12,7 +12,7 @@
     {{-- Subcopy --}}
     @isset($subcopy)
         @slot('subcopy')
-            @component('factotum::email.template.markdown.subcopy')
+            @component('email.template.markdown.subcopy')
                 {{ $subcopy }}
             @endcomponent
         @endslot
@@ -20,7 +20,7 @@
 
     {{-- Footer --}}
     @slot('footer')
-        @component('factotum::email.template.markdown.footer')
+        @component('email.template.markdown.footer')
             © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
         @endcomponent
     @endslot

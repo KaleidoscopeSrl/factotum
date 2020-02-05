@@ -37,7 +37,7 @@ class AuthForgottenPassword extends Mailable
 		$subject = 'Factotum - Recupero Password';
 
 		return $this->subject($subject)
-					->markdown('factotum::email.auth.forgotten_password', [
+					->markdown('email.auth.forgotten_password', [
 						'demTitle' => 'Factotum - Recupero Password'
 					]);
     }

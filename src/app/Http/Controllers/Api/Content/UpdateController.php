@@ -25,9 +25,7 @@ class UpdateController extends Controller
 		$content->fill( $data );
 		$content->save();
 
-		$this->_saveContent( $request, $content );
-
-		return response()->json( [ 'status' => 'ok', 'data' => $data ]);
+		return response()->json( [ 'status' => 'ok', 'data' => $content->toArray() ]);
 	}
 
 }

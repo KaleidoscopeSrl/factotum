@@ -16,23 +16,23 @@ class SitemapController extends Controller
 
 	public function generate()
 	{
-		$contentTypes = ContentType::where('sitemap_in',1)->get();
+		$contentTypes = ContentType::where( 'sitemap_in', 1 )->get();
 		$listData     = [];
 
-		if ( !$contentTypes || $contentTypes->count() == 0 ){
+		if ( !$contentTypes || $contentTypes->count() == 0 ) {
 			$homepage               = new ContentType;
 			$homepage->abs_url      = url('/').'';
 			$homepage->updated_at   = now();
 			$listData['default'] = [ $homepage ];
 		}
 
-		foreach ($contentTypes as $contentType) {
-			$contentSearch = new ContentSearch($contentType->toArray());
+		foreach ( $contentTypes as $contentType ) {
+			$contentSearch = new ContentSearch( $contentType->toArray() );
 			$contentSearch->onlyPublished();
 			$listData[$contentType->content_type] = $contentSearch->search()->toArray();
 		}
 		
-		$content = View::make('factotum::frontend.sitemap', ['listData' => $listData]);
+		$content = View::make('sitemap', ['listData' => $listData]);
 
 		return Response::make($content)->header('Content-Type', 'text/xml;charset=utf-8');
 	}
@@ -51,7 +51,7 @@ class SitemapController extends Controller
 
 		$contentTypes = ContentType::get();
 
-		foreach ( $contentTypes as $contentType ){
+		foreach ( $contentTypes as $contentType ) {
 
 			request()->request->add(['setNoUpdateSchema'=> true]);
 

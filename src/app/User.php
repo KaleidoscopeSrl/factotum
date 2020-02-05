@@ -2,21 +2,14 @@
 
 namespace Kaleidoscope\Factotum;
 
-use Kaleidoscope\Factotum\Notifications\AdminResetPassword as AdminResetPasswordNotification;
-
 use Laravel\Passport\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Image;
-use Kaleidoscope\Factotum\Library\Utility;
 
 
 class User extends Authenticatable
 {
 	use HasApiTokens;
-	use Notifiable;
 
 
     protected $fillable = [

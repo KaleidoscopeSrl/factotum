@@ -3,10 +3,16 @@
 namespace Kaleidoscope\Factotum;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+
+use Kaleidoscope\Factotum\Http\Requests\StoreContent;
+use Kaleidoscope\Factotum\Library\Utility;
+
 
 class Content extends Model
 {
 	public static $FIRE_EVENTS = true;
+
 
 	protected $fillable = [
 		'parent_id', 'user_id', 'content_type_id',
@@ -39,14 +45,106 @@ class Content extends Model
 	];
 
 	protected $casts = [
-//		'show_in_menu'   => 'boolean',
-//		'is_home'        => 'boolean',
-
 		'fb_title'       => 'string|null',
 		'fb_description' => 'string|null',
 		'fb_image'       => 'int|null',
 	];
 
+
+
+	public function save( array $options = [] )
+	{
+		$contentSaved = parent::save($options);
+		$this->_saveAdditionalContent( $this );
+		return $contentSaved;
+	}
+
+
+	private function _saveAdditionalContent( Content $content )
+	{
+		$data = request()->all();
+
+		if ( count($data) > 0 ) {
+
+			// Categories
+			if ( isset($data['categories']) ) {
+				CategoryContent::where( 'content_id', $content->id )->delete();
+
+				foreach ( $data['categories'] as $categoryID ) {
+					$categoryContent = new CategoryContent;
+					$categoryContent->content_id  = $content->id;
+					$categoryContent->category_id = $categoryID;
+					$categoryContent->save();
+				}
+			}
+
+			// Save Additional Fields
+			$contentType   = ContentType::find($data['content_type_id']);
+			$contentFields = ContentField::where( 'content_type_id', '=', $content->content_type_id )->get();
+
+			if ( $contentType && $contentFields->count() > 0 ) {
+
+				$additionalValuesExists = DB::table( $contentType->content_type )
+											->where( 'content_type_id', $contentType->id )
+											->where( 'content_id', $content->id )
+											->first();
+
+				$additionalValues = array(
+					'content_type_id' => $contentType->id,
+					'content_id'      => $content->id
+				);
+
+
+				foreach ( $contentFields as $field ) {
+
+					// Date fields
+					if ( isset( $data[ $field->name ] ) && $field->type == 'date' && $data[$field->name] != '' ) {
+						$data[$field->name] = Utility::convertHumanDateToIso($data[$field->name]);
+					}
+
+					// Date-time fields
+					if ( isset( $data[ $field->name ] ) && $field->type == 'datetime' && $data[$field->name] != '' ) {
+						$data[$field->name] = Utility::convertHumanDateTimeToIso($data[$field->name]);
+					}
+
+					// Image Operation
+					if ( $field->type == 'image_upload' && isset( $data[ $field->name ] ) ) {
+						Media::saveImageById( $field, $data[ $field->name ] );
+					}
+
+					// Gallery Operation
+					if ( $field->type == 'gallery' && isset( $data[ $field->name ] ) ) {
+						$gallery = explode( ',', $data[ $field->name ] );
+						foreach ( $gallery as $g ) {
+							Media::saveImageById( $field, $g );
+						}
+					}
+
+					$additionalValues[ $field->name ] = (isset($data[ $field->name ]) ? $data[ $field->name ] : null);
+
+				}
+
+				if ( $additionalValuesExists ) {
+					DB::table( $contentType->content_type )
+						->where( 'id', $additionalValuesExists->id )
+						->update( $additionalValues );
+				} else {
+					DB::table( $contentType->content_type )
+						->insert( $additionalValues );
+				}
+
+			}
+
+		}
+
+		return $content;
+	}
+
+
+
+
+
+	// RELATIONS
 
 	public function parent() {
 		return $this->belongsTo( 'Kaleidoscope\Factotum\Content', 'parent_id');
@@ -79,8 +177,6 @@ class Content extends Model
 	{
 		return $this->belongsToMany('Kaleidoscope\Factotum\Category');
 	}
-
-
 
 
 	public static function treeChildsArray( $contentTypeId, $pagination = null, $language = '' )

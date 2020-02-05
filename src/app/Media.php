@@ -40,13 +40,17 @@ class Media extends Model
 		}
 
 		if ( $mediaExist->count() > 0 ) {
-			if (!$counter) {
+
+			if ( !$counter ) {
 				$counter = 1;
 			} else {
 				$counter++;
 			}
+
 			$filename = substr( $origFilename, 0, strlen('.' . $extension) * -1 ) . '-' . $counter . '.' . $extension;
+
 			return self::filenameAvailable($filename, $origFilename, $counter);
+
 		}
 
 		return $filename;
@@ -85,21 +89,26 @@ class Media extends Model
 
 				if ( isset($fieldModel->sizes) && $fieldModel->sizes != '' ) {
 					$mediaUrl = substr( $media['url'], 0, -4);
-					$ext = substr( $media['filename'], strlen($media['filename'])-3, 3 );
+					$ext      = substr( $media['filename'], strlen($media['filename'])-3, 3 );
 
 					if ( count($fieldModel->sizes) > 0 ) {
 						$tmp = [];
 						foreach ( $fieldModel->sizes as $size ) {
-							$tmp[] = $mediaUrl . $size . '.' . $ext ;
+							$tmp[] = $mediaUrl . '-' . $size->w . 'x' . $size->h . '.' . $ext ;
 						}
 						$media['sizes'] = $tmp;
 					}
 				}
+
 				return $media;
 			}
+
 		} else if ( is_array($mediaId) ) {
+
 			return $mediaId;
+
 		}
+
 		return null;
 	}
 
@@ -123,7 +132,7 @@ class Media extends Model
 
 		if ( $field->resizes ) {
 
-			foreach ( json_decode($field->resizes,true) as $resize ) {
+			foreach ( $field->resizes as $resize ) {
 
 				$width  = $resize['w'];
 				$height = $resize['h'];
@@ -172,7 +181,7 @@ class Media extends Model
 
 			// Creo la thumb se è un immagine
 			if ( $image && strpos( $image->mime, 'image/') !== false &&
-							strpos( $image->mime, 'photoshop') === false ) {
+				strpos( $image->mime, 'photoshop') === false ) {
 
 				$origFilename  = $image->dirname . '/' . $image->filename;
 				$ext           = $image->extension;

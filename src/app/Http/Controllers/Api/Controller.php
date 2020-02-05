@@ -92,15 +92,6 @@ class Controller extends BaseController
 		], $errorCode );
 	}
 
-	public function index()
-	{
-		$clientId = (config('factotum.analytics_client_id') != '' ? config('factotum.analytics_client_id') : false );
-		$siteId   = (config('factotum.analytics_site_id') != '' ? config('factotum.analytics_site_id') : false );
-		return view('factotum::admin.index')
-				->with('dashboardAssets', true)
-				->with('clientId', $clientId)
-				->with('siteId', $siteId);
-	}
 
 	public function optionsRequest( Request $request )
 	{

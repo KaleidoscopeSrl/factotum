@@ -1,8 +1,8 @@
-@component('factotum::email.template.html.layout')
+@component('email.template.html.layout')
 
 	{{-- Header --}}
 	@slot('header')
-		@component('factotum::email.template.html.header', ['url' => config('app.url')])
+		@component('email.template.html.header', ['url' => config('app.url')])
 			<td width="80">
 				<img src="{{ asset('/assets/media/factotum/img/logo-dem.jpg')  }}" alt="{{ config('app.name') }}">
 			</td>
@@ -18,7 +18,7 @@
 	{{-- Subcopy --}}
 	@isset($subcopy)
 		@slot('subcopy')
-			@component('factotum::email.template.html.subcopy')
+			@component('email.template.html.subcopy')
 				{{ $subcopy }}
 			@endcomponent
 		@endslot
@@ -26,7 +26,7 @@
 
 	{{-- Footer --}}
 	@slot('footer')
-		@component('factotum::email.template.html.footer')
+		@component('email.template.html.footer')
 		&copy; Kaleidoscope S.R.L. - C.F. 04360650230 - P.IVA 04360650230 <br>
 		<a href="https://factotum.kaleidoscope.it/#!/app/cookies" target="_blank">COOKIE POLICY</a> -
 		<a href="https://factotum.kaleidoscope.it/#!/app/privacy" target="_blank">PRIVACY POLICY</a>

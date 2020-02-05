@@ -37,9 +37,9 @@ class CreateSymbolicLinks extends Command
      */
     public function handle()
     {
-//    	if ( !file_exists(public_path('media')) ) {
-//			symlink( storage_path('app/media'), public_path('media') );
-//		}
+		if ( !file_exists(public_path('media')) ) {
+			symlink( storage_path('app/public/media'), public_path('media') );
+		}
 		if ( !file_exists(public_path('storage')) ) {
 			symlink( storage_path('app/public'), public_path('storage') );
 		}

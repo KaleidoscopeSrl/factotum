@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app', ['errorCode' => 404])
+@extends('layouts.app', ['errorCode' => 404])
 
 @section('content')
 

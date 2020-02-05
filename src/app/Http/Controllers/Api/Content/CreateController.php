@@ -27,8 +27,6 @@ class CreateController extends Controller
 		$content->fill( $data );
 		$content->save();
 
-		$this->_saveContent( $request, $content );
-
 		return response()->json( [ 'status' => 'ok', 'content' => $content->toArray() ] );
 	}
 

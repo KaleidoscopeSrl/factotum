@@ -4,9 +4,7 @@ namespace Kaleidoscope\Factotum;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
@@ -26,6 +24,12 @@ use Kaleidoscope\Factotum\Observers\ContentFieldObserver;
 use Kaleidoscope\Factotum\Observers\ContentObserver;
 use Kaleidoscope\Factotum\Observers\CategoryObserver;
 
+use Kaleidoscope\Factotum\Console\Commands\CleanFolders;
+use Kaleidoscope\Factotum\Console\Commands\MigrateContentTypeAndFields;
+use Kaleidoscope\Factotum\Console\Commands\MigrateMedia;
+use Kaleidoscope\Factotum\Console\Commands\MigrateContents;
+use Kaleidoscope\Factotum\Console\Commands\ResetAbsUrl;
+use Kaleidoscope\Factotum\Console\Commands\DumpAutoload;
 use Kaleidoscope\Factotum\Console\Commands\CreateStorageFolders;
 use Kaleidoscope\Factotum\Console\Commands\CreateSymbolicLinks;
 use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
@@ -47,8 +51,8 @@ class FactotumServiceProvider extends ServiceProvider
 	];
 
 
-    public function boot(GateContract $gate)
-    {
+	public function boot(GateContract $gate)
+	{
 		Schema::defaultStringLength(191);
 
 
@@ -60,6 +64,10 @@ class FactotumServiceProvider extends ServiceProvider
 		// Configurations
 		$this->app['config']->set( 'auth', array_merge(
 			$this->app['config']->get('auth', []), require __DIR__ . '/config/auth.php'
+		));
+
+		$this->app['config']->set( 'database', array_merge(
+			$this->app['config']->get('database', []), require __DIR__ . '/config/database.php'
 		));
 
 		$this->app['config']->set( 'mail', array_merge(
@@ -75,12 +83,6 @@ class FactotumServiceProvider extends ServiceProvider
 		));
 
 
-    	// Publish Configurations
-		$this->publishes([
-			__DIR__ . '/config/factotum.php' => config_path('factotum.php'),
-		], 'config');
-
-
 
 		// Middlewares
 		$this->getRouter()->pushMiddlewareToGroup('session_start', \Illuminate\Session\Middleware\StartSession::class);
@@ -88,25 +90,29 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 
-		// View
-		$this->loadViewsFrom(__DIR__ . '/resources/views', 'factotum');
-
-
-
-		// Resources and Public
+		// Config, Resources and Public
 		$this->publishes([
+			// CONFIG
+			__DIR__ . '/config/factotum.php'  => config_path('factotum.php'),
+
 			// WEB APP
-			__DIR__ . '/public/admin'          => public_path('admin'),
+			__DIR__ . '/public/admin'         => public_path('admin'),
 
 			// MINISITE
-			__DIR__ . '/public/assets'            => public_path('assets'),
-			__DIR__ . '/resources/views/frontend' => resource_path( 'views/frontend' )
-		], 'factotum-public');
+			__DIR__ . '/public/assets'        => public_path('assets'),
+			__DIR__ . '/resources/views'      => resource_path( 'views' )
+		], 'factotum');
 
 
 
 		if ($this->app->runningInConsole()) {
 			$this->commands([
+				CleanFolders::class,
+				ResetAbsUrl::class,
+				MigrateMedia::class,
+				MigrateContentTypeAndFields::class,
+				MigrateContents::class,
+				DumpAutoload::class,
 				CreateStorageFolders::class,
 				CreateSymbolicLinks::class,
 				FactotumInstallation::class
@@ -180,10 +186,10 @@ class FactotumServiceProvider extends ServiceProvider
 		$this->_addValidators();
 
 
-    }
+	}
 
 
-    private function _addValidators()
+	private function _addValidators()
 	{
 		Validator::extend('allowed_types', function($attribute, $value, $parameters, $validator) {
 			if ( $value == '["*"]' ) {
@@ -231,9 +237,9 @@ class FactotumServiceProvider extends ServiceProvider
 	}
 
 
-    public function register()
-    {
-    }
+	public function register()
+	{
+	}
 
 
 

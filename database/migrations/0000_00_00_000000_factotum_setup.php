@@ -90,8 +90,7 @@ class FactotumSetup extends Migration
 			$table->integer('role_id')->unsigned();
 			$table->foreign('role_id')->references('id')->on('roles');
 			$table->boolean('editable')->default(true);
-			$table->integer('avatar')->unsigned();
-			$table->foreign('avatar')->references('id')->on('media')->onDelete('cascade');
+			$table->integer('avatar')->unsigned()->nullable(true);
 			$table->rememberToken();
 			$table->timestamps();
 		});
@@ -155,9 +154,6 @@ class FactotumSetup extends Migration
 			$table->boolean('show_in_menu');
 			$table->boolean('is_home')->default(false)->nullable(true);
 			$table->integer('order_no')->nullable(true);
-			$table->string('link', 255)->nullable(true);
-			$table->string('link_title', 255)->nullable(true);
-			$table->string('link_open_in', 16)->nullable(true);
 			$table->string('seo_title', 60)->nullable(true);
 			$table->text('seo_description')->nullable(true);
 			$table->string('seo_canonical_url', 255)->nullable(true);
@@ -217,4 +213,5 @@ class FactotumSetup extends Migration
 		Schema::drop('content_categories');
 		Schema::drop('categories');
 	}
+
 }

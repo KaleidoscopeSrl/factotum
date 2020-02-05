@@ -76,6 +76,13 @@ class PageTableSeeder extends Seeder
 		$contentField->name  = 'content_type_to_list';
 		$contentField->label = 'Content Type To List';
 		$contentField->type  = 'select';
+
+		$contentTypeToList = [
+			[ 'value' => 'news',  'label' => 'News' ],
+			[ 'value' => 'page',  'label' => 'Page' ],
+		];
+
+		$contentField->options = json_encode( $contentTypeToList );
 		$contentField->save();
 
 
@@ -118,6 +125,35 @@ class PageTableSeeder extends Seeder
 		$contentField->options = json_encode( $operations );
 		$contentField->save();
 
+		// Link
+		$contentField = new ContentField;
+		$contentField->content_type_id = $pageContentType->id;
+		$contentField->name  = 'link';
+		$contentField->label = 'Link';
+		$contentField->type  = 'text';
+		$contentField->save();
+
+		// Link Title
+		$contentField = new ContentField;
+		$contentField->content_type_id = $pageContentType->id;
+		$contentField->name  = 'link_title';
+		$contentField->label = 'Link Title';
+		$contentField->type  = 'text';
+		$contentField->save();
+
+		// Link Open In
+		$contentField = new ContentField;
+		$contentField->content_type_id = $pageContentType->id;
+		$contentField->name  = 'link_open_in';
+		$contentField->label = 'Link Open In';
+		$options = [
+			[ 'value' => '_self',            'label' => 'Same Page' ],
+			[ 'value' => '_blank',           'label' => 'New Page' ]
+		];
+		$contentField->options = json_encode( $options );
+		$contentField->type  = 'select';
+		$contentField->save();
+
 
 		// Action
 		$contentField = new ContentField;
@@ -149,7 +185,9 @@ class PageTableSeeder extends Seeder
 			'page_template'    => 'home',
 			'page_operation'   => 'show_content'
 		];
+
 		DB::table( $pageContentType->content_type )->insert( $additionalValues );
+
 
 		// Create content type news
 		$contentType               = new ContentType;

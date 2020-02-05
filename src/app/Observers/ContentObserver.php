@@ -7,24 +7,15 @@ use Illuminate\Support\Facades\DB;
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\ContentType;
 
+
 class ContentObserver
 {
-	/**
-	 * Listen to the ContentType created event.
-	 *
-	 * @param  Content  $content
-	 * @return void
-	 */
+
 	public function created(Content $content)
 	{
 	}
 
-	/**
-	 * Listen to the ContentType updated event.
-	 *
-	 * @param  Content  $content
-	 * @return void
-	 */
+
 	public function updating(Content $content)
 	{
 	}
@@ -37,9 +28,11 @@ class ContentObserver
 		}
 	}
 
+
+
 	private function generateURLs( Content $content )
 	{
-		$contentType = ContentType::where( 'content_type', '=', 'page' )->first();
+		$contentType = ContentType::find( $content->content_type_id );
 
 		if ( $contentType && $content->content_type_id == $contentType->id ) {
 
@@ -47,14 +40,13 @@ class ContentObserver
 
 			// Generating pages
 			if ( $content->parent_id ) {
-				$absUrl = $this->generateHierarchyURL( $content );
-				$absUrl = url($lang)
-						. '/'
-						. $absUrl;
+
+				$absUrl = url($lang) . '/' . $this->generateHierarchyURL( $content );
+
 			} else {
-				$absUrl = url($lang)
-						. '/'
-						. $content->url;
+
+				$absUrl = url($lang)  . ( $content->url != '/' ? '/' . $content->url : '' );
+
 			}
 
 			DB::table('contents')
@@ -64,15 +56,18 @@ class ContentObserver
 			if ( $content->childs ) {
 				$this->updateChildsAbsURL( $content->childs, $content );
 			}
+
 		}
+
 	}
+
 
 	private function generateHierarchyURL( $content )
 	{
 		$parents = Content::with('parentRecursive')->whereId( $content->id )->get();
 		$parents = $parents->toArray();
 		$final   = array_reverse(  $this->reverseParentsHierarchy( $parents ) );
-		$url     = array();
+		$url     = [];
 		if ( count($final) > 0 ) {
 			foreach ( $final as $index => $item ) {
 				$url[] = $item['url'];
@@ -81,11 +76,12 @@ class ContentObserver
 		return join( '/', $url );
 	}
 
-	private function reverseParentsHierarchy( $parents, $final = array() )
+
+	private function reverseParentsHierarchy( $parents, $final = [] )
 	{
 		foreach ( $parents as $item ) {
 			if ( isset($item['parent_recursive']) && $item['parent_recursive'] ) {
-				$next = array( $item['parent_recursive'] );
+				$next = [ $item['parent_recursive'] ];
 				unset( $item['parent_recursive'] );
 				$final[] = $item;
 				return $this->reverseParentsHierarchy( $next, $final );
@@ -95,6 +91,7 @@ class ContentObserver
 		}
 		return $final;
 	}
+
 
 	private function updateChildsAbsURL( $childs, $parent )
 	{
@@ -108,6 +105,7 @@ class ContentObserver
 			}
 		}
 	}
+
 
 
 	/**
@@ -133,4 +131,6 @@ class ContentObserver
 			}
 		}
 	}
+
+
 }

@@ -163,32 +163,27 @@ class ContentFieldObserver
 		}
 
 		$fields = ContentField::where( 'content_type_id', $contentType->id )->get();
+
 		if ( $fields->count() > 0 ) {
-			$obj = array();
-			$rel = array();
+
+			$obj = [];
+			$rel = [];
+
 			foreach ( $fields as $f ) {
 
-				$tmp = array(
+				$tmp = [
 					'type' => $f->type
-				);
+				];
 
-				if ( in_array($f->type, array('image_upload', 'file_upload', 'gallery', 'linked_content', 'multiple_linked_content') )) {
+				if ( in_array($f->type, [ 'image_upload', 'file_upload', 'gallery', 'linked_content', 'multiple_linked_content' ] )) {
 					$tmp['need_parsing'] = true;
 				}
 
-				if ( in_array($f->type, array('image_upload', 'gallery') )) {
-					$sizes = Utility::convertOptionsTextToAssocArray($f->resizes);
-
-					if ( count($sizes) > 0 ) {
-						$tmpSizes = array();
-						foreach ( $sizes as $w => $h ) {
-							$tmpSizes[] = '-' . $w . 'x' . $h;
-						}
-						$tmp['sizes'] = $tmpSizes;
-					}
+				if ( in_array($f->type, [ 'image_upload', 'gallery' ] )) {
+					$tmp['sizes'] = $f->resizes;
 				}
 
-				if ( in_array($f->type, array('linked_content', 'multiple_linked_content') )) {
+				if ( in_array($f->type, [ 'linked_content', 'multiple_linked_content' ] )) {
 					$tmp['linked_content_type'] = ContentType::find($f->linked_content_type_id)->toArray();
 				}
 
@@ -204,7 +199,9 @@ class ContentFieldObserver
 				'fields'          => $obj,
 				'content_type'    => $contentType->toArray()
 			)));
+
 		}
+
 	}
 
 }

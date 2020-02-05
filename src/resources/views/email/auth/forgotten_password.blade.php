@@ -1,4 +1,4 @@
-@component('factotum::email.template.html.message', ['demTitle' => $demTitle ])
+@component('email.template.html.message', [ 'demTitle' => $demTitle ])
 
 <!-- Email Body -->
 <tr>

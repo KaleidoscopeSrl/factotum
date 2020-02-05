@@ -49,7 +49,7 @@ class ForgotPasswordController extends Controller
 
 			// check for failures
 			if ( Mail::failures() ) {
-				$response = Mail::failures();
+				return $this->_sendJsonError( 'Error on sending email', 500 );
 			} else {
 				return response()->json( [ 'result' => 'ok' ]);
 			}

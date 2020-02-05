@@ -68,6 +68,10 @@ class FrontController extends Controller
 
 			View::share( 'menu', $menu );
 
+			if ( method_exists( app('App\Http\Controllers\Controller'), 'registerViewShare' ) ) {
+				app('App\Http\Controllers\Controller')->registerViewShare();
+			}
+
 			return $next($request);
 		});
 	}
@@ -96,6 +100,7 @@ class FrontController extends Controller
 							->first();
 
 			if ( $content ) {
+
 				$contentType = ContentType::find($content->content_type_id)->toArray();
 				$contentSearch = new ContentSearch( $contentType );
 				$content = $contentSearch->addWhereCondition( 'url', '=', $uri )
@@ -103,18 +108,20 @@ class FrontController extends Controller
 										 ->loadCategories(true)
 										 ->search();
 
-				if ($content) {
-					return $content[0];
-				} else {
-					return null;
-				}
+				return ( $content ? $content[0] : null );
 
 			} else {
+
 				return null;
+
 			}
+
 		} else {
+
 			return $content;
+
 		}
+
 	}
 
 
@@ -139,7 +146,7 @@ class FrontController extends Controller
 					switch ($content->page_operation) {
 
 						case 'show_content':
-							return [    'view' => 'frontend.' . $content->page_template,
+							return [    'view' => $content->page_template,
 										'data' => [
 											'content' => $content
 										]
@@ -147,23 +154,28 @@ class FrontController extends Controller
 							break;
 
 						case 'content_list':
-							$contentType = ContentType::find($content->content_type_to_list)->toArray();
+							$contentType = ContentType::where( 'content_type', $content->content_type_to_list )->first()->toArray();
+
 							list($orderBy, $sort) = explode('-', $content->content_list_order);
+
 							$contentSearch = new ContentSearch($contentType);
 							$contentSearch->onlyPublished();
 							$contentSearch->loadCategories(true);
+
 							if ( $category ) {
 								$contentSearch->filterByCategories( $category );
 							}
+
 							$contentSearch->addWhereCondition('lang', '=', $this->currentLanguage);
 							$contentSearch->addOrderBy( $orderBy, $sort);
 
-							if ($content->content_list_pagination) {
+							if ( $content->content_list_pagination ) {
 								$contentSearch->addPagination($content->content_list_pagination);
 							}
+
 							$contentList = $contentSearch->search();
 
-							return [  'view' => 'frontend.' . $content->page_template,
+							return [  'view' => $content->page_template,
 									  'data' => [
 											'content'     => $content,
 											'contentList' => $contentList,
@@ -182,14 +194,15 @@ class FrontController extends Controller
 							return [
 											'data'   => [ 'content' => $content ],
 											'action' => $content->action,
-											'view'   => 'frontend.' . $content->page_template,
+											'view'   => $content->page_template,
 								   ];
 							break;
 					}
 
 				} else {
-					return [ 'view' => 'frontend.' . $contentType->content_type,
-							 'data' => [ 'content' => $content ]
+					return [
+							'view' => $contentType->content_type,
+							'data' => [ 'content' => $content ]
 					];
 				}
 
@@ -204,7 +217,7 @@ class FrontController extends Controller
 
 
 	// Function for parsing URIs just for categories
-	protected function reparseUri()
+	protected function _reparseUri()
 	{
 		if ( count($this->uriParts) > 0 ) {
 			$uri = array_pop( $this->uriParts );
@@ -214,7 +227,7 @@ class FrontController extends Controller
 				$category = $this->_getCategoryByURIandContentType( $uri, $content->content_type_to_list );
 				return $this->_switchContent($content, $category);
 			} else {
-				return $this->reparseUri();
+				return $this->_reparseUri();
 			}
 		} else {
 			return $this->_switchContent( null );
@@ -233,9 +246,9 @@ class FrontController extends Controller
 	}
 
 
-	protected function extractContentOnIndex( $uri = '' )
+	protected function _extractContentOnIndex( $uri = '' )
 	{
-		$uri = trim($uri, '/');
+		$uri = trim( $uri, '/' );
 
 		if ( $uri != '' ) {
 			$checkLang = $this->uriParts[0];
@@ -259,7 +272,7 @@ class FrontController extends Controller
 				} else {
 
 					// Check if is a series of categories
-					$data = $this->reparseUri();
+					$data = $this->_reparseUri();
 
 				}
 
@@ -277,7 +290,7 @@ class FrontController extends Controller
 
 	public function index($uri = '', Request $request)
 	{
-		$data = $this->extractContentOnIndex($uri);
+		$data = $this->_extractContentOnIndex($uri);
 
 		if ( isset($data['action']) ) {
 
