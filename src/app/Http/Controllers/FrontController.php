@@ -12,6 +12,9 @@ use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
 
+use Kaleidoscope\Factotum\Mail\AuthForgottenPassword;
+use Kaleidoscope\Factotum\User;
+
 
 class FrontController extends Controller
 {

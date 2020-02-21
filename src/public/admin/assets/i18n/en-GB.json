@@ -113,7 +113,9 @@
 		"no_category": "No categories",
 		"content_attribute": "Content Attributes",
 		"categories": "Categories",
-		"custom_fields": "Custom Fields"
+		"custom_fields": "Custom Fields",
+		"add_media_from_library": "Add Media from Library",
+		"order_no": "Order No"
 	},
 
 	"deleteContentDialog": {
@@ -302,6 +304,8 @@
 		"event": "Event",
 		"rocket": "Rocket",
 		"box": "Product",
+
+		"order_no": "Order No",
 
 		"save_success": "Content Type saved!"
 	},

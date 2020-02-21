@@ -84,7 +84,7 @@
 		"content_title": "Titolo",
 		"author": "Autore",
 		"categories": "Categorie",
-		"updated_at": "Data/Ora ultimo aggiornamento",
+		"update_date": "Data/Ora ultimo aggiornamento",
 		"save_success": "Contenuto salvato con successo"
 	},
 
@@ -104,7 +104,7 @@
 		"seo_canonical_url": "URL Canonical SEO",
 		"seo_robots_indexing": "Meta Robots Indexing",
 		"seo_robots_following": "Meta Robots Following",
-		"seo_focus_key": "Focus Keyword",
+		"seo_focus_key": "Frase Chiave",
 		"social_sharing": "Social Sharing",
 		"sharing_title": "Titolo per Condivisione Social",
 		"sharing_description": "Descrizione per Condivisione Social",
@@ -113,7 +113,9 @@
 		"no_category": "Non ci sono categorie",
 		"content_attribute": "Attributi Contenuto",
 		"categories": "Categorie",
-		"custom_fields": "Campi Personalizzati"
+		"custom_fields": "Campi Personalizzati",
+		"add_media_from_library": "Aggiungi Media dalla Libreria",
+		"order_no": "Ordinamento"
 	},
 
 	"deleteContentDialog": {
@@ -314,6 +316,8 @@
 		"rocket": "Razzo",
 		"box": "Prodotto",
 
+		"order_no": "Ordinamento",
+
 		"save_success": "Tipo di Contenuto salvato con successo!"
 	},
 
@@ -346,7 +350,7 @@
 		"line_2": "Le vecchie thumbnail verranno mantenute per evitare immagini non funzionanti a causa di URL inseriti a mano nel codice.",
 		"line_3": "La rigenerazione delle thumbnail non è reverisbile, ma puoi ripristinare le vecchie dimensioni e ricominciare se non ti piacciono i risultati.",
 		"line_4": "Per iniziare seleziona il tipo di contenuto e premi il bottone qui in basso.",
-		"select_content_type": "Seleziona Content Type",
+		"select_content_type": "Seleziona Tipo di Contenuto",
 		"line_5": "è stato correttamente ritagliato in",
 		"seconds": "secondi",
 		"start": "Avvia",

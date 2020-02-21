@@ -36,9 +36,10 @@ class PageTableSeeder extends Seeder
 		// Page Templates
 		$contentField = new ContentField;
 		$contentField->content_type_id = $pageContentType->id;
-		$contentField->name    = 'page_template';
-		$contentField->label   = 'Page Template';
-		$contentField->type    = 'select';
+		$contentField->name            = 'page_template';
+		$contentField->label           = 'Page Template';
+		$contentField->type            = 'select';
+		$contentField->mandatory       = true;
 		$templates = [
 			[ 'value' => 'basic',        'label' => 'Basic Page Template' ],
 			[ 'value' => 'content_list',  'label' => 'Content List Page Template' ],
@@ -54,13 +55,13 @@ class PageTableSeeder extends Seeder
 		// Page Operation
 		$contentField = new ContentField;
 		$contentField->content_type_id = $pageContentType->id;
-		$contentField->name  = 'page_operation';
-		$contentField->label = 'Page Operation';
-		$contentField->type  = 'select';
+		$contentField->name            = 'page_operation';
+		$contentField->label           = 'Page Operation';
+		$contentField->type            = 'select';
+		$contentField->mandatory       = true;
 
 		$operations = [
 			[ 'value' => 'show_content',    'label' => 'Show Page Content' ],
-			[ 'value' => 'single_content',  'label' => 'Show Related Content' ],
 			[ 'value' => 'content_list',    'label' => 'Show Content List' ],
 			[ 'value' => 'link',            'label' => 'Link' ],
 			[ 'value' => 'action',          'label' => 'Action' ],

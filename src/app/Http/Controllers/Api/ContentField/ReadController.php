@@ -4,8 +4,8 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\ContentField;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\ContentType;
 
 
 class ReadController extends Controller
@@ -16,6 +16,33 @@ class ReadController extends Controller
     	$contentFields = ContentField::where( 'content_type_id', $contentTypeId)
 										->orderBy('order_no', 'ASC')
 										->get();
+
+    	if ( $contentFields->count() > 0 ) {
+
+    		foreach ( $contentFields as $cf ) {
+
+    			// If the "content type to list" field does not have options, I fill with the content types
+    			if ( $cf->name == 'content_type_to_list' && !$cf->options ) {
+
+					$contentTypes = ContentType::orderBy('order_no', 'asc')->get();
+
+					$tmp = [];
+
+					if ( $contentTypes->count() > 0 ) {
+						foreach ( $contentTypes as $ct ) {
+							$tmp[] = [
+								'value' => $ct->id,
+								'label' => $ct->content_type
+							];
+						}
+					}
+
+					$cf->options = json_encode( $tmp );
+
+				}
+			}
+
+		}
 
 		return response()->json( [ 'result' => 'ok', 'content_fields' => $contentFields ]);
 	}

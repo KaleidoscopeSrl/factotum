@@ -31,7 +31,7 @@ blockquote {
 }
 
 a {
-    color: #FF8400;
+    color: #8600FF;
 }
 
 a img {
@@ -121,10 +121,10 @@ img {
 }
 
 .header td {
-    padding: 10px 0;
+    padding: 10px;
 }
 .header img {
-	max-width: 200px;
+	max-width: 160px;
 }
 .header a {
     color: #bbbfc3;
@@ -134,7 +134,7 @@ img {
     text-shadow: 0 1px 0 white;
 }
 .header .link {
-    color: #FF8400;
+    color: #8600FF;
     padding-left: 10px;
     padding-right: 20px;
     font-size: 16px;
@@ -261,11 +261,12 @@ img {
 }
 
 .button-red {
-    background-color: #FF8400;
-    border-top: 10px solid #FF8400;
-    border-right: 18px solid #FF8400;
-    border-bottom: 10px solid #FF8400;
-    border-left: 18px solid #FF8400;
+    background-color: #FFF;
+    border-top: 10px solid #8600FF;
+    border-right: 18px solid #8600FF;
+    border-bottom: 10px solid #8600FF;
+    border-left: 18px solid #8600FF;
+	color: #8600FF;
 }
 
 /* Panels */

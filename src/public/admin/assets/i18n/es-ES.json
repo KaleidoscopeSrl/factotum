@@ -113,7 +113,9 @@
 		"no_category": "No hay categorias",
 		"content_attribute": "Atributos de contenido",
 		"categories": "Categorias",
-		"custom_fields": "Campos Personalizados"
+		"custom_fields": "Campos Personalizados",
+		"add_media_from_library": "Agregar Medios de la Biblioteca",
+		"order_no": "Número de orden"
 	},
 
 	"deleteContentDialog": {
@@ -301,6 +303,8 @@
 		"event": "Evento",
 		"rocket": "Cohete",
 		"box": "Producto",
+
+		"order_no": "Número de orden",
 
 		"save_success": "Tipo de contenido salvado!"
 	},

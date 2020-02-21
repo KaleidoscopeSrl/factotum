@@ -14,7 +14,10 @@ class ReadController extends Controller
 
 	public function getList(Request $request)
 	{
-		$query = ContentType::capabilityFilter()->withCount('content_fields');
+		$query = ContentType::capabilityFilter()
+							->withCount('content_fields')
+							->orderBy('order_no', 'ASC');
+
 		$contentTypes = $query->get();
 
 		return response()->json( [ 'result' => 'ok', 'content_types' => $contentTypes ]);

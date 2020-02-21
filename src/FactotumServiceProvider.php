@@ -100,9 +100,13 @@ class FactotumServiceProvider extends ServiceProvider
 
 			// MINISITE
 			__DIR__ . '/public/assets'        => public_path('assets'),
+			__DIR__ . '/public/robots.txt'    => public_path(''),
 			__DIR__ . '/resources/views'      => resource_path( 'views' )
 		], 'factotum');
 
+		$this->publishes([
+			__DIR__ . '/public/admin'         => public_path('admin'),
+		], 'factotum-webapp');
 
 
 		if ($this->app->runningInConsole()) {

@@ -66,7 +66,9 @@ class ReadController extends Controller
 		return response()->json( [
 			'result'   => 'ok',
 			'contents' => $contentList,
-			'total'    => Content::where('content_type_id', $contentTypeId)->count()
+			'total'    => Content::where('content_type_id', $contentTypeId)
+									->where( 'lang', $lang )
+									->count()
 		]);
 	}
 
