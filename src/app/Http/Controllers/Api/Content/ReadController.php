@@ -167,7 +167,8 @@ class ReadController extends Controller
 							if ( !$tmpLinkedContent ) {
 								$content->{$contentField->name} = '';
 							} else {
-								$content->{$contentField->name} = Content::whereIn( 'id', explode( ',', $tmpLinkedContent ) )->get();
+								$ids = explode( ',', $tmpLinkedContent );
+								$content->{$contentField->name} = Content::whereIn( 'id', $ids )->orderByRaw("FIELD(id, $tmpLinkedContent)")->get();
 							}
 						break;
 

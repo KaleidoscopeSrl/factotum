@@ -61,6 +61,23 @@ class ContentFieldObserver
 	{
 		$contentType = ContentType::find($contentField->content_type_id);
 
+		if ( $update ) {
+			if ( $contentField->mandatory ) {
+				$compareValue = ( $contentField->type == 'linked_content' ? '' : '' );
+
+				DB::table( $contentType->content_type )
+					->whereNull( $contentField->name )
+					->update( [ $contentField->name => $compareValue ] );
+			} else {
+				$compareValue = ( $contentField->type == 'linked_content' ? null : '' );
+
+				DB::table( $contentType->content_type )
+					->where( $contentField->name, $compareValue )
+					->update( [ $contentField->name => null ] );
+			}
+		}
+
+
 		$query = 'ALTER TABLE ' . $contentType->content_type
 				. ( $update ? ' CHANGE ' : ' ADD ' ) . 'COLUMN '
 				. ( $update ? $contentField->name . ' ' . $contentField->name : $contentField->name ) . ' '
@@ -74,22 +91,6 @@ class ContentFieldObserver
 
 			DB::beginTransaction();
 			DB::statement( $query );
-
-
-			if ( $update ) {
-				if ( $contentField->mandatory ) {
-					DB::table( $contentType->content_type )
-						->whereNull( $contentField->name )
-						->update( [ $contentField->name => '' ] );
-				} else {
-					$compareValue = ( $contentField->type == 'linked_content' ? 0 : '' );
-
-					DB::table( $contentType->content_type )
-						->where( $contentField->name, $compareValue )
-						->update( [ $contentField->name => null ] );
-				}
-			}
-
 			DB::commit();
 
 			$this->_saveJsonModel( $contentType );
