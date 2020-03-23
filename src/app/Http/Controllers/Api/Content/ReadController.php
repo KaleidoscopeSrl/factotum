@@ -143,7 +143,6 @@ class ReadController extends Controller
 
 			if ( $contentFields && $contentFields->count() > 0 ) {
 
-
 				foreach ( $contentFields as $contentField ) {
 
 					switch ( $contentField->type ) {
@@ -178,6 +177,10 @@ class ReadController extends Controller
 
 						case 'checkbox':
 							$content->{$contentField->name} = ( isset($dataContent->{$contentField->name}) && ($dataContent->{$contentField->name} == 1 || $dataContent->{$contentField->name} == '1') ? true : false );
+						break;
+
+						case 'datetime':
+							$content->{$contentField->name} = ( isset($dataContent->{$contentField->name}) ? strtotime($dataContent->{$contentField->name}) * 1000 : '' );
 						break;
 
 						default:

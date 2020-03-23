@@ -29,7 +29,7 @@ class UploadController extends Controller
 
 		$path = $request->file('files')->storeAs( $media->id, $media->filename, 'media' );
 
-		$media->url = 'storage/media/' . $path;
+		$media->url = 'media/' . $path;
 		$media->save();
 
 

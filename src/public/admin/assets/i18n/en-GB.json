@@ -96,6 +96,7 @@
 		"publish": "Publish",
 		"draft": "Draft",
 		"parent": "Parent",
+		"no_parent_selected": "No Parent selected",
 		"no_parent_content": "There are no parents",
 		"created_at": "Created at",
 		"updated_at": "Last update",
@@ -115,7 +116,9 @@
 		"categories": "Categories",
 		"custom_fields": "Custom Fields",
 		"add_media_from_library": "Add Media from Library",
-		"order_no": "Order No"
+		"order_no": "Order No",
+		"search_in": "Search in",
+		"multiple_help": "Drag and Drop here the contents that you want to link"
 	},
 
 	"deleteContentDialog": {
@@ -240,6 +243,7 @@
 		"checkbox": "Checkbox",
 		"date": "Date",
 		"time": "Time",
+		"datetime": "Datetime",
 		"file_upload": "File Upload",
 		"image_upload": "Image Upload",
 		"gallery": "Gallery",
@@ -252,6 +256,7 @@
 		"field_hint": "Field Hint",
 		"field_id": "Field ID",
 		"field_generate_label": "Generate from Field Label",
+		"field_order": "Field Order No.",
 		"preview": "Preview",
 		"checkbox_single_option": "The selected type accepts only one option",
 		"add_option": "Add Option",
@@ -306,6 +311,7 @@
 		"box": "Product",
 
 		"order_no": "Order No",
+		"label": "Label",
 
 		"save_success": "Content Type saved!"
 	},

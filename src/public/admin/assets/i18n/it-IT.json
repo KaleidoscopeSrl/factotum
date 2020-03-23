@@ -96,9 +96,10 @@
 		"publish": "Pubblica",
 		"draft": "Bozza",
 		"parent": "Genitore",
+		"no_parent_selected": "Nessun Genitore Selezionato",
 		"no_parent_content": "Non ci sono genitori",
 		"created_at": "Data/ora creazione",
-		"update_at": "Data/ora ultimo aggiornamento",
+		"updated_at": "Data/ora ultimo aggiornamento",
 		"seo_title": "Titolo SEO",
 		"seo_description": "Descrizione SEO",
 		"seo_canonical_url": "URL Canonical SEO",
@@ -115,7 +116,9 @@
 		"categories": "Categorie",
 		"custom_fields": "Campi Personalizzati",
 		"add_media_from_library": "Aggiungi Media dalla Libreria",
-		"order_no": "Ordinamento"
+		"order_no": "Ordinamento",
+		"search_in": "Cerca in",
+		"multiple_help": "Trascina qui sotto i contenuti che vuoi collegare"
 	},
 
 	"deleteContentDialog": {
@@ -247,6 +250,7 @@
 		"checkbox": "Spunta",
 		"date": "Data",
 		"time": "Ora",
+		"datetime": "Data e Ora",
 		"file_upload": "Caricamento File",
 		"image_upload": "Caricamento Immagine",
 		"gallery": "Gallery",
@@ -261,6 +265,7 @@
 		"field_hint": "Suggerimenti Campo",
 		"field_id": "ID Campo",
 		"field_generate_label": "Genera da Etichetta",
+		"field_order": "Ordine Campo",
 		"preview": "Anteprima",
 		"checkbox_single_option": "Il tipo selezionato accetta una sola opzione",
 		"add_option": "Aggiungi Opzione",
@@ -317,6 +322,7 @@
 		"box": "Prodotto",
 
 		"order_no": "Ordinamento",
+		"label": "Etichetta",
 
 		"save_success": "Tipo di Contenuto salvato con successo!"
 	},

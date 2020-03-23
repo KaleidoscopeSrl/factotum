@@ -23,7 +23,8 @@ Route::group([
 	});
 
 	Route::group(['middleware' => 'can:update,Kaleidoscope\Factotum\ContentType,id'], function() {
-		Route::post('/update/{id}',         'UpdateController@update');
+		Route::post('/update/{id}',               'UpdateController@update');
+		Route::post('/change-visibility/{id}',    'UpdateController@changeVisibility');
 	});
 
 	Route::group(['middleware' => 'can:delete,Kaleidoscope\Factotum\ContentType,id'], function() {

@@ -14,11 +14,10 @@ class UpdateController extends Controller
 
 	public function update( StoreContent $request, $id )
 	{
-		$data = $request->all();
+		$data    = $request->all();
+		$content = Content::find($id);
 
-		$content   = Content::find($id);
-
-		if ( !$data['created_at'] ) {
+		if ( !isset($data['created_at']) ) {
 			$data['created_at'] = date('Y-m-d H:i:s', $content->created_at / 1000 );
 		}
 

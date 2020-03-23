@@ -47,7 +47,6 @@ Then register Facade class aliases:
     'Image'                       => Intervention\Image\Facades\Image::class,
     'PrintMenu'                   => Kaleidoscope\Factotum\Helpers\PrintMenuHelper::class,
     'PrintCategories'             => Kaleidoscope\Factotum\Helpers\PrintCategoriesHelper::class,
-    'PrintField'                  => Kaleidoscope\Factotum\Helpers\PrintFieldHelper::class,
     ...
 ]
 ```

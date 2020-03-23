@@ -15,7 +15,9 @@ class ContentType extends Model
 		'editable',
 		'order_no',
 		'icon',
-		'sitemap_in'
+		'sitemap_in',
+		'label',
+		'visible'
 	];
 
 	public function content_fields() {

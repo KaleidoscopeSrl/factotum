@@ -96,6 +96,7 @@
 		"publish": "Publicar",
 		"draft": "Copia borrador",
 		"parent": "Contenido Superior",
+		"no_parent_selected": "No Contenido Superior Seleccionado",
 		"no_parent_content": "No hay contenido principal",
 		"created_at": "Creado en",
 		"updated_at": "Última actualización",
@@ -115,7 +116,9 @@
 		"categories": "Categorias",
 		"custom_fields": "Campos Personalizados",
 		"add_media_from_library": "Agregar Medios de la Biblioteca",
-		"order_no": "Número de orden"
+		"order_no": "Número de orden",
+		"search_in": "Busca en",
+		"multiple_help": "Arrastre y suelte aquí los contenidos que desea vincular"
 	},
 
 	"deleteContentDialog": {
@@ -239,6 +242,7 @@
 		"checkbox": "Caja",
 		"date": "Fecha",
 		"time": "Hora",
+		"datetime": "Fecha y Hora",
 		"file_upload": "Subir archivo",
 		"image_upload": "Carga de imagen",
 		"gallery": "Gallery",
@@ -251,6 +255,7 @@
 		"field_hint": "Sugerencia de campo",
 		"field_id": "ID Campo",
 		"field_generate_label": "Generar a partir de etiqueta de campo",
+		"field_order": "Número de orden de campo",
 		"preview": "Avance",
 		"checkbox_single_option": "El tipo seleccionado solo acepta una opción",
 		"add_option": "Agregar opción",
@@ -305,6 +310,7 @@
 		"box": "Producto",
 
 		"order_no": "Número de orden",
+		"label": "Etiqueta",
 
 		"save_success": "Tipo de contenido salvado!"
 	},

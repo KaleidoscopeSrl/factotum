@@ -25,6 +25,7 @@ class Content extends Model
 
 		'show_in_menu',
 		'is_home',
+		'order_no',
 
 		'link',
 		'link_title',
@@ -42,6 +43,7 @@ class Content extends Model
 		'fb_image',
 
 		'created_at',
+		'updated_at',
 	];
 
 	protected $casts = [

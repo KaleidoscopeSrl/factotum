@@ -196,7 +196,7 @@ class Media extends Model
 				$image->save( $thumbFilename, 90 );
 				$image->destroy();
 
-				$media->thumb = 'storage/media/' . $media->id . '/' . $image->filename . '.' . $ext;
+				$media->thumb = 'media/' . $media->id . '/' . $image->filename . '.' . $ext;
 				$media->save();
 			}
 

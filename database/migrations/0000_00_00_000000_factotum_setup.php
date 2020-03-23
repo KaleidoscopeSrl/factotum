@@ -16,12 +16,14 @@ class FactotumSetup extends Migration
 		// Create content types tables
 		Schema::create('content_types', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('label', 64);
 			$table->string('content_type', 32)->unique();
 			$table->string('old_content_type', 32)->nullable(true);
 			$table->boolean('editable')->default(true);
 			$table->integer('order_no')->unsigned()->nullable(true);
 			$table->string('icon', 64)->nullable(true);
 			$table->integer('sitemap_in')->unsigned()->default(0);
+			$table->boolean('visible')->default(true)->nullable(true);
 			$table->timestamps();
 		});
 
