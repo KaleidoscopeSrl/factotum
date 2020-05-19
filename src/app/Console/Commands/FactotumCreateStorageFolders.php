@@ -5,7 +5,7 @@ namespace Kaleidoscope\Factotum\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class CreateStorageFolders extends Command
+class FactotumCreateStorageFolders extends Command
 {
 
     protected $signature = 'factotum:storage';
@@ -23,7 +23,7 @@ class CreateStorageFolders extends Command
     public function handle()
     {
 		Storage::makeDirectory('models');
-		Storage::makeDirectory('app/public/media');
+		Storage::makeDirectory('public/media');
     }
 
 }

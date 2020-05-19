@@ -48,7 +48,8 @@ class FrontController extends Controller
 				$this->origUriParts = $this->uriParts;
 			}
 
-			$checkLang = $this->uriParts[0];
+			$checkLang = ( isset($this->uriParts) ? $this->uriParts[0] : '' );
+
 			if ( strlen($checkLang) == 5 &&
 				in_array( $checkLang, array_keys( config('factotum.site_languages') ) )  ) {
 				$this->currentLanguage = $checkLang;

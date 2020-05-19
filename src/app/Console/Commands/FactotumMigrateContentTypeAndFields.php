@@ -10,7 +10,7 @@ use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\ContentField;
 
 
-class MigrateContentTypeAndFields extends Command
+class FactotumMigrateContentTypeAndFields extends Command
 {
 
 	protected $signature = 'factotum:migrate-content-type-fields {contentType}';

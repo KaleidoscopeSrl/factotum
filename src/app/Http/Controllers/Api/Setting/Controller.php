@@ -2,6 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Setting;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
@@ -13,6 +14,29 @@ use Kaleidoscope\Factotum\Content;
 
 class Controller extends ApiBaseController
 {
+
+	public function getSettings( Request $request )
+	{
+		return [
+			'ecommerce' => env('FACTOTUM_ECOMMERCE_INSTALLED') ? true : false,
+			'version'   => config('factotum.version')
+		];
+	}
+
+
+	public function brandsViaPim( Request $request )
+	{
+		return [
+			'result' => config('factotum.brands_via_pim')
+		];
+	}
+
+	public function productCategoriesViaPim( Request $request )
+	{
+		return [
+			'result' => config('factotum.product_categories_via_pim')
+		];
+	}
 
 
 	public function saveHomepageByLanguage( StoreSetting $request )

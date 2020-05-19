@@ -154,7 +154,9 @@ class Content extends Model
 
 
 	public function childs() {
-		return $this->hasMany('Kaleidoscope\Factotum\Content','parent_id','id') ;
+		return $this->hasMany('Kaleidoscope\Factotum\Content','parent_id','id')
+					->with('user.profile')
+					->with('categories');
 	}
 
 
@@ -181,11 +183,67 @@ class Content extends Model
 	}
 
 
-	public static function treeChildsArray( $contentTypeId, $pagination = null, $language = '' )
+	private static function getQuery( $args )
 	{
-		$contents = self::_getChildContents( $contentTypeId, $pagination, $language );
+		$query = Content::whereNull( 'parent_id' );
 
-		if ($contents->count() > 0) {
+		if ( isset($args['content_type_id']) ) {
+			$query->where( 'content_type_id', $args['content_type_id'] );
+		}
+
+		if ( isset($args['lang']) ) {
+			$query->where( 'lang', $args['lang'] );
+		}
+
+		if ( isset($args['limit']) ) {
+			$query->take( $args['limit'] );
+		}
+
+		if ( isset($args['offset']) ) {
+			$query->skip( $args['offset'] );
+		}
+
+		if ( isset($args['sort']) || isset($args['direction']) ) {
+			$query->orderBy( $args['sort'], $args['direction'] );
+		}
+
+		if ( isset($args['exclude']) ) {
+			$query->whereNotIn( 'id', $args['exclude'] );
+		}
+
+		if ( isset($args['query']) ) {
+			$query->where( 'title', 'like', '%' . $args['query'] . '%' );
+		}
+
+//		echo '<pre>'; print_r($args);
+//		echo Utility::getSqlQuery($query);
+//		die;
+
+		return $query;
+	}
+
+
+	public static function getQueryCount( $args )
+	{
+		$q = self::getQuery( $args );
+		return $q->count();
+	}
+
+
+	private static function _getChildContents( $args )
+	{
+		$query = self::getQuery( $args );
+		$query->with('user.profile')->with('categories');
+
+		return $query->get();
+	}
+
+
+	public static function treeChildsArray( $args )
+	{
+		$contents = self::_getChildContents( $args );
+
+		if ( $contents->count() > 0 ) {
 			$contents = self::_parseChildsTree( $contents );
 		}
 		return $contents->toArray();
@@ -202,28 +260,9 @@ class Content extends Model
 	}
 
 
-	private static function _getChildContents( $contentTypeId, $pagination, $language = '' )
-	{
-		$query = Content::where( 'content_type_id', '=', $contentTypeId )
-						->whereNull( 'parent_id' )
-						->orderBy('order_no', 'DESC')
-						->orderBy('id', 'DESC');
-
-		if ( $language != '' ) {
-			$query->where( 'lang', $language );
-		}
-
-		if ( $pagination ) {
-			return $query->paginate($pagination);
-		} else {
-			return $query->get();
-		}
-	}
-
-
 	private static function _parseChildsTree( $contents )
 	{
-		foreach ($contents as $c) {
+		foreach ( $contents as $c ) {
 			if ( $c->childs->count() > 0 ) {
 				$c->childs = $c->childs->sortByDesc('order_no');
 				$c->childs = self::_parseChildsTree($c->childs);
@@ -236,12 +275,12 @@ class Content extends Model
 	// MUTATORS
 	public function getCreatedAtAttribute($value)
 	{
-		return ( $value ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->timestamp * 1000 : null );
+		return ( $value ? strtotime($value) * 1000 : null );
 	}
 
 	public function getUpdatedAtAttribute($value)
 	{
-		return ( $value ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->timestamp * 1000 : null );
+		return ( $value ? strtotime($value) * 1000 : null );
 	}
 
 

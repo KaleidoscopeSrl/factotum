@@ -221,12 +221,12 @@ class Media extends Model
 
 	public function getCreatedAtAttribute($value)
 	{
-		return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->timestamp * 1000;
+		return strtotime( $value ) * 1000;
 	}
 
 	public function getUpdatedAtAttribute($value)
 	{
-		return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->timestamp * 1000;
+		return strtotime( $value ) * 1000;
 	}
 
 	public function getIconAttribute($value) {

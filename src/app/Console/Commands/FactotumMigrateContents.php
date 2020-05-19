@@ -13,7 +13,7 @@ use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\Media;
 
 
-class MigrateContents extends Command
+class FactotumMigrateContents extends Command
 {
 
 	protected $signature = 'factotum:migrate-contents {contentType}';

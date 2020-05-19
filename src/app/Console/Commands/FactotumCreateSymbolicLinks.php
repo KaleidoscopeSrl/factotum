@@ -4,7 +4,7 @@ namespace Kaleidoscope\Factotum\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class CreateSymbolicLinks extends Command
+class FactotumCreateSymbolicLinks extends Command
 {
     /**
      * The name and signature of the console command.

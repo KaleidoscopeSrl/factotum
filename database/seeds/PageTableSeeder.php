@@ -20,7 +20,9 @@ class PageTableSeeder extends Seeder
     	// Create content type page
 		$pageContentType = new ContentType;
 		$pageContentType->content_type = 'page';
+		$pageContentType->label        = 'Pagine';
 		$pageContentType->editable     = false;
+		$pageContentType->visible      = true;
 		$pageContentType->icon         = 'content';
 		$pageContentType->save();
 
@@ -41,7 +43,7 @@ class PageTableSeeder extends Seeder
 		$contentField->type            = 'select';
 		$contentField->mandatory       = true;
 		$templates = [
-			[ 'value' => 'basic',        'label' => 'Basic Page Template' ],
+			[ 'value' => 'basic',         'label' => 'Basic Page Template' ],
 			[ 'value' => 'content_list',  'label' => 'Content List Page Template' ],
 			[ 'value' => 'ajax',          'label' => 'Ajax Page Template' ],
 			[ 'value' => 'contact_us',    'label' => 'Contact Us Page Template' ],
@@ -193,7 +195,9 @@ class PageTableSeeder extends Seeder
 		// Create content type news
 		$contentType               = new ContentType;
 		$contentType->content_type = 'news';
+		$contentType->label        = 'News';
 		$contentType->editable     = true;
+		$contentType->visible      = true;
 		$contentType->icon         = 'news';
 		$contentType->save();
 

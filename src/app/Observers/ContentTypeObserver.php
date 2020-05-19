@@ -23,9 +23,9 @@ class ContentTypeObserver
 
 		Schema::create( $contentType->content_type, function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('content_type_id')->unsigned();
+			$table->bigInteger('content_type_id')->unsigned();
 			$table->foreign('content_type_id')->references('id')->on('content_types')->onDelete('cascade');
-			$table->integer('content_id')->unsigned();
+			$table->bigInteger('content_id')->unsigned();
 			$table->foreign('content_id')->references('id')->on('contents')->onDelete('cascade');
 		});
 

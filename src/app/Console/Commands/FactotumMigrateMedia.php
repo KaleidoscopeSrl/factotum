@@ -10,7 +10,7 @@ use Kaleidoscope\Factotum\Media;
 use Kaleidoscope\Factotum\User;
 
 
-class MigrateMedia extends Command
+class FactotumMigrateMedia extends Command
 {
 
 	protected $signature = 'factotum:migrate-media';

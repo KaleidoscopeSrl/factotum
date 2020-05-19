@@ -13,7 +13,7 @@ use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\Media;
 
 
-class ResetAbsUrl extends Command
+class FactotumResetAbsUrl extends Command
 {
 
 	protected $signature = 'factotum:reset-abs-url {contentType}';

@@ -23,52 +23,58 @@ class ReadController extends Controller
 		$lang      = $request->input('lang');
 		$limit     = $request->input('limit');
 		$offset    = $request->input('offset');
-		$sort      = $request->input('sort');
-		$direction = $request->input('direction');
+		$sort      = $request->input('sort', 'id');
+		$direction = $request->input('direction', 'DESC');
 		$contentId = $request->input('contentId');
-
-		if ( !$sort ) {
-			$sort = 'id';
-		}
-
-		if ( !$direction ) {
-			$direction = 'DESC';
-		}
-
-		$query = Content::with('user.profile')
-						->with('categories')
-						->where('content_type_id', $contentTypeId)
-						->orderBy($sort, $direction);
-
-		if ( $lang ) {
-			$query->where( 'lang', $lang );
-		}
-
-		if ( $limit ) {
-			$query->take($limit);
-		}
-
-		if ( $offset ) {
-			$query->skip($offset);
-		}
-
-		if ( $contentId ) {
-			$query = $query->where('id', '<>' , $contentId);
-		}
-
-		if ( $request->input('filter') ) {
-			$query->where( 'title', 'like', '%' . $request->input('filter') . '%' );
-		}
+		$filter    = $request->input('filter');
 
 
-		$contentList = $query->get();
+		$args = [
+			'content_type_id' => $contentTypeId,
+			'lang'            => $lang,
+			'limit'           => $limit,
+			'offset'          => $offset,
+			'sort'            => $sort,
+			'direction'       => $direction,
+			'query'           => $filter,
+		];
+
+//		$query = Content::with('user.profile')
+//						->with('categories')
+//						->where('content_type_id', $contentTypeId)
+//						->orderBy($sort, $direction);
+//
+//		if ( $lang ) {
+//			$query->where( 'lang', $lang );
+//		}
+//
+//		if ( $limit ) {
+//			$query->take($limit);
+//		}
+//
+//		if ( $offset ) {
+//			$query->skip($offset);
+//		}
+//
+//		if ( $contentId ) {
+//			$args['exclude'] = [ $contentId ];
+//			$query = $query->where('id', '<>' , $contentId);
+//		}
+//
+//		if ( $request->input('filter') ) {
+//			$query->where( 'title', 'like', '%' . $request->input('filter') . '%' );
+//		}
+//
+//		$contentList = $query->get();
+		$contentList = Content::treeChildsArray( $args );
+
+//		$q = Content::getQuery( $args );
+//		echo '<pre>'; print_r($args);
 
 		return response()->json( [
 			'result'   => 'ok',
 			'contents' => $contentList,
-			'total'    => Content::where('content_type_id', $contentTypeId)
-									->where( 'lang', $lang )
-									->count()
+			'total'    => Content::getQueryCount( $args )
 		]);
 	}
 

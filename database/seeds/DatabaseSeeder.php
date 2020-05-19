@@ -25,35 +25,29 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$path = base_path('.env');
+		$this->setFKCheckOff();
 
-		if ( file_exists($path) && !env('FACTOTUM_INSTALLED') ) {
-			file_put_contents($path, "\n" . 'FACTOTUM_INSTALLED=true', FILE_APPEND);
+		Capability::truncate();
+		Category::truncate();
+		Content::truncate();
+		CategoryContent::truncate();
+		ContentField::truncate();
+		ContentType::truncate();
+		Media::truncate();
+		Profile::truncate();
+		Role::truncate();
+		User::truncate();
 
-			$this->setFKCheckOff();
-
-			Capability::truncate();
-			Category::truncate();
-			Content::truncate();
-			CategoryContent::truncate();
-			ContentField::truncate();
-			ContentType::truncate();
-			Media::truncate();
-			Profile::truncate();
-			Role::truncate();
-			User::truncate();
-
-			if (Schema::hasTable('page')) {
-				Schema::drop( 'page' );
-			}
-
-			$this->setFKCheckOn();
-
-			$this->call(RolesTableSeeder::class);
-			$this->call(UsersTableSeeder::class);
-			$this->call(ProfilesTableSeeder::class);
-			$this->call(PageTableSeeder::class);
+		if (Schema::hasTable('page')) {
+			Schema::drop( 'page' );
 		}
+
+		$this->setFKCheckOn();
+
+		$this->call(RolesTableSeeder::class);
+		$this->call(UsersTableSeeder::class);
+		$this->call(ProfilesTableSeeder::class);
+		$this->call(PageTableSeeder::class);
 
 	}
 

@@ -5,7 +5,7 @@ namespace Kaleidoscope\Factotum\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class CleanFolders extends Command
+class FactotumCleanFolders extends Command
 {
 
 	protected $signature = 'factotum:clean-laravel-scaffolding';

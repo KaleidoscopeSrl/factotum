@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
 use Kaleidoscope\Factotum\Mail\AuthForgottenPassword;
@@ -17,7 +16,6 @@ use Kaleidoscope\Factotum\User;
 class ForgotPasswordController extends Controller
 {
 
-    use SendsPasswordResetEmails;
 
 
     public function __construct()
@@ -58,4 +56,6 @@ class ForgotPasswordController extends Controller
 		return $this->_sendJsonError( 'Impossibile recuperare la password' );
 
 	}
+
+
 }

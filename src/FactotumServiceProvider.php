@@ -18,21 +18,26 @@ use Kaleidoscope\Factotum\Policies\ContentFieldPolicy;
 use Kaleidoscope\Factotum\Policies\ContentPolicy;
 use Kaleidoscope\Factotum\Policies\MediaPolicy;
 use Kaleidoscope\Factotum\Policies\CategoryPolicy;
+use Kaleidoscope\Factotum\Policies\BrandPolicy;
+use Kaleidoscope\Factotum\Policies\ProductCategoryPolicy;
+use Kaleidoscope\Factotum\Policies\ProductPolicy;
+
 
 use Kaleidoscope\Factotum\Observers\ContentTypeObserver;
 use Kaleidoscope\Factotum\Observers\ContentFieldObserver;
 use Kaleidoscope\Factotum\Observers\ContentObserver;
 use Kaleidoscope\Factotum\Observers\CategoryObserver;
 
-use Kaleidoscope\Factotum\Console\Commands\CleanFolders;
-use Kaleidoscope\Factotum\Console\Commands\MigrateContentTypeAndFields;
-use Kaleidoscope\Factotum\Console\Commands\MigrateMedia;
-use Kaleidoscope\Factotum\Console\Commands\MigrateContents;
-use Kaleidoscope\Factotum\Console\Commands\ResetAbsUrl;
-use Kaleidoscope\Factotum\Console\Commands\DumpAutoload;
-use Kaleidoscope\Factotum\Console\Commands\CreateStorageFolders;
-use Kaleidoscope\Factotum\Console\Commands\CreateSymbolicLinks;
+
+use Kaleidoscope\Factotum\Console\Commands\FactotumCleanFolders;
+use Kaleidoscope\Factotum\Console\Commands\FactotumMigrateContentTypeAndFields;
+use Kaleidoscope\Factotum\Console\Commands\FactotumMigrateMedia;
+use Kaleidoscope\Factotum\Console\Commands\FactotumMigrateContents;
+use Kaleidoscope\Factotum\Console\Commands\FactotumResetAbsUrl;
+use Kaleidoscope\Factotum\Console\Commands\FactotumCreateStorageFolders;
+use Kaleidoscope\Factotum\Console\Commands\FactotumCreateSymbolicLinks;
 use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
+use Kaleidoscope\Factotum\Console\Commands\DumpAutoload;
 
 
 
@@ -56,14 +61,27 @@ class FactotumServiceProvider extends ServiceProvider
 		Schema::defaultStringLength(191);
 
 
+		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+			$policies[] = [
+				Brand::class             => BrandPolicy::class,
+				ProductCategory::class   => ProductCategoryPolicy::class,
+				Product::class           => ProductPolicy::class,
+				Order::class             => OrderPolicy::class
+			];
+		}
+
 		// Migrations & Seeds
-		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+		// $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
 
 
 		// Configurations
 		$this->app['config']->set( 'auth', array_merge(
 			$this->app['config']->get('auth', []), require __DIR__ . '/config/auth.php'
+		));
+
+		$this->app['config']->set( 'cors', array_merge(
+			$this->app['config']->get('cors', []), require __DIR__ . '/config/cors.php'
 		));
 
 		$this->app['config']->set( 'database', array_merge(
@@ -109,18 +127,20 @@ class FactotumServiceProvider extends ServiceProvider
 		], 'factotum-webapp');
 
 
-		if ($this->app->runningInConsole()) {
+		if ( $this->app->runningInConsole() ) {
+
 			$this->commands([
-				CleanFolders::class,
-				ResetAbsUrl::class,
-				MigrateMedia::class,
-				MigrateContentTypeAndFields::class,
-				MigrateContents::class,
+				FactotumCleanFolders::class,
+				FactotumResetAbsUrl::class,
+				FactotumMigrateMedia::class,
+				FactotumMigrateContentTypeAndFields::class,
+				FactotumMigrateContents::class,
 				DumpAutoload::class,
-				CreateStorageFolders::class,
-				CreateSymbolicLinks::class,
+				FactotumCreateStorageFolders::class,
+				FactotumCreateSymbolicLinks::class,
 				FactotumInstallation::class
 			]);
+
 		}
 
 
@@ -138,7 +158,6 @@ class FactotumServiceProvider extends ServiceProvider
 			'middleware' => [
 				'api',
 				'session_start',
-				'preflight'
 			],
 			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Api'
 		], function ($router) {
@@ -152,12 +171,19 @@ class FactotumServiceProvider extends ServiceProvider
 			'middleware' => [
 				'api',
 				'auth:api',
-				'session_start',
-				'preflight',
+				'session_start'
 			],
 			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Api'
 		], function ($router) {
 			require __DIR__ . '/routes/api/auth.php';
+
+			if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+				require __DIR__ . '/routes/api/brand.php';
+				require __DIR__ . '/routes/api/product-category.php';
+				require __DIR__ . '/routes/api/product.php';
+				require __DIR__ . '/routes/api/order.php';
+			}
+
 			require __DIR__ . '/routes/api/capability.php';
 			require __DIR__ . '/routes/api/category.php';
 			require __DIR__ . '/routes/api/content.php';

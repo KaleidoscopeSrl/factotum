@@ -7,41 +7,157 @@ use Illuminate\Console\Command;
 class FactotumInstallation extends Command
 {
 
-	protected $signature = 'factotum:install';
+	protected $signature = 'factotum:install {--reinstall}';
 
 
 	protected $description = 'Install Factotum CMS';
 
 
+	private $install;
+	private $installEcommerce;
+	private $reInstall;
+
+	private $migrationPath;
+
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->install          = false;
+		$this->installEcommerce = false;
+		$this->reInstall        = false;
+		$this->migrationPath    = 'vendor/kaleidoscope/' . ( env('APP_ENV') == 'local' ? 'dev-' : '')
+								. 'factotum/database/migrations';
+	}
+
+
+	private function _resetMigration()
+	{
+		$this->info('Resetting DB...');
+
+		$paths = [
+			$this->migrationPath . '/0000_00_00_000000_factotum_setup.php'
+		];
+
+		if ( $this->installEcommerce ) {
+			$paths[] = $this->migrationPath . '/0000_00_00_000001_factotum_ecommerce_setup.php';
+		}
+
+		$this->call('migrate:reset', [
+			'--path' => $paths
+		]);
+
+		$this->info('DB resetted...');
+	}
+
+
+	private function _cleanLaravelScaffolding()
+	{
+		$this->info('Cleaning up Laravel scaffolding...');
+		$this->call('factotum:clean-laravel-scaffolding');
+		$this->info('Clean up done.');
+	}
+
+
+	private function _publishVendorAndDump()
+	{
+		$this->call('vendor:publish', [ '--tag' => 'factotum' ]);
+		$this->call('dump-autoload');
+	}
+
+
+	private function _installMigration()
+	{
+		$this->info('Migration running...');
+		$this->call('migrate', [
+			'--path' => $this->migrationPath . '/0000_00_00_000000_factotum_setup.php'
+		] );
+		$this->call('migrate');
+		$this->info('Migration done.');
+
+		if ( $this->installEcommerce ) {
+			$this->info('eCommerce Migration running...');
+			$this->call('migrate', [
+				'--path' => $this->migrationPath . '/0000_00_00_000001_factotum_ecommerce_setup.php'
+			] );
+			$this->info('eCommerce Migration done.');
+		}
+	}
+
+
+	private function _installPassport()
+	{
+		$this->call('passport:install', [ '--force' => true ]);
+	}
+
+
+	private function _dbSeeding()
+	{
+		$this->info('Seeding running...');
+		$this->call('db:seed');
+		$this->info('Seeding done.');
+
+		if ( $this->installEcommerce ) {
+			$this->info('eCommerce Seeding running...');
+			$this->call('db:seed', [ '--class' => 'EcommerceTableSeeder' ]);
+			$this->info('eCommerce Seeding done.');
+		}
+	}
+
+
+	private function _factotumUtils()
+	{
+		$this->call('factotum:storage');
+		$this->call('factotum:symlinks');
+
+		$path = base_path('.env');
+
+		if ( file_exists($path) && !env('FACTOTUM_INSTALLED') ) {
+			file_put_contents($path, "\n" . 'FACTOTUM_INSTALLED=true', FILE_APPEND);
+
+			if ( $this->installEcommerce ) {
+				file_put_contents($path, "\n" . 'FACTOTUM_ECOMMERCE_INSTALLED=true', FILE_APPEND);
+			}
+		}
 	}
 
 
 	public function handle()
 	{
+		$this->reInstall = $this->option('reinstall');
+
 		if ( $this->confirm('Are you sure?') ) {
+			$this->install = true;
+		}
 
-			$this->info('Cleaning up Laravel scaffolding...');
-			$this->call('factotum:clean-laravel-scaffolding');
-			$this->info('Clean up done.');
+		if ( $this->confirm('Do you want to install the eCommerce Version') ) {
+			$this->installEcommerce = true;
+		}
 
-			$this->call('vendor:publish', [ '--tag' => 'factotum' ]);
-			$this->call('dump-autoload');
+		if ( !$this->install ) {
+			$this->info('Nothing to do.');
+			exit;
+		}
 
-			$this->info('Migration running...');
-			$this->call('migrate');
-			$this->info('Migration done.');
+		if ( $this->reInstall ) {
+			$this->_resetMigration();
 
-			$this->info('Seeding running...');
-			$this->call('db:seed');
-			$this->info('Seeding done.');
+			// TODO: destroy folders from storage
+			// TODO: destroy symlinks
+			// TODO: found a way to remove keys from .env
+		}
 
-			$this->call('passport:install');
-			$this->call('factotum:storage');
-			$this->call('factotum:symlinks');
+		if ( $this->install ) {
 
+			$this->_cleanLaravelScaffolding();
+			$this->_publishVendorAndDump();
+			$this->_installMigration();
+
+			$this->_installPassport();
+
+			$this->_dbSeeding();
+
+			$this->_factotumUtils();
 		}
 
 	}

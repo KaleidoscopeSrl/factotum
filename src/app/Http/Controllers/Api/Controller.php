@@ -110,7 +110,6 @@ class Controller extends BaseController
 		} else {
 			return response('OK', 200);
 		}
-
 	}
 
 }

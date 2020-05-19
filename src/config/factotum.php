@@ -16,6 +16,17 @@ return [
 		'pages', 'page',
 		'categories', 'category',
 		'content_categories', 'content_category',
+
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'brand' : '' ),
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'brands' : '' ),
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'product' : '' ),
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'products' : '' ),
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'discount_code' : '' ),
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'discount_codes' : '' ),
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'product_category' : '' ),
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'product_categories' : '' ),
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'cart' : '' ),
+		( env('FACTOTUM_ECOMMERCE_INSTALLED') ? 'carts' : '' ),
 	],
 
 
@@ -37,12 +48,14 @@ return [
 		'multiple_linked_content'    => 'Multiple Linked Content',
 	],
 
+
 	'image_operations' => [
 		'null'   => 'None',
 		'resize' => 'Resize',
 		'crop'   => 'Crop',
 		'fit'    => 'Fit'
 	],
+
 
 	'prohibited_content_field_names' => [
 		'id',
@@ -68,6 +81,7 @@ return [
 		'updated_at'
 	],
 
+
 	'thumb_size' => [
 		'width'  => 100,
 		'height' => 100
@@ -84,6 +98,9 @@ return [
 	'analytics_client_id' => '',
 	'analytics_site_id'   => '',
 
-	'css_version' => '1.0.0',
-	'js_version'  => '1.0.0',
+	'brands_via_pim'             => false,
+	'product_categories_via_pim' => false,
+
+	'version' => '4.3.0',
+
 ];
