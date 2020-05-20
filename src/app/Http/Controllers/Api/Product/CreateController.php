@@ -22,4 +22,17 @@ class CreateController extends Controller
 		return response()->json( [ 'result' => 'ok', 'product'  => $product->toArray() ] );
 	}
 
+	public function duplicate( Request $request, $productId )
+	{
+		$product = Product::find( $productId );
+		$product = $product->replicate();
+
+		$product->code   = substr( $product->code . '_2', 0, 16);
+		$product->name   = $product->name . ' clone';
+		$product->active = 0;
+		$product->save();
+
+		return response()->json( [ 'result' => 'ok', 'product'  => $product->toArray() ] );
+	}
+
 }

@@ -10,10 +10,10 @@ class DeleteController extends Controller
 
     public function remove(Request $request, $id)
     {
-        $role = Brand::find( $id );
+        $brand = Brand::find( $id );
 
-        if ( $role ) {
-            $deletedRows = $role->delete();
+        if ( $brand ) {
+            $deletedRows = $brand->delete();
 
             if ( $deletedRows > 0 ) {
                 return response()->json( [ 'result' => 'ok' ]);

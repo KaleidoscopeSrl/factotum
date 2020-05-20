@@ -15,7 +15,7 @@ class CreateController extends Controller
 		$brand->fill($data);
 		$brand->save();
 
-        return response()->json( [ 'result' => 'ok', 'brand'  => $brand->toArray() ] );
+        return response()->json( [ 'result' => 'ok', 'brand'  => $brand ] );
     }
 
 }

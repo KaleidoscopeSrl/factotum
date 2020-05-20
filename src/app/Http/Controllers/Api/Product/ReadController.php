@@ -108,4 +108,17 @@ class ReadController extends Controller
         return $this->_sendJsonError( 'Product not found', 404 );
     }
 
+
+	public function getNumberByStatus( Request $request )
+	{
+		$totalActive    = Product::where('active', 1)->count();
+		$totalNotActive = Product::whereNull('active')->orWhere('active', 0)->count();
+
+		return response()->json( [
+			'result' => 'ok',
+			'active' => $totalActive,
+			'not_active' => $totalNotActive
+		]);
+	}
+
 }

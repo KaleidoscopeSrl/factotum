@@ -21,6 +21,7 @@ use Kaleidoscope\Factotum\Policies\CategoryPolicy;
 use Kaleidoscope\Factotum\Policies\BrandPolicy;
 use Kaleidoscope\Factotum\Policies\ProductCategoryPolicy;
 use Kaleidoscope\Factotum\Policies\ProductPolicy;
+use Kaleidoscope\Factotum\Policies\TaxPolicy;
 
 
 use Kaleidoscope\Factotum\Observers\ContentTypeObserver;
@@ -66,6 +67,7 @@ class FactotumServiceProvider extends ServiceProvider
 				Brand::class             => BrandPolicy::class,
 				ProductCategory::class   => ProductCategoryPolicy::class,
 				Product::class           => ProductPolicy::class,
+				Tax::class               => TaxPolicy::class,
 				Order::class             => OrderPolicy::class
 			];
 		}
@@ -182,6 +184,7 @@ class FactotumServiceProvider extends ServiceProvider
 				require __DIR__ . '/routes/api/product-category.php';
 				require __DIR__ . '/routes/api/product.php';
 				require __DIR__ . '/routes/api/order.php';
+				require __DIR__ . '/routes/api/tax.php';
 			}
 
 			require __DIR__ . '/routes/api/capability.php';

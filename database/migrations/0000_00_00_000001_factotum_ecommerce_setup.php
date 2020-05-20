@@ -74,8 +74,8 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('brand_id')->unsigned()->nullable();
 			$table->foreign('brand_id')->references('id')->on('brands');
 
-			$table->bigInteger('category_id')->unsigned()->nullable();
-			$table->foreign('category_id')->references('id')->on('product_categories');
+			$table->bigInteger('product_category_id')->unsigned()->nullable();
+			$table->foreign('product_category_id')->references('id')->on('product_categories');
 
 			$table->integer('order_no')->nullable(true);
 			$table->string('seo_title', 60)->nullable(true);
