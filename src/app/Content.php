@@ -57,7 +57,9 @@ class Content extends Model
 	public function save( array $options = [] )
 	{
 		$contentSaved = parent::save($options);
+
 		$this->_saveAdditionalContent( $this );
+
 		return $contentSaved;
 	}
 
@@ -68,7 +70,7 @@ class Content extends Model
 
 		if ( count($data) > 0 ) {
 
-			// Categories
+			// Save Categories
 			if ( isset($data['categories']) ) {
 				CategoryContent::where( 'content_id', $content->id )->delete();
 
@@ -81,58 +83,63 @@ class Content extends Model
 			}
 
 			// Save Additional Fields
-			$contentType   = ContentType::find($data['content_type_id']);
-			$contentFields = ContentField::where( 'content_type_id', '=', $content->content_type_id )->get();
+			if ( isset($data['content_type_id']) ) {
 
-			if ( $contentType && $contentFields->count() > 0 ) {
+				$contentType   = ContentType::find($data['content_type_id']);
+				$contentFields = ContentField::where( 'content_type_id', '=', $content->content_type_id )->get();
 
-				$additionalValuesExists = DB::table( $contentType->content_type )
-											->where( 'content_type_id', $contentType->id )
-											->where( 'content_id', $content->id )
-											->first();
+				if ( $contentType && $contentFields->count() > 0 ) {
 
-				$additionalValues = array(
-					'content_type_id' => $contentType->id,
-					'content_id'      => $content->id
-				);
+					$additionalValuesExists = DB::table( $contentType->content_type )
+												->where( 'content_type_id', $contentType->id )
+												->where( 'content_id', $content->id )
+												->first();
+
+					$additionalValues = array(
+						'content_type_id' => $contentType->id,
+						'content_id'      => $content->id
+					);
 
 
-				foreach ( $contentFields as $field ) {
+					foreach ( $contentFields as $field ) {
 
-					// Date fields
-					if ( isset( $data[ $field->name ] ) && $field->type == 'date' && $data[$field->name] != '' ) {
-						$data[$field->name] = Utility::convertHumanDateToIso($data[$field->name]);
-					}
-
-					// Date-time fields
-					if ( isset( $data[ $field->name ] ) && $field->type == 'datetime' && $data[$field->name] != '' ) {
-						$data[$field->name] = Utility::convertHumanDateTimeToIso($data[$field->name]);
-					}
-
-					// Image Operation
-					if ( $field->type == 'image_upload' && isset( $data[ $field->name ] ) ) {
-						Media::saveImageById( $field, $data[ $field->name ] );
-					}
-
-					// Gallery Operation
-					if ( $field->type == 'gallery' && isset( $data[ $field->name ] ) ) {
-						$gallery = explode( ',', $data[ $field->name ] );
-						foreach ( $gallery as $g ) {
-							Media::saveImageById( $field, $g );
+						// Date fields
+						if ( isset( $data[ $field->name ] ) && $field->type == 'date' && $data[$field->name] != '' ) {
+							$data[$field->name] = Utility::convertHumanDateToIso($data[$field->name]);
 						}
+
+						// Date-time fields
+						if ( isset( $data[ $field->name ] ) && $field->type == 'datetime' && $data[$field->name] != '' ) {
+							$data[$field->name] = Utility::convertHumanDateTimeToIso($data[$field->name]);
+						}
+
+						// Image Operation
+						if ( $field->type == 'image_upload' && isset( $data[ $field->name ] ) ) {
+							Media::saveImageById( $field, $data[ $field->name ] );
+						}
+
+						// Gallery Operation
+						if ( $field->type == 'gallery' && isset( $data[ $field->name ] ) ) {
+							$gallery = explode( ',', $data[ $field->name ] );
+							foreach ( $gallery as $g ) {
+								Media::saveImageById( $field, $g );
+							}
+							// TODO: verificare
+						}
+
+						$additionalValues[ $field->name ] = (isset($data[ $field->name ]) ? $data[ $field->name ] : null);
+
 					}
 
-					$additionalValues[ $field->name ] = (isset($data[ $field->name ]) ? $data[ $field->name ] : null);
+					if ( $additionalValuesExists ) {
+						DB::table( $contentType->content_type )
+							->where( 'id', $additionalValuesExists->id )
+							->update( $additionalValues );
+					} else {
+						DB::table( $contentType->content_type )
+							->insert( $additionalValues );
+					}
 
-				}
-
-				if ( $additionalValuesExists ) {
-					DB::table( $contentType->content_type )
-						->where( 'id', $additionalValuesExists->id )
-						->update( $additionalValues );
-				} else {
-					DB::table( $contentType->content_type )
-						->insert( $additionalValues );
 				}
 
 			}

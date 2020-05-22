@@ -22,12 +22,14 @@ use Kaleidoscope\Factotum\Policies\BrandPolicy;
 use Kaleidoscope\Factotum\Policies\ProductCategoryPolicy;
 use Kaleidoscope\Factotum\Policies\ProductPolicy;
 use Kaleidoscope\Factotum\Policies\TaxPolicy;
+use Kaleidoscope\Factotum\Policies\DiscountCodePolicy;
 
 
 use Kaleidoscope\Factotum\Observers\ContentTypeObserver;
 use Kaleidoscope\Factotum\Observers\ContentFieldObserver;
 use Kaleidoscope\Factotum\Observers\ContentObserver;
 use Kaleidoscope\Factotum\Observers\CategoryObserver;
+use Kaleidoscope\Factotum\Observers\DiscountCodeObserver;
 
 
 use Kaleidoscope\Factotum\Console\Commands\FactotumCleanFolders;
@@ -68,6 +70,7 @@ class FactotumServiceProvider extends ServiceProvider
 				ProductCategory::class   => ProductCategoryPolicy::class,
 				Product::class           => ProductPolicy::class,
 				Tax::class               => TaxPolicy::class,
+				DiscountCode::class      => DiscountCodePolicy::class,
 				Order::class             => OrderPolicy::class
 			];
 		}
@@ -152,6 +155,10 @@ class FactotumServiceProvider extends ServiceProvider
 		Content::observe(ContentObserver::class);
 		Category::observe(CategoryObserver::class);
 
+		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+			DiscountCode::observe(DiscountCodeObserver::class);
+		}
+
 
 		// Routes
 
@@ -185,6 +192,7 @@ class FactotumServiceProvider extends ServiceProvider
 				require __DIR__ . '/routes/api/product.php';
 				require __DIR__ . '/routes/api/order.php';
 				require __DIR__ . '/routes/api/tax.php';
+				require __DIR__ . '/routes/api/discount-code.php';
 			}
 
 			require __DIR__ . '/routes/api/capability.php';

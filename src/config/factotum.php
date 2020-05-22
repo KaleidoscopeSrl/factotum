@@ -88,7 +88,7 @@ return [
 	],
 
 
-	'main_site_language' => 'en-GB',
+	'main_site_language' => 'it-IT',
 
 	'site_languages' => [
 		'en-GB' => 'English',
@@ -100,6 +100,7 @@ return [
 
 	'brands_via_pim'             => false,
 	'product_categories_via_pim' => false,
+	'products_via_pim'           => false,
 
 	'version' => '4.3.0',
 

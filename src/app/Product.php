@@ -24,6 +24,7 @@ class Product extends Model
 		'validity',
 		'brand_id',
 		'category_id',
+		'tax_id',
 
 		'url',
 		'abs_url',
@@ -56,15 +57,91 @@ class Product extends Model
 	}
 
 
-	public function category() {
-		return $this->hasOne('Kaleidoscope\Factotum\ProductCategory', 'id', 'category_id');
+	public function product_category() {
+		return $this->hasOne('Kaleidoscope\Factotum\ProductCategory', 'id', 'product_category_id');
+	}
+
+	public function tax() {
+		return $this->hasOne('Kaleidoscope\Factotum\Tax', 'id', 'tax_id');
 	}
 
 	public function orders() {
 		return $this->belongsToMany('Kaleidoscope\Factotum\Order', 'order_product');
 	}
 
+	public function discount_codes() {
+		return $this->belongsToMany('Kaleidoscope\Factotum\DiscountCode', 'product_discount_code');
+	}
+
+
 	public function getImageAttribute($value)
+	{
+		return $this->_getMediaFromValue( $value );
+	}
+
+
+	public function getFbImageAttribute($value)
+	{
+		return $this->_getMediaFromValue( $value );
+	}
+
+
+	public function getGalleryAttribute($value)
+	{
+		return $this->_getMultipleMediaFromValue( $value );
+	}
+
+
+	// CUSTOM FILL
+	public function fill(array $attributes)
+	{
+		if ( isset($attributes['active']) ) {
+			if ( $attributes['active'] == '' ) {
+				$attributes['active'] = 0;
+			}
+		}
+
+		if ( isset($attributes['image']) ) {
+			$image = $attributes['image'];
+
+			// Main image
+			if ( isset($image) && is_array($image) && count($image) > 0 ) {
+				$attributes['image'] = $image[0]['id'];
+			} else {
+				$attributes['image'] = ( substr($image, 0, 4) == 'http' ? $image : null );
+			}
+		}
+
+		if ( isset($attributes['fb_image']) ) {
+			$fbImage = $attributes['fb_image'];
+
+			// Fb Image
+			if ( isset($fbImage) && is_array($fbImage) && count($fbImage) > 0 ) {
+				$attributes['fb_image'] = $fbImage[0]['id'];
+			} else {
+				$attributes['fb_image'] = ( substr($fbImage, 0, 4) == 'http' ? $fbImage : null );
+			}
+		}
+
+		if ( isset($attributes['gallery']) ) {
+			$gallery = $attributes['gallery'];
+
+			// Gallery
+			if ( isset($gallery) && count($gallery) > 0 ) {
+				$tmp = [];
+				foreach ( $gallery as $img ) {
+					$tmp[] = $img['id'];
+				}
+				$attributes['gallery'] = join( ',', $tmp );
+			} else {
+				$attributes['gallery'] = null;
+			}
+		}
+
+		return parent::fill($attributes);
+	}
+
+	private function _getMediaFromValue( $value )
 	{
 		if ( $value ) {
 
@@ -74,6 +151,16 @@ class Product extends Model
 
 			$media = Media::find($value);
 			return ( $media ? [ Media::find($value) ] : null );
+		}
+
+		return null;
+	}
+
+	private function _getMultipleMediaFromValue( $value )
+	{
+		if ( $value ) {
+			$media = Media::whereIn( 'id', explode(',', $value) )->get();
+			return $media;
 		}
 
 		return null;

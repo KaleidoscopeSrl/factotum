@@ -26,13 +26,13 @@ class ProductCategoryPolicy
 	}
 
 
-	public function update(User $user, $categoryID)
+	public function update(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_product_categories ? true : false );
 	}
 
 
-	public function delete(User $user, $categoryID)
+	public function delete(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_product_categories ? true : false );
 	}

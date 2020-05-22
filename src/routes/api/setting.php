@@ -16,6 +16,7 @@ Route::group([
 
 	Route::get('/brands-via-pim',                    'Controller@brandsViaPim');
 	Route::get('/product-categories-via-pim',        'Controller@productCategoriesViaPim');
+	Route::get('/products-via-pim',                  'Controller@productsViaPim');
 
 	Route::group(['middleware' => 'can:manage-settings,Kaleidoscope\Factotum\Role'], function() {
 		Route::post('/save-homepage-languages',       'Controller@saveHomepageByLanguage');

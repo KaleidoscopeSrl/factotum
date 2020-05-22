@@ -1,13 +1,59 @@
 <?php
 
-namespace App\Http\Controllers\Api\DiscountCode;
+namespace Kaleidoscope\Factotum\Http\Controllers\Api\DiscountCode;
 
 use Illuminate\Http\Request;
 
-use App\DiscountCode;
+use Kaleidoscope\Factotum\DiscountCode;
+
 
 class ReadController extends Controller
 {
+
+	public function getListPaginated( Request $request )
+	{
+		$limit     = $request->input('limit');
+		$offset    = $request->input('offset');
+		$sort      = $request->input('sort');
+		$direction = $request->input('direction');
+		$filters   = $request->input('filters', null);
+
+
+		if ( !$sort ) {
+			$sort = 'id';
+		}
+
+		if ( !$direction ) {
+			$direction = 'DESC';
+		}
+
+		$query = DiscountCode::query();
+
+
+		if ( isset($filters) && count($filters) > 0 ) {
+
+			if ( isset($filters['term']) && strlen($filters['term']) > 0 ) {
+				$query->whereRaw( 'LCASE(code) like "%' . $filters['term'] . '%"' );
+				$query->orWhereRaw( 'LCASE(discount) like "%' . $filters['term'] . '%"' );
+			}
+
+		}
+
+		$query->orderBy($sort, $direction);
+
+		if ( $limit ) {
+			$query->take($limit);
+		}
+
+		if ( $offset ) {
+			$query->skip($offset);
+		}
+
+		$products = $query->get();
+
+		return response()->json( [ 'result' => 'ok', 'discount_codes' => $products ]);
+	}
+
 
 	public function getList( Request $request, $eventId )
 	{
@@ -26,7 +72,7 @@ class ReadController extends Controller
 		$discountCode = DiscountCode::find( $id );
 
 		if ( $discountCode ) {
-			$discountCode->load('tickets');
+			$discountCode->load('products');
 			return response()->json( [ 'result' => 'ok', 'discount_code'  => $discountCode->toArray() ] );
 		}
 

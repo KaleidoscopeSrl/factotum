@@ -18,8 +18,9 @@ Route::group([
 	});
 
 	Route::group(['middleware' => 'can:read,Kaleidoscope\Factotum\User'], function() {
-		Route::get('/list',                 'ReadController@getList');
-		Route::get('/detail/{id}',          'ReadController@getDetail');
+		Route::post('/list',                 'ReadController@getList');
+		Route::post('/list-by-role',         'ReadController@getListByRole');
+		Route::get('/detail/{id}',           'ReadController@getDetail');
 	});
 
 	Route::group(['middleware' => 'can:update,Kaleidoscope\Factotum\User,id'], function() {

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use Kaleidoscope\Factotum\Product;
 use Kaleidoscope\Factotum\ProductCategory;
-use Kaleidoscope\Factotum\Media;
 
 
 class ReadController extends Controller
@@ -29,7 +28,7 @@ class ReadController extends Controller
 			$direction = 'DESC';
 		}
 
-		$query = Product::with([ 'brand', 'category', 'supplier' ]);
+		$query = Product::with([ 'brand', 'product_category' ]);
 
 
 		if ( isset($filters) && count($filters) > 0 ) {
@@ -39,35 +38,27 @@ class ReadController extends Controller
 				$query->orWhereRaw( 'LCASE(code) like "%' . $filters['term'] . '%"' );
 			}
 
-			if ( isset($filters['category_id']) && $filters['category_id'] ) {
-				$category   = Category::find( $filters['category_id'] );
-				$categories = $category->getFlatChildsArray();
-				$tmp = [ $category->id ];
+			if ( isset($filters['product_category_id']) && $filters['product_category_id'] ) {
+				$productCategory   = ProductCategory::find( $filters['product_category_id'] );
+				$productCategories = $productCategory->getFlatChildsArray();
+				$tmp = [ $productCategory->id ];
 
-				if ( count($categories) > 0 ) {
-					foreach ( $categories as $c ) {
+				if ( count($productCategories) > 0 ) {
+					foreach ( $productCategories as $c ) {
 						$tmp[] = $c->id;
 					}
 				}
 
 				$tmp = array_unique( $tmp );
-				$query->whereIn( 'category_id', $tmp );
+				$query->whereIn( 'product_category_id', $tmp );
 			}
 
 			if ( isset($filters['brand_id']) && $filters['brand_id'] ) {
 				$query->whereIn('brand_id', $filters['brand_id']);
 			}
 
-			if ( isset($filters['supplier_id']) && $filters['supplier_id'] ) {
-				$query->where('supplier_id', $filters['supplier_id']);
-			}
-
 			if ( isset($filters['active']) && $filters['active'] ) {
 				$query->where('active', true );
-			}
-
-			if ( isset($filters['new']) && $filters['new'] ) {
-				$query->where('status', 'C' );
 			}
 
 		}
@@ -101,7 +92,7 @@ class ReadController extends Controller
 		$product = Product::find($id);
 
         if ( $product ) {
-			$product->load([ 'brand', 'category', 'supplier' ]);
+			$product->load([ 'brand', 'product_category', 'tax' ]);
             return response()->json( [ 'result' => 'ok', 'product' => $product ]);
         }
 

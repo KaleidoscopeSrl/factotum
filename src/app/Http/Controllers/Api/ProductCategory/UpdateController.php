@@ -16,7 +16,7 @@ class UpdateController extends Controller
 		$productCategory->fill($data);
 		$productCategory->save();
 
-        return response()->json( [ 'result' => 'ok', 'product_category'  => $productCategory->toArray() ] );
+        return response()->json( [ 'result' => 'ok', 'product_category'  => $productCategory ] );
 	}
 
 }

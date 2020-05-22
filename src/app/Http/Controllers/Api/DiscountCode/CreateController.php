@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Api\DiscountCode;
+namespace Kaleidoscope\Factotum\Http\Controllers\Api\DiscountCode;
 
-use Illuminate\Http\Request;
+use Kaleidoscope\Factotum\Http\Requests\StoreDiscountCode;
+use Kaleidoscope\Factotum\DiscountCode;
 
-use App\DiscountCode;
 
 class CreateController extends Controller
 {
 
-	public function create(Request $request)
+	public function create( StoreDiscountCode $request )
 	{
-		$this->_validate( $request );
+		$data = $request->all();
 
 		$discountCode = new DiscountCode;
-		$discountCode = $this->_save( $request, $discountCode );
+		$discountCode->fill($data);
+		$discountCode->save();
 
-		return response()->json( [ 'result' => 'ok', 'discount_code' => $discountCode->toArray() ] );
+		return response()->json( [ 'result' => 'ok', 'discount_code'  => $discountCode ] );
 	}
-
 
 }

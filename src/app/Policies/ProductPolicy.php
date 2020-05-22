@@ -27,7 +27,7 @@ class ProductPolicy
 		return ( $user->role->backend_access && $user->role->manage_products ? true : false );
 	}
 
-	public function delete(User $user, $brandID)
+	public function delete(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_products ? true : false );
 	}

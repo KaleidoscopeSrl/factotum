@@ -28,6 +28,19 @@ class FactotumEcommerceSetup extends Migration
 		});
 
 
+		// Create taxes
+		Schema::create('taxes', function (Blueprint $table) {
+			$table->id();
+
+			$table->string('name', 128);
+			$table->float('amount');
+			$table->string('description', 255)->nullable();
+
+			$table->timestamps();
+			$table->softDeletes();
+		});
+
+
 		// Product Categories table
 		Schema::create('product_categories', function (Blueprint $table) {
 			$table->id();
@@ -77,6 +90,9 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('product_category_id')->unsigned()->nullable();
 			$table->foreign('product_category_id')->references('id')->on('product_categories');
 
+			$table->bigInteger('tax_id')->unsigned();
+			$table->foreign('tax_id')->references('id')->on('taxes')->onDelete('cascade');
+
 			$table->integer('order_no')->nullable(true);
 			$table->string('seo_title', 60)->nullable(true);
 			$table->text('seo_description')->nullable(true);
@@ -87,6 +103,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('fb_title', 255)->nullable(true);
 			$table->string('fb_description', 255)->nullable(true);
 			$table->bigInteger('fb_image')->nullable(true);
+
 
 			$table->timestamps();
 			$table->softDeletes();
@@ -171,13 +188,15 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('customer_id')->unsigned()->nullable();
 			$table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
 
+			$table->boolean('all_customers')->nullable();
+
 			$table->timestamps();
 			$table->softDeletes();
 		});
 
 
-		// Create product discount codes
-		Schema::create('product_discount_codes', function (Blueprint $table) {
+		// Create product discount code
+		Schema::create('product_discount_code', function (Blueprint $table) {
 			$table->id();
 
 			$table->bigInteger('product_id')->unsigned();
@@ -190,33 +209,6 @@ class FactotumEcommerceSetup extends Migration
 			$table->softDeletes();
 		});
 
-
-		// Create taxes
-		Schema::create('taxes', function (Blueprint $table) {
-			$table->id();
-
-			$table->string('name', 128);
-			$table->float('amount');
-			$table->string('description', 255)->nullable();
-
-			$table->timestamps();
-			$table->softDeletes();
-		});
-
-
-		// Create product taxes
-		Schema::create('product_taxes', function (Blueprint $table) {
-			$table->id();
-
-			$table->bigInteger('product_id')->unsigned();
-			$table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-
-			$table->bigInteger('tax_id')->unsigned();
-			$table->foreign('tax_id')->references('id')->on('taxes')->onDelete('cascade');
-
-			$table->timestamps();
-			$table->softDeletes();
-		});
 
 
 		// Create orders tables
@@ -286,9 +278,8 @@ class FactotumEcommerceSetup extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('product_discount_codes');
+		Schema::drop('product_discount_code');
 		Schema::drop('discount_codes');
-		Schema::drop('product_taxes');
 		Schema::drop('taxes');
 		Schema::drop('order_products');
 		Schema::drop('orders');

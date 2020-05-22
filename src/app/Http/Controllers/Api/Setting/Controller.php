@@ -31,10 +31,19 @@ class Controller extends ApiBaseController
 		];
 	}
 
+
 	public function productCategoriesViaPim( Request $request )
 	{
 		return [
 			'result' => config('factotum.product_categories_via_pim')
+		];
+	}
+
+
+	public function productsViaPim( Request $request )
+	{
+		return [
+			'result' => config('factotum.products_via_pim')
 		];
 	}
 

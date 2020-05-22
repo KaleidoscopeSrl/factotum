@@ -16,7 +16,6 @@ class UpdateController extends Controller
 		$data = $request->all();
 
 		$product = Product::find($id);
-		$data['status'] = ( $product->exported ? 'U' : 'C' );
 		$product->fill( $data );
 		$product->save();
 
@@ -30,9 +29,9 @@ class UpdateController extends Controller
 		$active   = $request->input('active');
 
 		if ( $products && count($products) > 0 ) {
-			foreach ( $products as $prod ) {
+			foreach ( $products as $prodId ) {
+				$prod = Product::find($prodId);
 				$prod->active = $active;
-				$prod->status = ( $prod->exported ? 'U' : 'C' );
 				$prod->save();
 			}
 		}
@@ -47,9 +46,9 @@ class UpdateController extends Controller
 		$categoryId = $request->input('category_id');
 
 		if ( $products && count($products) > 0 ) {
-			foreach ( $products as $prod ) {
-				$prod->category_id = $categoryId;
-				$prod->status = ( $prod->exported ? 'U' : 'C' );
+			foreach ( $products as $prodId ) {
+				$prod = Product::find($prodId);
+				$prod->product_category_id = $categoryId;
 				$prod->save();
 			}
 		}

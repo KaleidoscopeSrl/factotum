@@ -5,6 +5,8 @@ namespace Kaleidoscope\Factotum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Support\Facades\Response;
+
 class ProductCategory extends Model
 {
 	use SoftDeletes;
@@ -14,6 +16,8 @@ class ProductCategory extends Model
 		'name',
 		'label',
 		'lang',
+		'image',
+		'icon',
 		'description',
 		'order_no'
 	];
@@ -151,6 +155,63 @@ class ProductCategory extends Model
 	public function getFlatChildsArray()
 	{
 		return ProductCategory::_parseFlatTreeChilds( [ $this ], 0 );
+	}
+
+
+	// CUSTOM FILL
+	public function fill(array $attributes)
+	{
+		if ( isset($attributes['image']) ) {
+			$image = $attributes['image'];
+
+			// Main image
+			if ( isset($image) && is_array($image) && count($image) > 0 ) {
+				$attributes['image'] = $image[0]['id'];
+			} else {
+				$attributes['image'] = ( substr($image, 0, 4) == 'http' ? $image : null );
+			}
+		}
+
+
+		if ( isset($attributes['icon']) ) {
+			$icon  = $attributes['icon'];
+
+			// Icon
+			if ( isset($icon) && is_array($icon) && count($icon) > 0 ) {
+				$attributes['icon'] = $icon[0]['id'];
+			} else {
+				$attributes['icon'] = ( substr($icon, 0, 4) == 'http' ? $icon : null );
+			}
+		}
+
+
+		return parent::fill($attributes);
+	}
+
+	public function getImageAttribute($value)
+	{
+		return $this->_getMediaFromValue( $value );
+	}
+
+	public function getIconAttribute($value)
+	{
+		return $this->_getMediaFromValue( $value );
+	}
+
+
+	private function _getMediaFromValue( $value )
+	{
+		if ( $value ) {
+
+			if ( substr($value, 0, 4) == 'http' ) {
+				return $value;
+			}
+
+			$media = Media::find($value);
+			return ( $media ? [ Media::find($value) ] : null );
+		}
+
+		return null;
 	}
 
 }

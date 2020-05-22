@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use ProductDiscountCode;
 
 class DiscountCode extends Model
 {
@@ -15,6 +16,8 @@ class DiscountCode extends Model
 		'discount',
 		'amount',
 		'type',
+		'customer_id',
+		'all_customers'
 	];
 
 
@@ -30,11 +33,10 @@ class DiscountCode extends Model
 //	{
 //		return $this->hasOne('App\Event', 'id', 'event_id');
 //	}
-//
-//	public function tickets()
-//	{
-//		return $this->belongsToMany( 'App\Ticket', 'ticket_discount_code' );
-//	}
 
+	public function products()
+	{
+		return $this->belongsToMany( 'Kaleidoscope\Factotum\Product', 'product_discount_code' );
+	}
 
 }

@@ -26,7 +26,7 @@ class TaxPolicy
 		return ( $user->role->backend_access && $user->role->manage_taxes ? true : false );
 	}
 
-	public function delete(User $user, $brandID)
+	public function delete(User $user)
 	{
 		return ( $user->role->backend_access && $user->role->manage_taxes ? true : false );
 	}

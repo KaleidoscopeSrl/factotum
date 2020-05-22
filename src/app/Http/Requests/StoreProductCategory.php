@@ -14,17 +14,33 @@ class StoreProductCategory extends CustomFormRequest
 
 	public function rules()
 	{
-		$rules = [
-			'label' => 'required|max:255',
-			'name'  => 'required|max:50|unique:product_categories',
-		];
+		$rules = [];
+		$data  = $this->all();
 
-		$data = $this->all();
+		$productCategoriesViaPim = config('factotum.product_categories_via_pim');
 
-		$id = request()->route('id');
+		if ( !$productCategoriesViaPim ) {
 
-		if ( $id ) {
-			$rules['name'] = 'required|unique:product_categories,name,' . $id;
+			$rules = [
+				'label' => 'required|max:255',
+				'name'  => 'required|max:50|unique:product_categories',
+			];
+
+			if ( isset($data['image']) && $data['image'] != '' ) {
+				$rules['image'] = 'required';
+			}
+
+			if ( isset($data['icon']) && $data['icon'] != '' ) {
+				$rules['icon'] = 'required';
+			}
+
+
+			$id = request()->route('id');
+
+			if ( $id ) {
+				$rules['name'] = 'required|unique:product_categories,name,' . $id;
+			}
+
 		}
 
 		$this->merge($data);
