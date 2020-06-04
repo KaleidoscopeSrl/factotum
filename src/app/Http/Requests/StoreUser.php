@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Http\Requests;
 
 use Illuminate\Support\Facades\Hash;
+
 use Kaleidoscope\Factotum\Role;
 
 class StoreUser extends CustomFormRequest

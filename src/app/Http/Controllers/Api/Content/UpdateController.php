@@ -2,9 +2,6 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\Http\Requests\StoreContent;
 

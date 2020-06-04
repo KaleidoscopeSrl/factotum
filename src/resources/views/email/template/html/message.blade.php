@@ -7,7 +7,9 @@
 				<img src="{{ asset('/admin/assets/img/logo.png')  }}" alt="{{ config('app.name') }}">
 			</td>
 			<td class="link" align="left">
-				<span>{{ $demTitle }}</span>
+				@if( isset($demTitle) )
+					<span>{{ $demTitle }}</span>
+				@endif
 			</td>
 		@endcomponent
 	@endslot

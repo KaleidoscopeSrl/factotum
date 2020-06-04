@@ -25,7 +25,13 @@
 <?php } ?>
 
 <meta name="twitter:card" content="summary" />
-<meta property="og:locale" content="<?php echo str_replace('-', '_', $currentLanguage); ?>" />
+
+<?php if ( isset($currentLanguage) ) { ?>
+	<meta property="og:locale" content="<?php echo str_replace('-', '_', $currentLanguage); ?>" />
+<?php } else { ?>
+	<meta property="og:locale" content="<?php echo str_replace('-', '_', config('factotum.main_site_language') ); ?>" />
+<?php } ?>
+
 <meta property="og:type" content="article" />
 <meta property="og:url" content="<?php echo url(Request::path()); ?>" />
 <meta property="og:site_name" content="<?php echo config('app.name'); ?>" />

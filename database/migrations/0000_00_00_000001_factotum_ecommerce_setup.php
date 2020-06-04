@@ -104,6 +104,8 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('fb_description', 255)->nullable(true);
 			$table->bigInteger('fb_image')->nullable(true);
 
+			$table->boolean('featured')->nullable();
+
 
 			$table->timestamps();
 			$table->softDeletes();
@@ -143,6 +145,9 @@ class FactotumEcommerceSetup extends Migration
 			$table->timestamps();
 		});
 
+		Schema::table('users', function (Blueprint $table) {
+			$table->string('fiscal_code', 16)->nullable()->after('avatar');
+		});
 
 		// Added new fields for shipping/invoice address
 		Schema::table('profiles', function (Blueprint $table) {

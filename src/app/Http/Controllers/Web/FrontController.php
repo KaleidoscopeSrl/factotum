@@ -1,11 +1,11 @@
 <?php
 
-namespace Kaleidoscope\Factotum\Http\Controllers;
+namespace Kaleidoscope\Factotum\Http\Controllers\Web;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\App;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 use Kaleidoscope\Factotum\Library\ContentSearch;
 use Kaleidoscope\Factotum\ContentType;
@@ -13,6 +13,7 @@ use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
 
 use Kaleidoscope\Factotum\Mail\AuthForgottenPassword;
+use Kaleidoscope\Factotum\Notifications\ResetPasswordNotification;
 use Kaleidoscope\Factotum\User;
 
 
@@ -26,66 +27,12 @@ class FrontController extends Controller
 	protected $pageContentType;
 
 
-	public function __construct()
-	{
-		$this->pageContentType = ContentType::where( 'content_type', 'page')->first();
 
-		if ( $this->pageContentType ) {
-			$this->pageContentType = $this->pageContentType->toArray();
-		}
-
-		$this->middleware(function ($request, $next) {
-			// TODO: rilevare la lingua dall URI
-			$this->currentLanguage = $request->session()->get('currentLanguage');
-
-			View::share( 'availableLanguages', config('factotum.site_languages') );
-
-			$uri = $request->path();
-			$this->uri = trim($uri, '/');
-
-			if ( $this->uri != '' ) {
-				$this->uriParts     = explode('/', $this->uri);
-				$this->origUriParts = $this->uriParts;
-			}
-
-			$checkLang = ( isset($this->uriParts) ? $this->uriParts[0] : '' );
-
-			if ( strlen($checkLang) == 5 &&
-				in_array( $checkLang, array_keys( config('factotum.site_languages') ) )  ) {
-				$this->currentLanguage = $checkLang;
-				// TODO: non gestire con la sessione la lingua
-				$request->session()->put('currentLanguage', $checkLang);
-				App::setLocale( $checkLang );
-			} else {
-				$this->currentLanguage = config('factotum.main_site_language');
-			}
-
-			View::share( 'currentLanguage', $this->currentLanguage );
-
-			$menu = Content::with('childrenRecursive')
-							->whereNull( 'parent_id' )
-							->where( 'status', 'publish' )
-							->where( 'lang', $this->currentLanguage )
-							->where( 'show_in_menu', 1 )
-							->orderBy('order_no', 'ASC')
-							->get();
-
-			View::share( 'menu', $menu );
-
-			if ( method_exists( app('App\Http\Controllers\Controller'), 'registerViewShare' ) ) {
-				app('App\Http\Controllers\Controller')->registerViewShare();
-			}
-
-			return $next($request);
-		});
-	}
-
-
-	protected function _getContentByURI($uri)
+	protected function _getContentByURI()
 	{
 		$contentSearch = new ContentSearch( $this->pageContentType );
 
-		$content = $contentSearch->addWhereCondition( 'abs_url', '=', url('') . '/' . $uri )
+		$content = $contentSearch->addWhereCondition( 'abs_url', '=', url('') . '/' . $this->uri )
 								 ->onlyPublished()
 								 ->addLimit(1)
 								 ->search();
@@ -94,23 +41,24 @@ class FrontController extends Controller
 
 		if ( !$content ) {
 
-			$uriParts = explode( '/' , $uri );
-			$uri = $uriParts[ count($uriParts) - 1 ];
+			$uri = ( count($this->uriParts) > 1 ? $this->uriParts[ count($this->uriParts) - 1 ] : $this->uri );
 
 			$content = DB::table('contents')
-							->select(DB::raw('*'))
-							->where('url', '=', $uri)
-							->where('status', '=', 'publish')
+							->select( DB::raw('*') )
+							->where([
+								'status' => 'publish',
+								'url'    => $uri
+							])
 							->first();
 
 			if ( $content ) {
 
-				$contentType = ContentType::find($content->content_type_id)->toArray();
+				$contentType   = ContentType::find($content->content_type_id)->toArray();
 				$contentSearch = new ContentSearch( $contentType );
-				$content = $contentSearch->addWhereCondition( 'url', '=', $uri )
-										 ->onlyPublished()
-										 ->loadCategories(true)
-										 ->search();
+				$content       = $contentSearch->addWhereCondition( 'url', '=', $uri )
+												 ->onlyPublished()
+												 ->loadCategories(true)
+												 ->search();
 
 				return ( $content ? $content[0] : null );
 
@@ -137,6 +85,14 @@ class FrontController extends Controller
 	}
 
 
+	/**
+	 * Restituisce l'array che gestisce il contenuto da lavorare, a seconda di come si è impostato il contenuto
+	 *
+	 * @param $content
+	 * @param null $category
+	 * @return array
+	 *
+	 */
 	protected function _switchContent( $content, $category = null )
 	{
 		if ($content) {
@@ -158,26 +114,33 @@ class FrontController extends Controller
 							break;
 
 						case 'content_list':
-							$contentType = ContentType::where( 'content_type', $content->content_type_to_list )->first()->toArray();
+							$contentType = ContentType::where( 'content_type', $content->content_type_to_list )->first();
+							$contentList = new LengthAwarePaginator( [], 0, 10, null );
 
-							list($orderBy, $sort) = explode('-', $content->content_list_order);
+							if ( $contentType ) {
+								$contentType = $contentType->toArray();
 
-							$contentSearch = new ContentSearch($contentType);
-							$contentSearch->onlyPublished();
-							$contentSearch->loadCategories(true);
+								list($orderBy, $sort) = explode('-', $content->content_list_order);
 
-							if ( $category ) {
-								$contentSearch->filterByCategories( $category );
+								$contentSearch = new ContentSearch($contentType);
+								$contentSearch->onlyPublished();
+								$contentSearch->loadCategories(true);
+
+								if ( $category ) {
+									$contentSearch->filterByCategories( $category );
+								}
+
+								$contentSearch->addWhereCondition('lang', '=', $this->currentLanguage);
+								$contentSearch->addOrderBy( $orderBy, $sort);
+
+								if ( $content->content_list_pagination ) {
+									$contentSearch->addPagination($content->content_list_pagination);
+								}
+
+								$contentList = $contentSearch->search();
 							}
 
-							$contentSearch->addWhereCondition('lang', '=', $this->currentLanguage);
-							$contentSearch->addOrderBy( $orderBy, $sort);
 
-							if ( $content->content_list_pagination ) {
-								$contentSearch->addPagination($content->content_list_pagination);
-							}
-
-							$contentList = $contentSearch->search();
 
 							return [  'view' => $content->page_template,
 									  'data' => [
@@ -239,34 +202,35 @@ class FrontController extends Controller
 	}
 
 
-	protected function _getHomepage( $lang )
+
+	protected function _getHomepage( Request $request )
 	{
 		$contentSearch = new ContentSearch( $this->pageContentType );
 		$content = $contentSearch->addWhereCondition('is_home', '=', true )
-								  ->addWhereCondition('lang', '=', $lang )
+								  ->addWhereCondition('lang', '=', $this->_getCurrentLanguage( $request ) )
 								  ->addLimit(1)
-								  ->search()[0];
-		return $this->_switchContent( $content );
+								  ->search();
+
+		if ( $content->count() > 0 ) {
+			return $this->_switchContent( $content[0] );
+		}
+
+		return null;
 	}
 
 
-	protected function _extractContentOnIndex( $uri = '' )
+	protected function _extractContentOnIndex( Request $request )
 	{
-		$uri = trim( $uri, '/' );
+		if ( $this->uri != '' ) {
 
-		if ( $uri != '' ) {
-			$checkLang = $this->uriParts[0];
-
-
-			if ( strlen($uri) == 5 && strlen($checkLang) == 5 ) {
-				if ( in_array( $checkLang, array_keys( config('factotum.site_languages') ) ) ) {
-					$data = $this->_getHomepage( $checkLang );
-				}
+			if ( in_array( $this->currentLanguage, array_keys( config('factotum.site_languages') ) ) ) {
+				$data = $this->_getHomepage( $request );
 			}
 
+			// Non siamo su una homepage (nè principale, nè di lingua)
 			if ( !isset($data) ) {
 
-				$content = $this->_getContentByURI( $uri );
+				$content = $this->_getContentByURI();
 
 				// Page or content exist
 				if ( $content ) {
@@ -284,7 +248,7 @@ class FrontController extends Controller
 
 		} else {
 
-			$data = $this->_getHomepage( config('factotum.main_site_language') );
+			$data = $this->_getHomepage( $request );
 
 		}
 
@@ -292,9 +256,11 @@ class FrontController extends Controller
 	}
 
 
-	public function index($uri = '', Request $request)
+	public function index( Request $request, $uri = '' )
 	{
-		$data = $this->_extractContentOnIndex($uri);
+		$this->uri = trim( $uri, '/' );
+
+		$data = $this->_extractContentOnIndex( $request );
 
 		if ( isset($data['action']) ) {
 

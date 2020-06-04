@@ -2,13 +2,19 @@
 
 namespace Kaleidoscope\Factotum;
 
-use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 use Image;
 
+use Kaleidoscope\Factotum\Notifications\ResetPasswordNotification;
+use Kaleidoscope\Factotum\Notifications\VerifyEmailNotification;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements MustVerifyEmail
 {
+	use Notifiable;
 	use HasApiTokens;
 
 
@@ -25,6 +31,26 @@ class User extends Authenticatable
 		'email_verified_at',
 		'created_at', 'updated_at', 'deleted_at'
 	];
+
+
+	public function __construct()
+	{
+		if (env('FACTOTUM_ECOMMERCE_INSTALLED')) {
+			$this->fillable[] = 'fiscal_code';
+		}
+	}
+
+
+	public function sendPasswordResetNotification($token)
+	{
+		$this->notify(new ResetPasswordNotification($token));
+	}
+
+
+	public function sendEmailVerificationNotification()
+	{
+		$this->notify(new VerifyEmailNotification);
+	}
 
 
 	public function profile() {

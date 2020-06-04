@@ -93,6 +93,7 @@ class FactotumSetup extends Migration
 			$table->foreign('role_id')->references('id')->on('roles');
 			$table->boolean('editable')->default(true);
 			$table->integer('avatar')->unsigned()->nullable(true);
+			$table->timestamp('email_verified_at')->nullable();
 			$table->rememberToken();
 			$table->timestamps();
 		});

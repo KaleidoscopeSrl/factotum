@@ -112,7 +112,6 @@ class FactotumServiceProvider extends ServiceProvider
 		$this->getRouter()->pushMiddlewareToGroup('preflight',     \Kaleidoscope\Factotum\Http\Middleware\PreflightResponse::class);
 
 
-
 		// Config, Resources and Public
 		$this->publishes([
 			// CONFIG
@@ -124,12 +123,19 @@ class FactotumServiceProvider extends ServiceProvider
 			// MINISITE
 			__DIR__ . '/public/assets'        => public_path('assets'),
 			__DIR__ . '/public/robots.txt'    => public_path(''),
-			__DIR__ . '/resources/views'      => resource_path( 'views' )
 		], 'factotum');
+
+		$this->publishes([
+			// VIEWS
+			__DIR__ . '/resources/views'      => resource_path( 'views' )
+		], 'factotum-views');
 
 		$this->publishes([
 			__DIR__ . '/public/admin'         => public_path('admin'),
 		], 'factotum-webapp');
+
+
+		$this->loadViewsFrom(__DIR__ . '/resources/views', 'factotum');
 
 
 		if ( $this->app->runningInConsole() ) {
@@ -160,8 +166,7 @@ class FactotumServiceProvider extends ServiceProvider
 		}
 
 
-		// Routes
-
+		// Public Routes
 		Route::group([
 			'prefix'     => 'api/v1',
 			'middleware' => [
@@ -174,12 +179,13 @@ class FactotumServiceProvider extends ServiceProvider
 			require __DIR__ . '/routes/api/public/auth.php';
 		});
 
-
+		// Protected Routes
 		Route::group([
 			'prefix'     => 'api/v1',
 			'middleware' => [
 				'api',
 				'auth:api',
+				'cors',
 				'session_start'
 			],
 			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Api'
@@ -209,15 +215,45 @@ class FactotumServiceProvider extends ServiceProvider
 		});
 
 
+		// Public routes
 		Route::group([
 			'middleware' => [
 				'web'
 			],
-			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers'
+			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web'
 		], function ($router) {
-			require __DIR__ . '/routes/web.php';
+			require __DIR__ . '/routes/web/public/auth.php';
+			require __DIR__ . '/routes/web/public/user.php';
+
+			if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+//				require __DIR__ . '/routes/web/public/product-category.php';
+//				require __DIR__ . '/routes/web/public/product.php';
+			}
 		});
 
+
+		// Protected Routes
+		Route::group([
+			'middleware' => [
+				'web',
+				'auth',
+			],
+			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web'
+		], function ($router) {
+			require __DIR__ . '/routes/web/auth.php';
+			require __DIR__ . '/routes/web/user.php';
+		});
+
+
+		// Public routes
+		Route::group([
+			'middleware' => [
+				'web'
+			],
+			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web'
+		], function ($router) {
+			require __DIR__ . '/routes/web/public/web.php';
+		});
 
 		Passport::routes();
 		Passport::enableImplicitGrant();

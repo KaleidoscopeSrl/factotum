@@ -260,13 +260,14 @@ img {
     border-left: 18px solid #2ab27b;
 }
 
+.button-success,
 .button-red {
-    background-color: #FFF;
+    background-color: #8600FF;
     border-top: 10px solid #8600FF;
     border-right: 18px solid #8600FF;
     border-bottom: 10px solid #8600FF;
     border-left: 18px solid #8600FF;
-	color: #8600FF;
+	color: #FFF;
 }
 
 /* Panels */

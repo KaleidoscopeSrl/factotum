@@ -124,7 +124,6 @@ class Content extends Model
 							foreach ( $gallery as $g ) {
 								Media::saveImageById( $field, $g );
 							}
-							// TODO: verificare
 						}
 
 						$additionalValues[ $field->name ] = (isset($data[ $field->name ]) ? $data[ $field->name ] : null);

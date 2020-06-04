@@ -71,45 +71,37 @@ class StoreContent extends CustomFormRequest
 			if ( $contentFields->count() > 0 ) {
 				foreach ( $contentFields as $cf ) {
 
+					$rule = [];
+
 					if ( $cf->mandatory ) {
-						$rules[ $cf->name ] = 'required';
+						$rule[] = 'required';
 					}
 
 					if ( $cf->type == 'email' ) {
-						$rules[ $cf->name ] .= '|email';
+						$rule[] = 'email';
 					}
 
 					if ( $cf->type == 'url' ) {
-						$rules[ $cf->name ] .= '|url';
+						$rule[] = 'url';
 					}
 
 					if ( $cf->type == 'number' ) {
-						$rules[ $cf->name ] .= '|numeric';
+						$rule[] = 'numeric';
 					}
 
 					if ( $cf->type == 'date' ) {
-						if ( isset($rules[ $cf->name ]) ) {
-							$rules[ $cf->name ] .= '|date_format:Y-m-d';
-						} else {
-							$rules[ $cf->name ] = 'date_format:Y-m-d';
-						}
+						$rule[] = 'date_format:Y-m-d';
 					}
 
 					if ( $cf->type == 'time' ) {
-						if ( isset($rules[ $cf->name ]) ) {
-							$rules[ $cf->name ] .= '|date_format:H:i';
-						} else {
-							$rules[ $cf->name ] = 'date_format:H:i';
-						}
+						$rule[] = 'date_format:H:i';
 					}
 
 					if ( $cf->type == 'datetime' ) {
-						if ( isset($rules[ $cf->name ]) ) {
-							$rules[ $cf->name ] .= '|date_format:Y-m-d H:i:s';
-						} else {
-							$rules[ $cf->name ] = 'date_format:Y-m-d H:i:s';
-						}
+						$rule[] = 'date_format:Y-m-d H:i:s';
 					}
+
+					$rules[ $cf->name ] = join('|', $rule);
 
 				}
 			}

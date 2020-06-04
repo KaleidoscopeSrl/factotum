@@ -15,6 +15,7 @@ class Product extends Model
 		'code',
 		'name',
 		'active',
+		'featured',
 		'status',
 		'description',
 		'image',
