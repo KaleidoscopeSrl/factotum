@@ -161,26 +161,33 @@ class ProductCategory extends Model
 	// CUSTOM FILL
 	public function fill(array $attributes)
 	{
+		// Main image
 		if ( isset($attributes['image']) ) {
 			$image = $attributes['image'];
 
-			// Main image
-			if ( isset($image) && is_array($image) && count($image) > 0 ) {
-				$attributes['image'] = $image[0]['id'];
+			if ( isset($image) ) {
+				if ( is_array($image) ) {
+					$attributes['image'] = (count($image) > 0 ? $image[0]['id'] : null );
+				} else {
+					$attributes['image'] = ( substr($image, 0, 4) == 'http' ? $image : null );
+				}
 			} else {
-				$attributes['image'] = ( substr($image, 0, 4) == 'http' ? $image : null );
+				$attributes['image'] = null;
 			}
 		}
 
-
+		// Icon
 		if ( isset($attributes['icon']) ) {
 			$icon  = $attributes['icon'];
 
-			// Icon
-			if ( isset($icon) && is_array($icon) && count($icon) > 0 ) {
-				$attributes['icon'] = $icon[0]['id'];
+			if ( isset($icon) ) {
+				if ( is_array($icon) ) {
+					$attributes['icon'] = (count($icon) > 0 ? $icon[0]['id'] : null );
+				} else {
+					$attributes['icon'] = ( substr($icon, 0, 4) == 'http' ? $icon : null );
+				}
 			} else {
-				$attributes['icon'] = ( substr($icon, 0, 4) == 'http' ? $icon : null );
+				$attributes['icon'] = null;
 			}
 		}
 

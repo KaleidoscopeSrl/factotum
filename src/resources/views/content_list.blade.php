@@ -19,9 +19,9 @@
 		<?php PrintCategories::print_categories( 'news', $content->abs_url ); ?>
 
 		<?php if ( isset($contentList) && $contentList instanceof Illuminate\Pagination\LengthAwarePaginator ) { ?>
-		<div class="tac">
-			{{ $contentList->links() }}
-		</div>
+			<div class="tac">
+				{{ $contentList->links() }}
+			</div>
 		<?php } ?>
 
 	</div>

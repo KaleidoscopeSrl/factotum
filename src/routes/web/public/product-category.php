@@ -7,7 +7,7 @@
  */
 
 Route::group([
-	'namespace'  => 'ProductCategory'
+	'namespace'  => 'Ecommerce\ProductCategory'
 ], function () {
 
 
