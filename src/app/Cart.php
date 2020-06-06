@@ -13,8 +13,8 @@ class Cart extends Model
 
 	protected $fillable = [
 		'customer_id',
-
 		'expires_at',
+		'total'
 	];
 
 
@@ -24,8 +24,14 @@ class Cart extends Model
 	];
 
 
-	public function customer() {
+	public function customer()
+	{
 		return $this->hasOne('Kaleidoscope\Factotum\User', 'id', 'customer_id');
+	}
+
+	public function products()
+	{
+		return $this->belongsToMany('Kaleidoscope\Factotum\Product');
 	}
 
 }

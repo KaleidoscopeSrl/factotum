@@ -2,6 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\User;
 
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Response;
@@ -17,7 +18,7 @@ class RegisterController extends Controller
 
 	use RegistersUsers;
 
-	protected $redirectTo = '/';
+	protected $redirectTo = '/user/thank-you';
 
 
 	public function __construct()
@@ -55,7 +56,13 @@ class RegisterController extends Controller
 			return $response;
 		}
 
-		return $request->wantsJson() ? new Response( '', 201 ) : redirect($this->redirectPath());
+		return $request->wantsJson() ? new Response( '', 201 ) : redirect($this->redirectTo);
+	}
+
+
+	public function showThankyou( Request $request )
+	{
+		return view('factotum::user.thank-you');
 	}
 
 }

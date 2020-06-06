@@ -16,16 +16,6 @@
 			<div class="row clearfix">
 				<div class="col col-xs-12 col-md-8">
 
-					@if ( session('status') )
-						<div class="alert alert-success" role="alert">
-							{{ session('status') }}
-
-							<button>
-								<i class="fi flaticon-trash"></i>
-							</button>
-						</div>
-					@endif
-
 					<div class="box">
 
 						<h3>Indirizzo di consegna</h3>

@@ -16,7 +16,7 @@ class ReadController extends Controller
     {
     	$itemsPerPage    = $request->input('items_per_page', 12);
 		$brandFilter     = $request->input('brand_filter');
-        $productCategory = ProductCategory::where('name', $productCategorySlug)->first();
+		$productCategory = ProductCategory::where('name', $productCategorySlug)->first();
 
         if ( $productCategory ) {
         	$brands   = Brand::all();
@@ -38,7 +38,7 @@ class ReadController extends Controller
 						]);
         }
 
-        return redirect('/404', 404);
+        return view('factotum::errors.404');
     }
 
 }

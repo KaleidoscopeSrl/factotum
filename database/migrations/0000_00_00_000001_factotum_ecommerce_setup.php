@@ -122,7 +122,6 @@ class FactotumEcommerceSetup extends Migration
 			$table->timestamp('expires_at')->nullable();
 
 			$table->decimal( 'total', 10, 2)->nullable();
-			$table->string('status', 16);
 
 			$table->timestamps();
 			$table->softDeletes();
@@ -140,7 +139,6 @@ class FactotumEcommerceSetup extends Migration
 			$table->integer('quantity')->default(0);
 			$table->decimal( 'product_price', 10, 2)->nullable();
 			$table->text('tax_data')->nullable();
-			$table->decimal( 'tax_cost', 10, 2)->nullable();
 
 			$table->timestamps();
 		});

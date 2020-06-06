@@ -29,7 +29,7 @@ class PrintProductCategoriesHelper {
 
 			if ( $item->childs->count() > 0 ) {
 				$level++;
-				$html .= self::print_product_categories_items( $item->childs, $baseURL, $level, $productCategory );
+				$html .= self::print_product_categories_items( $item->childs, $baseURL . '/' . $item->name , $level, $productCategory );
 			}
 
 			$html .= '</li>' . "\n";

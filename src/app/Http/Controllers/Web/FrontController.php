@@ -11,6 +11,8 @@ use Kaleidoscope\Factotum\Library\ContentSearch;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
+use Kaleidoscope\Factotum\Product;
+use Kaleidoscope\Factotum\ProductCategory;
 
 use Kaleidoscope\Factotum\Mail\AuthForgottenPassword;
 use Kaleidoscope\Factotum\Notifications\ResetPasswordNotification;
@@ -188,16 +190,26 @@ class FrontController extends Controller
 	{
 		if ( count($this->uriParts) > 0 ) {
 			$uri = array_pop( $this->uriParts );
+
 			$content = $this->_getContentByURI( join('/', $this->uriParts) );
-			if (isset($content->page_operation) && $content->page_operation == 'content_list') {
+
+			if ( isset($content->page_operation) && $content->page_operation == 'content_list' ) {
+
 				$uri = $this->origUriParts[ count($this->origUriParts) - 1 ];
 				$category = $this->_getCategoryByURIandContentType( $uri, $content->content_type_to_list );
+
 				return $this->_switchContent($content, $category);
+
 			} else {
+
 				return $this->_reparseUri();
+
 			}
+
 		} else {
+
 			return $this->_switchContent( null );
+
 		}
 	}
 
@@ -223,21 +235,42 @@ class FrontController extends Controller
 	{
 		if ( $this->uri != '' ) {
 
-			if ( in_array( $this->currentLanguage, array_keys( config('factotum.site_languages') ) ) ) {
+			if ( in_array( $this->uri, array_keys( config('factotum.site_languages') ) ) ) {
 				$data = $this->_getHomepage( $request );
 			}
 
 			// Non siamo su una homepage (nè principale, nè di lingua)
 			if ( !isset($data) ) {
 
+				// Check se è attivo ecommerce
+				if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+
+					// Check se prodotto
+					$product = Product::where( 'url', $this->uriParts[ count($this->uriParts) - 1 ] )->first();
+
+					if ( $product ) {
+						$data['product'] = $product;
+						return $data;
+					}
+
+					// Check se categoria prodotto
+					$productCategory = ProductCategory::where( 'name', $this->uriParts[ count($this->uriParts) - 1 ] )->first();
+					if ( $productCategory ) {
+						$data['productCategory'] = $productCategory;
+						return $data;
+					}
+
+				}
+
 				$content = $this->_getContentByURI();
 
 				// Page or content exist
 				if ( $content ) {
 
-					$data = $this->_switchContent( $content );
+					$data = $this->_switchContent($content);
 
 				} else {
+
 
 					// Check if is a series of categories
 					$data = $this->_reparseUri();
@@ -262,7 +295,19 @@ class FrontController extends Controller
 
 		$data = $this->_extractContentOnIndex( $request );
 
-		if ( isset($data['action']) ) {
+		if ( isset($data['product']) ) {
+
+			if ( file_exists( app_path('Http/Controllers/Ecommerce/Product/ReadController.php') ) ) {
+				return app('App\Http\Controllers\Ecommerce\Product\ReadController')->getProductBySlug($request, $this->uriParts[ count($this->uriParts) - 1 ]);
+			}
+
+			return app('\Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Product\ReadController')->getProductBySlug($request, $this->uriParts[ count($this->uriParts) - 1 ]);
+
+		} elseif ( isset($data['productCategory']) ) {
+
+			return app('\Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\ProductCategory\ReadController')->getProductsByCategory($request, $this->uriParts[ count($this->uriParts) - 1 ]);
+
+		} elseif ( isset($data['action']) ) {
 
 			return app('App\Http\Controllers\Controller')->{$data['action']}($request, $data);
 

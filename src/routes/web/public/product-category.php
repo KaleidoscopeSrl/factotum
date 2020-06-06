@@ -11,7 +11,7 @@ Route::group([
 ], function () {
 
 
-	Route::get('/categoria-prodotto/{productCategorySlug}',  'ReadController@getProductsByCategory');
+	// Route::get('/{productCategorySlug}',  'ReadController@getProductsByCategory');
 
 });
 

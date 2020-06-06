@@ -38,7 +38,7 @@ class ProfileController extends Controller
 		$profile->fill( $data );
 		$profile->save();
 
-		session()->flash( 'status', 'Profilo aggiornato con successo!' );
+		session()->flash( 'message', 'Profilo aggiornato con successo!' );
 
 		return view('factotum::user.profile')->with( 'user', Auth::user() );
 	}
@@ -74,7 +74,7 @@ class ProfileController extends Controller
 
 		$profile->save();
 
-		session()->flash( 'status', 'Indirizzo di consegna aggiornato con successo!' );
+		session()->flash( 'message', 'Indirizzo di consegna aggiornato con successo!' );
 
 		return view('factotum::ecommerce.user.delivery-address')->with( 'user', Auth::user() );
 	}
@@ -110,7 +110,7 @@ class ProfileController extends Controller
 
 		$profile->save();
 
-		session()->flash( 'status', 'Indirizzo di fatturazione aggiornato con successo!' );
+		session()->flash( 'message', 'Indirizzo di fatturazione aggiornato con successo!' );
 
 		return view('factotum::ecommerce.user.invoice-address')->with( 'user', Auth::user() );
 	}

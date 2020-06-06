@@ -242,6 +242,10 @@ class FactotumServiceProvider extends ServiceProvider
 		], function ($router) {
 			require __DIR__ . '/routes/web/auth.php';
 			require __DIR__ . '/routes/web/user.php';
+
+			if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+				require __DIR__ . '/routes/web/cart.php';
+			}
 		});
 
 

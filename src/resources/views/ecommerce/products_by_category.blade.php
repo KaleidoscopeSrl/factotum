@@ -20,7 +20,7 @@
 					<h3>Filtri veloci</h3>
 
 					<div class="box">
-						<?php \Kaleidoscope\Factotum\Helpers\PrintProductCategoriesHelper::print_product_categories( '/categoria-prodotto', $productCategory ); ?>
+						<?php \Kaleidoscope\Factotum\Helpers\PrintProductCategoriesHelper::print_product_categories( '', $productCategory ); ?>
 					</div>
 				</div>
 

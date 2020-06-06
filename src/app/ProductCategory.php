@@ -36,7 +36,6 @@ class ProductCategory extends Model
 		return $this->belongsTo( 'Kaleidoscope\Factotum\ProductCategory', 'parent_id');
 	}
 
-
 	public function childs() {
 		return $this->hasMany('Kaleidoscope\Factotum\ProductCategory','parent_id','id') ;
 	}
@@ -129,6 +128,7 @@ class ProductCategory extends Model
 	private static function _parseFlatTreeChilds( $categories, $level = 0 )
 	{
 		$result = [];
+
 		foreach ( $categories as $c ) {
 
 			$childs = null;
@@ -156,6 +156,37 @@ class ProductCategory extends Model
 	{
 		return ProductCategory::_parseFlatTreeChilds( [ $this ], 0 );
 	}
+
+
+	private static function _parseFlatTreeParents( $categories, $level = 0 )
+	{
+		$result = [];
+		foreach ( $categories as $c ) {
+
+			$parent = null;
+			if ( $c->parent ) {
+				$parent = $c->parent;
+			}
+
+			unset($c->parent);
+
+			$result[] = $c;
+
+			if ( $parent ) {
+				$level = $level + 1;
+				$result = array_merge( $result, self::_parseFlatTreeParents( [ $parent ], $level ) );
+			}
+		}
+
+		return $result;
+	}
+
+
+	public function getFlatParentsArray()
+	{
+		return ProductCategory::_parseFlatTreeParents( [ $this ], 0 );
+	}
+
 
 
 	// CUSTOM FILL
@@ -195,10 +226,12 @@ class ProductCategory extends Model
 		return parent::fill($attributes);
 	}
 
+
 	public function getImageAttribute($value)
 	{
 		return $this->_getMediaFromValue( $value );
 	}
+
 
 	public function getIconAttribute($value)
 	{
