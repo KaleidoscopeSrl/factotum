@@ -31,7 +31,7 @@ class Cart extends Model
 
 	public function products()
 	{
-		return $this->belongsToMany('Kaleidoscope\Factotum\Product');
+		return $this->belongsToMany('Kaleidoscope\Factotum\Product')->withPivot([ 'quantity', 'product_price', 'tax_data' ]);
 	}
 
 }

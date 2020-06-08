@@ -37,7 +37,7 @@
 								</div>
 							@endif
 
-							<p>{{ $productCategory->description }}</p>
+							{!! $productCategory->description !!}
 						</div>
 					</div>
 
@@ -60,12 +60,11 @@
 										<div class="field field-inline">
 											<label for="items_per_page">Mostra</label>
 
-											<!-- TODO: cambiare in 12, 24, 38, 96 -->
 											<select name="items_per_page" id="items_per_page">
-												<option value="1" @if( $itemsPerPage == 1 ) selected @endif>12</option>
-												<option value="2" @if( $itemsPerPage == 2 ) selected @endif>24</option>
-												<option value="4" @if( $itemsPerPage == 4 ) selected @endif>48</option>
-												<option value="9" @if( $itemsPerPage == 9 ) selected @endif>96</option>
+												<option value="1" @if( $itemsPerPage == 12 ) selected @endif>12</option>
+												<option value="2" @if( $itemsPerPage == 24 ) selected @endif>24</option>
+												<option value="4" @if( $itemsPerPage == 48 ) selected @endif>48</option>
+												<option value="9" @if( $itemsPerPage == 96 ) selected @endif>96</option>
 											</select>
 										</div>
 

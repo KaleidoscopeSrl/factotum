@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CartProduct extends Model
 {
-	use SoftDeletes;
+	protected $table = 'cart_product';
 
 	protected $fillable = [
 		'cart_id',
@@ -22,7 +22,7 @@ class CartProduct extends Model
 
 
 	public function product() {
-		return $this->hasOne('Kaleidoscope\Factotum\product', 'id', 'product_id');
+		return $this->hasOne('Kaleidoscope\Factotum\Product', 'id', 'product_id');
 	}
 
 	public function cart() {

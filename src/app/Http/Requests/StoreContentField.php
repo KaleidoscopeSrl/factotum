@@ -48,9 +48,12 @@ class StoreContentField extends CustomFormRequest
 
 		if ( in_array( $data['type'], [ 'file_upload', 'image_upload', 'gallery' ] ) ) {
 			$rules['max_file_size']   .= '|numeric';
+			$rules['allowed_types']   .= '|allowed_types';
+		}
+
+		if ( in_array( $data['type'], [ 'image_upload', 'gallery' ] ) ) {
 			$rules['min_width_size']  .= '|numeric';
 			$rules['min_height_size'] .= '|numeric';
-			$rules['allowed_types']   .= '|allowed_types';
 		}
 
 

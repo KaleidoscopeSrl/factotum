@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\App;
 
+use Kaleidoscope\Factotum\Traits\CartUtils;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Content;
 
@@ -23,6 +24,7 @@ class Controller extends BaseController
 	protected $uriParts;
 	protected $pageContentType;
 
+	use CartUtils;
 
 	public function __construct()
 	{
@@ -54,6 +56,11 @@ class Controller extends BaseController
 
 			if ( method_exists( app('App\Http\Controllers\Controller'), 'registerViewShare' ) ) {
 				app('App\Http\Controllers\Controller')->registerViewShare();
+			}
+
+			if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+				$cart = $this->_getCart();
+				View::share( 'cart', $cart );
 			}
 
 			return $next($request);

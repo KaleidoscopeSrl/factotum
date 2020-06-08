@@ -129,7 +129,7 @@ class FactotumEcommerceSetup extends Migration
 
 
 		// Create cart products tables
-		Schema::create('cart_products', function (Blueprint $table) {
+		Schema::create('cart_product', function (Blueprint $table) {
 			$table->id();
 			$table->bigInteger('cart_id')->unsigned();
 			$table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
@@ -286,7 +286,7 @@ class FactotumEcommerceSetup extends Migration
 		Schema::drop('taxes');
 		Schema::drop('order_products');
 		Schema::drop('orders');
-		Schema::drop('cart_products');
+		Schema::drop('cart_product');
 		Schema::drop('carts');
 		Schema::drop('products');
 		Schema::drop('product_categories');
