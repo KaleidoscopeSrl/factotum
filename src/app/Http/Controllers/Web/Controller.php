@@ -58,11 +58,6 @@ class Controller extends BaseController
 				app('App\Http\Controllers\Controller')->registerViewShare();
 			}
 
-			if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
-				$cart = $this->_getCart();
-				View::share( 'cart', $cart );
-			}
-
 			return $next($request);
 		});
 	}

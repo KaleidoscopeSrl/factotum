@@ -13,22 +13,27 @@ trait CartUtils
 	protected function _getCart()
 	{
 		try {
-			$user = Auth::user();
 
-			$cart = Cart::where( 'customer_id', $user->id )
-						->where('expires_at', '>=', date('Y-m-d H:i:s'))->first();
+			if ( Auth::check() ) {
+				$user = Auth::user();
 
-			if ( !$cart ) {
-				$cart = new Cart;
-				$cart->customer_id = $user->id;
-				$cart->expires_at  = date('Y-m-d H:i:s', strtotime('+1 day') );
-				$cart->total       = 0;
-				$cart->save();
+				$cart = Cart::where( 'customer_id', $user->id )
+					->where('expires_at', '>=', date('Y-m-d H:i:s'))->first();
+
+				if ( !$cart ) {
+					$cart = new Cart;
+					$cart->customer_id = $user->id;
+					$cart->expires_at  = date('Y-m-d H:i:s', strtotime('+1 day') );
+					$cart->total       = 0;
+					$cart->save();
+				}
+
+				$cart->load('products');
+
+				return $cart;
 			}
 
-			$cart->load('products');
-
-			return $cart;
+			return null;
 
 		} catch ( \Exception $ex ) {
 			session()->flash( 'error', $ex->getMessage() );

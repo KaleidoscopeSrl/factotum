@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Cart;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 use Kaleidoscope\Factotum\CartProduct;
 use Kaleidoscope\Factotum\DiscountCode;
@@ -91,22 +92,50 @@ class CartController extends Controller
 
 			session()->flash( 'product_added', 'Prodotto aggiunto al carrello!' );
 
-			return redirect()->back();
+			return $request->wantsJson() ? json_encode(['result' => 'ok', 'message' => 'Prodotto aggiunto al carrello!' ]) : redirect()->back();
 
 		} catch ( \Exception $ex ) {
-			echo '<pre>';
-			print_r( $ex->getLine() . ' - ' . $ex->getMessage());die;
 			session()->flash( 'error', $ex->getMessage() );
-
-			return view('factotum::errors.500');
-
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view('factotum::errors.500');
 		}
 
     }
 
+
+    public function ajaxGetCartPanel( Request $request )
+	{
+		$view = 'factotum::ecommerce.ajax.cart-panel';
+		$cart = $this->_getCart();
+
+		$total = 0;
+		$totalProducts = 0;
+
+		if ( isset($cart) && $cart->products->count() > 0 ) {
+			foreach( $cart->products as $p ) {
+				$totalProducts += $p->pivot->quantity;
+				$total += $p->pivot->quantity * $p->pivot->product_price;
+			}
+		}
+
+		if ( file_exists( resource_path('views/ecommerce/ajax/cart-panel.blade.php') ) ) {
+			$view = 'ecommerce.ajax.cart-panel';
+		}
+
+		$returnHTML = view( $view )->with([
+			'total' => $total,
+			'cart'  => $cart
+		])->render();
+
+		return response()->json([
+			'result'        => 'ok',
+			'total'         => '€' . number_format( $total, 2, ',', '.' ),
+			'totalProducts' => $totalProducts,
+			'html'          => $returnHTML
+		]);
+
+	}
+
     // TODO: removeProduct ( rimuovere il prodotto dal carrello )
 
-    // TODO: addProductQuick ( aggiunta di 1 pezzo alla volta )
 
-	// TODO: removeProductQuick ( rimuovere di 1 pezzo alla volta )
 }
