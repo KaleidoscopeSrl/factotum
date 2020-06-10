@@ -9,8 +9,7 @@
  */
 
 Route::group([
-	'prefix'    => 'auth',
-	'namespace' => 'Auth'
+	'prefix'    => 'auth'
 ], function() {
 
 	// AUTH LOGIN ROUTES

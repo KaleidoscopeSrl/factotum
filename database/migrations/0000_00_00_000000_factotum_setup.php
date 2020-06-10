@@ -204,6 +204,8 @@ class FactotumSetup extends Migration
 	 */
 	public function down()
 	{
+		Schema::disableForeignKeyConstraints();
+
 		Schema::drop('category_content');
 		Schema::drop('categories');
 		Schema::drop('contents');
@@ -220,6 +222,8 @@ class FactotumSetup extends Migration
 		Schema::drop('users');
 		Schema::drop('roles');
 		Schema::drop('password_resets');
+
+		Schema::enableForeignKeyConstraints();
 	}
 
 }

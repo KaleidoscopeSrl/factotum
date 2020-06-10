@@ -14,7 +14,6 @@ class Cart extends Model
 	protected $fillable = [
 		'customer_id',
 		'expires_at',
-		'total'
 	];
 
 

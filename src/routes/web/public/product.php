@@ -7,10 +7,10 @@
  */
 
 Route::group([
-	'namespace'  => 'Ecommerce\Product'
+	'prefix'    => 'product'
 ], function () {
 
-	Route::post('/ricerca-prodotto',         'ReadController@searchProduct');
+	Route::post('/search',         'ReadController@searchProduct');
 
 });
 

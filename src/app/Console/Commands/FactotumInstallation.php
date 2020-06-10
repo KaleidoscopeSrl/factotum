@@ -35,19 +35,19 @@ class FactotumInstallation extends Command
 	{
 		$this->info('Resetting DB...');
 
-		$paths = [
-			$this->migrationPath . '/0000_00_00_000000_factotum_setup.php'
-		];
+		$paths = [];
 
 		if ( $this->installEcommerce ) {
 			$paths[] = $this->migrationPath . '/0000_00_00_000001_factotum_ecommerce_setup.php';
 		}
 
+		$paths[] = $this->migrationPath . '/0000_00_00_000000_factotum_setup.php';
+
 		$this->call('migrate:reset', [
 			'--path' => $paths
 		]);
 
-		$this->info('DB resetted...');
+		$this->info('DB resetted...', var_dump($paths));
 	}
 
 
@@ -140,6 +140,7 @@ class FactotumInstallation extends Command
 		}
 
 		if ( $this->reInstall ) {
+			// TODO: cancellare le tabelle create sui content type (tipo news, page, ecc.)
 			$this->_resetMigration();
 
 			// TODO: destroy folders from storage
@@ -148,7 +149,6 @@ class FactotumInstallation extends Command
 		}
 
 		if ( $this->install ) {
-
 			$this->_cleanLaravelScaffolding();
 			$this->_publishVendorAndDump();
 			$this->_installMigration();

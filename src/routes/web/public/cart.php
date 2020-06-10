@@ -9,10 +9,9 @@
  */
 
 Route::group([
-	'prefix'    => 'cart',
-	'namespace' => 'Ecommerce\Cart'
+	'prefix'    => 'cart'
 ], function() {
 
-	Route::get('/get-cart-panel',                'CartController@ajaxGetCartPanel');
+	Route::get('/get-cart-panel',                'ReadController@ajaxGetCartPanel');
 
 });

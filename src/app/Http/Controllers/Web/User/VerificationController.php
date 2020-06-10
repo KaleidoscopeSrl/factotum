@@ -27,7 +27,7 @@ class VerificationController extends Controller
 	use VerifiesEmails;
 
 
-	protected $redirectTo = '/';
+	protected $redirectTo = '/?verified=1';
 
 
 	public function __construct()

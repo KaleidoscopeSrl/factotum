@@ -9,11 +9,14 @@
  */
 
 Route::group([
-	'prefix'    => 'cart',
-	'namespace' => 'Ecommerce\Cart'
+	'prefix'     => 'cart',
+	'middleware' => 'auth'
 ], function() {
 
-	Route::post('/add-product',                  'CartController@addProduct');
-	// Route::post('/remove-product',               'CartController@removeProduct');
+	Route::get('',                               'ReadController@getCart');
+
+	Route::post('/add-product',                  'UpdateController@addProduct');
+	Route::post('/remove-product',               'UpdateController@removeProduct');
+	Route::post('/drop-product',                 'UpdateController@dropProduct');
 
 });

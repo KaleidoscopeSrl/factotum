@@ -9,8 +9,8 @@
  */
 
 Route::group([
-	'prefix'    => 'user',
-	'namespace' => 'User'
+	'middleware' => 'auth',
+	'prefix'     => 'user'
 ], function() {
 
 	Route::get('/profile',                   'ProfileController@showProfileForm');

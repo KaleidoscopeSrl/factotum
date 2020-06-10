@@ -9,8 +9,7 @@
  */
 
 Route::group([
-	'prefix'    => 'user',
-	'namespace' => 'User'
+	'prefix'    => 'user'
 ], function() {
 
 	// USER ROUTES

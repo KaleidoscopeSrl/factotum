@@ -17,14 +17,12 @@ trait CartUtils
 			if ( Auth::check() ) {
 				$user = Auth::user();
 
-				$cart = Cart::where( 'customer_id', $user->id )
-					->where('expires_at', '>=', date('Y-m-d H:i:s'))->first();
+				$cart = Cart::where( 'customer_id', $user->id )->where('expires_at', '>=', date('Y-m-d H:i:s'))->first();
 
 				if ( !$cart ) {
 					$cart = new Cart;
 					$cart->customer_id = $user->id;
 					$cart->expires_at  = date('Y-m-d H:i:s', strtotime('+1 day') );
-					$cart->total       = 0;
 					$cart->save();
 				}
 

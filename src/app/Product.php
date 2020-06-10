@@ -19,6 +19,7 @@ class Product extends Model
 		'status',
 		'description',
 		'image',
+		'thumb',
 		'barcode',
 		'basic_price',
 		'discount_price',

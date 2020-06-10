@@ -321,7 +321,7 @@ class FrontController extends Controller
 
 		} else {
 
-			return view( $data['view'] );
+			return ( isset($data['view']) ? view( $data['view'] ) : view( 'errors.404' ) );
 
 		}
 	}

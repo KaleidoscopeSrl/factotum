@@ -10,7 +10,7 @@
 
 Route::group([
 	'prefix'     => 'auth',
-	'namespace'  => 'Auth',
+	'middleware' => 'auth'
 ], function() {
 
 	Route::get('/logout',     'AuthController@logout')->name('logout');
