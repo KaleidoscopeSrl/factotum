@@ -248,25 +248,35 @@ class FactotumServiceProvider extends ServiceProvider
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 
 			// Frontend Cart Routes
-			if ( !file_exists( base_path('routes') . '/web/cart.php' ) ) {
+			if ( !file_exists( base_path('routes') . '/web/ecommerce/cart.php' ) ) {
 
 				Route::group([
 					'middleware' => [ 'web' ],
 					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Cart'
 				], function ($router) {
-					require __DIR__ . '/routes/web/public/cart.php';
-					require __DIR__ . '/routes/web/cart.php';
+					require __DIR__ . '/routes/web/public/ecommerce/cart.php';
+					require __DIR__ . '/routes/web/ecommerce/cart.php';
 				});
 
 			}
 
 			// Frontend Product Routes
-			if ( !file_exists( base_path('routes') . '/web/product.php' ) ) {
+			if ( !file_exists( base_path('routes') . '/web/ecommerce/product.php' ) ) {
 				Route::group([
 					'middleware' => [ 'web' ],
 					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Product'
 				], function ($router) {
-					require __DIR__ . '/routes/web/public/product.php';
+					require __DIR__ . '/routes/web/public/ecommerce/product.php';
+				});
+			}
+
+			// Frontend Ecommerce User Routes
+			if ( !file_exists( base_path('routes') . '/web/ecommerce/user.php' ) ) {
+				Route::group([
+					'middleware' => [ 'web' ],
+					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\User'
+				], function ($router) {
+					require __DIR__ . '/routes/web/ecommerce/user.php';
 				});
 			}
 

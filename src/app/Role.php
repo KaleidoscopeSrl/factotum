@@ -14,7 +14,21 @@ class Role extends Model
 		'manage_users',
 		'manage_media',
 		'manage_settings',
+		'manage_categories',
 	];
+
+	public function __construct()
+	{
+		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+			$this->fillable[] = 'manage_brands';
+			$this->fillable[] = 'manage_products';
+			$this->fillable[] = 'manage_orders';
+			$this->fillable[] = 'manage_discount_codes';
+			$this->fillable[] = 'manage_product_categories';
+			$this->fillable[] = 'manage_carts';
+			$this->fillable[] = 'manage_taxes';
+		}
+	}
 
 
 	protected $hidden = [

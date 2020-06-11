@@ -109,8 +109,10 @@ class Product extends Model
 			// Main image
 			if ( isset($image) && is_array($image) && count($image) > 0 ) {
 				$attributes['image'] = $image[0]['id'];
-			} else {
+			} else if ( isset($image) && is_string($image) ) {
 				$attributes['image'] = ( substr($image, 0, 4) == 'http' ? $image : null );
+			} else {
+				$attributes['image'] = null;
 			}
 		}
 
@@ -120,8 +122,10 @@ class Product extends Model
 			// Fb Image
 			if ( isset($fbImage) && is_array($fbImage) && count($fbImage) > 0 ) {
 				$attributes['fb_image'] = $fbImage[0]['id'];
-			} else {
+			} else if ( isset($fbImage) && is_string($fbImage) ) {
 				$attributes['fb_image'] = ( substr($fbImage, 0, 4) == 'http' ? $fbImage : null );
+			} else {
+				$attributes['fb_image'] = null;
 			}
 		}
 

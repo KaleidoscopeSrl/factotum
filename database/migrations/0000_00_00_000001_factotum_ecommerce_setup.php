@@ -71,7 +71,7 @@ class FactotumEcommerceSetup extends Migration
 		Schema::create('products', function (Blueprint $table) {
 			$table->id();
 
-			$table->string('code', 16);
+			$table->string('code', 25)->unique();
 			$table->boolean('active')->nullable();
 			$table->string('url', 191);
 			$table->string('abs_url', 191)->nullable(true)->unique();
@@ -156,7 +156,6 @@ class FactotumEcommerceSetup extends Migration
 		// Added new fields for shipping/invoice address
 		Schema::table('profiles', function (Blueprint $table) {
 			$table->string('phone', 64)->nullable()->after('first_name');
-
 			$table->boolean('privacy')->nullable()->after('phone')->default(0);
 			$table->boolean('newsletter')->nullable()->after('privacy')->default(0);
 			$table->boolean('partner_offers')->nullable()->after('newsletter')->default(0);
@@ -180,6 +179,8 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('nation', 64);
 
 			$table->boolean('default_address')->default(0);
+
+			$table->timestamps();
 		});
 
 

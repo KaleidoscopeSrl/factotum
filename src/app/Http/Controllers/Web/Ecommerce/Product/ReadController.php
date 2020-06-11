@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 
 use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductCategory;
 
 
 class ReadController extends Controller

@@ -2,7 +2,7 @@
 
 @section('content')
 
-	<section class="page page-register">
+	<section class="page page-customer-address">
 
 		<div class="container">
 
@@ -18,23 +18,25 @@
 
 					<div class="box">
 
-						<h3>Indirizzo di consegna</h3>
+						<h3>@if ( !isset($address) ) Nuovo @endif Indirizzo di @if ( $type == 'delivery' ) consegna @else fatturazione @endif</h3>
 
-						<form method="POST" action="/user/delivery-address" class="container-fluid col-no-pl col-no-pr">
+						<form method="POST"
+							  action="/user/customer-addresses/edit/{{ $type }}{{ (isset($address) ? '/' . $address->id : '' ) }}"
+							  class="container-fluid col-no-pl col-no-pr">
 							@csrf
 
 							<div class="row clearfix">
 								<div class="col col-xs-12 col-md-6">
 
 									<div class="field">
-										<label for="delivery_address">Indirizzo</label>
+										<label for="address">Indirizzo</label>
 
-										<input id="delivery_address" type="text"
-											   value="{{ $user->profile->delivery_address }}"
-											   class="form-control @error('delivery_address') is-invalid @enderror" name="delivery_address"
+										<input id="address" type="text"
+											   value="@if( isset($address) ){{ $address->address }}@endif"
+											   class="form-control @error('address') is-invalid @enderror" name="address"
 											   required autofocus>
 
-										@error('delivery_address')
+										@error('address')
 										<p class="error" role="alert">{{ $message }}</p>
 										@enderror
 									</div>
@@ -43,15 +45,15 @@
 								<div class="col col-xs-12 col-md-2">
 
 									<div class="field">
-										<label for="delivery_zip">CAP</label>
+										<label for="zip">CAP</label>
 
-										<input id="delivery_zip" type="text"
+										<input id="zip" type="text"
 											   maxlength="7"
-											   value="{{ $user->profile->delivery_zip }}"
-											   class="form-control @error('delivery_zip') is-invalid @enderror" name="delivery_zip"
+											   value="@if( isset($address) ){{ $address->zip }}@endif"
+											   class="form-control @error('zip') is-invalid @enderror" name="zip"
 											   required autofocus>
 
-										@error('delivery_zip')
+										@error('zip')
 										<p class="error" role="alert">{{ $message }}</p>
 										@enderror
 									</div>
@@ -60,14 +62,14 @@
 								<div class="col col-xs-12 col-md-4">
 
 									<div class="field">
-										<label for="delivery_city">Città</label>
+										<label for="city">Città</label>
 
-										<input id="delivery_city" type="text"
-											   value="{{ $user->profile->delivery_city }}"
-											   class="form-control @error('delivery_city') is-invalid @enderror" name="delivery_city"
+										<input id="city" type="text"
+											   value="@if( isset($address) ){{ $address->city }}@endif"
+											   class="form-control @error('city') is-invalid @enderror" name="city"
 											   required autofocus>
 
-										@error('delivery_city')
+										@error('city')
 										<p class="error" role="alert">{{ $message }}</p>
 										@enderror
 									</div>
@@ -80,14 +82,14 @@
 								<div class="col col-xs-12 col-md-6">
 
 									<div class="field">
-										<label for="delivery_province">Provincia</label>
+										<label for="province">Provincia</label>
 
-										<input id="delivery_province" type="text"
-											   value="{{ $user->profile->delivery_province }}"
-											   class="@error('delivery_province') is-invalid @enderror" name="delivery_province"
+										<input id="province" type="text"
+											   value="@if( isset($address) ){{ $address->province }}@endif"
+											   class="@error('province') is-invalid @enderror" name="province"
 											   required autofocus>
 
-										@error('delivery_province')
+										@error('province')
 										<p class="error" role="alert">{{ $message }}</p>
 										@enderror
 									</div>
@@ -96,20 +98,20 @@
 								<div class="col col-xs-12 col-md-6">
 
 									<div class="field">
-										<label for="delivery_nation">Nazione</label>
+										<label for="nation">Nazione</label>
 
 										@php $countries = \Kaleidoscope\Factotum\Library\Utility::getCountries(); @endphp
 
-										<select name="delivery_nation" id="delivery_nation"
+										<select name="nation" id="nation"
 												required
-												class="@error('delivery_nation') is-invalid @enderror">
+												class="@error('nation') is-invalid @enderror">
 											<option value="">Seleziona la nazione</option>
 											@foreach ( $countries as $code => $label )
-												<option value="{{ $code }}" @if( $code == $user->profile->delivery_nation ) selected @endif>{{ $label }}</option>
+												<option value="{{ $code }}" @if( isset($address) && $code == $address->nation ) selected @endif>{{ $label }}</option>
 											@endforeach
 										</select>
 
-										@error('delivery_nation')
+										@error('nation')
 										<p class="error" role="alert">{{ $message }}</p>
 										@enderror
 									</div>
@@ -117,17 +119,6 @@
 								</div>
 							</div>
 
-
-							<div class="row clearfix">
-								<div class="col col-xs-12">
-
-									<div class="field field-checkbox">
-										<input type="checkbox" name="use_for_invoice" id="use_for_invoice" value="1">
-										<label for="use_for_invoice">Usa lo stesso indirizzo per la fatturazione</label>
-									</div>
-
-								</div>
-							</div>
 
 							<div class="row clearfix">
 								<div class="col col-xs-12">
