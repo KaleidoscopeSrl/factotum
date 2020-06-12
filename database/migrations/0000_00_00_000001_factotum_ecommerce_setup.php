@@ -149,10 +149,6 @@ class FactotumEcommerceSetup extends Migration
 			$table->timestamps();
 		});
 
-		Schema::table('users', function (Blueprint $table) {
-			$table->string('fiscal_code', 16)->nullable()->after('avatar');
-		});
-
 		// Added new fields for shipping/invoice address
 		Schema::table('profiles', function (Blueprint $table) {
 			$table->string('phone', 64)->nullable()->after('first_name');

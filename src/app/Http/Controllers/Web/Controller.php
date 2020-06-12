@@ -36,23 +36,27 @@ class Controller extends BaseController
 
 		$this->middleware(function ($request, $next) {
 
-			View::share( 'availableLanguages', config('factotum.site_languages') );
-
 			$this->_setupVariables( $request );
+			$currentLang = $this->_getCurrentLanguage( $request );
 
-			View::share( 'currentLanguage', $this->_getCurrentLanguage( $request ) );
+			if ( !$request->wantsJson() ) {
 
-			$menu = Content::with('childrenRecursive')
-							->whereNull( 'parent_id' )
-							->where([
-								'status'       => 'publish',
-								'lang'         => $this->currentLanguage,
-								'show_in_menu' => 1,
-							])
-							->orderBy('order_no', 'ASC')
-							->get();
+				View::share( 'availableLanguages', config('factotum.site_languages') );
+				View::share( 'currentLanguage', $currentLang );
 
-			View::share( 'menu', $menu );
+				$menu = Content::with('childrenRecursive')
+								->whereNull( 'parent_id' )
+								->where([
+									'status'       => 'publish',
+									'lang'         => $this->currentLanguage,
+									'show_in_menu' => 1,
+								])
+								->orderBy('order_no', 'ASC')
+								->get();
+
+				View::share( 'menu', $menu );
+
+			}
 
 			if ( method_exists( app('App\Http\Controllers\Controller'), 'registerViewShare' ) ) {
 				app('App\Http\Controllers\Controller')->registerViewShare();
@@ -83,6 +87,7 @@ class Controller extends BaseController
 			App::setLocale( $checkLang );
 		} else {
 			$this->currentLanguage = config('factotum.main_site_language');
+			App::setLocale( $this->currentLanguage );
 		}
 
 		return $this->currentLanguage;

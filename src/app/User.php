@@ -33,14 +33,6 @@ class User extends Authenticatable implements MustVerifyEmail
 	];
 
 
-	public function __construct()
-	{
-		if (env('FACTOTUM_ECOMMERCE_INSTALLED')) {
-			$this->fillable[] = 'fiscal_code';
-		}
-	}
-
-
 	public function sendPasswordResetNotification($token)
 	{
 		$this->notify(new ResetPasswordNotification($token));

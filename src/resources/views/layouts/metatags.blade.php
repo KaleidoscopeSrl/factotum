@@ -1,4 +1,18 @@
-@if ( isset($content) )
+@if ( isset($metatags) )
+
+	@if ( $metatags['title'] != '' )
+		<title>{{ $metatags['title'] }} - {{ config('app.name', 'Factotum') }}</title>
+		<meta property="og:title" content="{{ $metatags['title'] }} - {{ config('app.name', 'Factotum') }}" />
+		<meta name="twitter:title" content="{{ $metatags['title'] }} - {{ config('app.name', 'Factotum') }}" >
+	@endif
+
+	@if ( $metatags['description'] != '' )
+		<meta name="description" content="{{ $metatags['description'] }}">
+		<meta property="og:description" content="{{ $metatags['description'] }}" />
+		<meta name="twitter:description" content="{{ $metatags['description'] }}" />
+	@endif
+
+@elseif ( isset($content) )
 
 	@if ( $content->seo_title != '' )
 		<title>{{ $content->seo_title }} - {{ config('app.name', 'Factotum') }}</title>
@@ -26,7 +40,7 @@
 		<meta name="twitter:description" content="{{ $content->fb_description }}" />
 	@endif
 
-	@php()
+	@php
 	$index  = ( $content->seo_robots_indexing  != '' ? $content->seo_robots_indexing  : 'index' );
 	$follow = ( $content->seo_robots_following != '' ? $content->seo_robots_following : 'follow');
 	@endphp

@@ -136,7 +136,7 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		$this->loadViewsFrom(__DIR__ . '/resources/views', 'factotum');
-
+		$this->loadTranslationsFrom( __DIR__ . '/resources/lang', 'factotum' );
 
 		if ( $this->app->runningInConsole() ) {
 
@@ -216,7 +216,7 @@ class FactotumServiceProvider extends ServiceProvider
 
 		$factotumNs = 'Kaleidoscope\Factotum\Http\Controllers\Web';
 
-
+		$overridingRoutes = false;
 
 		// Frontend Auth Routes
 		if ( !file_exists( base_path('routes') . '/web/auth.php' ) ) {
@@ -229,6 +229,7 @@ class FactotumServiceProvider extends ServiceProvider
 				require __DIR__ . '/routes/web/auth.php';
 			});
 
+			$overridingRoutes = true;
 		}
 
 		// Frontend User Routes
@@ -242,6 +243,7 @@ class FactotumServiceProvider extends ServiceProvider
 				require __DIR__ . '/routes/web/user.php';
 			});
 
+			$overridingRoutes = true;
 		}
 
 
@@ -258,43 +260,57 @@ class FactotumServiceProvider extends ServiceProvider
 					require __DIR__ . '/routes/web/ecommerce/cart.php';
 				});
 
+				$overridingRoutes = true;
 			}
 
 			// Frontend Product Routes
 			if ( !file_exists( base_path('routes') . '/web/ecommerce/product.php' ) ) {
+
 				Route::group([
 					'middleware' => [ 'web' ],
 					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Product'
 				], function ($router) {
 					require __DIR__ . '/routes/web/public/ecommerce/product.php';
 				});
+
+				$overridingRoutes = true;
 			}
 
 			// Frontend Ecommerce User Routes
 			if ( !file_exists( base_path('routes') . '/web/ecommerce/user.php' ) ) {
+
 				Route::group([
 					'middleware' => [ 'web' ],
 					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\User'
 				], function ($router) {
 					require __DIR__ . '/routes/web/ecommerce/user.php';
 				});
+
+				$overridingRoutes = true;
 			}
 
 		}
 
+		/**
+		 *
+		 * PAY ATTENTION!
+		 * IF YOU OVERRIDE ONE OF THE DEFAULT FACTOTUM ROUTES, YOU SHOULD ALSO OVERRIDE THE MAIN public/web.php ROUTE FILE
+		 *
+		 */
 
+		if ( !$overridingRoutes ) {
 
+			// Public routes
+			Route::group([
+				'middleware' => [
+					'web'
+				],
+				'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web'
+			], function ($router) {
+				require __DIR__ . '/routes/web/public/web.php';
+			});
 
-
-		// Public routes
-		Route::group([
-			'middleware' => [
-				'web'
-			],
-			'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web'
-		], function ($router) {
-			require __DIR__ . '/routes/web/public/web.php';
-		});
+		}
 
 
 		Passport::routes();

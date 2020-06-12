@@ -1,19 +1,21 @@
 <?php
 
 return [
-	'user'                => 'Utente',
-	'add_new_user'        => 'Aggiungi Utente',
-	'edit_user'           => 'Modifica Utente',
-	'user_list'           => 'Lista Utenti',
-	'first_name'          => 'Nome',
-	'last_name'           => 'Cognome',
-	'email'               => 'Indirizzo E-Mail',
-	'role'                => 'Ruolo',
-	'actions'             => 'Azioni',
-	'confirm_password'    => 'Conferma Password',
-	'success_create_user' => 'Utente creato con successo!',
-	'success_update_user' => 'Utente aggiornato con successo!',
-	'success_delete_user' => 'Utente cancellato con successo!',
-	'delete_user_title'   => 'Cancella Utente',
-	'reassign'            => 'Riassegna i contenuti dell\'utente in cancellazione all\'utente seguente'
+
+	'registration_title'       => 'Registrati',
+	'registration_description' => 'Registrati',
+
+	'thankyou_title'       => 'Registrazione completata',
+	'thankyou_description' => 'Grazie per esserti registrato',
+
+	'email_verification_title'       => 'Verifica la tua email',
+	'email_verification_description' => 'Verifica la tua email',
+
+	'user_verified' => 'Utente verificato con successo!',
+
+	'user_updated' => 'Profilo aggiornato con successo!',
+
+	'profile_title'       => 'Profilo Utente',
+	'profile_description' => 'Profilo Utente',
+
 ];

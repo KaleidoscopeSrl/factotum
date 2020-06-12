@@ -117,7 +117,8 @@ class Utility
 
 	public static function getCountries()
 	{
-		$countries = array();
+		$countries = [];
+		$countries['IT'] = 'Italia';
 		$countries['AD'] = 'Andorra';
 		$countries['AE'] = 'United Arab Emirates';
 		$countries['AF'] = 'Afghanistan';
@@ -227,7 +228,6 @@ class Utility
 		$countries['IR'] = 'Iran';
 		$countries['IQ'] = 'Iraq';
 		$countries['IS'] = 'Iceland';
-		$countries['IT'] = 'Italy';
 		$countries['JE'] = 'Jersey';
 		$countries['JM'] = 'Jamaica';
 		$countries['JO'] = 'Jordan';

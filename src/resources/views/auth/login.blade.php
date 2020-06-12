@@ -22,7 +22,6 @@
 					<form method="POST" action="/auth/login">
 						@csrf
 
-						<!-- TODO: cambiare con p.iva -->
 						<div class="field">
 							<label for="email">Email</label>
 

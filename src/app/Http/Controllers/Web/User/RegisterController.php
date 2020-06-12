@@ -2,6 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\User;
 
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Auth\Events\Registered;
@@ -31,8 +32,13 @@ class RegisterController extends Controller
 
 	public function showRegistrationForm()
 	{
-		// TODO: aggiungere metatags
-		return view('factotum::user.register');
+		return view('factotum::user.register')
+				->with([
+					'metatags' => [
+						'title'       => Lang::get('factotum::user.registration_title'),
+						'description' => Lang::get('factotum::user.registration_description')
+					]
+				]);
 	}
 
 
@@ -50,6 +56,7 @@ class RegisterController extends Controller
 
 		event( new Registered( $user ) );
 
+		// NO AUTO LOGIN AFTER REGISTRATION
 		// $this->guard()->login($user);
 
 		if ( $response = $this->registered($request, $user) ) {
@@ -62,7 +69,13 @@ class RegisterController extends Controller
 
 	public function showThankyou( Request $request )
 	{
-		return view('factotum::user.thank-you');
+		return view('factotum::user.thank-you')
+				->with([
+					'metatags' => [
+						'title'       => Lang::get('factotum::user.thankyou_title'),
+						'description' => Lang::get('factotum::user.thankyou_description')
+					]
+				]);
 	}
 
 }

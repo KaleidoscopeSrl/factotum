@@ -65,7 +65,7 @@ class UpdateController extends Controller
 
     public function addProduct( AddProductToCart $request )
     {
-    	try {
+		try {
 
 			$productId = $request->input('product_id');
 			$quantity  = $request->input('quantity');

@@ -19,6 +19,8 @@ Route::group([
 
 	Route::post('/customer-addresses/edit/{type}/{id?}',        'ProfileController@saveCustomerAddress');
 
+	Route::post('/customer-addresses/set-default',              'ProfileController@setDefaultCustomerAddress');
+
 //	Route::get('/delivery-address',          'ProfileController@showDeliveryAddressForm');
 //
 //

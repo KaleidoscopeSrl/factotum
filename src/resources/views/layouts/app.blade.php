@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	@include('layouts.metatags', array('content' => ( isset($content) ? $content : null)) )
+	@include('layouts.metatags', ['content' => ( isset($content) ? $content : null), 'metatags' => ( isset($metatags) ? $metatags : null )] )
 
 	<!-- Styles -->
 	<link href="/assets/css/main.css" rel="stylesheet">

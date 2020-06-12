@@ -61,7 +61,29 @@ trait CartUtils
 			session()->flash( 'error', $ex->getMessage() );
 			return view('factotum::errors.500');
 		}
-
 	}
+
+
+	protected function _extendCart()
+	{
+		try {
+
+			if ( Auth::check() ) {
+				$user = Auth::user();
+
+				$cart = Cart::where( 'customer_id', $user->id )->where('expires_at', '>=', date('Y-m-d H:i:s'))->first();
+
+				if ( $cart ) {
+					$cart->expires_at  = date('Y-m-d H:i:s', strtotime('+1 day') );
+					$cart->save();
+				}
+			}
+
+		} catch ( \Exception $ex ) {
+			session()->flash( 'error', $ex->getMessage() );
+			return view('factotum::errors.500');
+		}
+	}
+
 
 }

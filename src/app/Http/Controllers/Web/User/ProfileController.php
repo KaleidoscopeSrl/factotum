@@ -3,12 +3,11 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\User;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller;
 
 use Kaleidoscope\Factotum\Http\Requests\UpdateUser;
-use Kaleidoscope\Factotum\Http\Requests\UpdateDeliveryAddress;
-use Kaleidoscope\Factotum\Http\Requests\UpdateInvoiceAddress;
 use Kaleidoscope\Factotum\Profile;
 
 
@@ -17,8 +16,13 @@ class ProfileController extends Controller
 
 	public function showProfileForm()
 	{
-		// TODO: aggiungere metatags
-		return view('factotum::user.profile')->with( 'user', Auth::user() );
+		return view('factotum::user.profile')->with([
+			'user'     => Auth::user(),
+			'metatags' => [
+				'title'       => Lang::get('factotum::user.profile_title'),
+				'description' => Lang::get('factotum::user.profile_description')
+			]
+		]);
 	}
 
 
@@ -39,9 +43,9 @@ class ProfileController extends Controller
 		$profile->fill( $data );
 		$profile->save();
 
-		session()->flash( 'message', 'Profilo aggiornato con successo!' );
+		session()->flash( 'message', Lang::get('factotum::user.user_updated') );
 
-		return view('factotum::user.profile')->with( 'user', Auth::user() );
+		return redirect('/user/profile');
 	}
 
 }

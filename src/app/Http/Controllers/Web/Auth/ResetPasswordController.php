@@ -2,6 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Auth;
 
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
@@ -16,10 +17,14 @@ class ResetPasswordController extends Controller
 
 	public function showResetForm(Request $request, $token = null)
 	{
-		return view('factotum::auth.reset-password')->with(
-			['token' => $token, 'email' => $request->email]
-		);
+		return view('factotum::auth.reset-password')
+					->with([
+						'token' => $token,
+						'email' => $request->email,
+						'metatags' => [
+							'title'       => Lang::get('factotum::auth.reset_password_title'),
+							'description' => Lang::get('factotum::auth.reset_password_description')
+						]
+					]);
 	}
-
-	// TODO: impaginare form reset password
 }

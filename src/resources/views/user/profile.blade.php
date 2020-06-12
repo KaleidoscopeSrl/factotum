@@ -158,60 +158,15 @@
 
 					<div class="box">
 
-						<h3>I tuoi indirizzi</h3>
-
-						<div class="container-fluid col-no-pl col-no-pl">
-
+						<div class="container-fluid">
 							<div class="row clearfix">
-								<div class="col col-xs-12 col-md-6">
-
-									<h4>Indirizzo di consegna</h4>
-
-									@if ( $user->profile->delivery_address != '' )
-									<span>{{ $user->profile->delivery_address }}</span><br>
-									@endif
-
-									@if ( $user->profile->delivery_zip != '' && $user->profile->delivery_city != '' )
-									<span>{{ $user->profile->delivery_zip }} - {{ $user->profile->delivery_city }}</span><br>
-									@endif
-
-									@if ( $user->profile->delivery_province != '' )
-										<span>{{ $user->profile->delivery_province }}</span><br>
-									@endif
-
-									@if ( $user->profile->delivery_nation != '' )
-										<span>{{ $user->profile->delivery_nation }}</span><br>
-									@endif
-
-									<br>
-									<a href="/user/delivery-address" class="cta">Aggiorna</a>
-
+								<div class="col col-xs-8">
+									<h3 class="cta-aligned">I tuoi indirizzi</h3>
 								</div>
-								<div class="col col-xs-12 col-md-6">
-
-									<h4>Indirizzo di fatturazione</h4>
-
-									@if ( $user->profile->invoice_address != '' )
-										<span>{{ $user->profile->invoice_address }}</span><br>
-									@endif
-
-									@if ( $user->profile->invoice_zip != '' && $user->profile->invoice_city != '' )
-										<span>{{ $user->profile->invoice_zip }} - {{ $user->profile->invoice_city }}</span><br>
-									@endif
-
-									@if ( $user->profile->invoice_province != '' )
-										<span>{{ $user->profile->invoice_province }}</span><br>
-									@endif
-
-									@if ( $user->profile->invoice_nation != '' )
-										<span>{{ $user->profile->invoice_nation }}</span><br>
-									@endif
-
-									<br>
-									<a href="/user/invoice-address" class="cta">Aggiorna</a>
+								<div class="col col-xs-4 tar">
+									<a href="{{ url('/user/customer-addresses') }}" class="cta">VEDI TUTTI</a>
 								</div>
 							</div>
-
 						</div>
 
 					</div>

@@ -2,6 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Auth;
 
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
@@ -21,8 +22,13 @@ class ForgotPasswordController extends Controller
 
     public function showLinkRequestForm( Request $request )
 	{
-		// TODO: aggiungere metatags
-		return view('factotum::auth.forgot-password');
+		return view('factotum::auth.forgot-password')
+					->with([
+						'metatags' => [
+							'title'       => Lang::get('factotum::auth.forgot_password_title'),
+							'description' => Lang::get('factotum::auth.forgot_password_description')
+						]
+					]);
 	}
 
 }

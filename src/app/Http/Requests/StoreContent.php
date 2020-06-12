@@ -121,7 +121,6 @@ class StoreContent extends CustomFormRequest
 		$data['url'] = ( $data['url'] != '/' ? Str::slug( $data['url'], '-') : '/' );
 
 		// Aggiungo al path la lingua solo se è diversa da quella di default
-		// TODO: rendere personalizzabile questa scelta dalle impostazioni
 		$data['abs_url'] = url('') . '/'
 			. ( $data['lang'] != config('factotum.main_site_language') ? $data['lang'] . '/' : '' )
 			. ( $data['url'] != '/' ? $data['url'] : '' );
