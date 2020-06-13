@@ -15,13 +15,20 @@ class ReadController extends Controller
     	$limit  = $request->input('limit');
 		$offset = $request->input('offset');
 
-        $users = User::with('profile')
+		$query = User::with('profile')
 						->with('role')
 						->with('avatar')
 						->orderBy('id','DESC')
 						->skip($offset)
-						->take($limit)
-						->get();
+						->take($limit);
+
+		// If Factotum Ecommerce, get all the users EXCEPT the customers
+        if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+			$role = Role::where( 'role', 'customer' )->first();
+			$query->where( 'role_id', '!=', $role->id );
+		}
+
+        $users = $query->get();
 
         return response()->json( [ 'result' => 'ok', 'users' => $users ]);
     }

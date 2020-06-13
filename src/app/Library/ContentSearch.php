@@ -22,7 +22,7 @@ class ContentSearch {
 
 
 	private $_cols = [
-		'contents.id', 'contents.content_type_id', 'contents.user_id', 'status', 'parent_id',
+		'contents.id', 'contents.content_type_id', 'contents.user_id', 'contents.status', 'parent_id',
 		'title', 'content', 'url', 'abs_url', 'lang',
 		'show_in_menu', 'is_home',
 		'order_no',
@@ -66,7 +66,7 @@ class ContentSearch {
 
 	public function onlyPublished()
 	{
-		$this->_query->where( 'status', '=', 'publish' );
+		$this->_query->where( 'contents.status', '=', 'publish' );
 		return $this;
 	}
 

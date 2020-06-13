@@ -98,20 +98,20 @@
 								<div class="col col-xs-12 col-md-6">
 
 									<div class="field">
-										<label for="nation">Nazione</label>
+										<label for="country">Nazione</label>
 
 										@php $countries = \Kaleidoscope\Factotum\Library\Utility::getCountries(); @endphp
 
-										<select name="nation" id="nation"
+										<select name="country" id="country"
 												required
-												class="@error('nation') is-invalid @enderror">
+												class="@error('country') is-invalid @enderror">
 											<option value="">Seleziona la nazione</option>
 											@foreach ( $countries as $code => $label )
-												<option value="{{ $code }}" @if( isset($address) && $code == $address->nation ) selected @endif>{{ $label }}</option>
+												<option value="{{ $code }}" @if( isset($address) && $code == $address->country ) selected @endif>{{ $label }}</option>
 											@endforeach
 										</select>
 
-										@error('nation')
+										@error('country')
 										<p class="error" role="alert">{{ $message }}</p>
 										@enderror
 									</div>

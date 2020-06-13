@@ -13,7 +13,7 @@ class CustomerAddress extends Model
 		'address',
 		'city',
 		'zip',
-		'nation',
+		'country',
 		'default_address'
 	];
 

@@ -18,7 +18,7 @@ class VerificationController extends Controller
 	use VerifiesEmails;
 
 
-	protected $redirectTo = '/?verified=1';
+	protected $redirectTo = '/user/verified';
 
 
 	public function __construct()
@@ -72,7 +72,22 @@ class VerificationController extends Controller
 			return $response;
 		}
 
-		return $request->wantsJson() ? new Response('', 204) : redirect($this->redirectPath())->with('verified', true);
+		return $request->wantsJson() ? new Response('', 204) : redirect( $this->redirectPath() . '/' . $user->id )->with('verified', true);
+	}
+
+
+	public function showVerified(Request $request, $id )
+	{
+		$user = User::find($id);
+
+		return view('user.verified')
+				->with([
+					'user' => $user,
+					'metatags' => [
+						'title'       => Lang::get('factotum::user.email_verification_thankyou_title'),
+						'description' => Lang::get('factotum::user.email_verification_thankyou_description')
+					]
+				]);
 	}
 
 }

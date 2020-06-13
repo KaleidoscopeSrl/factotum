@@ -17,6 +17,7 @@ class EcommerceTableSeeder extends Seeder
 		$customer = new Role;
 		$customer->fill([
 			'role'                        => 'customer',
+			'editable'                    => 0,
 			'backend_access'              => 0,
 			'manage_content_types'        => 0,
 			'manage_users'                => 0,
@@ -47,14 +48,6 @@ class EcommerceTableSeeder extends Seeder
 
 	private function _setOrder()
 	{
-		$orderContentType = new ContentType;
-		$orderContentType->content_type = 'order';
-		$orderContentType->label        = 'Ordine';
-		$orderContentType->editable     = true;
-		$orderContentType->visible      = true;
-		$orderContentType->icon         = 'content';
-		$orderContentType->save();
-
 		$contentField = new ContentField;
 		$contentField->content_type_id = $orderContentType->id;
 		$contentField->name            = 'order_status';

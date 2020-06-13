@@ -172,7 +172,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('city', 64);
 			$table->string('zip', 7);
 			$table->string('province', 16);
-			$table->string('nation', 64);
+			$table->string('country', 64);
 
 			$table->boolean('default_address')->default(0);
 
@@ -246,13 +246,13 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('delivery_city', 64)->nullable();
 			$table->string('delivery_zip', 7)->nullable();
 			$table->string('delivery_province', 16)->nullable();
-			$table->string('delivery_nation', 64)->nullable();
+			$table->string('delivery_country', 64)->nullable();
 
 			$table->string('invoice_address', 128)->nullable();
 			$table->string('invoice_city', 64)->nullable();
 			$table->string('invoice_zip', 7)->nullable();
 			$table->string('invoice_province', 16)->nullable();
-			$table->string('invoice_nation', 64)->nullable();
+			$table->string('invoice_country', 64)->nullable();
 
 			$table->text('notes')->nullable();
 			$table->string('payment_type', 64)->nullable();

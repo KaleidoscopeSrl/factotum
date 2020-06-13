@@ -24,8 +24,7 @@ class ProfileController extends Controller
 											->orderBy('default_address', 'DESC')
 											->get();
 
-		// TODO: indirizzo di fatturazione
-		$invoiceAddress    = CustomerAddress::where( 'type', 'invoice'  )->where( 'customer_id', $user->id )->first();
+		$invoiceAddress    = CustomerAddress::where( 'type', 'invoice' )->where( 'customer_id', $user->id )->first();
 
 
 		return view('factotum::ecommerce.user.customer-addresses')
@@ -83,7 +82,7 @@ class ProfileController extends Controller
 				$customerAddress->zip      = $data['zip'];
 				$customerAddress->city     = $data['city'];
 				$customerAddress->province = $data['province'];
-				$customerAddress->nation   = $data['nation'];
+				$customerAddress->country  = $data['country'];
 				$customerAddress->save();
 	
 				session()->flash( 'message', Lang::get('factotum::ecommerce_user.customer_address_saved') );

@@ -116,7 +116,7 @@ return [
         'theme' => 'default',
 
         'paths' => [
-            resource_path('views/vendor/mail'),
+			resource_path('views/vendor/mail'),
 			base_path() . '/vendor/kaleidoscope/factotum/src/resources/views/email/template',
 			base_path() . '/vendor/kaleidoscope/dev-factotum/src/resources/views/email/template',
         ],

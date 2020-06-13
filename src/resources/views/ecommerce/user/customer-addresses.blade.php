@@ -14,7 +14,7 @@
 			]])
 
 			<div class="row clearfix">
-				<div class="col col-xs-12 col-md-8">
+				<div class="col col-xs-12 col-md-6">
 
 					<div class="box">
 
@@ -29,7 +29,7 @@
 							</div>
 						</div>
 
-						<br><br>
+						<br>
 
 						<div class="container-fluid col-no-pl col-no-pr">
 
@@ -59,8 +59,8 @@
 												<span>{{ $d->province }}</span><br>
 											@endif
 
-											@if ( $d->nation != '' )
-												<span>{{ $d->nation }}</span><br>
+											@if ( $d->country != '' )
+												<span>{{ $d->country }}</span><br>
 											@endif
 
 											<div class="cta-container">
@@ -88,7 +88,7 @@
 
 				</div>
 
-				<div class="col col-xs-12 col-md-4">
+				<div class="col col-xs-12 col-md-6">
 
 					<div class="box">
 
@@ -100,9 +100,11 @@
 							</div>
 						</div>
 
+						<br>
+
 						@if ( isset($invoiceAddress) && $invoiceAddress )
 
-						<div class="box">
+						<div class="box box-address">
 
 							<div class="container-fluid col-no-pl col-no-pl">
 
@@ -121,14 +123,13 @@
 											<span>{{ $invoiceAddress->province }}</span><br>
 										@endif
 
-										@if ( $invoiceAddress->nation != '' )
-											<span>{{ $invoiceAddress->nation }}</span><br>
+										@if ( $invoiceAddress->country != '' )
+											<span>{{ $invoiceAddress->country }}</span><br>
 										@endif
 
-										<br>
-
-										<a href="/user/customer-addresses/edit/{{ $invoiceAddress->type }}/{{ $invoiceAddress->id }}" class="cta">Aggiorna</a>
-
+										<div class="cta-container">
+											<a href="/user/customer-addresses/edit/{{ $invoiceAddress->type }}/{{ $invoiceAddress->id }}" class="cta">Aggiorna</a>
+										</div>
 									</div>
 
 								</div>

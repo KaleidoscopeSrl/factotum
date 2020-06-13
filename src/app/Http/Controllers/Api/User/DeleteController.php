@@ -2,9 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\User;
 
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Http\Requests\DeleteUser;
 use Kaleidoscope\Factotum\User;
 use Kaleidoscope\Factotum\Content;
 
@@ -12,12 +11,13 @@ use Kaleidoscope\Factotum\Content;
 class DeleteController extends Controller
 {
 
-	public function remove(DeleteUser $request, $id)
+	public function remove(Request $request, $id)
 	{
 		$reassigningUser = $request->input('reassigned_user');
 
-		Content::where('user_id', $id)
-				->update(['user_id' => $reassigningUser]);
+		if ( $reassigningUser ) {
+			Content::where('user_id', $id)->update(['user_id' => $reassigningUser]);
+		}
 
 		$user = User::find( $id );
 

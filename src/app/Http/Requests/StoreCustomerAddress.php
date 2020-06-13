@@ -33,7 +33,7 @@ class StoreCustomerAddress extends CustomFormRequest
 			'zip'         => 'required|max:7',
 			'city'        => 'required',
 			'province'    => 'required',
-			'nation'      => 'required|max:2',
+			'country'      => 'required|max:2',
 		];
 
 		return $rules;

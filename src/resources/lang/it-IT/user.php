@@ -11,6 +11,9 @@ return [
 	'email_verification_title'       => 'Verifica la tua email',
 	'email_verification_description' => 'Verifica la tua email',
 
+	'email_verification_thankyou_title'       => 'Utente Verificato',
+	'email_verification_thankyou_description' => 'Utente Verificato',
+
 	'user_verified' => 'Utente verificato con successo!',
 
 	'user_updated' => 'Profilo aggiornato con successo!',

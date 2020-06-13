@@ -93,8 +93,9 @@ class FactotumServiceProvider extends ServiceProvider
 			$this->app['config']->get('database', []), require __DIR__ . '/config/database.php'
 		));
 
-		$this->app['config']->set( 'mail', array_merge(
-			$this->app['config']->get('mail', []), require __DIR__ . '/config/mail.php'
+		$this->app['config']->set( 'mail', array_replace_recursive(
+			require __DIR__ . '/config/mail.php',
+			$this->app['config']->get('mail', [])
 		));
 
 		$this->app['config']->set( 'view', array_merge(
@@ -129,6 +130,11 @@ class FactotumServiceProvider extends ServiceProvider
 			// VIEWS
 			__DIR__ . '/resources/views'      => resource_path( 'views' )
 		], 'factotum-views');
+
+		$this->publishes([
+			// VIEWS
+			__DIR__ . '/resources/views/email'      => resource_path( 'views/email' )
+		], 'factotum-emails-views');
 
 		$this->publishes([
 			__DIR__ . '/public/admin'         => public_path('admin'),
@@ -258,6 +264,19 @@ class FactotumServiceProvider extends ServiceProvider
 				], function ($router) {
 					require __DIR__ . '/routes/web/public/ecommerce/cart.php';
 					require __DIR__ . '/routes/web/ecommerce/cart.php';
+				});
+
+				$overridingRoutes = true;
+			}
+
+			// Frontend Checkout Routes
+			if ( !file_exists( base_path('routes') . '/web/ecommerce/checkout.php' ) ) {
+
+				Route::group([
+					'middleware' => [ 'web' ],
+					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Checkout'
+				], function ($router) {
+					require __DIR__ . '/routes/web/ecommerce/checkout.php';
 				});
 
 				$overridingRoutes = true;
