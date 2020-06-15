@@ -92,19 +92,7 @@
 			</div>
 			<div class="col col-xs-12 col-md-5">
 
-				<div class="box cart-recap">
-
-					<h4>
-						Totale provvisorio (<span class="total-products">{{ $totalProducts }} prodotti</span>) <br>
-					</h4>
-
-					<h1 class="total tar">{{ $total }}</h1>
-
-					<div class="cta-container tar">
-						<a href="{{ url('/checkout') }}" class="cta">PROCEDI ALL'ORDINE</a>
-					</div>
-
-				</div>
+				@include('factotum::ecommerce.cart.cart-recap')
 
 			</div>
 		</div>

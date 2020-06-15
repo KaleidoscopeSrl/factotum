@@ -15,4 +15,9 @@ Route::group([
 
 	Route::get('',                               'ReadController@prepareCheckout');
 
+	Route::post('/set-delivery-address',         'UpdateController@setDeliveryAddress');
+	Route::post('/set-invoice-address',          'UpdateController@setInvoiceAddress');
+	Route::post('/set-shipping',                 'UpdateController@setShipping');
+
+
 });

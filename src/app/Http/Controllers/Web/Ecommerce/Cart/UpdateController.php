@@ -94,22 +94,19 @@ class UpdateController extends Controller
 
 			session()->flash( 'product_added', 'Prodotto aggiunto al carrello!' );
 
-			$total         = 0;
-			$totalProducts = 0;
-			$cart          = $this->_getCart();
-			if ( isset($cart) && $cart->products->count() > 0 ) {
-				foreach( $cart->products as $p ) {
-					$totalProducts += $p->pivot->quantity;
-					$total += $p->pivot->quantity * $p->pivot->product_price;
-				}
-			}
+			$cart   = $this->_getCart();
+			$totals = $this->_getCartTotals( $cart );
 
 			$result = [
 				'result'        => 'ok',
 				'message'       => 'Prodotto aggiunto al carrello!',
-				'total'         => '€ ' . number_format( $total, 2, ',', '.' ),
-				'totalProducts' => $totalProducts,
-				'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' )
+				'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' ),
+
+				'totalProducts' => $totals['totalProducts'],
+				'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
+				'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
+				'totalShipping' => ( $totals['totalShipping'] ? '€ ' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
+				'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
 			];
 
 			return $request->wantsJson() ? json_encode( $result ) : redirect()->back();
@@ -166,23 +163,20 @@ class UpdateController extends Controller
 
 			session()->flash( 'product_removed', 'Prodotto rimosso dal carrello!' );
 
-			$total         = 0;
-			$totalProducts = 0;
-			$cart          = $this->_getCart();
-			if ( isset($cart) && $cart->products->count() > 0 ) {
-				foreach( $cart->products as $p ) {
-					$totalProducts += $p->pivot->quantity;
-					$total += $p->pivot->quantity * $p->pivot->product_price;
-				}
-			}
+			$cart   = $this->_getCart();
+			$totals = $this->_getCartTotals( $cart );
 
 			$result = [
 				'result'        => 'ok',
 				'message'       => 'Prodotto rimosso dal carrello!',
 				'removed'       => $removed,
-				'total'         => '€ ' . number_format( $total, 2, ',', '.' ),
-				'totalProducts' => $totalProducts,
-				'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' )
+				'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' ),
+
+				'totalProducts' => $totals['totalProducts'],
+				'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
+				'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
+				'totalShipping' => ( $totals['totalShipping'] ? '€ ' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
+				'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
 			];
 
 			return $request->wantsJson() ? json_encode( $result ) : redirect()->back();
@@ -207,30 +201,27 @@ class UpdateController extends Controller
 			$productCart = $this->_getProductCart($cart->id, $product->id);
 			$dropped     = $productCart->delete();
 
-			$total         = 0;
-			$totalProducts = 0;
-			$cart          = $this->_getCart();
-
-			if ( isset($cart) && $cart->products->count() > 0 ) {
-				foreach( $cart->products as $p ) {
-					$totalProducts += $p->pivot->quantity;
-					$total += $p->pivot->quantity * $p->pivot->product_price;
-				}
-			}
-
 			if ( $dropped ) {
 				session()->flash( 'product_dropped', 'Prodotto rimosso dal carrello!' );
 			} else {
 				session()->flash( 'error', 'Impossibile rimuovere un prodotto dal carrello!' );
 			}
 
+			$cart   = $this->_getCart();
+			$totals = $this->_getCartTotals( $cart );
+
 			$result = [
 				'result'        => ( $dropped ? 'ok' : 'ko' ),
 				'message'       => ( $dropped ? 'Prodotto rimosso dal carrello!' : 'Impossibile rimuovere un prodotto dal carrello!' ),
 				'removed'       => $dropped,
-				'total'         => '€ ' . number_format( $total, 2, ',', '.' ),
-				'totalProducts' => $totalProducts,
-				'price'         => '€ 0'
+				'price'         => '€ 0',
+
+				'totalProducts' => $totals['totalProducts'],
+				'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
+				'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
+				'totalShipping' => ( $totals['totalShipping'] ? '€ ' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
+				'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
+
 			];
 
 			return $request->wantsJson() ? json_encode($result) : redirect()->back();

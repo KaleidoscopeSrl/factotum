@@ -92,52 +92,70 @@
 
 					<div class="box">
 
-						<div class="container-fluid">
+						<div class="container-fluid col-no-pl col-no-pr">
 							<div class="row clearfix">
-								<div class="col col-xs-12">
+								<div class="col col-xs-12 col-md-8">
 									<h3 class="cta-aligned">Indirizzo di fatturazione</h3>
+								</div>
+								<div class="col col-xs-12 col-md-4 tar">
+									<a href="{{ '/user/customer-addresses/edit/invoice' }}" class="cta cta-blue">Nuovo Indirizzo</a>
 								</div>
 							</div>
 						</div>
 
 						<br>
 
-						@if ( isset($invoiceAddress) && $invoiceAddress )
+						<div class="container-fluid col-no-pl col-no-pl">
 
-						<div class="box box-address">
-
-							<div class="container-fluid col-no-pl col-no-pl">
+							@if ( isset($invoiceAddresses) && $invoiceAddresses->count() > 0 )
 
 								<div class="row clearfix">
-									<div class="col col-xs-12 col-md-6">
 
-										@if ( $invoiceAddress->address != '' )
-											<span>{{ $invoiceAddress->address }}</span><br>
-										@endif
+									@foreach ( $invoiceAddresses as $i )
 
-										@if ( $invoiceAddress->zip != '' && $invoiceAddress->city != '' )
-											<span>{{ $invoiceAddress->zip }} - {{ $invoiceAddress->city }}</span><br>
-										@endif
+										<div class="col col-xs-12 col-sm-6 col-md-12">
 
-										@if ( $invoiceAddress->province != '' )
-											<span>{{ $invoiceAddress->province }}</span><br>
-										@endif
+											<div class="box box-address @if( $i->default_address ) default @endif" data-address-id="{{ $i->id }}">
 
-										@if ( $invoiceAddress->country != '' )
-											<span>{{ $invoiceAddress->country }}</span><br>
-										@endif
+												<strong class="default-address @if( !$i->default_address ) hidden @endif">
+													Indirizzo Preferito
+												</strong>
 
-										<div class="cta-container">
-											<a href="/user/customer-addresses/edit/{{ $invoiceAddress->type }}/{{ $invoiceAddress->id }}" class="cta">Aggiorna</a>
+												@if ( $i->address != '' )
+													<span>{{ $i->address }}</span><br>
+												@endif
+
+												@if ( $i->zip != '' && $i->city != '' )
+													<span>{{ $i->zip }} - {{ $i->city }}</span><br>
+												@endif
+
+												@if ( $i->province != '' )
+													<span>{{ $i->province }}</span><br>
+												@endif
+
+												@if ( $i->country != '' )
+													<span>{{ $i->country }}</span><br>
+												@endif
+
+												<div class="cta-container">
+													<a href="/user/customer-addresses/edit/{{ $i->type }}/{{ $i->id }}" class="cta">Aggiorna</a>
+
+													<button class="cta cta-blue set-default-address @if( $i->default_address ) hidden @endif" data-address-id="{{ $i->id }}">Imposta come preferito</button>
+
+													<button class="cta cta-red remove-address" data-address-id="{{ $i->id }}">Elimina</button>
+												</div>
+
+											</div>
+
 										</div>
-									</div>
+
+									@endforeach
 
 								</div>
-							</div>
+
+							@endif
 
 						</div>
-
-						@endif
 
 					</div>
 

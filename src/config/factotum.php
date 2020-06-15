@@ -104,4 +104,16 @@ return [
 
 	'version' => '4.3.0',
 
+	'payment_methods' => [
+		'stripe',
+		'paypal'
+	],
+
+	// TODO: move to database and management
+	'shipping_options' => [
+		'pick-up' => 0,
+		'IT'      => 15,
+		'abroad'  => 30,
+	]
+
 ];

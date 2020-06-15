@@ -10,7 +10,8 @@
         "doctrine/dbal": "^2.8",
         "intervention/image": "^2.4.2",
         "barryvdh/laravel-debugbar": "^3.1.5",
-        "laravel/passport": "7.4.*"
+        "laravel/passport": "7.4.*",
+        "stripe/stripe-php": "^7.37"
     },
     "autoload": {
         "classmap": [

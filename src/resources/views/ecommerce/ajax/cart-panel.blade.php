@@ -32,16 +32,52 @@
 
 			</ul>
 
-			<div class="container-fluid col-no-pl col-no-pr">
-				<div class="row clearfix">
-					<div class="col col-xs-8 col-sm-7">
-						<strong>Totale<br>(iva esclusa)</strong>
-					</div>
-					<div class="col col-xs-4 col-sm-5 tar">
-						&euro; {{ number_format( $total, 2, ',', '.' ) }}
-					</div>
-				</div>
-			</div>
+			<table>
+
+				<tr>
+					<td>
+						<strong>Totale parziale</strong>
+					</td>
+					<td class="tar">
+						{{ '€ ' . number_format( $totalPartial, 2, ',', '.' ) }}
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<strong>Totale tasse</strong>
+					</td>
+					<td class="tar">
+						{{ '€ ' . number_format( $totalTaxes, 2, ',', '.' ) }}
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<strong>Spedizione</strong>
+					</td>
+					<td class="tar">
+						<strong>
+							@if( $totalShipping )
+								{{ '€ ' . number_format( $totalShipping, 2, ',', '.' ) }}
+							@else
+								-
+							@endif
+						</strong>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<strong>Totale (tasse incluse)</strong>
+					</td>
+					<td class="tar">
+						<strong>{{ '€ ' . number_format( $total, 2, ',', '.' ) }}</strong>
+					</td>
+				</tr>
+
+			</table>
+
 
 			<div class="cta-container tac">
 				<a href="/cart" class="cta">VEDI CARRELLO</a>

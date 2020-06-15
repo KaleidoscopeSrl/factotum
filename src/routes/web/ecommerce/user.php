@@ -21,10 +21,5 @@ Route::group([
 
 	Route::post('/customer-addresses/set-default',              'ProfileController@setDefaultCustomerAddress');
 
-//	Route::get('/delivery-address',          'ProfileController@showDeliveryAddressForm');
-//
-//
-//	Route::get('/invoice-address',           'ProfileController@showInvoiceAddressForm');
-//	Route::post('/invoice-address',          'ProfileController@saveInvoiceAddress');
 
 });

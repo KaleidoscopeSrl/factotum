@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Cart;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 
@@ -14,52 +15,44 @@ class ReadController extends Controller
 
 	use CartUtils;
 
+
+
 	public function ajaxGetCartPanel( Request $request )
 	{
-		$view = 'factotum::ecommerce.ajax.cart-panel';
-		$cart = $this->_getCart();
+		$view   = 'factotum::ecommerce.ajax.cart-panel';
+		$cart   = $this->_getCart();
+		$totals = $this->_getCartTotals( $cart );
 
-		$total = 0;
-		$totalProducts = 0;
-
-		if ( isset($cart) && isset($cart->products) && $cart->products->count() > 0 ) {
-			foreach( $cart->products as $p ) {
-				$totalProducts += $p->pivot->quantity;
-				$total += $p->pivot->quantity * $p->pivot->product_price;
-			}
-		}
 
 		if ( file_exists( resource_path('views/ecommerce/ajax/cart-panel.blade.php') ) ) {
 			$view = 'ecommerce.ajax.cart-panel';
 		}
 
 		$returnHTML = view( $view )->with([
-			'total' => $total,
-			'cart'  => $cart
+			'cart'          => $cart,
+			'totalProducts' => $totals['totalProducts'],
+			'totalPartial'  => $totals['totalPartial'],
+			'totalTaxes'    => $totals['totalTaxes'],
+			'totalShipping' => $totals['totalShipping'],
+			'total'         => $totals['total'],
 		])->render();
 
 		return response()->json([
 			'result'        => 'ok',
-			'total'         => '€' . number_format( $total, 2, ',', '.' ),
-			'totalProducts' => $totalProducts,
+			'totalProducts' => $totals['totalProducts'],
+			'totalPartial'  => '€' . number_format( $totals['totalPartial'], 2, ',', '.' ),
+			'totalTaxes'    => '€' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
+			'totalShipping' => ( $totals['totalShipping'] ? '€' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
+			'total'         => '€' . number_format( $totals['total'], 2, ',', '.' ),
 			'html'          => $returnHTML
 		]);
 
 	}
 
-
-	public function getCart( Request $request )
+	public function readCart( Request $request )
 	{
-		$cart          = $this->_getCart();
-		$total         = 0;
-		$totalProducts = 0;
-
-		if ( isset($cart) && $cart->products->count() > 0 ) {
-			foreach( $cart->products as $p ) {
-				$totalProducts += $p->pivot->quantity;
-				$total += $p->pivot->quantity * $p->pivot->product_price;
-			}
-		}
+		$cart   = $this->_getCart();
+		$totals = $this->_getCartTotals( $cart );
 
 		$view = 'factotum::ecommerce.cart';
 
@@ -69,8 +62,15 @@ class ReadController extends Controller
 
 		return view($view)->with([
 			'cart'          => $cart,
-			'total'         => '€ ' . number_format( $total, 2, ',', '.' ),
-			'totalProducts' => $totalProducts
+			'totalProducts' => $totals['totalProducts'],
+			'totalPartial'  => $totals['totalPartial'],
+			'totalTaxes'    => $totals['totalTaxes'],
+			'totalShipping' => $totals['totalShipping'],
+			'total'         => $totals['total'],
+			'metatags' => [
+				'title'       => Lang::get('factotum::ecommerce_cart.cart_title'),
+				'description' => Lang::get('factotum::ecommerce_cart.cart_description')
+			]
 		]);
 	}
 

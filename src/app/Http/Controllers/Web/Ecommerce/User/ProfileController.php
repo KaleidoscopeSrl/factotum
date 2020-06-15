@@ -24,13 +24,16 @@ class ProfileController extends Controller
 											->orderBy('default_address', 'DESC')
 											->get();
 
-		$invoiceAddress    = CustomerAddress::where( 'type', 'invoice' )->where( 'customer_id', $user->id )->first();
+		$invoiceAddresses  = CustomerAddress::where( 'type', 'invoice' )
+											->where( 'customer_id', $user->id )
+											->orderBy('default_address', 'DESC')
+											->get();
 
 
 		return view('factotum::ecommerce.user.customer-addresses')
 					->with([
 						'deliveryAddresses' => $deliveryAddresses,
-						'invoiceAddress'    => $invoiceAddress,
+						'invoiceAddresses'  => $invoiceAddresses,
 						'metatags' => [
 							'title'       => Lang::get('factotum::ecommerce_user.customer_addresses_title'),
 							'description' => Lang::get('factotum::ecommerce_user.customer_addresses_description')

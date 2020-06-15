@@ -13,7 +13,7 @@ Route::group([
 	'middleware' => 'auth'
 ], function() {
 
-	Route::get('',                               'ReadController@getCart');
+	Route::get('',                               'ReadController@readCart');
 
 	Route::post('/add-product',                  'UpdateController@addProduct');
 	Route::post('/remove-product',               'UpdateController@removeProduct');

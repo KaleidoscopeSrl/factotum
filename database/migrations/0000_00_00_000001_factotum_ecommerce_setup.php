@@ -239,6 +239,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('status', 16);
 			$table->decimal('total_net', 10, 2 );
 			$table->decimal('total_tax', 10, 2 );
+			//TODO: aggiungere costi di spedizione
 
 			$table->string('phone', 64)->nullable();
 

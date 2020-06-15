@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ substr($currentLanguage, 0, 2) }}">
 <head>
 	@include('layouts.metatags', ['content' => ( isset($content) ? $content : null), 'metatags' => ( isset($metatags) ? $metatags : null )] )
 
