@@ -13,11 +13,11 @@ Route::group([
 	'middleware' => 'auth'
 ], function() {
 
-	Route::get('',                               'ReadController@prepareCheckout');
+	Route::get('',                               'CheckoutController@prepareCheckout');
+	Route::post('',                              'CheckoutController@proceedCheckout');
 
-	Route::post('/set-delivery-address',         'UpdateController@setDeliveryAddress');
-	Route::post('/set-invoice-address',          'UpdateController@setInvoiceAddress');
-	Route::post('/set-shipping',                 'UpdateController@setShipping');
-
+	Route::post('/set-delivery-address',         'CheckoutController@setDeliveryAddress');
+	Route::post('/set-invoice-address',          'CheckoutController@setInvoiceAddress');
+	Route::post('/set-shipping',                 'CheckoutController@setShipping');
 
 });

@@ -104,9 +104,12 @@ return [
 
 	'version' => '4.3.0',
 
+	// TODO: move to database and management
 	'payment_methods' => [
 		'stripe',
-		'paypal'
+		'paypal',
+		'bank-transfer',
+		'custom-payment'
 	],
 
 	// TODO: move to database and management

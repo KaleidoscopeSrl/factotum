@@ -282,6 +282,32 @@ class FactotumServiceProvider extends ServiceProvider
 				$overridingRoutes = true;
 			}
 
+			// Frontend Payment Routes
+			if ( !file_exists( base_path('routes') . '/web/ecommerce/payment.php' ) ) {
+
+				Route::group([
+					'middleware' => [ 'web' ],
+					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Payment'
+				], function ($router) {
+					require __DIR__ . '/routes/web/ecommerce/payment.php';
+				});
+
+				$overridingRoutes = true;
+			}
+
+			// Frontend Order Routes
+			if ( !file_exists( base_path('routes') . '/web/ecommerce/order.php' ) ) {
+
+				Route::group([
+					'middleware' => [ 'web' ],
+					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Order'
+				], function ($router) {
+					require __DIR__ . '/routes/web/ecommerce/order.php';
+				});
+
+				$overridingRoutes = true;
+			}
+
 			// Frontend Product Routes
 			if ( !file_exists( base_path('routes') . '/web/ecommerce/product.php' ) ) {
 

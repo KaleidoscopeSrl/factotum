@@ -29,6 +29,15 @@
 
 			</div>
 
+			<div class="row clearfix">
+				<div class="col col-xs-12">
+					<label for="notes">
+						Se vuoi aggiungere un commento al tuo ordine, scrivilo qui sotto.
+					</label>
+					<textarea id="notes" name="notes"></textarea>
+				</div>
+			</div>
+
 			<div class="cta-container tar">
 				<button class="cta" @if( !$shipping ) disabled @endif>CONTINUA</button>
 			</div>

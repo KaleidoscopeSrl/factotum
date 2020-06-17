@@ -93,11 +93,11 @@ class ProfileController extends Controller
 				return redirect('/user/customer-addresses');
 			}
 
-			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => 'Error on saving customer address' ]) : view('factotum::errors.500');
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => 'Error on saving customer address' ]) : view($this->_getServerErrorView());
 
 		} catch ( \Exception $ex ) {
 			session()->flash( 'error', $ex->getMessage() );
-			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view('factotum::errors.500');
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
 		}
 
 	}
@@ -130,11 +130,11 @@ class ProfileController extends Controller
 				return $request->wantsJson() ? json_encode( $result ) : redirect()->back();
 			}
 
-			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => 'Error on setting default address' ]) : view('factotum::errors.500');
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => 'Error on setting default address' ]) : view($this->_getServerErrorView());
 
 		} catch ( \Exception $ex ) {
 			session()->flash( 'error', $ex->getMessage() );
-			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view('factotum::errors.500');
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
 		}
 	}
 

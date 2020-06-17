@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Lang;
 use Kaleidoscope\Factotum\Cart;
 use Kaleidoscope\Factotum\CartProduct;
 use Kaleidoscope\Factotum\CustomerAddress;
+use Kaleidoscope\Factotum\Order;
+use Kaleidoscope\Factotum\OrderProduct;
 
 
 trait CartUtils
@@ -89,7 +91,7 @@ trait CartUtils
 	}
 
 
-	protected function _getCartTotals( Cart $cart )
+	protected function _getCartTotals( $cart = null )
 	{
 		$total         = 0;
 		$totalPartial  = 0;
@@ -97,21 +99,28 @@ trait CartUtils
 		$totalShipping = null;
 		$totalProducts = 0;
 
-		if ( isset($cart) && $cart->products->count() > 0 ) {
+		if ( isset($cart) ) {
 
-			foreach( $cart->products as $p ) {
-				$totalProducts += $p->pivot->quantity;
-				$totalPartial  += $p->pivot->quantity * $p->pivot->product_price;
-				$total         += $totalPartial;
+			$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
 
-				if ( $p->pivot->tax_data ) {
-					$tax         = json_decode( $p->pivot->tax_data, true );
-					$totalTaxes += ( ( $p->pivot->quantity * $p->pivot->product_price ) / 100 * $tax['amount'] );
-					$total      += $totalTaxes;
+			if ( $cartProducts->count() > 0 ) {
+				foreach( $cartProducts as $cp ) {
+					$totalProducts += $cp->quantity;
+					$totalPartial  += $cp->quantity * $cp->product_price;
+
+					if ( $cp->tax_data ) {
+						$tax         = json_decode( $cp->tax_data, true );
+						$totalTaxes += ( ( $cp->quantity * $cp->product_price ) / 100 * $tax['amount'] );
+					}
 				}
+
 			}
 
+			$total  = $totalPartial;
+			$total += $totalTaxes;
+
 			$shipping = $this->_getTemporaryShipping();
+
 			if ( $shipping ) {
 				$shippingOptions = $this->_getShippingOptions();
 				if ( isset($shippingOptions[$shipping]) ) {
@@ -183,7 +192,7 @@ trait CartUtils
 		$addressId = request()->session()->get( 'delivery_address' );
 
 		if ( $addressId ) {
-			$user      = Auth::user();
+			$user = Auth::user();
 
 			return  CustomerAddress::where('customer_id', $user->id)
 									->where('type', 'delivery')
@@ -200,7 +209,7 @@ trait CartUtils
 		$addressId = request()->session()->get( 'invoice_address' );
 
 		if ( $addressId ) {
-			$user      = Auth::user();
+			$user = Auth::user();
 
 			return  CustomerAddress::where('customer_id', $user->id)
 									->where('type', 'invoice')
@@ -215,6 +224,85 @@ trait CartUtils
 	protected function _getTemporaryShipping()
 	{
 		return ( request()->session()->get('shipping') ? request()->session()->get('shipping') : null );
+	}
+
+
+	protected function _createOrderFromCart( Cart $cart )
+	{
+		try {
+
+			if ( Auth::check() ) {
+				$user = Auth::user();
+
+				$totals          = $this->_getCartTotals( $cart );
+				$deliveryAddress = $this->_getTemporaryDeliveryAddress();
+				$invoiceAddress  = $this->_getTemporaryInvoiceAddress();
+
+				$order = new Order();
+				$order->cart_id     = $cart->id;
+				$order->customer_id = $user->id;
+				$order->status      = 'waiting_payment';
+
+				$order->total_net      = $totals['totalPartial'];
+				$order->total_tax      = $totals['totalTaxes'];
+				$order->total_shipping = $totals['totalShipping'];
+
+				// TODO: manage discount code on purchasing
+				// $order->discount_code_id = $user->id;
+
+				$order->phone = $user->profile->phone;
+
+				$order->delivery_address  = $deliveryAddress->address;
+				$order->delivery_city     = $deliveryAddress->city;
+				$order->delivery_zip      = $deliveryAddress->zip;
+				$order->delivery_province = $deliveryAddress->province;
+				$order->delivery_country  = $deliveryAddress->country;
+
+				$order->invoice_address  = $invoiceAddress->address;
+				$order->invoice_city     = $invoiceAddress->city;
+				$order->invoice_zip      = $invoiceAddress->zip;
+				$order->invoice_province = $invoiceAddress->province;
+				$order->invoice_country  = $invoiceAddress->country;
+
+				$order->notes = $cart->notes;
+
+				$order->customer_user_agent = $_SERVER['HTTP_USER_AGENT'];
+				$order->save();
+
+				// Copy the products from cart to order
+				if ( isset($cart) ) {
+					$cartProducts = CartProduct::where('cart_id', $cart->id)->get();
+
+					if ( $cartProducts->count() > 0 ) {
+						foreach ($cartProducts as $cp) {
+							$orderProduct                = new OrderProduct;
+							$orderProduct->order_id      = $order->id;
+							$orderProduct->product_id    = $cp->product_id;
+							$orderProduct->quantity      = $cp->quantity;
+							$orderProduct->product_price = $cp->product_price;
+							$orderProduct->tax_data      = $cp->tax_data;
+							$orderProduct->save();
+						}
+					}
+				}
+
+				// Delete the cart
+				if ( $order->id ) {
+					$cart->delete();
+					request()->session()->remove('delivery_address');
+					request()->session()->remove('invoice_address');
+					request()->session()->remove('shipping');
+				}
+
+				return $order;
+			}
+
+			return null;
+
+		} catch ( \Exception $ex ) {
+			session()->flash( 'error', $ex->getMessage() );
+			return request()->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view( $this->_getServerErrorView() );
+		}
 	}
 
 }

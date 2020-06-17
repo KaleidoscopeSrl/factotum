@@ -21,13 +21,13 @@ class Order extends Model
 		'delivery_city',
 		'delivery_zip',
 		'delivery_province',
-		'delivery_nation',
+		'delivery_country',
 
 		'invoice_address',
 		'invoice_city',
 		'invoice_zip',
 		'invoice_province',
-		'invoice_nation'
+		'invoice_country'
 	];
 
 
@@ -45,4 +45,17 @@ class Order extends Model
 		return $this->belongsToMany('Kaleidoscope\Factotum\Product', 'order_product');
 	}
 
+	// TODO: email per nuovo ordine ricevuto a backoffice e a client
+
+	// TODO: email per pagamento avvenuto
+	public function setTransactionId( $transactionId = '' )
+	{
+		if ( $transactionId != '' ) {
+			$this->transaction_id = $transactionId;
+			$this->status         = 'progress';
+			$this->save();
+		}
+
+		return $this;
+	}
 }

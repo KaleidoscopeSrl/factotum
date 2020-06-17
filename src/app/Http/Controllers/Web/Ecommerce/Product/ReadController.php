@@ -28,7 +28,7 @@ class ReadController extends Controller
 								]);
         }
 
-		return view('factotum::errors.404');
+		return view( $this->_getNotFoundView() );
     }
 
 }

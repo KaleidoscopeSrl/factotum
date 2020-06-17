@@ -2,27 +2,27 @@
 
 	@if ( isset($cart) )
 
-		@if ( isset($cart->products) && $cart->products->count() > 0 )
+		@if ( isset($cartProducts) && $cartProducts->count() > 0 )
 			<ul class="container-fluid col-no-pl col-no-pr">
 
-				@foreach( $cart->products as $p )
+				@foreach( $cartProducts as $cp )
 
 					<li class="row">
-						<a href="{{ $p['abs_url'] }}" class="clearfix">
+						<a href="{{ $cp->product['abs_url'] }}" class="clearfix">
 							<div class="col col-xs-3 col-no-pl col-no-pr">
 								<div class="img-container">
-									@if ( $p['image'] )
-										<img src="{{ $p['image'] }}" alt="{{ $p['name'] }}" class="img-responsive">
+									@if ( $cp->product['image'] )
+										<img src="{{ $cp->product['image'] }}" alt="{{ $cp->product['name'] }}" class="img-responsive">
 									@else
-										<img src="/assets/media/img/product-placeholder.jpg" alt="{{ $p['name'] }}" class="img-responsive placeholder">
+										<img src="/assets/media/img/product-placeholder.jpg" alt="{{ $cp->product['name'] }}" class="img-responsive placeholder">
 									@endif
 								</div>
 							</div>
 							<div class="col col-xs-9 col-no-pr">
 								<span>
-									<strong>{{ $p->pivot->quantity  }}</strong> x {{ $p->name }}
+									<strong>{{ $cp->quantity  }}</strong> x {{ $cp->product['name'] }}
 									<br>
-									<strong>&euro; {{ number_format( $p->pivot->quantity * $p->pivot->product_price, 2, ',', '.' ) }}</strong>
+									<strong>&euro; {{ number_format( $cp->quantity * $cp->product_price, 2, ',', '.' ) }}</strong>
 								</span>
 							</div>
 						</a>

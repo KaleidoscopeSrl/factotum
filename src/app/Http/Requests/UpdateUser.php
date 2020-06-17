@@ -18,8 +18,6 @@ class UpdateUser extends CustomFormRequest
 	public function rules()
 	{
 		$rules = [
-			// TODO: rimuovere da qua, va messa su una request custom
-			'fiscal_code'    => 'required|max:16',
 			'first_name'     => 'required|max:64',
 			'last_name'      => 'required|max:64',
 			'email'          => 'required|email|max:128',
@@ -30,11 +28,6 @@ class UpdateUser extends CustomFormRequest
 
 		if ( $user->email != $data['email'] ) {
 			$rules['email'] = 'required|email|max:128|unique:users,id,' . $user->id;
-		}
-
-		// TODO: rimuovere da qua
-		if ( $user->fiscal_code != $data['fiscal_code'] ) {
-			$rules['fiscal_code'] = 'required|max:16|unique:users,id,' . $user->id;
 		}
 
 		if ( isset($data['password']) && $data['password'] != '' ) {

@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 
+use Kaleidoscope\Factotum\CartProduct;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 
 use Kaleidoscope\Factotum\Traits\CartUtils;
@@ -16,13 +17,12 @@ class ReadController extends Controller
 	use CartUtils;
 
 
-
 	public function ajaxGetCartPanel( Request $request )
 	{
-		$view   = 'factotum::ecommerce.ajax.cart-panel';
-		$cart   = $this->_getCart();
-		$totals = $this->_getCartTotals( $cart );
-
+		$view         = 'factotum::ecommerce.ajax.cart-panel';
+		$cart         = $this->_getCart();
+		$totals       = $this->_getCartTotals( $cart );
+		$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
 
 		if ( file_exists( resource_path('views/ecommerce/ajax/cart-panel.blade.php') ) ) {
 			$view = 'ecommerce.ajax.cart-panel';
@@ -30,6 +30,7 @@ class ReadController extends Controller
 
 		$returnHTML = view( $view )->with([
 			'cart'          => $cart,
+			'cartProducts'  => $cartProducts,
 			'totalProducts' => $totals['totalProducts'],
 			'totalPartial'  => $totals['totalPartial'],
 			'totalTaxes'    => $totals['totalTaxes'],
@@ -49,19 +50,22 @@ class ReadController extends Controller
 
 	}
 
+
 	public function readCart( Request $request )
 	{
-		$cart   = $this->_getCart();
-		$totals = $this->_getCartTotals( $cart );
+		$cart         = $this->_getCart();
+		$totals       = $this->_getCartTotals( $cart );
+		$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
 
-		$view = 'factotum::ecommerce.cart';
+		$view = 'factotum::ecommerce.cart.cart';
 
-		if ( file_exists( resource_path('views/ecommerce/cart.blade.php') ) ) {
-			$view = 'ecommerce.cart';
+		if ( file_exists( resource_path('views/ecommerce/cart/cart.blade.php') ) ) {
+			$view = 'ecommerce.cart.cart';
 		}
 
 		return view($view)->with([
 			'cart'          => $cart,
+			'cartProducts'  => $cartProducts,
 			'totalProducts' => $totals['totalProducts'],
 			'totalPartial'  => $totals['totalPartial'],
 			'totalTaxes'    => $totals['totalTaxes'],

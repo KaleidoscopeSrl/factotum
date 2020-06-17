@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Cart;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\DiscountCode;
 use Kaleidoscope\Factotum\Http\Requests\AddProductToCart;
@@ -92,14 +93,14 @@ class UpdateController extends Controller
 
 			$productCart->save();
 
-			session()->flash( 'product_added', 'Prodotto aggiunto al carrello!' );
+			session()->flash( 'product_added', Lang::get('factotum::ecommerce_cart.product_added') );
 
 			$cart   = $this->_getCart();
 			$totals = $this->_getCartTotals( $cart );
 
 			$result = [
 				'result'        => 'ok',
-				'message'       => 'Prodotto aggiunto al carrello!',
+				'message'       => Lang::get('factotum::ecommerce_cart.product_added'),
 				'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' ),
 
 				'totalProducts' => $totals['totalProducts'],
@@ -113,7 +114,7 @@ class UpdateController extends Controller
 
 		} catch ( \Exception $ex ) {
 			session()->flash( 'error', $ex->getMessage() );
-			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view('factotum::errors.500');
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
 		}
 
     }
@@ -161,14 +162,14 @@ class UpdateController extends Controller
 
 			}
 
-			session()->flash( 'product_removed', 'Prodotto rimosso dal carrello!' );
+			session()->flash( 'product_removed', Lang::get('factotum::ecommerce_cart.product_removed') );
 
 			$cart   = $this->_getCart();
 			$totals = $this->_getCartTotals( $cart );
 
 			$result = [
 				'result'        => 'ok',
-				'message'       => 'Prodotto rimosso dal carrello!',
+				'message'       => Lang::get('factotum::ecommerce_cart.product_removed'),
 				'removed'       => $removed,
 				'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' ),
 
@@ -184,7 +185,7 @@ class UpdateController extends Controller
 		} catch ( \Exception $ex ) {
 
 			session()->flash( 'error', $ex->getMessage() );
-			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view('factotum::errors.500');
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
 
 		}
 	}
@@ -202,9 +203,9 @@ class UpdateController extends Controller
 			$dropped     = $productCart->delete();
 
 			if ( $dropped ) {
-				session()->flash( 'product_dropped', 'Prodotto rimosso dal carrello!' );
+				session()->flash( 'product_dropped', Lang::get('factotum::ecommerce_cart.product_dropped') );
 			} else {
-				session()->flash( 'error', 'Impossibile rimuovere un prodotto dal carrello!' );
+				session()->flash( 'error', Lang::get('factotum::ecommerce_cart.product_drop_error') );
 			}
 
 			$cart   = $this->_getCart();
@@ -212,7 +213,7 @@ class UpdateController extends Controller
 
 			$result = [
 				'result'        => ( $dropped ? 'ok' : 'ko' ),
-				'message'       => ( $dropped ? 'Prodotto rimosso dal carrello!' : 'Impossibile rimuovere un prodotto dal carrello!' ),
+				'message'       => ( $dropped ? Lang::get('factotum::ecommerce_cart.product_dropped') : Lang::get('factotum::ecommerce_cart.product_drop_error') ),
 				'removed'       => $dropped,
 				'price'         => '€ 0',
 
@@ -230,7 +231,7 @@ class UpdateController extends Controller
 		} catch ( \Exception $ex ) {
 
 			session()->flash( 'error', $ex->getMessage() );
-			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view('factotum::errors.500');
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
 
 		}
 	}

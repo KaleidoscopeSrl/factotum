@@ -78,6 +78,7 @@ class Controller extends BaseController
 		}
 	}
 
+
 	protected function _getCurrentLanguage( Request $request )
 	{
 		$checkLang = ( isset($this->uriParts) ? $this->uriParts[0] : '' );
@@ -91,6 +92,18 @@ class Controller extends BaseController
 		}
 
 		return $this->currentLanguage;
+	}
+
+
+	protected function _getNotFoundView()
+	{
+		return ( file_exists( resource_path('views/errors/404.blade.php') ) ? 'errors.404' : 'factotum::errors.404' );
+	}
+
+
+	protected function _getServerErrorView()
+	{
+		return ( file_exists( resource_path('views/errors/500.blade.php') ) ? 'errors.500' : 'factotum::errors.500' );
 	}
 
 }

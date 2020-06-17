@@ -19,8 +19,8 @@ class ReadController extends Controller
 		$productCategory = ProductCategory::where('name', $productCategorySlug)->first();
 
         if ( $productCategory ) {
-        	$brands   = Brand::all();
-			$query = DB::table('products')->where('product_category_id', $productCategory->id);
+        	$brands = Brand::all();
+			$query  = DB::table('products')->where('product_category_id', $productCategory->id);
 
 			if ( $brandFilter ) {
 				$query->where( 'brand_id', $brandFilter );
@@ -38,7 +38,7 @@ class ReadController extends Controller
 						]);
         }
 
-        return view('factotum::errors.404');
+        return view( $this->_getNotFoundView() );
     }
 
 }

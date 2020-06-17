@@ -126,6 +126,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
 
 			$table->timestamp('expires_at')->nullable();
+			$table->text('notes')->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();
@@ -143,7 +144,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 
 			$table->integer('quantity')->default(0);
-			$table->decimal( 'product_price', 10, 2)->nullable();
+			$table->decimal( 'product_price', 10, 2);
 			$table->text('tax_data')->nullable();
 
 			$table->timestamps();
@@ -239,7 +240,8 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('status', 16);
 			$table->decimal('total_net', 10, 2 );
 			$table->decimal('total_tax', 10, 2 );
-			//TODO: aggiungere costi di spedizione
+			$table->decimal('total_shipping', 10, 2 );
+			$table->text('notes')->nullable();
 
 			$table->string('phone', 64)->nullable();
 
@@ -255,9 +257,9 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('invoice_province', 16)->nullable();
 			$table->string('invoice_country', 64)->nullable();
 
-			$table->text('notes')->nullable();
 			$table->string('payment_type', 64)->nullable();
 			$table->string('transaction_id', 128)->nullable();
+			$table->string('paypal_order_id', 128)->nullable();
 			$table->text('customer_user_agent')->nullable();
 
 			$table->timestamps();
@@ -281,11 +283,10 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('product_id')->unsigned();
 			$table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 			$table->integer('quantity')->default(0);
+			$table->decimal( 'product_price', 10, 2);
 			$table->text('tax_data')->nullable();
-			$table->decimal( 'tax_cost', 10, 2)->nullable();
 
 			$table->timestamps();
-			$table->softDeletes();
 		});
 
 	}
