@@ -19,9 +19,42 @@
 
 					<h3>Filtri veloci</h3>
 
-					<div class="box">
+					<div class="box box-categories">
+						<h4>Categorie</h4>
 						<?php \Kaleidoscope\Factotum\Helpers\PrintProductCategoriesHelper::print_product_categories( '', $productCategory ); ?>
 					</div>
+
+					@if ( isset($brands) && $brands->count() > 0 )
+
+					<div class="box">
+						<h4>Marca</h4>
+
+						<ul class="brands">
+							@foreach( $brands as $br )
+							<li>
+								<div class="flexed">
+									<label class="no-link" for="brand_{{ $br->id }}">
+										{{ $br->name }}
+									</label>
+									<div class="no-button">
+										<input type="checkbox" name="brands[]"
+											   @if( $brandsFilter && in_array( $br->id, $brandsFilter ) ) checked @endif
+											   value="{{ $br->id }}" id="brand_{{ $br->id }}" />
+									</div>
+								</div>
+							</li>
+							@endforeach
+						</ul>
+
+
+						<div class="cta-container tac">
+							<button class="cta cta-blue" id="brands-filter">FILTRA</button>
+						</div>
+
+					</div>
+
+					@endif
+
 				</div>
 
 			</div>
@@ -61,10 +94,10 @@
 											<label for="items_per_page">Mostra</label>
 
 											<select name="items_per_page" id="items_per_page">
-												<option value="1" @if( $itemsPerPage == 12 ) selected @endif>12</option>
-												<option value="2" @if( $itemsPerPage == 24 ) selected @endif>24</option>
-												<option value="4" @if( $itemsPerPage == 48 ) selected @endif>48</option>
-												<option value="9" @if( $itemsPerPage == 96 ) selected @endif>96</option>
+												<option value="12" @if( $itemsPerPage == 12 ) selected @endif>12</option>
+												<option value="24" @if( $itemsPerPage == 24 ) selected @endif>24</option>
+												<option value="48" @if( $itemsPerPage == 48 ) selected @endif>48</option>
+												<option value="96" @if( $itemsPerPage == 96 ) selected @endif>96</option>
 											</select>
 										</div>
 

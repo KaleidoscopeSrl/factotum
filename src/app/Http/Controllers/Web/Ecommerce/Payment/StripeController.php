@@ -31,7 +31,7 @@ class StripeController extends Controller
 			if ( $totals && $totals['total'] > 0 ) {
 
 				$intent = \Stripe\PaymentIntent::create([
-					'amount'   => $totals['total'] * 100, // Stirpe accepts 1099 for a 10.99 payment
+					'amount'   => round( $totals['total'] * 100, 0 ), // Stirpe accepts 1099 for a 10.99 payment
 					'currency' => 'eur',
 				]);
 

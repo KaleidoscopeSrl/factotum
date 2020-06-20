@@ -29,8 +29,13 @@ class ProfileController extends Controller
 											->orderBy('default_address', 'DESC')
 											->get();
 
+		$view = 'factotum::ecommerce.user.customer-addresses';
 
-		return view('factotum::ecommerce.user.customer-addresses')
+		if ( file_exists( resource_path('views/ecommerce/user/customer-addresses.blade.php') ) ) {
+			$view = 'ecommerce.user.customer-addresses';
+		}
+
+		return view($view)
 					->with([
 						'deliveryAddresses' => $deliveryAddresses,
 						'invoiceAddresses'  => $invoiceAddresses,
@@ -52,8 +57,17 @@ class ProfileController extends Controller
 			$customerAddress = CustomerAddress::where( 'id', $customerAddressId )->where( 'customer_id', $user->id )->first();
 		}
 
+		if ( isset($_GET['back-to-checkout']) ) {
+			$request->session()->put('back_to_checkout', 1);
+		}
 
-		return view('factotum::ecommerce.user.customer-address-form')
+		$view = 'factotum::ecommerce.user.customer-address-form';
+
+		if ( file_exists( resource_path('views/ecommerce/user/customer-address-form.blade.php') ) ) {
+			$view = 'ecommerce.user.customer-address-form';
+		}
+
+		return view( $view )
 					->with([
 						'type'    => $type,
 						'address' => $customerAddress,
@@ -89,7 +103,13 @@ class ProfileController extends Controller
 				$customerAddress->save();
 	
 				session()->flash( 'message', Lang::get('factotum::ecommerce_user.customer_address_saved') );
-	
+
+				if ( $request->session()->get('back_to_checkout') ) {
+					$request->session()->remove('back_to_checkout');
+					$request->session()->put( $customerAddress->type . '_address', $customerAddress->id );
+					return redirect('/checkout');
+				}
+
 				return redirect('/user/customer-addresses');
 			}
 

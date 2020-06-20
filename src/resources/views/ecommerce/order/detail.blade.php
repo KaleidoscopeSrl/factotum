@@ -14,7 +14,7 @@
 			]])
 
 			<div class="row clearfix">
-				<div class="col col-xs-12 col-md-7">
+				<div class="col col-xs-12">
 
 					@include('factotum::ecommerce.order.partials.details-table')
 
@@ -77,11 +77,6 @@
 					<a href="{{ url('/order/list') }}">
 						<h3>Torna indietro</h3>
 					</a>
-
-				</div>
-				<div class="col col-xs-12 col-md-5">
-
-					<?php // TODO: banners ?>
 
 				</div>
 			</div>

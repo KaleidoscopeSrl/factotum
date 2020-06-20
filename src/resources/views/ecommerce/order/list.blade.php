@@ -13,7 +13,7 @@
 			]])
 
 			<div class="row clearfix">
-				<div class="col col-xs-12 col-md-7">
+				<div class="col col-xs-12">
 
 					<div class="box">
 
@@ -51,13 +51,8 @@
 
 					</div>
 
-
 				</div>
-				<div class="col col-xs-12 col-md-5">
 
-					<?php // TODO: banners ?>
-
-				</div>
 			</div>
 
 		</div>

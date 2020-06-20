@@ -291,6 +291,30 @@ img {
 }
 
 
+/* Order table */
+.table .order-table {
+    margin: 15px auto;
+}
+.order-table {
+    border-right: 1px #CCC solid;
+    border-bottom: 1px #CCC solid;
+}
+.order-table td {
+    padding: 5px;
+    border-top: 1px #CCC solid;
+    border-left: 1px #CCC solid;
+    text-align: left;
+}
+.order-table thead td {
+    font-weight: bold;
+}
+
+hr {
+    border-top: none;
+    border-color: #CCC;
+}
+
+
 /* Promotions */
 
 .promotion {

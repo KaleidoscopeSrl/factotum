@@ -301,7 +301,11 @@ trait CartUtils
 
 		} catch ( \Exception $ex ) {
 			session()->flash( 'error', $ex->getMessage() );
-			return request()->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view( $this->_getServerErrorView() );
+			return request()->wantsJson() ? json_encode([
+				'result' => 'ko',
+				'error'  => $ex->getMessage(),
+				'trace' => $ex->getTrace()
+			]) : view( $this->_getServerErrorView() );
 		}
 	}
 

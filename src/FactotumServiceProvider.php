@@ -30,6 +30,7 @@ use Kaleidoscope\Factotum\Observers\ContentFieldObserver;
 use Kaleidoscope\Factotum\Observers\ContentObserver;
 use Kaleidoscope\Factotum\Observers\CategoryObserver;
 use Kaleidoscope\Factotum\Observers\DiscountCodeObserver;
+use Kaleidoscope\Factotum\Observers\OrderObserver;
 
 
 use Kaleidoscope\Factotum\Console\Commands\FactotumCleanFolders;
@@ -168,6 +169,7 @@ class FactotumServiceProvider extends ServiceProvider
 		Category::observe(CategoryObserver::class);
 
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+			Order::observe(OrderObserver::class);
 			DiscountCode::observe(DiscountCodeObserver::class);
 		}
 
@@ -335,6 +337,8 @@ class FactotumServiceProvider extends ServiceProvider
 			}
 
 		}
+
+
 
 		/**
 		 *

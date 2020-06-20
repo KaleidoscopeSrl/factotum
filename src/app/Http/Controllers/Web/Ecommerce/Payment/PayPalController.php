@@ -94,7 +94,7 @@ class PayPalController extends Controller
 				0 => [
 					'amount' => [
 						'currency_code' => 'EUR',
-						'value'         => $total
+						'value'         => round($total, 2)
 					],
 					'description' => 'Acquisto su ' . env('APP_NAME'),
 					'custom_id'   => $cartId,

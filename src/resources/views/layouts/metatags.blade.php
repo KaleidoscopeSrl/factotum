@@ -59,8 +59,19 @@
 		<meta name="twitter:description" content="{{ $productCategory->description }}" />
 	@endif
 
-@endif
+@elseif ( isset($product) )
 
+	<title>{{ $product->name }} - {{ config('app.name', 'Factotum') }}</title>
+	<meta property="og:title" content="{{ $product->name }} - {{ config('app.name', 'Factotum') }}" />
+	<meta name="twitter:title" content="{{ $product->name }} - {{ config('app.name', 'Factotum') }}" >
+
+	@if ( $product->description != '' )
+		<meta name="description" content="{{ $product->description }}">
+		<meta property="og:description" content="{{ $product->description }}" />
+		<meta name="twitter:description" content="{{ $product->description }}" />
+	@endif
+
+@endif
 
 
 

@@ -19,34 +19,50 @@ class ReadController extends Controller
 
 	public function ajaxGetCartPanel( Request $request )
 	{
-		$view         = 'factotum::ecommerce.ajax.cart-panel';
-		$cart         = $this->_getCart();
-		$totals       = $this->_getCartTotals( $cart );
-		$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
+		$view   = 'factotum::ecommerce.ajax.cart-panel';
+		$cart   = $this->_getCart();
 
-		if ( file_exists( resource_path('views/ecommerce/ajax/cart-panel.blade.php') ) ) {
-			$view = 'ecommerce.ajax.cart-panel';
+		$result = [
+			'result'        => 'ok',
+			'totalProducts' => 0,
+			'totalPartial'  => 0,
+			'totalTaxes'    => 0,
+			'totalShipping' => 0,
+			'total'         => 0,
+			'html'          => ''
+		];
+
+		if ( $cart ) {
+			$totals       = $this->_getCartTotals( $cart );
+			$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
+
+			if ( file_exists( resource_path('views/ecommerce/ajax/cart-panel.blade.php') ) ) {
+				$view = 'ecommerce.ajax.cart-panel';
+			}
+
+			$returnHTML = view( $view )->with([
+				'cart'          => $cart,
+				'cartProducts'  => $cartProducts,
+				'totalProducts' => $totals['totalProducts'],
+				'totalPartial'  => $totals['totalPartial'],
+				'totalTaxes'    => $totals['totalTaxes'],
+				'totalShipping' => $totals['totalShipping'],
+				'total'         => $totals['total'],
+			])->render();
+
+			$result = [
+				'result'        => 'ok',
+				'totalProducts' => $totals['totalProducts'],
+				'totalPartial'  => '€' . number_format( $totals['totalPartial'], 2, ',', '.' ),
+				'totalTaxes'    => '€' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
+				'totalShipping' => ( $totals['totalShipping'] ? '€' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
+				'total'         => '€' . number_format( $totals['total'], 2, ',', '.' ),
+				'html'          => $returnHTML
+			];
+
 		}
 
-		$returnHTML = view( $view )->with([
-			'cart'          => $cart,
-			'cartProducts'  => $cartProducts,
-			'totalProducts' => $totals['totalProducts'],
-			'totalPartial'  => $totals['totalPartial'],
-			'totalTaxes'    => $totals['totalTaxes'],
-			'totalShipping' => $totals['totalShipping'],
-			'total'         => $totals['total'],
-		])->render();
-
-		return response()->json([
-			'result'        => 'ok',
-			'totalProducts' => $totals['totalProducts'],
-			'totalPartial'  => '€' . number_format( $totals['totalPartial'], 2, ',', '.' ),
-			'totalTaxes'    => '€' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
-			'totalShipping' => ( $totals['totalShipping'] ? '€' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
-			'total'         => '€' . number_format( $totals['total'], 2, ',', '.' ),
-			'html'          => $returnHTML
-		]);
+		return response()->json( $result );
 
 	}
 

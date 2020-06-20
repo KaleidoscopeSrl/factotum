@@ -87,6 +87,10 @@ class Product extends Model
 		return $this->_getMediaFromValue( $value );
 	}
 
+	public function getAttributesAttribute($value)
+	{
+		return ( $value ? json_decode( $value ) : null );
+	}
 
 	public function getGalleryAttribute($value)
 	{

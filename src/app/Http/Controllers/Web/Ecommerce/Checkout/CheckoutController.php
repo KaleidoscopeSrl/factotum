@@ -22,11 +22,11 @@ class CheckoutController extends Controller
 
 	use CartUtils;
 
-	// TODO: aggiunta indirizzo nuovo e redirect
-	// TODO: pagamento bonifico, concordato con cliente
-	// STEP 1: scegliere indirizzo di consegna e di spedizione (con possibilità di aggiungerne uno nuovo e fare redirect al checkout dopo)
-	// STEP 3: scegli metodo di pagamento (stripe, paypal, pagamento concordato con mt distribuzione)
-	// STEP 4: sulla conferma di pagamento, salvare i dati di transazione
+	// STEP 1: the user must choose the delivery address (he can add a new one)
+	// STEP 2: the user must choose the invoice address (he can add a new one)
+	// STEP 3: the user must choose a shipping method
+	// STEP 4: the user must chosse a payment method (stripe, paypal, bank transfer, custom payment )
+	// STEP 5: payment done, transactions email and thankyou page
 
 	public function prepareCheckout( Request $request )
 	{
@@ -51,7 +51,7 @@ class CheckoutController extends Controller
 
 		$view = 'factotum::ecommerce.checkout.checkout';
 
-		if ( file_exists( resource_path('views/ecommerce/checkout.blade.php') ) ) {
+		if ( file_exists( resource_path('views/ecommerce/checkout/checkout.blade.php') ) ) {
 			$view = 'ecommerce.checkout.checkout';
 		}
 
@@ -147,12 +147,31 @@ class CheckoutController extends Controller
 				]);
 	}
 
-	public function proceedCheckout( Request $request )
+	public function proceedCheckout( ProceedCheckout $request )
 	{
 		$data = $request->all();
-		echo '<pre>';
-		print_r($data);
-		die;
+
+		try {
+			$cart = $this->_getCart();
+
+			if ( $cart ) {
+				$order = $this->_createOrderFromCart( $cart );
+				$order->payment_type = $data['pay-with'];
+				$order->save();
+
+				return redirect( url( '/order/thank-you/' . $order->id ) );
+			}
+
+			return $request->wantsJson() ? json_encode([ 'result' => 'ko', 'message' => 'Error on creating order.' ]) : view( $this->_getServerErrorView() );
+
+		} catch ( \Exception $ex ) {
+			session()->flash( 'error', $ex->getMessage() );
+			return $request->wantsJson() ? json_encode([
+				'result' => 'ko',
+				'error' => $ex->getMessage(),
+				'trace' => $ex->getTrace()
+			]) : view( $this->_getServerErrorView() );
+		}
 	}
 
 
@@ -174,6 +193,7 @@ class CheckoutController extends Controller
 				$shippingOptions = $this->_getShippingOptions();
 
 				$view = 'factotum::ecommerce.ajax.shipping-options';
+
 				if ( file_exists( resource_path('views/ecommerce/ajax/shipping-options.blade.php') ) ) {
 					$view = 'ecommerce.ajax.shipping-options';
 				}

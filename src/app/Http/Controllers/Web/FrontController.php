@@ -11,6 +11,7 @@ use Kaleidoscope\Factotum\Library\ContentSearch;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
+use Kaleidoscope\Factotum\Notifications\NewOrderToCustomerNotification;
 use Kaleidoscope\Factotum\Product;
 use Kaleidoscope\Factotum\ProductCategory;
 
@@ -325,5 +326,6 @@ class FrontController extends Controller
 
 		}
 	}
+
 
 }

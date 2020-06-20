@@ -28,7 +28,7 @@ class ProceedCheckout extends CustomFormRequest
 
 	public function rules()
 	{
-		$paymentOptions  = join(',', array_keys( config('factotum.payment_methods') ) );
+		$paymentOptions  = join(',', config('factotum.payment_methods') );
 		$shippingOptions = join(',', array_keys( config('factotum.shipping_options') ) );
 
 		$rules = [

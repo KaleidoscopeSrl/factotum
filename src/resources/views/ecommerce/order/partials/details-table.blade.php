@@ -52,7 +52,7 @@
 			</td>
 		</tr>
 
-		@if ( $order->payment_type && $order->transaction_id )
+		@if ( $order->payment_type )
 		<tr>
 			<td>
 				Pagato con

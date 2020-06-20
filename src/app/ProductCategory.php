@@ -57,7 +57,7 @@ class ProductCategory extends Model
 
 	public static function treeChildsArray( $pagination = null, $filters = null )
 	{
-		$categories = self::_getChildCategories( $pagination, $filters );
+		$categories = self::_getChildCategories( null, $pagination, $filters );
 
 		if ( $categories->count() > 0 ) {
 			$categories = self::_parseChildsTree( $categories );
@@ -69,7 +69,7 @@ class ProductCategory extends Model
 
 	public static function treeChildsObjects( $pagination = null, $filters = null )
 	{
-		$categories = self::_getChildCategories( $pagination, $filters );
+		$categories = self::_getChildCategories( null, $pagination, $filters );
 
 		if ( $categories->count() > 0 ) {
 			$categories = self::_parseChildsTree( $categories );
@@ -79,9 +79,13 @@ class ProductCategory extends Model
 	}
 
 
-	private static function _getChildCategories( $pagination = null, $filters = null )
+	private static function _getChildCategories( $category = null, $pagination = null, $filters = null )
 	{
-		$query = ProductCategory::whereNull( 'parent_id' )->orderBy('order_no');
+		if ( $category ) {
+			$query = ProductCategory::where( 'id', $category->id )->orderBy('order_no');
+		} else {
+			$query = ProductCategory::whereNull( 'parent_id' )->orderBy('order_no');
+		}
 
 		if ( isset($filters) && count($filters) > 0 ) {
 
@@ -114,14 +118,24 @@ class ProductCategory extends Model
 
 	public static function flatTreeChildsArray( $pagination = null, $filters = null )
 	{
-		$categories = self::_getChildCategories( $pagination, $filters );
+		$categories = self::_getChildCategories( null, $pagination, $filters );
 
 		if ( $categories->count() > 0 ) {
 			$categories = self::_parseFlatTreeChilds( $categories );
 		}
 
 		return $categories;
+	}
 
+	public function singleCategoryFlatTreeChildsArray( $pagination = null, $filters = null )
+	{
+		$categories = self::_getChildCategories( $this, $pagination, $filters );
+
+		if ( $categories->count() > 0 ) {
+			$categories = self::_parseFlatTreeChilds( $categories );
+		}
+
+		return $categories;
 	}
 
 

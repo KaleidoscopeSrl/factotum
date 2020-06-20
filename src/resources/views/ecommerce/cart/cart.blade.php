@@ -39,7 +39,13 @@
 									<div class="col col-xs-9 col-sm-5 col-md-4">
 
 										<div class="title-container">
-											<h4>{{ $cp->product['name'] }}</h4>
+											<a href="{{ $cp->product['abs_url'] }}">
+												<h4>{{ $cp->product['name'] }}</h4>
+											</a>
+											<small>
+												Codice
+												<strong>{{ $cp->product['attributes']->esolver_code }}</strong>
+											</small>
 										</div>
 
 									</div>

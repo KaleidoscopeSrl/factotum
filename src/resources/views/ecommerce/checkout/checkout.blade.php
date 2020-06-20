@@ -26,6 +26,11 @@
 
 					@include('factotum::ecommerce.checkout.partials.payment')
 
+					<div class="error">
+						@if($errors->any())
+							{{ implode('', $errors->all('<div>:message</div>')) }}
+						@endif
+					</div>
 				</div>
 				<div class="col col-xs-12 col-md-5">
 

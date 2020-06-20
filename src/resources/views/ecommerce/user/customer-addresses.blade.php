@@ -63,7 +63,7 @@
 												<span>{{ $d->country }}</span><br>
 											@endif
 
-											<div class="cta-container">
+											<div class="cta-container clearfix">
 
 												<a href="/user/customer-addresses/edit/{{ $d->type }}/{{ $d->id }}" class="cta">Aggiorna</a>
 
@@ -137,7 +137,7 @@
 													<span>{{ $i->country }}</span><br>
 												@endif
 
-												<div class="cta-container">
+												<div class="cta-container clearfix">
 													<a href="/user/customer-addresses/edit/{{ $i->type }}/{{ $i->id }}" class="cta">Aggiorna</a>
 
 													<button class="cta cta-blue set-default-address @if( $i->default_address ) hidden @endif" data-address-id="{{ $i->id }}">Imposta come preferito</button>
