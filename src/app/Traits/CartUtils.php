@@ -109,7 +109,7 @@ trait CartUtils
 					$totalPartial  += $cp->quantity * $cp->product_price;
 
 					if ( $cp->tax_data ) {
-						$tax         = json_decode( $cp->tax_data, true );
+						$tax         = $cp->tax_data;
 						$totalTaxes += ( ( $cp->quantity * $cp->product_price ) / 100 * $tax['amount'] );
 					}
 				}
@@ -288,7 +288,9 @@ trait CartUtils
 
 				// Delete the cart
 				if ( $order->id ) {
-					$cart->delete();
+					$cart->order_id = $order->id;
+					$cart->save();
+
 					request()->session()->remove('delivery_address');
 					request()->session()->remove('invoice_address');
 					request()->session()->remove('shipping');

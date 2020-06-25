@@ -6,38 +6,17 @@ use Kaleidoscope\Factotum\Order;
 
 class OrderObserver
 {
-	/**
-	 * Listen to the Order created event.
-	 *
-	 * @param  Order  $order
-	 * @return void
-	 */
-	public function created(Order $order)
+
+	public function updating( Order $order )
 	{
-	}
+		if ( $order->isDirty('status') ) {
+			$newStatus = $order->status;
+			$oldStatus = $order->getOriginal('status');
 
-
-
-	/**
-	 * Listen to the Order updated event.
-	 *
-	 * @param  Order $order
-	 * @return void
-	 */
-	public function updated(Order $order)
-	{
-		if ( $order->payment_type == 'stripe' && $order->transaction_id && $order->status == 'new_order' ) {
-			$order->sendNewOrderNotifications();
-		}
-
-		if ( $order->payment_type == 'paypal' && $order->transaction_id && $order->status == 'new_order' ) {
-			$order->sendNewOrderNotifications();
-		}
-
-		if ( $order->status == 'waiting_payment' && ( $order->payment_type == 'bank-transfer' || $order->payment_type == 'custom-payment' ) ) {
-			$order->sendNewOrderNotifications();
+			if ( $newStatus != $oldStatus ) {
+				$order->sendOrderStatusChangeNotification();
+			}
 		}
 	}
-
 
 }

@@ -4,10 +4,13 @@ namespace Kaleidoscope\Factotum\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\HtmlString;
 use Kaleidoscope\Factotum\OrderProduct;
 
-class NewOrderToCustomerNotification extends Notification
+use Illuminate\Support\Facades\App;
+
+class OrderStatusChangeToCustomerNotification extends Notification
 {
 	use Queueable;
 
@@ -17,8 +20,8 @@ class NewOrderToCustomerNotification extends Notification
 
 	public function __construct( $customer, $order )
 	{
-		$this->demTitle = 'La tua ricevuta da ' . env('SHOP_OWNER_NAME') . ' per l\'ordine #' . $order->id . ' del '
-						. \Carbon\Carbon::createFromTimestampMs( $order->created_at )->formatLocalized('%d %B %Y');
+		$this->demTitle = 'Il tuo ordine #' . $order->id . ' del '
+						. \Carbon\Carbon::createFromTimestampMs( $order->created_at )->formatLocalized('%d %B %Y') . ' ha cambiato stato.';
 
 		$this->customer      = $customer;
 		$this->order         = $order;
@@ -34,13 +37,14 @@ class NewOrderToCustomerNotification extends Notification
 
 	public function toMail($notifiable)
 	{
-		$view = 'factotum::notifications.new_order';
-		if ( file_exists( resource_path('views/notifications/new_order.blade.php') ) ) {
-			$view = 'notifications.new_order';
+		$view = 'factotum::notifications.order_status_change';
+		if ( file_exists( resource_path('views/notifications/order_status_change.blade.php') ) ) {
+			$view = 'notifications.order_status_change';
 		}
 
+
 		$intro = 'Ciao <strong>' . $this->customer->profile->first_name . ' ' . $this->customer->profile->last_name . '</strong>, '
-			. 'grazie per il tuo ordine.<br>A breve verrà messo in lavorazione per effettuare la spedizione.';
+			. 'il tuo ordine ha cambiato stato in <strong>' . Lang::get('factotum::ecommerce_order.' . $this->order->status) . '</strong>.';
 
 		$intro = new HtmlString( $intro );
 

@@ -3,9 +3,11 @@
 namespace Kaleidoscope\Factotum;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomerAddress extends Model
 {
+	use SoftDeletes;
 
 	protected $fillable = [
 		'customer_id',
@@ -18,7 +20,7 @@ class CustomerAddress extends Model
 	];
 
 	protected $hidden = [
-		'created_at', 'updated_at'
+		'created_at', 'updated_at', 'deleted_at'
 	];
 
 

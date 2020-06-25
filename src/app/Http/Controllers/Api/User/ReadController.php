@@ -75,7 +75,7 @@ class ReadController extends Controller
 
 	public function getListPaginated( Request $request )
 	{
-		return response()->json( [ 'result' => 'ok', 'users' => $this->_getListPaginated( $request ) ]);
+		return response()->json( [ 'result' => 'ok', 'users' => $this->_getListPaginated( $request ), 'total' => User::count() ]);
 	}
 
 
@@ -84,7 +84,13 @@ class ReadController extends Controller
 		$role = $request->input('role');
 
 		if ( $role != '' ) {
-			return response()->json( [ 'result' => 'ok', 'users' => $this->_getListPaginated( $request, $role ) ]);
+			$role = Role::where( 'role', $request->input('role') )->first();
+
+			return response()->json( [
+				'result' => 'ok',
+				'users'  => $this->_getListPaginated( $request, $role ),
+				'total'  => User::where( 'role_id', $role->id )->count()
+			]);
 		}
 
 		return $this->_sendJsonError( 'Users not found', 404 );

@@ -76,28 +76,6 @@ class Product extends Model
 	}
 
 
-	public function getImageAttribute($value)
-	{
-		return $this->_getMediaFromValue( $value );
-	}
-
-
-	public function getFbImageAttribute($value)
-	{
-		return $this->_getMediaFromValue( $value );
-	}
-
-	public function getAttributesAttribute($value)
-	{
-		return ( $value ? json_decode( $value ) : null );
-	}
-
-	public function getGalleryAttribute($value)
-	{
-		return $this->_getMultipleMediaFromValue( $value );
-	}
-
-
 	// CUSTOM FILL
 	public function fill(array $attributes)
 	{
@@ -176,4 +154,27 @@ class Product extends Model
 		return null;
 	}
 
+
+
+	// MUTATORS
+
+	public function getImageAttribute($value)
+	{
+		return $this->_getMediaFromValue( $value );
+	}
+
+	public function getFbImageAttribute($value)
+	{
+		return $this->_getMediaFromValue( $value );
+	}
+
+	public function getAttributesAttribute($value)
+	{
+		return ( $value ? json_decode( $value ) : null );
+	}
+
+	public function getGalleryAttribute($value)
+	{
+		return $this->_getMultipleMediaFromValue( $value );
+	}
 }

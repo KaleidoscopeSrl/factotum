@@ -125,6 +125,9 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('customer_id')->unsigned()->nullable();
 			$table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
 
+			$table->bigInteger('order_id')->unsigned()->nullable();
+			$table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+
 			$table->timestamp('expires_at')->nullable();
 			$table->text('notes')->nullable();
 
@@ -178,6 +181,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->boolean('default_address')->default(0);
 
 			$table->timestamps();
+			$table->softDeletes();
 		});
 
 

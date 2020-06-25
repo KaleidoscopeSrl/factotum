@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 
+use Kaleidoscope\Factotum\Brand;
 use Kaleidoscope\Factotum\Library\ContentSearch;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Category;
@@ -261,6 +262,13 @@ class FrontController extends Controller
 						return $data;
 					}
 
+					// Check se brand
+					$brand = Brand::where( 'code', $this->uriParts[ count($this->uriParts) - 1 ] )->first();
+					if ( $brand ) {
+						$data['brand'] = $brand;
+						return $data;
+					}
+
 				}
 
 				$content = $this->_getContentByURI();
@@ -307,6 +315,10 @@ class FrontController extends Controller
 		} elseif ( isset($data['productCategory']) ) {
 
 			return app('\Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\ProductCategory\ReadController')->getProductsByCategory($request, $this->uriParts[ count($this->uriParts) - 1 ]);
+
+		} elseif ( isset($data['brand']) ) {
+
+			return app('\Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Brand\ReadController')->getProductsByBrand($request, $this->uriParts[ count($this->uriParts) - 1 ]);
 
 		} elseif ( isset($data['action']) ) {
 

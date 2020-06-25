@@ -29,7 +29,7 @@ class PrintProductCategoriesHelper {
 			$html .= '<li class="category-item category-item-' . $level . '">' . "\n";
 			$html .= '<div class="flexed">' . "\n";
 			$html .= '<a href="' . $baseURL . '/' . $item->name . '"'
-					.' class="' . ( $item->id == $productCategory->id ? 'active' : '' ) . '">' . $item->label . '</a>' . "\n";
+					.' class="' . ( $productCategory && $item->id == $productCategory->id ? 'active' : '' ) . '">' . $item->label . '</a>' . "\n";
 
 			if ( $item->childs->count() > 0 ) {
 				$html .= '<button class="toggle-subcategory"><i class="fi flaticon-down-arrow"></i></button>';

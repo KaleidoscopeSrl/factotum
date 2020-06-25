@@ -22,4 +22,21 @@ class UpdateController extends Controller
         return response()->json( [ 'result' => 'ok', 'order'  => $order->toArray() ] );
 	}
 
+
+	public function changeOrdersStatus(Request $request)
+	{
+		$orders = $request->input('orders');
+		$status = $request->input('status');
+
+		if ( $orders && count($orders) > 0 ) {
+			foreach ( $orders as $orderId ) {
+				$order = Order::find($orderId);
+				$order->status = $status;
+				$order->save();
+			}
+		}
+
+		return response()->json( [ 'result' => 'ok' ] );
+	}
+
 }

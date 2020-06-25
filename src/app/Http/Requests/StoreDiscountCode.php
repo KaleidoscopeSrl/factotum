@@ -15,7 +15,7 @@ class StoreDiscountCode extends CustomFormRequest
 	public function rules()
 	{
 		$rules = [
-			'code'        => 'required|alpha_num',
+			'code'        => 'required|alpha_num|unique:discount_codes,code',
 			'discount'    => 'required|numeric',
 			'amount'      => 'required|numeric',
 			'type'        => 'required',

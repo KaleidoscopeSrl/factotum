@@ -75,7 +75,7 @@ class ReadController extends Controller
 
 		$products = $query->get();
 
-        return response()->json( [ 'result' => 'ok', 'products' => $products ]);
+        return response()->json( [ 'result' => 'ok', 'products' => $products, 'total' => Product::count() ]);
     }
 
 

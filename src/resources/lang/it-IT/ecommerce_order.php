@@ -12,12 +12,14 @@ return [
 	'thankyou_title'       => 'Grazie. Ordine ricevuto.',
 	'thankyou_description' => 'Grazie. Ordine ricevuto.',
 
-	'waiting_payment' => 'In attesa di pagamento',
-	'progress'        => 'In lavorazione',
-	'waiting'         => 'In sospeso',
-	'done'            => 'Completato',
-	'cancel'          => 'Annullato',
-	'refunded'        => 'Rimborsato',
-	'failed'          => 'Fallito',
+	'waiting_payment'  => 'In attesa di pagamento',
+	'waiting'          => 'In sospeso',
+	'payment_accepted' => 'Pagamento accettato',
+	'progress'         => 'In lavorazione',
+	'shipped'          => 'Spedito',
+	'done'             => 'Completato',
+	'canceled'         => 'Annullato',
+	'refunded'         => 'Rimborsato',
+	'failed'           => 'Fallito',
 
 ];

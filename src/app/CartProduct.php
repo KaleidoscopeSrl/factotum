@@ -30,4 +30,11 @@ class CartProduct extends Model
 		return $this->hasOne('Kaleidoscope\Factotum\Cart', 'id', 'cart_id');
 	}
 
+
+	// MUTATORS
+	public function getTaxDataAttribute($value)
+	{
+		return ( $value ? json_decode( $value, true ) : null );
+	}
+
 }

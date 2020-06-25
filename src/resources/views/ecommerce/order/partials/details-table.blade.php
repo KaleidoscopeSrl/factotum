@@ -8,7 +8,7 @@
 				Data ordine
 			</td>
 			<td>
-				<strong>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $order->created_at)->format('d/m/Y') }}</strong>
+				<strong>{{ \Carbon\Carbon::createFromTimestampMs( $order->created_at )->format('d/m/Y') }}</strong>
 			</td>
 		</tr>
 		<tr>

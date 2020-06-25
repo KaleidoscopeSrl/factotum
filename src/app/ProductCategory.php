@@ -221,33 +221,11 @@ class ProductCategory extends Model
 			}
 		}
 
-		// Icon
-		if ( isset($attributes['icon']) ) {
-			$icon  = $attributes['icon'];
-
-			if ( isset($icon) ) {
-				if ( is_array($icon) ) {
-					$attributes['icon'] = (count($icon) > 0 ? $icon[0]['id'] : null );
-				} else {
-					$attributes['icon'] = ( substr($icon, 0, 4) == 'http' ? $icon : null );
-				}
-			} else {
-				$attributes['icon'] = null;
-			}
-		}
-
-
 		return parent::fill($attributes);
 	}
 
 
 	public function getImageAttribute($value)
-	{
-		return $this->_getMediaFromValue( $value );
-	}
-
-
-	public function getIconAttribute($value)
 	{
 		return $this->_getMediaFromValue( $value );
 	}

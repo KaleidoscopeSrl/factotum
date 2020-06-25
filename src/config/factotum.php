@@ -102,7 +102,7 @@ return [
 	'product_categories_via_pim' => false,
 	'products_via_pim'           => false,
 
-	'version' => '4.3.0',
+	'version' => '5.0.0',
 
 	// TODO: move to database and management
 	'payment_methods' => [

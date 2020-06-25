@@ -19,8 +19,8 @@ class DiscountCodeObserver
 			ProductDiscountCode::where( 'discount_code_id', $discountCode )->delete();
 
 			foreach ( $products as $prodId ) {
-				$prdc = new ProductDiscountCode;
-				$prdc->product_id = $prodId;
+				$prdc                   = new ProductDiscountCode;
+				$prdc->product_id       = $prodId;
 				$prdc->discount_code_id = $discountCode->id;
 				$prdc->save();
 			}

@@ -83,6 +83,22 @@ class StoreUser extends CustomFormRequest
 			$data['password'] = Hash::make($data['password']);
 		}
 
+		if ( isset($data['newsletter']) ) {
+			$data['newsletter'] = ( $data['newsletter'] ? 1 : 0 );
+		}
+
+		if ( isset($data['partner_offers']) ) {
+			$data['partner_offers'] = ( $data['partner_offers'] ? 1 : 0 );
+		}
+
+		if ( isset($data['privacy']) ) {
+			$data['privacy'] = ( $data['privacy'] ? 1 : 0 );
+		}
+
+		if ( isset($data['terms_conditions']) ) {
+			$data['terms_conditions'] = ( $data['terms_conditions'] ? 1 : 0 );
+		}
+
 		$this->merge($data);
 
 		return $rules;

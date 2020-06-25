@@ -41,6 +41,7 @@ class StripeController extends Controller
 					if ( $order ) {
 						$order->payment_type = 'stripe';
 						$order->save();
+						$order->sendNewOrderNotifications();
 
 						$result = [
 							'result'         => 'ok',

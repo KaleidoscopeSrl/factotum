@@ -9,7 +9,7 @@
 		@include('layouts.breadcrumbs', [
 		'breadcrumbs' => [
 			'/' => 'Home',
-			'#' => $productCategory->label
+			'#' => $brand->name
 		]])
 
 		<div class="row clearfix">
@@ -24,19 +24,16 @@
 
 					<div class="row clearfix">
 						<div class="col col-xs-12">
-							@if( isset($productCategory->image[0]) )
-								<div class="img-container">
-									<img src="{{ $productCategory->image[0]->url }}" alt="{{ $productCategory->label }}" class="img-responsive"/>
-								</div>
+							@if( isset($brand->logo) )
+								<img src="{{ $brand->logo }}" alt="{{ $brand->name }}" width="200" />
 							@endif
-
-							{!! $productCategory->description !!}
 						</div>
 					</div>
 
 				</div>
 
-				@include('factotum::ecommerce.product.partials.product-category-filters', [ 'title' => $productCategory->label ])
+
+				@include('factotum::ecommerce.product.partials.product-category-filters', [ 'title' => $brand->name ])
 
 
 				@if ( $products->count() > 0 )
@@ -63,7 +60,6 @@ $appends = [];
 if ( isset($brandFilter) ) {
 	$appends[ 'brand_filter' ] = $brandFilter;
 }
-
 
 if ( isset($brandsFilter) ) {
 	$appends[ 'brands' ] = join(',', $brandsFilter );

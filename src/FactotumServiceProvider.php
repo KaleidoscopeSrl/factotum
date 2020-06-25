@@ -23,6 +23,9 @@ use Kaleidoscope\Factotum\Policies\ProductCategoryPolicy;
 use Kaleidoscope\Factotum\Policies\ProductPolicy;
 use Kaleidoscope\Factotum\Policies\TaxPolicy;
 use Kaleidoscope\Factotum\Policies\DiscountCodePolicy;
+use Kaleidoscope\Factotum\Policies\OrderPolicy;
+use Kaleidoscope\Factotum\Policies\CustomerAddressPolicy;
+use Kaleidoscope\Factotum\Policies\CartPolicy;
 
 
 use Kaleidoscope\Factotum\Observers\ContentTypeObserver;
@@ -72,7 +75,9 @@ class FactotumServiceProvider extends ServiceProvider
 				Product::class           => ProductPolicy::class,
 				Tax::class               => TaxPolicy::class,
 				DiscountCode::class      => DiscountCodePolicy::class,
-				Order::class             => OrderPolicy::class
+				Order::class             => OrderPolicy::class,
+				Cart::class              => CartPolicy::class,
+				CustomerAddress::class   => CustomerAddressPolicy::class
 			];
 		}
 
@@ -204,7 +209,9 @@ class FactotumServiceProvider extends ServiceProvider
 				require __DIR__ . '/routes/api/brand.php';
 				require __DIR__ . '/routes/api/product-category.php';
 				require __DIR__ . '/routes/api/product.php';
+				require __DIR__ . '/routes/api/customer-address.php';
 				require __DIR__ . '/routes/api/order.php';
+				require __DIR__ . '/routes/api/cart.php';
 				require __DIR__ . '/routes/api/tax.php';
 				require __DIR__ . '/routes/api/discount-code.php';
 			}

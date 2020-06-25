@@ -22,6 +22,9 @@ class Cart extends Model
 		'deleted_at'
 	];
 
+	protected $appends = [
+		'expired'
+	];
 
 	public function customer()
 	{
@@ -31,6 +34,12 @@ class Cart extends Model
 	public function products()
 	{
 		return $this->belongsToMany('Kaleidoscope\Factotum\Product')->withPivot([ 'quantity', 'product_price', 'tax_data' ]);
+	}
+
+	// ACCESSORS
+	public function getExpiredAttribute()
+	{
+		return $this->expires_at && strtotime($this->expires_at) < time();
 	}
 
 }

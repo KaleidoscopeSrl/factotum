@@ -5,14 +5,27 @@ namespace Kaleidoscope\Factotum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Notification;
+
 use Kaleidoscope\Factotum\Notifications\NewOrderToCustomerNotification;
 use Kaleidoscope\Factotum\Notifications\NewOrderToShopOwnerNotification;
+use Kaleidoscope\Factotum\Notifications\OrderStatusChangeToCustomerNotification;
 
 
 class Order extends Model
 {
 	use SoftDeletes;
 
+
+	// STATI:
+	// "waiting_payment": ordini da verificare il pagamento (bonifico o fatturazione)
+	// "waiting":  ordine da lavorare
+	// "payment_accepted": Pagamento accettato
+	// "progress": ordine in lavorazione
+	// "shipped": ordine spedito
+	// "done": ordine completato
+	// "canceled": annullato
+	// "failed": fallito
+	// "refuned": rimborsato
 
 	protected $fillable = [
 		'customer_id',
@@ -53,7 +66,7 @@ class Order extends Model
 	{
 		if ( $transactionId != '' ) {
 			$this->transaction_id = $transactionId;
-			$this->status         = 'new_order';
+			$this->status         = 'payment_accepted';
 			$this->save();
 		}
 
@@ -82,7 +95,29 @@ class Order extends Model
 
 			Notification::send( $users, new NewOrderToShopOwnerNotification( $customer, $this ) );
 		}
-
 	}
 
+
+	public function sendOrderStatusChangeNotification()
+	{
+		if ( file_exists( app_path('User.php') ) ) {
+			$customer = \App\User::with('profile')->find( $this->customer_id );
+		} else {
+			$customer = User::with('profile')->find( $this->customer_id );
+		}
+
+		Notification::send( $customer, new OrderStatusChangeToCustomerNotification( $customer, $this ) );
+	}
+
+
+	// MUTATORS
+	public function getCreatedAtAttribute($value)
+	{
+		return ( $value ? strtotime($value) * 1000 : null );
+	}
+
+	public function getUpdatedAtAttribute($value)
+	{
+		return ( $value ? strtotime($value) * 1000 : null );
+	}
 }

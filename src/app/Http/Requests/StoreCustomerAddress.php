@@ -17,7 +17,6 @@ class StoreCustomerAddress extends CustomFormRequest
 
 		if ( $user ) {
 			if ( $user->role_id == $roleCustomer->id || $user->role_id == $roleAdmin->id ) {
-
 				return true;
 			}
 		}
@@ -33,7 +32,7 @@ class StoreCustomerAddress extends CustomFormRequest
 			'zip'         => 'required|max:7',
 			'city'        => 'required',
 			'province'    => 'required',
-			'country'      => 'required|max:2',
+			'country'     => 'required|max:2',
 		];
 
 		return $rules;

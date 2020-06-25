@@ -31,4 +31,11 @@ class OrderProduct extends Model
 		return $this->hasOne('Kaleidoscope\Factotum\Order', 'id', 'order_id');
 	}
 
+
+	// MUTATORS
+	public function getTaxDataAttribute($value)
+	{
+		return ( $value ? json_decode( $value, true ) : null );
+	}
+
 }

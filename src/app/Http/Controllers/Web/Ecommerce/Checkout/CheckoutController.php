@@ -158,6 +158,7 @@ class CheckoutController extends Controller
 				$order = $this->_createOrderFromCart( $cart );
 				$order->payment_type = $data['pay-with'];
 				$order->save();
+				$order->sendNewOrderNotifications();
 
 				return redirect( url( '/order/thank-you/' . $order->id ) );
 			}
@@ -182,9 +183,9 @@ class CheckoutController extends Controller
 			$addressId = $request->input('address_id');
 
 			$deliveryAddress = CustomerAddress::where('customer_id', $user->id)
-				->where('type', 'delivery')
-				->where('id', $addressId)
-				->first();
+											->where('type', 'delivery')
+											->where('id', $addressId)
+											->first();
 
 			if ( $deliveryAddress ) {
 				$request->session()->put( 'delivery_address', $deliveryAddress->id );
