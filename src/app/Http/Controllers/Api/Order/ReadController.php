@@ -42,6 +42,14 @@ class ReadController extends Controller
 				$query->orWhereRaw( 'LCASE(last_name) like "%' . $filters['term'] . '%"' );
 				$query->orWhereRaw( 'LCASE(company_name) like "%' . $filters['term'] . '%"' );
 			}
+
+			if ( isset($filters['from_date']) ) {
+				$query->where('orders.created_at', '>=', $filters['from_date']);
+			}
+
+			if ( isset($filters['to_date']) ) {
+				$query->where('orders.created_at', '<=', $filters['to_date']);
+			}
 		}
 
 		if ( $sort == 'customer' ) {
@@ -74,8 +82,9 @@ class ReadController extends Controller
 		}
 
 		$orders = $query->get();
+		$total  = (isset($filters) && count($filters) > 0 ? $orders->count() : Order::count() );
 
-        return response()->json( [ 'result' => 'ok', 'orders' => $orders, 'total' => Order::count() ]);
+        return response()->json( [ 'result' => 'ok', 'orders' => $orders, 'total' => $total ]);
     }
 
 

@@ -280,7 +280,7 @@ trait CartUtils
 							$orderProduct->product_id    = $cp->product_id;
 							$orderProduct->quantity      = $cp->quantity;
 							$orderProduct->product_price = $cp->product_price;
-							$orderProduct->tax_data      = $cp->tax_data;
+							$orderProduct->tax_data      = json_encode( $cp->tax_data );
 							$orderProduct->save();
 						}
 					}
