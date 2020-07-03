@@ -14,6 +14,7 @@ use Kaleidoscope\Factotum\OrderProduct;
 
 trait CartUtils
 {
+	protected $_cartDuration = '+3 days';
 
 	protected function _getCart()
 	{
@@ -27,7 +28,7 @@ trait CartUtils
 				if ( !$cart ) {
 					$cart = new Cart;
 					$cart->customer_id = $user->id;
-					$cart->expires_at  = date('Y-m-d H:i:s', strtotime('+1 day') );
+					$cart->expires_at  = date('Y-m-d H:i:s', strtotime( $this->_cartDuration ) );
 					$cart->save();
 				}
 
@@ -79,7 +80,7 @@ trait CartUtils
 				$cart = Cart::where( 'customer_id', $user->id )->where('expires_at', '>=', date('Y-m-d H:i:s'))->first();
 
 				if ( $cart ) {
-					$cart->expires_at  = date('Y-m-d H:i:s', strtotime('+1 day') );
+					$cart->expires_at  = date('Y-m-d H:i:s', strtotime( $this->_cartDuration ) );
 					$cart->save();
 				}
 			}

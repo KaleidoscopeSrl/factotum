@@ -28,7 +28,6 @@ class RegisterUser extends CustomFormRequest
 		];
 
 
-
 		$data = $this->all();
 
 		if ( isset($data['password']) && $data['password'] != '' ) {

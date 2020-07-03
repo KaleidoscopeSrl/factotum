@@ -57,6 +57,10 @@
 
 						<a href="/auth/forgot-password">Password dimenticata?</a>
 
+						<br><br>
+
+						Non sei ancora registrato? <a href="/user/register">Registrati</a>
+
 					</div>
 
 				</div>
