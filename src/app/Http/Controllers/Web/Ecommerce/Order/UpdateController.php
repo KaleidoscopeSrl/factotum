@@ -30,6 +30,7 @@ class UpdateController extends Controller
 
 			if ( $order ) {
 				$order->setTransactionId( $transactionId );
+				$cart = $this->_getCart();
 
 				$result = [
 					'result'   => 'ok',

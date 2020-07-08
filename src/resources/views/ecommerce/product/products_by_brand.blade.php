@@ -20,20 +20,33 @@
 			</div>
 			<div class="col col-xs-12 col-md-9">
 
-				<div class="product-category-cover">
+				@if ( !$brandsFiltered )
+					<div class="product-category-cover">
 
-					<div class="row clearfix">
-						<div class="col col-xs-12">
-							@if( isset($brand->logo) )
-								<img src="{{ $brand->logo }}" alt="{{ $brand->name }}" width="200" />
-							@endif
+						<div class="row clearfix">
+							<div class="col col-xs-12">
+								@if( isset($brand->logo) )
+									<img src="{{ $brand->logo }}" alt="{{ $brand->name }}" width="200" />
+								@endif
+							</div>
 						</div>
+
 					</div>
+				@endif
 
-				</div>
 
-
-				@include('factotum::ecommerce.product.partials.product-category-filters', [ 'title' => $brand->name ])
+				@if ( !$brandsFiltered )
+					@include('factotum::ecommerce.product.partials.product-category-filters', [ 'title' => $brand->name ])
+				@else
+					@php
+					$title = [];
+					foreach ( $brandsFiltered as $b ) {
+						$title[] = $b->name;
+					}
+					$title = 'Ricerca per : ' . join(', ', $title);
+					@endphp
+					@include('factotum::ecommerce.product.partials.product-category-filters', [ 'title' => $title ])
+				@endif
 
 
 				@if ( $products->count() > 0 )

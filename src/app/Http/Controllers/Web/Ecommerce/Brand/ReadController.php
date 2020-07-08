@@ -11,16 +11,20 @@ use Kaleidoscope\Factotum\Brand;
 
 class ReadController extends Controller
 {
+	protected $_productsPerPage = 48;
 
     public function getProductsByBrand(Request $request, $brandCode)
     {
-    	$itemsPerPage    = $request->input('items_per_page', 12);
+    	$itemsPerPage    = $request->input('items_per_page', $this->_productsPerPage );
 		$brandFilter     = $request->input('brand_filter');
 		$brandsFilter    = $request->input('brands');
 		$brand           = Brand::where( 'code', $brandCode )->first();
+		$brandsFiltered  = null;
 
 		if ( $brandsFilter ) {
 			$brandsFilter = explode(',', $brandsFilter);
+
+			$brandsFiltered = Brand::whereIn('id', $brandsFilter)->get();
 		}
 
         if ( $brand ) {
@@ -49,6 +53,7 @@ class ReadController extends Controller
 						->with([
 							'itemsPerPage'         => $products->perPage(),
 							'brandFilter'          => $brandFilter,
+							'brandsFiltered'       => $brandsFiltered,
 							'brand'                => $brand,
 							'brandsFilter'         => $brandsFilter,
 							'products'             => $products,

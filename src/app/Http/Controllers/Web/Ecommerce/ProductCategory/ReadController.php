@@ -11,10 +11,11 @@ use Kaleidoscope\Factotum\Brand;
 
 class ReadController extends Controller
 {
+	protected $_productsPerPage = 48;
 
     public function getProductsByCategory(Request $request, $productCategorySlug)
     {
-    	$itemsPerPage    = $request->input('items_per_page', 12);
+    	$itemsPerPage    = $request->input('items_per_page', $this->_productsPerPage );
 		$brandFilter     = $request->input('brand_filter');
 		$brandsFilter    = $request->input('brands');
 		$productCategory = ProductCategory::where('name', $productCategorySlug)->first();

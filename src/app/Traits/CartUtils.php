@@ -295,6 +295,8 @@ trait CartUtils
 					request()->session()->remove('delivery_address');
 					request()->session()->remove('invoice_address');
 					request()->session()->remove('shipping');
+
+					$cart->delete();
 				}
 
 				return $order;

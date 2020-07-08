@@ -35,7 +35,7 @@
 								<select name="brand_filter" id="brand_filter">
 									<option value="">Brand</option>
 									@foreach( $brands as $br )
-										<option value="{{ $br->id }}" @if( $brandFilter == $br->id ) selected @endif>{{ $br->name }}</option>
+										<option value="{{ $br->id }}" @if( !isset($brandsFiltered) && $brandFilter == $br->id ) selected @endif>{{ $br->name }}</option>
 									@endforeach
 								</select>
 							</div>

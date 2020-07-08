@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Kaleidoscope\Factotum\Cart;
 use Kaleidoscope\Factotum\CartProduct;
+use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Order;
 use Kaleidoscope\Factotum\Traits\CartUtils;
 
@@ -31,7 +32,7 @@ class ReadController extends Controller
 			$direction = 'DESC';
 		}
 
-		$query = Cart::query();
+		$query = Cart::withTrashed();
 		$query->selectRaw('carts.*, first_name, last_name, company_name');
 		$query->join('users', 'users.id', '=', 'carts.customer_id');
 		$query->join('profiles', 'profiles.user_id', '=', 'users.id');
@@ -70,7 +71,6 @@ class ReadController extends Controller
 				$cart->totals = $this->_getCartTotals( $cart );
 			}
 		}
-
         return response()->json( [ 'result' => 'ok', 'carts' => $carts, 'total' => Cart::count() ]);
     }
 

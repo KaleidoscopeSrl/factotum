@@ -25,6 +25,7 @@ class SearchProduct extends CustomFormRequest
 
 		if ( isset($data['product_category_id']) && $data['product_category_id'] != '' ) {
 			$rules['product_category_id'] = 'required|exists:product_categories,id';
+			unset($rules['term']);
 		}
 
 		return $rules;
