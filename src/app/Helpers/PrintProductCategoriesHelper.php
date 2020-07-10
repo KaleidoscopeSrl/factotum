@@ -10,6 +10,7 @@ class PrintProductCategoriesHelper {
 	{
 		$productCategories = ProductCategory::with('childrenRecursive')
 											->where('parent_id', '=', null)
+											->orderBy('label', 'ASC')
 											->get();
 
 		if ( $productCategories->count() > 0 ) {

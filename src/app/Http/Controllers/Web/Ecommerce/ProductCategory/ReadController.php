@@ -34,7 +34,7 @@ class ReadController extends Controller
 		}
 
         if ( $productCategory ) {
-        	$brands = Brand::all();
+        	$brands = Brand::orderBy('name', 'asc')->get();
 
 			$query  = DB::table('products')
 						->select('products.*', 'brands.name AS brand_name')
