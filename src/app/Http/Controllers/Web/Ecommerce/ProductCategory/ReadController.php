@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
+use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\ProductCategory;
 use Kaleidoscope\Factotum\Brand;
 
@@ -50,6 +51,10 @@ class ReadController extends Controller
 			}
 
 			$query->whereNull('products.deleted_at');
+
+//			if ( env('APP_DEBUG') ) {
+//				echo Utility::getSqlQuery($query);
+//			}
 
 			$products = $query->paginate($itemsPerPage);
 

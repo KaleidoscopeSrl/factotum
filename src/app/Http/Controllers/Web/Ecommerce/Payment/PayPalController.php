@@ -45,7 +45,6 @@ class PayPalController extends Controller
 						$order->payment_type    = 'paypal';
 						$order->paypal_order_id = $response->result->id;
 						$order->save();
-						$order->sendNewOrderNotifications();
 
 						$result = [
 							'result'         => 'ok',
@@ -141,6 +140,7 @@ class PayPalController extends Controller
 						$transactionId = $response->result->purchase_units[0]->payments->captures[0]->id;
 
 						$order->setTransactionId( $transactionId );
+						$order->sendNewOrderNotifications();
 
 						$result = [
 							'result'   => 'ok',

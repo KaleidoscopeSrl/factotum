@@ -30,6 +30,8 @@ class UpdateController extends Controller
 
 			if ( $order ) {
 				$order->setTransactionId( $transactionId );
+				$order->sendNewOrderNotifications();
+
 				$cart = $this->_getCart();
 
 				$result = [
