@@ -49,6 +49,8 @@ class ReadController extends Controller
 				$query->whereIn( 'brand_id', $brandsFilter );
 			}
 
+			$query->whereNull('products.deleted_at');
+
 			$products = $query->paginate($itemsPerPage);
 
 			$view = 'factotum::ecommerce.product.products_by_category';

@@ -6,18 +6,18 @@ use Kaleidoscope\Factotum\ProductCategory;
 
 class PrintProductCategoriesHelper {
 
-	public static function print_product_categories( $baseURL = '', $productCategory = null )
+	public static function print_product_categories( $baseURL = '', $productCategory = null, $showChilds = true )
 	{
 		$productCategories = ProductCategory::with('childrenRecursive')
 											->where('parent_id', '=', null)
 											->get();
 
 		if ( $productCategories->count() > 0 ) {
-			echo self::print_product_categories_items( $productCategories, $baseURL, 0, $productCategory );
+			echo self::print_product_categories_items( $productCategories, $baseURL, 0, $productCategory, $showChilds );
 		}
 	}
 
-	private static function print_product_categories_items( $productCategories, $baseURL, $level = 0, $productCategory = null )
+	private static function print_product_categories_items( $productCategories, $baseURL, $level = 0, $productCategory = null, $showChilds = true )
 	{
 		$html = '';
 		$html .= '<ul class="category-' . $level
@@ -31,7 +31,7 @@ class PrintProductCategoriesHelper {
 			$html .= '<a href="' . $baseURL . '/' . $item->name . '"'
 					.' class="' . ( $productCategory && $item->id == $productCategory->id ? 'active' : '' ) . '">' . $item->label . '</a>' . "\n";
 
-			if ( $item->childs->count() > 0 ) {
+			if ( $showChilds && $item->childs->count() > 0 ) {
 				$html .= '<button class="toggle-subcategory"><i class="fi flaticon-down-arrow"></i></button>';
 			} else {
 				$html .= '<div class="no-button"></div>';
@@ -39,7 +39,7 @@ class PrintProductCategoriesHelper {
 
 			$html .= '</div>' . "\n";
 
-			if ( $item->childs->count() > 0 ) {
+			if ( $showChilds && $item->childs->count() > 0 ) {
 				$level++;
 				$html .= self::print_product_categories_items( $item->childs, $baseURL . '/' . $item->name , $level, $productCategory );
 			}
