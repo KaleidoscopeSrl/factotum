@@ -22,7 +22,12 @@ class ForgotPasswordController extends Controller
 
     public function showLinkRequestForm( Request $request )
 	{
-		return view('factotum::auth.forgot-password')
+		$view = 'factotum::auth.forgot-password';
+		if ( file_exists( resource_path('views/auth/forgot-password.blade.php') ) ) {
+			$view = 'auth.forgot-password';
+		}
+
+		return view( $view )
 					->with([
 						'metatags' => [
 							'title'       => Lang::get('factotum::auth.forgot_password_title'),

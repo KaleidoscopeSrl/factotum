@@ -18,8 +18,7 @@
 				<div class="box">
 
 					<h3>
-						Effettua il login<br>
-						<span class="error">Accesso consentito solo ad operatori di settore</span>
+						Effettua il login
 					</h3>
 
 					<form method="POST" action="/auth/login">

@@ -65,3 +65,67 @@
 </table>
 @endif
 </div>
+
+<div class="table">
+	<table cellpadding="0" cellspacing="0" border="0" class="order-table">
+		<thead>
+			<tr>
+				<td colspan="2">Indirizzo di spedizione</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Indirizzo</td>
+				<td>{{ $order->delivery_address }}</td>
+			</tr>
+			<tr>
+				<td>Città</td>
+				<td>{{ $order->delivery_city }}</td>
+			</tr>
+			<tr>
+				<td>CAP</td>
+				<td>{{ $order->delivery_zip }}</td>
+			</tr>
+			<tr>
+				<td>Provincia</td>
+				<td>{{ $order->delivery_province }}</td>
+			</tr>
+			<tr>
+				<td>Stato</td>
+				<td>{{ $order->delivery_country }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="table">
+	<table cellpadding="0" cellspacing="0" border="0" class="order-table">
+		<thead>
+		<tr>
+			<td colspan="2">Indirizzo di fatturazione</td>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>Indirizzo</td>
+			<td>{{ $order->invoice_address }}</td>
+		</tr>
+		<tr>
+			<td>Città</td>
+			<td>{{ $order->invoice_city }}</td>
+		</tr>
+		<tr>
+			<td>CAP</td>
+			<td>{{ $order->invoice_zip }}</td>
+		</tr>
+		<tr>
+			<td>Provincia</td>
+			<td>{{ $order->invoice_province }}</td>
+		</tr>
+		<tr>
+			<td>Stato</td>
+			<td>{{ $order->invoice_country }}</td>
+		</tr>
+		</tbody>
+	</table>
+</div>

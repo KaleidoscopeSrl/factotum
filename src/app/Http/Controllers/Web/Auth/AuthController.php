@@ -24,7 +24,12 @@ class AuthController extends Controller
 			$request->session()->put('force_extend_cart', 1);
 		}
 
-		return view('factotum::auth.login')
+		$view = 'factotum::auth.login';
+		if ( file_exists( resource_path('views/auth/login.blade.php') ) ) {
+			$view = 'auth.login';
+		}
+
+		return view($view)
 					->with([
 						'metatags' => [
 							'title'       => Lang::get('factotum::auth.login_title'),

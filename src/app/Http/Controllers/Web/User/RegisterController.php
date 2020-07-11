@@ -32,7 +32,12 @@ class RegisterController extends Controller
 
 	public function showRegistrationForm()
 	{
-		return view('factotum::user.register')
+		$view = 'factotum::user.register';
+		if ( file_exists( resource_path('views/user/register.blade.php') ) ) {
+			$view = 'user.register';
+		}
+
+		return view( $view )
 				->with([
 					'metatags' => [
 						'title'       => Lang::get('factotum::user.registration_title'),
@@ -69,7 +74,12 @@ class RegisterController extends Controller
 
 	public function showThankyou( Request $request )
 	{
-		return view('factotum::user.thank-you')
+		$view = 'factotum::user.thank-you';
+		if ( file_exists( resource_path('views/user/thank-you.blade.php') ) ) {
+			$view = 'user.thank-you';
+		}
+
+		return view( $view )
 				->with([
 					'metatags' => [
 						'title'       => Lang::get('factotum::user.thankyou_title'),

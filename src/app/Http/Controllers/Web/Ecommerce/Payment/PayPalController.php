@@ -37,35 +37,31 @@ class PayPalController extends Controller
 				$client   = PayPalClient::client();
 				$response = $client->execute($ppRequest);
 
-
 				if ( $response->statusCode == 200 || $response->statusCode == 201 ) {
-					$order = $this->_createOrderFromCart( $cart );
+					$cart->payment_type    = 'paypal';
+					$cart->paypal_order_id = $response->result->id;
+					$cart->save();
 
-					if ( $order ) {
-						$order->payment_type    = 'paypal';
-						$order->paypal_order_id = $response->result->id;
-						$order->save();
+					$invoiceAddress = $this->_getTemporaryInvoiceAddress();
 
-						$result = [
-							'result'         => 'ok',
-							'billingDetails' => [
-								'name'  => $user->profile->company_name,
-								'email' => $user->email,
-								'phone' => $user->profile->phone,
-								'address' => [
-									'line1'       => $order->invoice_address,
-									'city'        => $order->invoice_city,
-									'postal_code' => $order->invoice_zip,
-									'state'       => $order->invoice_province,
-									'country'     => $order->invoice_country,
-								]
-							],
-							'order_id'      => $order->id,
-							'paypalOrderID' => $response->result->id
-						];
+					$result = [
+						'result'         => 'ok',
+						'billingDetails' => [
+							'name'  => $user->profile->company_name,
+							'email' => $user->email,
+							'phone' => $user->profile->phone,
+							'address' => [
+								'line1'       => $invoiceAddress->invoice_address,
+								'city'        => $invoiceAddress->invoice_city,
+								'postal_code' => $invoiceAddress->invoice_zip,
+								'state'       => $invoiceAddress->invoice_province,
+								'country'     => $invoiceAddress->invoice_country,
+							]
+						],
+						'paypalOrderID' => $response->result->id
+					];
 
-						return $request->wantsJson() ? json_encode($result) : redirect()->back();
-					}
+					return $request->wantsJson() ? json_encode($result) : redirect()->back();
 				}
 
 				return $request->wantsJson() ? json_encode([ 'result' => 'ko', 'message' => 'Error on creating intent. Missing cart data' ]) : view( $this->_getServerErrorView() );
@@ -117,19 +113,15 @@ class PayPalController extends Controller
 	public function getTransactionId( Request $request )
 	{
 		try {
-			$user          = Auth::user();
-			$orderId       = $request->input('order_id');
 			$paypalOrderId = $request->input( 'paypal_order_id' );
 
-			$order = null;
-			if ( $orderId ) {
-				$order = Order::where('id', $orderId)
-								->where('paypal_order_id', $paypalOrderId)
-								->where('customer_id', $user->id)
-								->first();
-			}
+			$cart = $this->_getCart();
 
-			if ( $paypalOrderId && $order ) {
+			if ( $paypalOrderId && $cart->paypal_order_id == $paypalOrderId ) {
+
+				$order = $this->_createOrderFromCart( $cart );
+				$order->payment_type    = 'paypal';
+				$order->save();
 
 				$client = PayPalClient::client();
 				$response = $client->execute(new OrdersGetRequest($paypalOrderId));

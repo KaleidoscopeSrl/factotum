@@ -34,8 +34,11 @@ class ReadController extends Controller
 		$query->join('users', 'users.id', '=', 'orders.customer_id');
 		$query->join('profiles', 'profiles.user_id', '=', 'users.id');
 
+		$filtersActive = false;
 		if ( isset($filters) && count($filters) > 0 ) {
 			if ( isset($filters['term']) && strlen($filters['term']) > 0 ) {
+				$filtersActive = true;
+
 				$query->whereRaw( 'LCASE(delivery_city) like "%' . $filters['term'] . '%"' );
 				$query->orWhereRaw( 'LCASE(delivery_province) like "%' . $filters['term'] . '%"' );
 				$query->orWhereRaw( 'LCASE(first_name) like "%' . $filters['term'] . '%"' );
@@ -44,10 +47,14 @@ class ReadController extends Controller
 			}
 
 			if ( isset($filters['from_date']) ) {
+				$filtersActive = true;
+
 				$query->where('orders.created_at', '>=', $filters['from_date']);
 			}
 
 			if ( isset($filters['to_date']) ) {
+				$filtersActive = true;
+
 				$query->where('orders.created_at', '<=', $filters['to_date']);
 			}
 		}
@@ -82,7 +89,7 @@ class ReadController extends Controller
 		}
 
 		$orders = $query->get();
-		$total  = (isset($filters) && count($filters) > 0 ? $orders->count() : Order::count() );
+		$total  = ( $filtersActive ? $orders->count() : Order::count() );
 
         return response()->json( [ 'result' => 'ok', 'orders' => $orders, 'total' => $total ]);
     }

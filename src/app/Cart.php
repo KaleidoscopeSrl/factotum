@@ -14,6 +14,9 @@ class Cart extends Model
 	protected $fillable = [
 		'customer_id',
 		'expires_at',
+		'payment_type',
+		'paypal_order_id',
+		'stripe_intent_id'
 	];
 
 

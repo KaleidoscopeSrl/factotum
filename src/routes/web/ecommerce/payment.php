@@ -15,6 +15,7 @@ Route::group([
 
 	Route::group([ 'prefix' => 'stripe' ], function() {
 		Route::post('/init-payment-intent',         'StripeController@initPaymentInit');
+		Route::post('/get-transaction-id',          'StripeController@getTransactionId');
 	});
 
 	Route::group([ 'prefix' => 'paypal' ], function() {

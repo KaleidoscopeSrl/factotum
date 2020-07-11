@@ -17,7 +17,12 @@ class ResetPasswordController extends Controller
 
 	public function showResetForm(Request $request, $token = null)
 	{
-		return view('factotum::auth.reset-password')
+		$view = 'factotum::auth.reset-password';
+		if ( file_exists( resource_path('views/auth/reset-password.blade.php') ) ) {
+			$view = 'auth.reset-password';
+		}
+
+		return view( $view )
 					->with([
 						'token' => $token,
 						'email' => $request->email,

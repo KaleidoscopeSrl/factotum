@@ -131,6 +131,10 @@ class FactotumEcommerceSetup extends Migration
 			$table->timestamp('expires_at')->nullable();
 			$table->text('notes')->nullable();
 
+			$table->string('payment_type', 64)->nullable();
+			$table->string('paypal_order_id', 128)->nullable();
+			$table->string('stripe_intent_id', 128)->nullable();
+
 			$table->timestamps();
 			$table->softDeletes();
 		});
@@ -263,7 +267,6 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->string('payment_type', 64)->nullable();
 			$table->string('transaction_id', 128)->nullable();
-			$table->string('paypal_order_id', 128)->nullable();
 			$table->text('customer_user_agent')->nullable();
 
 			$table->timestamps();
