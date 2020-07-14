@@ -26,6 +26,10 @@ class ProductCategory extends Model
 		'created_at', 'updated_at', 'deleted_at'
 	];
 
+	protected $appends = [
+		'abs_url'
+	];
+
 	public function products()
 	{
 		return $this->belongsToMany('Kaleidoscope\Factotum\Product');
@@ -139,7 +143,7 @@ class ProductCategory extends Model
 	}
 
 
-	private static function _parseFlatTreeChilds( $categories, $level = 0 )
+	private static function _parseFlatTreeChilds( $categories, $level = 0, $parent = null )
 	{
 		$result = [];
 
@@ -152,13 +156,21 @@ class ProductCategory extends Model
 
 			unset($c->childs);
 
-			$c->label = str_repeat('-', $level) . $c->label;
+			// TODO: fix label repeat stuff
+			// $c->label = str_repeat('-', $level ) . $c->label;
+			$c->label = $c->label;
+
+			if ( $parent ) {
+				$c->abs_url = $parent->abs_url . '/' . $c->name;
+			} else {
+				$c->abs_url = $c->name;
+			}
 
 			$result[] = $c;
 
 			if ( $childs ) {
 				$level = $level + 1;
-				$result = array_merge( $result, self::_parseFlatTreeChilds($childs, $level) );
+				$result = array_merge( $result, self::_parseFlatTreeChilds($childs, $level, $c) );
 			}
 		}
 

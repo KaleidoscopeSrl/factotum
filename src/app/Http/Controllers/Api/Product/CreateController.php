@@ -22,6 +22,7 @@ class CreateController extends Controller
 		return response()->json( [ 'result' => 'ok', 'product'  => $product->toArray() ] );
 	}
 
+
 	public function duplicate( Request $request, $productId )
 	{
 		$product = Product::find( $productId );

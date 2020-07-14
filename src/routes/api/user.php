@@ -34,5 +34,4 @@ Route::group([
 		Route::post('/delete-users',        'DeleteController@removeUsers');
 	});
 
-
 });

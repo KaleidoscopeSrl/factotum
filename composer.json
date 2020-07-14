@@ -11,6 +11,7 @@
         "intervention/image": "^2.4.2",
         "barryvdh/laravel-debugbar": "^3.1.5",
         "laravel/passport": "7.4.*",
+        "spatie/laravel-sitemap": "^5.7",
         "stripe/stripe-php": "^7.37"
     },
     "autoload": {

@@ -35,10 +35,10 @@ class ReadController extends Controller
 
 		if ( isset($filters) && count($filters) > 0 ) {
 			if ( isset($filters['term']) && strlen($filters['term']) > 0 ) {
-				$query->whereRaw( 'LCASE(address) like "%' . $filters['term'] . '%"' );
-				$query->orWhereRaw( 'LCASE(city) like "%' . $filters['term'] . '%"' );
-				$query->orWhereRaw( 'LCASE(first_name) like "%' . $filters['term'] . '%"' );
-				$query->orWhereRaw( 'LCASE(last_name) like "%' . $filters['term'] . '%"' );
+				$query->where( 'address', 'like', $filters['term'] );
+				$query->orWhere( 'city', 'like', $filters['term'] );
+				$query->orWhere( 'first_name', 'like', $filters['term'] );
+				$query->orWhere( 'last_name', 'like', $filters['term'] );
 			}
 		}
 

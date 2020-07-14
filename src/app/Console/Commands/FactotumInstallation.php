@@ -15,6 +15,7 @@ class FactotumInstallation extends Command
 
 	private $install;
 	private $installEcommerce;
+	private $installNewsletter;
 	private $reInstall;
 
 	private $migrationPath;
@@ -23,11 +24,12 @@ class FactotumInstallation extends Command
 	{
 		parent::__construct();
 
-		$this->install          = false;
-		$this->installEcommerce = false;
-		$this->reInstall        = false;
-		$this->migrationPath    = 'vendor/kaleidoscope/' . ( env('APP_ENV') == 'local' ? 'dev-' : '')
-								. 'factotum/database/migrations';
+		$this->install           = false;
+		$this->installEcommerce  = false;
+		$this->installNewsletter = false;
+		$this->reInstall         = false;
+		$this->migrationPath     = 'vendor/kaleidoscope/' . ( env('APP_ENV') == 'local' ? 'dev-' : '')
+									. 'factotum/database/migrations';
 	}
 
 
@@ -39,6 +41,10 @@ class FactotumInstallation extends Command
 
 		if ( $this->installEcommerce ) {
 			$paths[] = $this->migrationPath . '/0000_00_00_000001_factotum_ecommerce_setup.php';
+		}
+
+		if ( $this->installNewsletter ) {
+			$paths[] = $this->migrationPath . '/0000_00_00_000002_factotum_newsletter_setup.php';
 		}
 
 		$paths[] = $this->migrationPath . '/0000_00_00_000000_factotum_setup.php';
@@ -82,6 +88,15 @@ class FactotumInstallation extends Command
 			] );
 			$this->info('eCommerce Migration done.');
 		}
+
+
+		if ( $this->installNewsletter ) {
+			$this->info('Newsletter Migration running...');
+			$this->call('migrate', [
+				'--path' => $this->migrationPath . '/0000_00_00_000002_factotum_newsletter_setup.php'
+			] );
+			$this->info('Newsletter Migration done.');
+		}
 	}
 
 
@@ -118,6 +133,10 @@ class FactotumInstallation extends Command
 			if ( $this->installEcommerce ) {
 				file_put_contents($path, "\n" . 'FACTOTUM_ECOMMERCE_INSTALLED=true', FILE_APPEND);
 			}
+
+			if ( $this->installNewsletter ) {
+				file_put_contents($path, "\n" . 'FACTOTUM_NEWSLETTER_INSTALLED=true', FILE_APPEND);
+			}
 		}
 	}
 
@@ -130,8 +149,12 @@ class FactotumInstallation extends Command
 			$this->install = true;
 		}
 
-		if ( $this->confirm('Do you want to install the eCommerce Version') ) {
+		if ( $this->confirm('Do you want to install the eCommerce Module') ) {
 			$this->installEcommerce = true;
+		}
+
+		if ( $this->confirm('Do you want to install the Newsletter Module') ) {
+			$this->installNewsletter = true;
 		}
 
 		if ( !$this->install ) {

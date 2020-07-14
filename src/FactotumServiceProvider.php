@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
+use Kaleidoscope\Factotum\Policies\CampaignEmailPolicy;
 use Laravel\Passport\Passport;
 
 use Kaleidoscope\Factotum\Policies\UserPolicy;
@@ -26,6 +27,8 @@ use Kaleidoscope\Factotum\Policies\DiscountCodePolicy;
 use Kaleidoscope\Factotum\Policies\OrderPolicy;
 use Kaleidoscope\Factotum\Policies\CustomerAddressPolicy;
 use Kaleidoscope\Factotum\Policies\CartPolicy;
+use Kaleidoscope\Factotum\Policies\CampaignPolicy;
+use Kaleidoscope\Factotum\Policies\CampaignTemplatePolicy;
 
 
 use Kaleidoscope\Factotum\Observers\ContentTypeObserver;
@@ -44,6 +47,7 @@ use Kaleidoscope\Factotum\Console\Commands\FactotumResetAbsUrl;
 use Kaleidoscope\Factotum\Console\Commands\FactotumCreateStorageFolders;
 use Kaleidoscope\Factotum\Console\Commands\FactotumCreateSymbolicLinks;
 use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
+use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateSitemap;
 use Kaleidoscope\Factotum\Console\Commands\DumpAutoload;
 
 
@@ -78,6 +82,14 @@ class FactotumServiceProvider extends ServiceProvider
 				Order::class             => OrderPolicy::class,
 				Cart::class              => CartPolicy::class,
 				CustomerAddress::class   => CustomerAddressPolicy::class
+			];
+		}
+
+		if ( env('FACTOTUM_NEWSLETTER_INSTALLED') ) {
+			$policies[] = [
+				Campaign::class             => CampaignPolicy::class,
+				CampaignTemplate::class     => CampaignTemplatePolicy::class,
+				CampaignEmail::class        => CampaignEmailPolicy::class
 			];
 		}
 
@@ -161,7 +173,8 @@ class FactotumServiceProvider extends ServiceProvider
 				DumpAutoload::class,
 				FactotumCreateStorageFolders::class,
 				FactotumCreateSymbolicLinks::class,
-				FactotumInstallation::class
+				FactotumInstallation::class,
+				FactotumGenerateSitemap::class
 			]);
 
 		}
@@ -214,6 +227,12 @@ class FactotumServiceProvider extends ServiceProvider
 				require __DIR__ . '/routes/api/cart.php';
 				require __DIR__ . '/routes/api/tax.php';
 				require __DIR__ . '/routes/api/discount-code.php';
+			}
+
+			if ( env('FACTOTUM_NEWSLETTER_INSTALLED') ) {
+				require __DIR__ . '/routes/api/campaign.php';
+				require __DIR__ . '/routes/api/campaign-template.php';
+				require __DIR__ . '/routes/api/campaign-email.php';
 			}
 
 			require __DIR__ . '/routes/api/capability.php';

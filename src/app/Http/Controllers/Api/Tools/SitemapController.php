@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Tools;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 
@@ -10,31 +11,17 @@ use Kaleidoscope\Factotum\Library\ContentSearch;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Setting;
 
+use Spatie\Sitemap\SitemapGenerator;
+use Spatie\Sitemap\Crawler;
 
 class SitemapController extends Controller
 {
 
 	public function generate()
 	{
-		$contentTypes = ContentType::where( 'sitemap_in', 1 )->get();
-		$listData     = [];
+		Artisan::call('factotum:generate-sitemap');
 
-		if ( !$contentTypes || $contentTypes->count() == 0 ) {
-			$homepage               = new ContentType;
-			$homepage->abs_url      = url('/').'';
-			$homepage->updated_at   = now();
-			$listData['default'] = [ $homepage ];
-		}
-
-		foreach ( $contentTypes as $contentType ) {
-			$contentSearch = new ContentSearch( $contentType->toArray() );
-			$contentSearch->onlyPublished();
-			$listData[$contentType->content_type] = $contentSearch->search()->toArray();
-		}
-		
-		$content = View::make('sitemap', ['listData' => $listData]);
-
-		return Response::make($content)->header('Content-Type', 'text/xml;charset=utf-8');
+		return response()->json( [ 'result' => 'ok' ]);
 	}
 
 
