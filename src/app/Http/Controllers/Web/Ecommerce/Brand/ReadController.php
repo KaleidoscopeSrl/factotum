@@ -16,6 +16,9 @@ class ReadController extends Controller
     public function getProductsByBrand(Request $request, $brandCode)
     {
     	$itemsPerPage    = $request->input('items_per_page', $this->_productsPerPage );
+    	if ( !is_integer($itemsPerPage) ) {
+			$itemsPerPage = $this->_productsPerPage;
+		}
 		$brandFilter     = $request->input('brand_filter');
 		$brandsFilter    = $request->input('brands');
 		$brand           = Brand::where( 'code', $brandCode )->first();

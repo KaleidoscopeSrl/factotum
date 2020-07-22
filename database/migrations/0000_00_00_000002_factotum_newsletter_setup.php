@@ -51,6 +51,33 @@ class FactotumNewsletterSetup extends Migration
 		});
 
 
+		// Campaign lists table
+		Schema::create('campaign_lists', function (Blueprint $table) {
+			$table->id();
+
+			$table->string('title', 255);
+			$table->text('filter')->nullable();
+
+			$table->timestamps();
+			$table->softDeletes();
+		});
+
+
+		// Campaign lists user table
+		Schema::create('campaign_list_user', function (Blueprint $table) {
+			$table->id();
+
+			$table->bigInteger( 'campaign_list_id')->unsigned();
+			$table->foreign('campaign_list_id')->references('id')->on('campaign_lists');
+
+			$table->bigInteger( 'user_id')->unsigned();
+			$table->foreign('user_id')->references('id')->on('users');
+
+			$table->timestamps();
+			$table->softDeletes();
+		});
+
+
 		// Campaigns table
 		Schema::create('campaigns', function (Blueprint $table) {
 			$table->id();
@@ -58,9 +85,11 @@ class FactotumNewsletterSetup extends Migration
 			$table->bigInteger( 'campaign_template_id')->unsigned();
 			$table->foreign('campaign_template_id')->references('id')->on('campaign_templates');
 
+			$table->bigInteger( 'campaign_list_id')->unsigned();
+			$table->foreign('campaign_list_id')->references('id')->on('campaign_lists');
+
 			$table->string('title', 255);
 			$table->timestamp('sent_date')->nullable();
-			$table->text('filter')->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();
@@ -76,11 +105,12 @@ class FactotumNewsletterSetup extends Migration
 			$table->bigInteger( 'campaign_id')->unsigned();
 			$table->foreign('campaign_id')->references('id')->on('campaigns');
 
-			$table->string( 'status',    32)->nullable();
+			$table->string( 'status', 32)->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();
 		});
+
 
 		Schema::table('roles', function (Blueprint $table) {
 			$table->boolean('manage_newsletters')->nullable()->default(null)->after('manage_settings');

@@ -258,4 +258,9 @@ class ProductCategory extends Model
 		return null;
 	}
 
+	public function getAbsUrlAttribute( $value )
+	{
+		return $value;
+	}
+
 }

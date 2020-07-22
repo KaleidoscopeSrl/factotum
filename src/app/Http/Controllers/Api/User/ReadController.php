@@ -127,6 +127,11 @@ class ReadController extends Controller
 		$query->join('profiles', 'users.id', '=', 'profiles.user_id');
 		$query->join('roles', 'users.role_id', '=', 'roles.id');
 
+		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+			$role = Role::where( 'role', 'customer' )->first();
+			$query->where( 'role_id', '!=', $role->id );
+		}
+
 		if ( isset($filters) && count($filters) > 0 ) {
 
 			if ( isset($filters['term']) && strlen($filters['term']) > 0 ) {

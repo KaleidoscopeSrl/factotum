@@ -11,4 +11,10 @@ return [
 	'reset_password_title'       => 'Reimposta Password',
 	'reset_password_description' => 'Reimposta Password',
 
+	'failed' => 'Login fallito',
+
+	'passwords' => [
+		'sent'  => 'Password Inviata',
+		'reset' => 'Password resettata'
+	]
 ];

@@ -21,7 +21,7 @@
 
 					@if (session('status'))
 						<div class="alert alert-success" role="alert">
-							{{ session('status') }}
+							@lang( 'factotum::auth.' . session('status') )
 						</div>
 					@endif
 
