@@ -129,6 +129,7 @@ class FactotumServiceProvider extends ServiceProvider
 		// Middlewares
 		$this->getRouter()->pushMiddlewareToGroup('session_start', \Illuminate\Session\Middleware\StartSession::class);
 		$this->getRouter()->pushMiddlewareToGroup('preflight',     \Kaleidoscope\Factotum\Http\Middleware\PreflightResponse::class);
+		$this->getRouter()->pushMiddlewareToGroup('cors',          \Fruitcake\Cors\HandleCors::class);
 
 
 		// Config, Resources and Public
@@ -203,6 +204,10 @@ class FactotumServiceProvider extends ServiceProvider
 		], function ($router) {
 			require __DIR__ . '/routes/api/public/api.php';
 			require __DIR__ . '/routes/api/public/auth.php';
+
+			if ( env('FACTOTUM_NEWSLETTER_INSTALLED') ) {
+				require __DIR__ . '/routes/api/public/mailgun.php';
+			}
 		});
 
 		// Protected Routes

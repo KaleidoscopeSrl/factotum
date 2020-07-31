@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\CampaignTemplate;
 use Illuminate\Http\Request;
 
 use Kaleidoscope\Factotum\CampaignTemplate;
+use Kaleidoscope\Factotum\Media;
 
 
 class ReadController extends Controller
@@ -56,6 +57,16 @@ class ReadController extends Controller
 		$campaignTemplate = CampaignTemplate::find($id);
 
 		if ( $campaignTemplate ) {
+			$campaignTemplate->load('attachments');
+
+			$tmp = [];
+			foreach ( $campaignTemplate->attachments as $attachment ) {
+				$attachment->load('attachment');
+				$tmp[] = $attachment->attachment;
+			}
+			unset($campaignTemplate->attachments);
+			$campaignTemplate->attachments = $tmp;
+
 			return response()->json( [ 'result' => 'ok', 'campaign_template'  => $campaignTemplate ] );
 		}
 

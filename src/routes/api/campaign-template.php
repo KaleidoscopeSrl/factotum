@@ -14,7 +14,7 @@ Route::group([
 
 	Route::group(['middleware' => 'can:create,Kaleidoscope\Factotum\CampaignTemplate'], function() {
 		Route::post('/create',             'CreateController@create');
-		Route::post('/preview/{id}',       'PreviewController@preview');
+		Route::post('/duplicate/{id}',     'CreateController@duplicate');
 	});
 
 	Route::group(['middleware' => 'can:read,Kaleidoscope\Factotum\CampaignTemplate'], function() {

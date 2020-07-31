@@ -18,46 +18,22 @@ class CampaignEmail extends Mailable implements ShouldQueue
 
 	protected $_viewData;
 
-    public function __construct( $user, $campaignTemplate, $campaignEmail = null )
+    public function __construct( $campaignTemplate, $campaignEmail = null )
     {
     	if ( $campaignEmail ) {
     		$this->_campaignEmail = $campaignEmail;
 		}
 
-    	$this->_user             = $user;
     	$this->_campaignTemplate = $campaignTemplate;
     	$this->_subject          = $this->_campaignTemplate->subject;
-
-    	$this->_prepareHeader();
 
 		$this->_viewData['demContent'] = $this->_parseContent( $this->_campaignTemplate->content );
     }
 
 
-	private function _prepareHeader()
+    public function setUser( $user )
 	{
-		// LOGO
-		if ( $this->_campaignTemplate->logo ) {
-			$this->_viewData['demLogo'] = url( $this->_campaignTemplate->logo );
-		} else {
-			$this->_viewData['demLogo'] = null;
-		}
-
-		$this->_viewData['hideDemLogo'] = $this->_campaignTemplate->hide_logo;
-
-
-		// TITLE
-		if ( $this->_campaignTemplate->title ) {
-			$this->_viewData['demTitle'] = $this->_campaignTemplate->title;
-		}
-
-
-		// IMAGE
-		if ( $this->_campaignTemplate->cover ) {
-			$this->_viewData['demImage'] = url( $this->_campaignTemplate->cover );
-		} else {
-			$this->_viewData['demImage'] = null;
-		}
+		$this->_user = $user;
 	}
 
 
@@ -67,7 +43,8 @@ class CampaignEmail extends Mailable implements ShouldQueue
 
 		if ( $attachments->count() > 0 ) {
 			foreach ( $attachments as $attach ) {
-				$email->attach( public_path( parse_url($attach->url, PHP_URL_PATH) ) );
+				// TODO: qui modificare con file da media
+				// $email->attach( public_path( parse_url($attach->url, PHP_URL_PATH) ) );
 			}
 		}
 
@@ -87,7 +64,7 @@ class CampaignEmail extends Mailable implements ShouldQueue
 		$view = 'factotum::email.campaign.campaign_email';
 
 		if ( file_exists( resource_path('views/email/campaign/campaign_email.blade.php') ) ) {
-			$view = 'notifications.new_order';
+			$view = 'email.campaign.campaign_email';
 		}
 
 
@@ -104,8 +81,11 @@ class CampaignEmail extends Mailable implements ShouldQueue
 	{
 		if ( $subject != '' ) {
 			$subject = strip_tags($subject);
-			$subject = str_replace('{FIRST_NAME}', $this->_user->profile->first_name, $subject);
-			$subject = str_replace('{LAST_NAME}',  $this->_user->profile->last_name, $subject);
+
+			if ( $this->_user ) {
+				$subject = str_replace('{FIRST_NAME}', $this->_user->profile->first_name, $subject);
+				$subject = str_replace('{LAST_NAME}',  $this->_user->profile->last_name, $subject);
+			}
 
 			return $subject;
 		}
@@ -116,8 +96,10 @@ class CampaignEmail extends Mailable implements ShouldQueue
 
 	protected function _parseContent($demContent)
 	{
-		$demContent = str_replace('{FIRST_NAME}',      $this->_user->profile->first_name,                 $demContent);
-		$demContent = str_replace('{LAST_NAME}',       $this->_user->profile->last_name,                  $demContent);
+		if ( $this->_user ) {
+			$demContent = str_replace('{FIRST_NAME}',      $this->_user->profile->first_name,                 $demContent);
+			$demContent = str_replace('{LAST_NAME}',       $this->_user->profile->last_name,                  $demContent);
+		}
 
 		return $demContent;
 	}

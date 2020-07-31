@@ -15,9 +15,10 @@ class StoreCampaignTemplate extends CustomFormRequest
 	public function rules()
 	{
 		$rules = [
-			'template_title'      => 'required',
-			'subject'             => 'required',
-			'content'             => 'required',
+			'title'      => 'required',
+			'subject'    => 'required',
+			'content'    => 'required',
+			'design'     => 'required',
 		];
 
 		return $rules;

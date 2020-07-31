@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Campaign;
 use Illuminate\Http\Request;
 
 use Kaleidoscope\Factotum\Campaign;
+use Kaleidoscope\Factotum\CampaignEmail;
 
 
 class ReadController extends Controller
@@ -37,6 +38,7 @@ class ReadController extends Controller
 		}
 
 		$query = Campaign::query();
+		$query->with('campaign_template');
 		$query->orderBy($sort, $direction);
 
 		if ( $limit ) {
@@ -48,6 +50,12 @@ class ReadController extends Controller
 		}
 
 		$campaigns = $query->get();
+
+		if ( $campaigns->count() ) {
+			foreach ( $campaigns as $campaign ) {
+				$campaign->recipients = CampaignEmail::where( 'campaign_id', $campaign->id )->count();
+			}
+		}
 
 		return response()->json( [ 'result' => 'ok', 'campaigns' => $campaigns ]);
 	}

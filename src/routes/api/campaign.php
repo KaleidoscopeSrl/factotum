@@ -24,7 +24,7 @@ Route::group([
 
 	Route::group(['middleware' => 'can:update,Kaleidoscope\Factotum\Campaign,id'], function() {
 		Route::post('/update/{id}',              'UpdateController@update');
-		Route::post('/update-filter/{id}',       'UpdateController@updateFilter');
+		// Route::post('/update-filter/{id}',       'UpdateController@updateFilter');
 		Route::post('/send/{id}',                'SendController@send');
 	});
 

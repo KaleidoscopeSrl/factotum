@@ -21,9 +21,7 @@ class Cart extends Model
 
 
 
-	protected $hidden = [
-		'deleted_at'
-	];
+	protected $hidden = [];
 
 	protected $appends = [
 		'expired'

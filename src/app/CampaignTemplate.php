@@ -12,13 +12,10 @@ class CampaignTemplate extends Model
 
 
 	protected $fillable = [
-		'template_title',
-		'subject',
 		'title',
+		'subject',
 		'content',
-		'logo',
-		'hide_logo',
-		'cover'
+		'design',
 	];
 
 
@@ -29,7 +26,7 @@ class CampaignTemplate extends Model
 	];
 
 
-	public function campaign_attachments()
+	public function attachments()
 	{
 		return $this->hasMany('Kaleidoscope\Factotum\CampaignAttachment', 'campaign_template_id', 'id');
 	}

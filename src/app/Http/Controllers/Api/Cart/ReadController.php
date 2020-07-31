@@ -85,7 +85,7 @@ class ReadController extends Controller
 
     public function getDetail(Request $request, $id)
     {
-		$cart = Cart::find($id);
+		$cart = Cart::withTrashed()->where( 'id', $id )->first();
 
         if ( $cart ) {
 			$cart->load([ 'customer', 'customer.profile' ]);

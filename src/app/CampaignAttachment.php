@@ -9,7 +9,7 @@ class CampaignAttachment extends Model
 
 	protected $fillable = [
 		'campaign_template_id',
-		'attachment',
+		'attachment_id',
 	];
 
 
@@ -21,7 +21,11 @@ class CampaignAttachment extends Model
 
 	public function campaign_template()
 	{
-		return $this->hasOne('App\CampaignTemplate', 'id', 'campaign_template_id');
+		return $this->hasOne('Kaleidoscope\Factotum\CampaignTemplate', 'id', 'campaign_template_id');
+	}
+
+	public function attachment() {
+		return $this->hasOne('Kaleidoscope\Factotum\Media', 'id', 'attachment_id');
 	}
 
 }

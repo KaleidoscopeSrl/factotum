@@ -28,6 +28,10 @@ class Role extends Model
 			$this->fillable[] = 'manage_carts';
 			$this->fillable[] = 'manage_taxes';
 		}
+
+		if ( env('FACTOTUM_NEWSLETTER_INSTALLED') ) {
+			$this->fillable[] = 'manage_newsletters';
+		}
 	}
 
 

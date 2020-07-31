@@ -47,7 +47,8 @@ class ReadController extends Controller
 					$query->where(function($q) use ($rules) {
 						foreach ( $rules['allowed_types'] as $ext ) {
 							$ext = strtolower( trim($ext) );
-							$q->orWhereRaw( "LCASE(filename) like '%" . $ext . "'" );
+							$mimeType = \GuzzleHttp\Psr7\mimetype_from_extension($ext);
+							$q->orWhere( 'mime_type', $mimeType );
 						}
 					});
 				}
@@ -62,7 +63,6 @@ class ReadController extends Controller
 			$query->whereRaw( 'LCASE(filename) like "%' . $request->input('filter') . '%"' );
 		}
 
-		// echo Utility::getSqlQuery($query);die;
 		$mediaList = $query->get();
 
         return response()->json( [

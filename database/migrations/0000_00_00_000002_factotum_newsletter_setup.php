@@ -19,18 +19,11 @@ class FactotumNewsletterSetup extends Migration
 		Schema::create('campaign_templates', function (Blueprint $table) {
 			$table->id();
 
-			$table->string('template_title', 64);
+			$table->string('title', 64);
 			$table->string('subject', 255);
 
-			$table->bigInteger('cover')->unsigned()->nullable();
-			$table->foreign('cover')->references('id')->on('media');
-
-			$table->bigInteger('logo')->unsigned()->nullable();
-			$table->foreign('logo')->references('id')->on('media');
-
-			$table->boolean('hide_logo')->nullable();
-			$table->string('title', 255)->nullable();
-			$table->text('content');
+			$table->text('content')->nullable();
+			$table->text('design')->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();
@@ -44,8 +37,8 @@ class FactotumNewsletterSetup extends Migration
 			$table->bigInteger( 'campaign_template_id')->unsigned();
 			$table->foreign('campaign_template_id')->references('id')->on('campaign_templates');
 
-			$table->bigInteger('attachment')->unsigned()->nullable();
-			$table->foreign('attachment')->references('id')->on('media');
+			$table->bigInteger('attachment_id')->unsigned()->nullable();
+			$table->foreign('attachment_id')->references('id')->on('media');
 
 			$table->timestamps();
 		});
@@ -89,7 +82,7 @@ class FactotumNewsletterSetup extends Migration
 			$table->foreign('campaign_list_id')->references('id')->on('campaign_lists');
 
 			$table->string('title', 255);
-			$table->timestamp('sent_date')->nullable();
+			$table->timestamp('sent_at')->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();
