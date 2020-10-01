@@ -1,15 +1,21 @@
 <?php
 
 return [
-	'failed'              => 'These credentials do not match our records.',
-	'not_auth'            => 'This user is not authorized to access.',
-	'throttle'            => 'Too many login attempts. Please try again in :seconds seconds.',
-	'remember_me'         => 'Remember Me',
-	'forgot'              => 'Forgot Your Password?',
-	'not_a_user'          => 'Not a User?',
-	'register'            => 'Register',
-	'email'               => 'E-Mail Address',
-	'pwd_reset'           => 'Reset Password',
-	'pwd_confirm'         => 'Password Confirm',
-	'reset_password_link' => 'Send Password Reset Link'
+
+	'login_title'       => 'Login',
+	'login_description' => 'Login',
+
+	'forgot_password_title'       => 'Forgot Your Password?',
+	'forgot_password_description' => 'Forgot Your Password?',
+
+	'reset_password_title'       => 'Reset Password',
+	'reset_password_description' => 'Reset Password',
+
+	'failed' => 'Login failed',
+
+	'passwords' => [
+		'sent'  => 'Password Sent',
+		'reset' => 'Password Resetted',
+		'token' => 'Token not matching'
+	]
 ];

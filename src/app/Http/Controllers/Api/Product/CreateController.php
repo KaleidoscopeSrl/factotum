@@ -4,6 +4,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Product;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Str;
 use Kaleidoscope\Factotum\Http\Requests\StoreProduct;
 use Kaleidoscope\Factotum\Product;
 
@@ -26,14 +27,24 @@ class CreateController extends Controller
 	public function duplicate( Request $request, $productId )
 	{
 		$product = Product::find( $productId );
-		$product = $product->replicate();
+		$newProduct = $product->replicate();
 
-		$product->code   = substr( $product->code . '_2', 0, 16);
-		$product->name   = $product->name . ' clone';
-		$product->active = 0;
-		$product->save();
+		$productCode = substr( $newProduct->code . '_2', 0, 16);
+		$absUrl      = $newProduct->abs_url . '-clone-2';
 
-		return response()->json( [ 'result' => 'ok', 'product'  => $product->toArray() ] );
+		$productExist = Product::withTrashed()->where('code', $productCode)->first();
+		if ( $productExist ) {
+			$productCode .= '_' . Str::random(5);
+			$absUrl      .= '_' . Str::random(5);
+		}
+
+		$newProduct->code    = $productCode;
+		$newProduct->name    = $product->name . ' clone';
+		$newProduct->abs_url = $absUrl;
+		$newProduct->active  = 0;
+		$newProduct->save();
+
+		return response()->json( [ 'result' => 'ok', 'product'  => $newProduct->toArray() ] );
 	}
 
 }

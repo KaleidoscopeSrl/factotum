@@ -22,6 +22,7 @@ use Kaleidoscope\Factotum\Policies\CategoryPolicy;
 use Kaleidoscope\Factotum\Policies\BrandPolicy;
 use Kaleidoscope\Factotum\Policies\ProductCategoryPolicy;
 use Kaleidoscope\Factotum\Policies\ProductPolicy;
+use Kaleidoscope\Factotum\Policies\ProductVariantPolicy;
 use Kaleidoscope\Factotum\Policies\TaxPolicy;
 use Kaleidoscope\Factotum\Policies\DiscountCodePolicy;
 use Kaleidoscope\Factotum\Policies\OrderPolicy;
@@ -77,6 +78,7 @@ class FactotumServiceProvider extends ServiceProvider
 				Brand::class             => BrandPolicy::class,
 				ProductCategory::class   => ProductCategoryPolicy::class,
 				Product::class           => ProductPolicy::class,
+				ProductVariant::class    => ProductVariantPolicy::class,
 				Tax::class               => TaxPolicy::class,
 				DiscountCode::class      => DiscountCodePolicy::class,
 				Order::class             => OrderPolicy::class,
@@ -226,6 +228,7 @@ class FactotumServiceProvider extends ServiceProvider
 			if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 				require __DIR__ . '/routes/api/brand.php';
 				require __DIR__ . '/routes/api/product-category.php';
+				require __DIR__ . '/routes/api/product-variant.php';
 				require __DIR__ . '/routes/api/product.php';
 				require __DIR__ . '/routes/api/customer-address.php';
 				require __DIR__ . '/routes/api/order.php';
@@ -284,7 +287,6 @@ class FactotumServiceProvider extends ServiceProvider
 
 			$overridingRoutes = true;
 		}
-
 
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 

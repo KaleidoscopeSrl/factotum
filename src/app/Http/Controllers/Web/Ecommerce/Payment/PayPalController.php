@@ -24,9 +24,11 @@ class PayPalController extends Controller
 	public function initPaymentInit( Request $request )
 	{
 		try {
-			$user   = Auth::user();
+			$user   = $this->_getUser();
 			$cart   = $this->_getCart();
 			$totals = $this->_getCartTotals( $cart );
+
+//			echo json_encode(['c' => $cart, 'u' => $user, 't' => $totals ]);die;
 
 			if ( $totals && $totals['total'] > 0 ) {
 
@@ -44,18 +46,23 @@ class PayPalController extends Controller
 
 					$invoiceAddress = $this->_getTemporaryInvoiceAddress();
 
+					$billingName = $user->profile->first_name . ' ' . $user->profile->last_name;
+					if ( isset($user->profile->company_name) && $user->profile->company_name ) {
+						$billingName = $user->profile->company_name;
+					}
+
 					$result = [
 						'result'         => 'ok',
 						'billingDetails' => [
-							'name'  => $user->profile->company_name,
+							'name'  => $billingName,
 							'email' => $user->email,
 							'phone' => $user->profile->phone,
 							'address' => [
-								'line1'       => $invoiceAddress->invoice_address,
-								'city'        => $invoiceAddress->invoice_city,
-								'postal_code' => $invoiceAddress->invoice_zip,
-								'state'       => $invoiceAddress->invoice_province,
-								'country'     => $invoiceAddress->invoice_country,
+								'line1'       => $invoiceAddress->address,
+								'city'        => $invoiceAddress->city,
+								'postal_code' => $invoiceAddress->zip,
+								'state'       => $invoiceAddress->province,
+								'country'     => $invoiceAddress->country,
 							]
 						],
 						'paypalOrderID' => $response->result->id
@@ -119,8 +126,8 @@ class PayPalController extends Controller
 
 			if ( $paypalOrderId && $cart->paypal_order_id == $paypalOrderId ) {
 
-				$order = $this->_createOrderFromCart( $cart );
-				$order->payment_type    = 'paypal';
+				$order               = $this->_createOrderFromCart( $cart );
+				$order->payment_type = 'paypal';
 				$order->save();
 
 				$client = PayPalClient::client();
@@ -134,10 +141,13 @@ class PayPalController extends Controller
 						$order->setTransactionId( $transactionId );
 						$order->sendNewOrderNotifications();
 
+						$shopBaseUrl = config('factotum.shop_base_url');
+						$redirectUrl = url( ( $shopBaseUrl ? $shopBaseUrl : '' ) . '/order/thank-you/' . $order->id );
+
 						$result = [
 							'result'   => 'ok',
 							'order_id' => $order->id,
-							'redirect' => url('/order/thank-you/' . $order->id )
+							'redirect' => $redirectUrl
 						];
 
 						return $request->wantsJson() ? json_encode($result) : redirect()->back();

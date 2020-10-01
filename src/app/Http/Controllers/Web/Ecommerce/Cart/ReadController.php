@@ -46,7 +46,7 @@ class ReadController extends Controller
 				'totalProducts' => $totals['totalProducts'],
 				'totalPartial'  => $totals['totalPartial'],
 				'totalTaxes'    => $totals['totalTaxes'],
-				'totalShipping' => $totals['totalShipping'],
+				'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
 				'total'         => $totals['total'],
 			])->render();
 
@@ -55,7 +55,7 @@ class ReadController extends Controller
 				'totalProducts' => $totals['totalProducts'],
 				'totalPartial'  => '€' . number_format( $totals['totalPartial'], 2, ',', '.' ),
 				'totalTaxes'    => '€' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
-				'totalShipping' => ( $totals['totalShipping'] ? '€' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
+				'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
 				'total'         => '€' . number_format( $totals['total'], 2, ',', '.' ),
 				'html'          => $returnHTML
 			];
@@ -63,7 +63,6 @@ class ReadController extends Controller
 		}
 
 		return response()->json( $result );
-
 	}
 
 
@@ -85,7 +84,7 @@ class ReadController extends Controller
 			'totalProducts' => $totals['totalProducts'],
 			'totalPartial'  => $totals['totalPartial'],
 			'totalTaxes'    => $totals['totalTaxes'],
-			'totalShipping' => $totals['totalShipping'],
+			'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
 			'total'         => $totals['total'],
 			'metatags' => [
 				'title'       => Lang::get('factotum::ecommerce_cart.cart_title'),

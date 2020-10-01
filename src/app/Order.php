@@ -34,12 +34,14 @@ class Order extends Model
 		'phone',
 
 		'delivery_address',
+		'delivery_address_line_2',
 		'delivery_city',
 		'delivery_zip',
 		'delivery_province',
 		'delivery_country',
 
 		'invoice_address',
+		'invoice_address_line_2',
 		'invoice_city',
 		'invoice_zip',
 		'invoice_province',
@@ -82,7 +84,11 @@ class Order extends Model
 			$customer = User::with('profile')->find( $this->customer_id );
 		}
 
-		Notification::send( $customer, new NewOrderToCustomerNotification( $customer, $this ) );
+		if ( file_exists(app_path('Notifications/NewOrderToCustomerNotification.php')) ) {
+			Notification::send( $customer, new \App\Notifications\NewOrderToCustomerNotification( $customer, $this ) );
+		} else {
+			Notification::send( $customer, new NewOrderToCustomerNotification( $customer, $this ) );
+		}
 
 		$roles = Role::where('manage_orders', 1)->get();
 
@@ -106,7 +112,11 @@ class Order extends Model
 			$customer = User::with('profile')->find( $this->customer_id );
 		}
 
-		Notification::send( $customer, new OrderStatusChangeToCustomerNotification( $customer, $this ) );
+		if ( file_exists(app_path('Notifications/NewOrderToCustomerNotification.php')) ) {
+			Notification::send( $customer, new \App\Notifications\OrderStatusChangeToCustomerNotification( $customer, $this ) );
+		} else {
+			Notification::send( $customer, new OrderStatusChangeToCustomerNotification( $customer, $this ) );
+		}
 	}
 
 

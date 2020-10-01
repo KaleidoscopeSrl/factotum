@@ -28,7 +28,7 @@ class UserPolicy
 	public function delete(User $user, $userID)
 	{
 		$userOnEdit = User::find($userID);
-		return ( $userOnEdit->editable || !$userOnEdit->editable && auth()->user()->isAdmin() ? true : false );
+		return ( $userOnEdit->editable || (!$userOnEdit->editable && auth()->user()->isAdmin()) ? true : false );
 	}
 
 }

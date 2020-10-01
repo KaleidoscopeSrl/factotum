@@ -74,14 +74,19 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('code', 25)->unique();
 			$table->boolean('active')->nullable();
 			$table->string('url', 191);
-			$table->string('abs_url', 191)->nullable(true)->unique();
+			$table->string('abs_url', 191)->nullable();
 			$table->string('lang', 5);
 			$table->string('name', 128);
 			$table->text('description')->nullable();
 			$table->string('barcode', 64)->nullable();
 			$table->string('gallery')->nullable();
 			$table->decimal('basic_price', 10, 2);
-			$table->decimal('discount_price', 10, 2);
+			$table->decimal('discount_price', 10, 2)->nullable()->default(null);
+
+			$table->integer('quantity')->default(0);
+			
+			$table->boolean('has_variants')->nullable()->default(null);
+
 			$table->text('attributes')->nullable()->default(null);
 
 			$table->bigInteger('image')->unsigned()->nullable();
@@ -118,6 +123,45 @@ class FactotumEcommerceSetup extends Migration
 		});
 
 
+		// Create orders tables
+		Schema::create('orders', function (Blueprint $table) {
+			$table->id();
+
+			$table->bigInteger('customer_id')->unsigned();
+			$table->bigInteger('cart_id')->unsigned();
+			$table->bigInteger('discount_code_id')->unsigned()->nullable();
+
+			$table->string('status', 16);
+			$table->decimal('total_net', 10, 2 );
+			$table->decimal('total_tax', 10, 2 );
+			$table->decimal('total_shipping', 10, 2 );
+			$table->text('notes')->nullable();
+
+			$table->string('phone', 64)->nullable();
+
+			$table->string('delivery_address', 128)->nullable();
+			$table->string('delivery_address_line_2', 128)->nullable();
+			$table->string('delivery_city', 64)->nullable();
+			$table->string('delivery_zip', 7)->nullable();
+			$table->string('delivery_province', 16)->nullable();
+			$table->string('delivery_country', 64)->nullable();
+
+			$table->string('invoice_address', 128)->nullable();
+			$table->string('invoice_address_line_2', 128)->nullable();
+			$table->string('invoice_city', 64)->nullable();
+			$table->string('invoice_zip', 7)->nullable();
+			$table->string('invoice_province', 16)->nullable();
+			$table->string('invoice_country', 64)->nullable();
+
+			$table->string('payment_type', 64)->nullable();
+			$table->string('transaction_id', 128)->nullable();
+			$table->text('customer_user_agent')->nullable();
+
+			$table->timestamps();
+			$table->softDeletes();
+		});
+
+
 		// Create carts tables
 		Schema::create('carts', function (Blueprint $table) {
 			$table->id();
@@ -140,6 +184,21 @@ class FactotumEcommerceSetup extends Migration
 		});
 
 
+		Schema::create('product_variants', function (Blueprint $table) {
+			$table->id();
+
+			$table->bigInteger('product_id')->unsigned();
+			$table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
+			$table->string('label', 128);
+			$table->text('description')->nullable();
+
+			$table->integer('quantity')->default(0);
+
+			$table->timestamps();
+		});
+
+
 		// Create cart products tables
 		Schema::create('cart_product', function (Blueprint $table) {
 			$table->id();
@@ -150,6 +209,9 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('product_id')->unsigned();
 			$table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 
+			$table->bigInteger('product_variant_id')->unsigned()->nullable()->default(null);
+			$table->foreign('product_variant_id')->references('id')->on('product_variants')->onDelete('cascade');
+
 			$table->integer('quantity')->default(0);
 			$table->decimal( 'product_price', 10, 2);
 			$table->text('tax_data')->nullable();
@@ -157,9 +219,11 @@ class FactotumEcommerceSetup extends Migration
 			$table->timestamps();
 		});
 
+
 		// Added new fields for shipping/invoice address
 		Schema::table('profiles', function (Blueprint $table) {
 			$table->string('phone', 64)->nullable()->after('first_name');
+			$table->string('company_name', 128)->nullable()->after('phone');
 			$table->boolean('privacy')->nullable()->after('phone')->default(0);
 			$table->boolean('newsletter')->nullable()->after('privacy')->default(0);
 			$table->boolean('partner_offers')->nullable()->after('newsletter')->default(0);
@@ -177,6 +241,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('type', 32);
 
 			$table->string('address', 128);
+			$table->string('address_line_2', 128)->nullable();
 			$table->string('city', 64);
 			$table->string('zip', 7);
 			$table->string('province', 16);
@@ -187,8 +252,6 @@ class FactotumEcommerceSetup extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 		});
-
-
 
 
 		Schema::table('roles', function (Blueprint $table) {
@@ -232,46 +295,8 @@ class FactotumEcommerceSetup extends Migration
 			$table->foreign('discount_code_id')->references('id')->on('discount_codes')->onDelete('cascade');
 
 			$table->timestamps();
-			$table->softDeletes();
 		});
 
-
-
-		// Create orders tables
-		Schema::create('orders', function (Blueprint $table) {
-			$table->id();
-
-			$table->bigInteger('customer_id')->unsigned();
-			$table->bigInteger('cart_id')->unsigned();
-			$table->bigInteger('discount_code_id')->unsigned()->nullable();
-
-			$table->string('status', 16);
-			$table->decimal('total_net', 10, 2 );
-			$table->decimal('total_tax', 10, 2 );
-			$table->decimal('total_shipping', 10, 2 );
-			$table->text('notes')->nullable();
-
-			$table->string('phone', 64)->nullable();
-
-			$table->string('delivery_address', 128)->nullable();
-			$table->string('delivery_city', 64)->nullable();
-			$table->string('delivery_zip', 7)->nullable();
-			$table->string('delivery_province', 16)->nullable();
-			$table->string('delivery_country', 64)->nullable();
-
-			$table->string('invoice_address', 128)->nullable();
-			$table->string('invoice_city', 64)->nullable();
-			$table->string('invoice_zip', 7)->nullable();
-			$table->string('invoice_province', 16)->nullable();
-			$table->string('invoice_country', 64)->nullable();
-
-			$table->string('payment_type', 64)->nullable();
-			$table->string('transaction_id', 128)->nullable();
-			$table->text('customer_user_agent')->nullable();
-
-			$table->timestamps();
-			$table->softDeletes();
-		});
 
 
 		Schema::table('orders', function (Blueprint $table) {
@@ -287,8 +312,13 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->bigInteger('order_id')->unsigned();
 			$table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+
 			$table->bigInteger('product_id')->unsigned();
 			$table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
+			$table->bigInteger('product_variant_id')->unsigned()->nullable()->default(null);
+			$table->foreign('product_variant_id')->references('id')->on('product_variants')->onDelete('cascade');
+
 			$table->integer('quantity')->default(0);
 			$table->decimal( 'product_price', 10, 2);
 			$table->text('tax_data')->nullable();

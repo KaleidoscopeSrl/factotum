@@ -15,6 +15,7 @@ return [
 
 	'passwords' => [
 		'sent'  => 'Password Inviata',
-		'reset' => 'Password resettata'
+		'reset' => 'Password resettata',
+		'token' => 'Token non corrispondente'
 	]
 ];

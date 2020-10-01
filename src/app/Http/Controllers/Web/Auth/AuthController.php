@@ -16,6 +16,7 @@ class AuthController extends Controller
 	protected $redirectTo = '/';
 
 	use AuthenticatesUsers;
+
 	use CartUtils;
 
 	public function showLoginForm(Request $request)

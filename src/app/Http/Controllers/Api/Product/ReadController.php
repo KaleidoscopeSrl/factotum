@@ -4,6 +4,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Product;
 
 use Illuminate\Http\Request;
 
+use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\Product;
 use Kaleidoscope\Factotum\ProductCategory;
 
@@ -87,12 +88,28 @@ class ReadController extends Controller
 	}
 
 
+	public function getListBySearch( Request $request )
+	{
+		$search = $request->input('search');
+
+		$query = Product::where( 'title', 'like', '%' . $search . '%' )
+						->orWhere( 'code', 'like', '%' . $search . '%'  );
+
+		$productList = $query->get();
+
+		return response()->json( [
+			'result'   => 'ok',
+			'products' => $productList
+		]);
+	}
+
+
     public function getDetail(Request $request, $id)
     {
 		$product = Product::find($id);
 
         if ( $product ) {
-			$product->load([ 'brand', 'product_category', 'tax' ]);
+			$product->load([ 'brand', 'product_category', 'tax', 'product_variants' ]);
             return response()->json( [ 'result' => 'ok', 'product' => $product ]);
         }
 

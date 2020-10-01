@@ -11,7 +11,6 @@ use Kaleidoscope\Factotum\Campaign;
 use Kaleidoscope\Factotum\CampaignEmail;
 use Kaleidoscope\Factotum\CampaignTemplate;
 
-// TODO: implementare
 class SendController extends Controller
 {
 

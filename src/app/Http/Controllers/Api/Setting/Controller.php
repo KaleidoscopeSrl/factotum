@@ -17,12 +17,17 @@ class Controller extends ApiBaseController
 
 	public function getSettings( Request $request )
 	{
-		return [
+		$settings = [
 			'ecommerce'  => env('FACTOTUM_ECOMMERCE_INSTALLED')  ? true : false,
 			'newsletter' => env('FACTOTUM_NEWSLETTER_INSTALLED') ? true : false,
 			'unlayer_id' => ( env('FACTOTUM_NEWSLETTER_INSTALLED') && env('UNLAYER_PROJECT_ID') ? env('UNLAYER_PROJECT_ID') : null ),
 			'version'    => config('factotum.version')
 		];
+		
+		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+			$settings['product_vat_included'] = config('factotum.product_vat_included');
+		}
+		return $settings;
 	}
 
 

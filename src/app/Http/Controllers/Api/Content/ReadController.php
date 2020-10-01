@@ -155,7 +155,9 @@ class ReadController extends Controller
 
 						case 'image_upload':
 						case 'file_upload':
-							$media = Media::find($dataContent->{$contentField->name});
+							if ( isset($dataContent->{$contentField->name}) && $dataContent->{$contentField->name} != null ) {
+								$media = Media::find($dataContent->{$contentField->name});
+							}
 							$content->{$contentField->name} = ( isset( $dataContent->{$contentField->name} ) && $media ? [ $media ] : null );
 						break;
 

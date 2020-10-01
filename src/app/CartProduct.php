@@ -13,6 +13,7 @@ class CartProduct extends Model
 	protected $fillable = [
 		'cart_id',
 		'product_id',
+		'product_variant_id',
 		'quantity',
 		'tax_data'
 	];
@@ -24,6 +25,10 @@ class CartProduct extends Model
 
 	public function product() {
 		return $this->hasOne('Kaleidoscope\Factotum\Product', 'id', 'product_id');
+	}
+
+	public function product_variant() {
+		return $this->hasOne('Kaleidoscope\Factotum\ProductVariant', 'id', 'product_variant_id');
 	}
 
 	public function cart() {

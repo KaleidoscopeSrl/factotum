@@ -89,15 +89,6 @@ class PageTableSeeder extends Seeder
 		$contentField->save();
 
 
-		// Single Content to show
-		$contentField = new ContentField;
-		$contentField->content_type_id = $pageContentType->id;
-		$contentField->name  = 'content_to_show';
-		$contentField->label = 'Content To Show';
-		$contentField->type  = 'select';
-		$contentField->save();
-
-
 		// Content List Pagination
 		$contentField = new ContentField;
 		$contentField->content_type_id = $pageContentType->id;

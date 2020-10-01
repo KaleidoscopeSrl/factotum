@@ -12,7 +12,8 @@
         "barryvdh/laravel-debugbar": "^3.1.5",
         "laravel/passport": "7.4.*",
         "spatie/laravel-sitemap": "^5.7",
-        "stripe/stripe-php": "^7.37"
+        "stripe/stripe-php": "^7.37",
+        "laravel/ui": "^2.1"
     },
     "autoload": {
         "classmap": [

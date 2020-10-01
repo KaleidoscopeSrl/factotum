@@ -9,13 +9,21 @@
  */
 
 Route::group([
-	'prefix'     => 'order',
-	'middleware' => 'auth'
+	'prefix'     => 'order'
 ], function() {
 
-	Route::get('/list',                           'ReadController@getList');
-	Route::get('/detail/{id}',                    'ReadController@getDetail');
+	$middlewares = [];
+
+	if ( !config('factotum.guest_cart') ) {
+		$middlewares['middleware'] = 'auth';
+	}
+
+	Route::group( $middlewares, function() {
+		Route::get('/list',                           'ReadController@getList');
+		Route::get('/detail/{id}',                    'ReadController@getDetail');
+		Route::post('/set-order-transaction',         'UpdateController@setOrderTransaction');
+	});
+
 	Route::get('/thank-you/{id}',                 'ReadController@showThankyou');
-	Route::post('/set-order-transaction',         'UpdateController@setOrderTransaction');
 
 });

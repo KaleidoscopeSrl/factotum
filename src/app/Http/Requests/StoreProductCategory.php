@@ -26,15 +26,6 @@ class StoreProductCategory extends CustomFormRequest
 				'name'  => 'required|max:50|unique:product_categories',
 			];
 
-			if ( isset($data['image']) && $data['image'] != '' ) {
-				$rules['image'] = 'required';
-			}
-
-			if ( isset($data['icon']) && $data['icon'] != '' ) {
-				$rules['icon'] = 'required';
-			}
-
-
 			$id = request()->route('id');
 
 			if ( $id ) {

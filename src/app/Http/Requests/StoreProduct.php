@@ -2,6 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Requests;
 
+use Illuminate\Validation\Rule;
 
 class StoreProduct extends CustomFormRequest
 {
@@ -18,7 +19,7 @@ class StoreProduct extends CustomFormRequest
 			'url' => 'required'
 		];
 
-		$data  = $this->all();
+		$data = $this->all();
 
 		$productsViaPim = config('factotum.products_via_pim');
 
@@ -28,8 +29,6 @@ class StoreProduct extends CustomFormRequest
 				'code'                 => 'required|max:16|unique:products,code',
 				'name'                 => 'required|max:128',
 				'basic_price'          => 'required|numeric',
-				'brand_id'             => 'required',
-				'product_category_id'  => 'required',
 			];
 
 			if ( isset($data['image']) && $data['image'] != '' ) {
@@ -39,12 +38,21 @@ class StoreProduct extends CustomFormRequest
 			$id = request()->route('id');
 
 			if ( $id ) {
-				$rules['code'] = 'required|max:16|unique:products,id,' . $id;
+				$rules['code'] = [
+					'required',
+					'max:16',
+					Rule::unique('products', 'code')->ignore($id),
+				];
 			}
 
 		}
 
 		$this->merge($data);
+
+		if ( !$data['has_variants'] ) {
+			$rules['quantity'] = 'required|numeric';
+		}
+
 
 		return $rules;
 	}

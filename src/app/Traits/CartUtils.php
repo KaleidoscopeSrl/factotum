@@ -4,24 +4,63 @@ namespace Kaleidoscope\Factotum\Traits;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 
 use Kaleidoscope\Factotum\Cart;
 use Kaleidoscope\Factotum\CartProduct;
 use Kaleidoscope\Factotum\CustomerAddress;
+use Kaleidoscope\Factotum\DiscountCode;
 use Kaleidoscope\Factotum\Order;
 use Kaleidoscope\Factotum\OrderProduct;
+use Kaleidoscope\Factotum\Product;
+use Kaleidoscope\Factotum\ProductVariant;
+use Kaleidoscope\Factotum\Role;
+use Kaleidoscope\Factotum\Tax;
+use Kaleidoscope\Factotum\User;
 
 
 trait CartUtils
 {
 	protected $_cartDuration = '+3 days';
 
+	
+	protected function _getUser()
+	{
+		if ( config('factotum.guest_cart') ) {
+
+			if ( !request()->session()->exists('user_id') ) {
+				$customerRole = Role::where('role', 'customer')->first();
+
+				$user           = new User;
+				$user->email    = 'guest_' . Str::random(8) . '@kaleidoscope.it';
+				$user->password = bcrypt(Str::random(8));
+				$user->role_id  = $customerRole->id;
+				$user->editable = true;
+				$user->save();
+
+				request()->session()->put('user_id', $user->id);
+			} else {
+				$userId = request()->session()->get('user_id');
+				$user   = User::find( $userId );
+			}
+			
+		} else {
+
+			$user = Auth::user();
+
+		}
+
+		return $user;
+	}
+	
+
 	protected function _getCart()
 	{
 		try {
 
-			if ( Auth::check() ) {
-				$user = Auth::user();
+			$user = $this->_getUser();
+
+			if ( isset($user) && $user ) {
 
 				$cart = Cart::where( 'customer_id', $user->id )->where('expires_at', '>=', date('Y-m-d H:i:s'))->first();
 
@@ -35,36 +74,50 @@ trait CartUtils
 				$cart->load('products');
 
 				return $cart;
+
 			}
 
 			return null;
 
 		} catch ( \Exception $ex ) {
-			session()->flash( 'error', $ex->getMessage() );
+			session()->flash( 'error', $ex->getFile() . ' - ' . $ex->getLine() . ' - ' . $ex->getMessage() );
 			return view('factotum::errors.500');
 		}
 	}
 
 
-	protected function _getProductCart( $cartId, $productId )
+	protected function _getProductCart( $cartId, $productId, $productVariantId = null )
 	{
 		try {
 
-			$productCart = CartProduct::where( 'cart_id', $cartId )
-										->where( 'product_id', $productId )
-										->first();
+			$product = Product::find($productId);
+
+			if ( $product->has_variants && $productVariantId ) {
+				$productCart = CartProduct::where( 'cart_id', $cartId )
+											->where( 'product_id', $productId )
+											->where( 'product_variant_id', $productVariantId )
+											->first();
+			} else {
+				$productCart = CartProduct::where( 'cart_id', $cartId )
+											->where( 'product_id', $productId )
+											->first();
+			}
 
 			if ( !$productCart ) {
 				$productCart = new CartProduct;
 				$productCart->cart_id    = $cartId;
 				$productCart->product_id = $productId;
 				$productCart->quantity   = 0;
+
+				if ( $product->has_variants && $productVariantId ) {
+					$productCart->product_variant_id = $productVariantId;
+				}
 			}
 
 			return $productCart;
 
 		} catch ( \Exception $ex ) {
-			session()->flash( 'error', $ex->getMessage() );
+			session()->flash( 'error', $ex->getFile() . ' - ' . $ex->getLine() . ' - ' . $ex->getMessage() );
 			return view('factotum::errors.500');
 		}
 	}
@@ -73,9 +126,9 @@ trait CartUtils
 	protected function _extendCart()
 	{
 		try {
+			$user = $this->_getUser();
 
-			if ( Auth::check() ) {
-				$user = Auth::user();
+			if ( $user ) {
 
 				$cart = Cart::where( 'customer_id', $user->id )->where('expires_at', '>=', date('Y-m-d H:i:s'))->first();
 
@@ -86,7 +139,7 @@ trait CartUtils
 			}
 
 		} catch ( \Exception $ex ) {
-			session()->flash( 'error', $ex->getMessage() );
+			session()->flash( 'error', $ex->getFile() . ' - ' . $ex->getLine() . ' - ' . $ex->getMessage() );
 			return view('factotum::errors.500');
 		}
 	}
@@ -97,7 +150,7 @@ trait CartUtils
 		$total         = 0;
 		$totalPartial  = 0;
 		$totalTaxes    = 0;
-		$totalShipping = null;
+		$totalShipping = 0;
 		$totalProducts = 0;
 
 		if ( isset($cart) ) {
@@ -118,7 +171,9 @@ trait CartUtils
 			}
 
 			$total  = $totalPartial;
-			$total += $totalTaxes;
+			if ( !config('factotum.product_vat_included') ) {
+				$total += $totalTaxes;
+			}
 
 			$shipping = $this->_getTemporaryShipping();
 
@@ -141,48 +196,86 @@ trait CartUtils
 	}
 
 
-	protected function _getShippingOptions()
+	protected function _getTotalShipping( $total, $totalShipping, $formatted = false ) {
+		$freeShipping  = false;
+
+		if ( config('factotum.min_free_shipping') ) {
+			if ( $total > config('factotum.min_free_shipping') ) {
+				$freeShipping  = true;
+				$totalShipping = Lang::get('factotum::ecommerce_cart.free_shipping');
+			}
+		}
+
+
+		if ( $freeShipping ) {
+			$totalShipping = Lang::get('factotum::ecommerce_cart.free_shipping');
+		} else {
+			if ( $totalShipping ) {
+				if ( $formatted ) {
+					$totalShipping = '€ ' . number_format( $totalShipping, 2, ',', '.' );
+				}
+			} else {
+				$totalShipping = Lang::get('factotum::ecommerce_cart.shipping_not_calculated');
+			}
+		}
+
+		return $totalShipping;
+	}
+
+
+	protected function _getShippingOptions( $countryCode = null)
 	{
 		try {
 
-			if ( Auth::check() ) {
+			$shippingOptions = config('factotum.shipping_options');
+			$deliveryAddress = $this->_getTemporaryDeliveryAddress();
 
-				$deliveryAddress = $this->_getTemporaryDeliveryAddress();
+			$tmp = [];
 
-				$shippingOptions = config('factotum.shipping_options');
-
-				$tmp = [
-					'pick-up' => [
-						'amount' => $shippingOptions['pick-up'],
-						'label'  => Lang::get('factotum::ecommerce_checkout.shipping_pick_up')
-					]
+			if ( isset( $shippingOptions['pick-up']) ) {
+				$tmp['pick-up'] = [
+					'amount' => $shippingOptions['pick-up']['standard'],
+					'label'  => Lang::get('factotum::ecommerce_checkout.shipping_pick_up')
 				];
+			}
+			
 
-				if ( $deliveryAddress ) {
+			if ( $deliveryAddress ) {
+				$countryCode = strtoupper($deliveryAddress->country);
 
-					if ( isset($shippingOptions[ 'IT' ]) && strtoupper($deliveryAddress->country) == 'IT' ) {
-						$tmp['IT'] = [
-							'amount' => $shippingOptions['IT'],
-							'label'  => Lang::get('factotum::ecommerce_checkout.shipping_italy')
-						];
-					} else {
-
-						$tmp['abroad'] = [
-							'amount' => $shippingOptions['abroad'],
-							'label'  => Lang::get('factotum::ecommerce_checkout.shipping_abroad')
-						];
-
-					}
-
-				}
-
-				return $tmp;
 			}
 
-			return null;
+			if ( $countryCode ) {
+
+				if ( isset($shippingOptions[ $countryCode ]) ) {
+					$shippingTypes = $shippingOptions[ $countryCode ];
+
+					foreach ( $shippingTypes as $shippingType => $amount ) {
+						$tmp[ $countryCode . '_' . $shippingType ] = [
+							'amount' => $amount,
+							'label'  => Lang::get('factotum::ecommerce_checkout.shipping_' . $countryCode . '_' . $shippingType )
+						];
+					}
+				}
+
+			} else {
+
+				foreach ( $shippingOptions as $country => $shippingTypes ) {
+					foreach ( $shippingTypes as $shippingType => $amount ) {
+						$tmp[ $country . '_' . $shippingType ] = [
+							'amount' => $amount,
+							'label'  => Lang::get('factotum::ecommerce_checkout.shipping_' . $country . '_' . $shippingType )
+						];
+					}
+				}
+
+			}
+
+
+			return $tmp;
 
 		} catch ( \Exception $ex ) {
-			session()->flash( 'error', $ex->getMessage() );
+			session()->flash( 'error', $ex->getFile() . ' - ' . $ex->getLine() . ' - ' . $ex->getMessage() );
 			return view('factotum::errors.500');
 		}
 	}
@@ -193,7 +286,8 @@ trait CartUtils
 		$addressId = request()->session()->get( 'delivery_address' );
 
 		if ( $addressId ) {
-			$user = Auth::user();
+
+			$user = $this->_getUser();
 
 			return  CustomerAddress::where('customer_id', $user->id)
 									->where('type', 'delivery')
@@ -210,9 +304,9 @@ trait CartUtils
 		$addressId = request()->session()->get( 'invoice_address' );
 
 		if ( $addressId ) {
-			$user = Auth::user();
+			$user = $this->_getUser();
 
-			return  CustomerAddress::where('customer_id', $user->id)
+			return CustomerAddress::where('customer_id', $user->id)
 									->where('type', 'invoice')
 									->where('id', $addressId)
 									->first();
@@ -232,14 +326,15 @@ trait CartUtils
 	{
 		try {
 
-			if ( Auth::check() ) {
-				$user = Auth::user();
+			$user = $this->_getUser();
+
+			if ( $user ) {
 
 				$totals          = $this->_getCartTotals( $cart );
 				$deliveryAddress = $this->_getTemporaryDeliveryAddress();
 				$invoiceAddress  = $this->_getTemporaryInvoiceAddress();
 
-				$order = new Order();
+				$order              = new Order();
 				$order->cart_id     = $cart->id;
 				$order->customer_id = $user->id;
 				$order->status      = 'waiting_payment';
@@ -275,43 +370,234 @@ trait CartUtils
 					$cartProducts = CartProduct::where('cart_id', $cart->id)->get();
 
 					if ( $cartProducts->count() > 0 ) {
+
 						foreach ($cartProducts as $cp) {
-							$orderProduct                = new OrderProduct;
-							$orderProduct->order_id      = $order->id;
-							$orderProduct->product_id    = $cp->product_id;
-							$orderProduct->quantity      = $cp->quantity;
-							$orderProduct->product_price = $cp->product_price;
-							$orderProduct->tax_data      = json_encode( $cp->tax_data );
+							$orderProduct                     = new OrderProduct;
+							$orderProduct->order_id           = $order->id;
+							$orderProduct->product_id         = $cp->product_id;
+							$orderProduct->product_variant_id = $cp->product_variant_id;
+							$orderProduct->quantity           = $cp->quantity;
+							$orderProduct->product_price      = $cp->product_price;
+							$orderProduct->tax_data           = json_encode( $cp->tax_data );
 							$orderProduct->save();
+
+							$product = Product::find( $cp->product_id );
+
+							if ( $product->has_variants && $cp->product_variant_id ) {
+								$productVariant = ProductVariant::find( $cp->product_variant_id );
+								$productVariant->quantity = $productVariant->quantity - $cp->quantity;
+								$productVariant->save();
+							} else {
+								$product->quantity = $product->quantity - $cp->quantity;
+								$product->save();
+							}
 						}
+
 					}
+
+					// Delete the cart
+					if ( $order->id ) {
+						$cart->order_id = $order->id;
+						$cart->save();
+
+						request()->session()->remove('delivery_address');
+						request()->session()->remove('invoice_address');
+						request()->session()->remove('shipping');
+
+						$cart->delete();
+					}
+
+					return $order;
 				}
 
-				// Delete the cart
-				if ( $order->id ) {
-					$cart->order_id = $order->id;
-					$cart->save();
-
-					request()->session()->remove('delivery_address');
-					request()->session()->remove('invoice_address');
-					request()->session()->remove('shipping');
-
-					$cart->delete();
-				}
-
-				return $order;
 			}
 
 			return null;
 
 		} catch ( \Exception $ex ) {
-			session()->flash( 'error', $ex->getMessage() );
+			session()->flash( 'error', $ex->getFile() . ' - ' . $ex->getLine() . ' - ' . $ex->getMessage() );
+
 			return request()->wantsJson() ? json_encode([
 				'result' => 'ko',
 				'error'  => $ex->getMessage(),
-				'trace' => $ex->getTrace()
+				'trace'  => $ex->getTrace()
 			]) : view( $this->_getServerErrorView() );
 		}
 	}
 
+
+
+
+	// IL PREZZO E' PER IL SINGOLO PRODOTTO; NON IL TOTALE
+	// SE NEL PERIODO DI CREAZIONE CARRELLO, IL PREZZO VARIA, IL SINGOLO PRODOTTO PRENDERA' IL VALORE ATTUALE
+	protected function _calculateProductPrice( Product $product )
+	{
+		$price = $product->basic_price;
+
+		if ( $product->discount_price != '' && $product->discount_price > 0 ) {
+			$price = $product->discount_price;
+		}
+
+		return $price;
+	}
+
+
+	protected function addProductToCart( $productId, $quantity, $productVariantId = null )
+	{
+		$product = Product::find( $productId );
+		$cart    = $this->_getCart();
+
+		if ( $product->has_variants ) {
+			$productVariant = ProductVariant::find( $productVariantId );
+			$productCart = $this->_getProductCart( $cart->id, $product->id, $productVariant->id );
+		} else {
+			$productCart = $this->_getProductCart( $cart->id, $product->id );
+		}
+
+		$checkQuantity = $productCart->quantity + $quantity;
+		$checkQuantityAgaints = ( $product->has_variants ? $productVariant->quantity : $product->quantity );
+
+		if ( $checkQuantity > $checkQuantityAgaints) {
+			return [
+				'result'        => 'ko',
+				'message'       => Lang::get('factotum::ecommerce_cart.max_quantity_reached'),
+			];
+		}
+
+		// AUMENTO LA QUANTITA'
+		$productCart->quantity     += $quantity;
+		$productCart->product_price = $this->_calculateProductPrice( $product );
+
+		// SE NEL PERIODO DI CREAZIONE CARRELLO, LA TASSAZIONE VARIA, IL SINGOLO PRODOTTO PRENDE IL VALORE ATTUALE
+		$tax = Tax::find( $product->tax_id );
+
+		if ( $tax ) {
+			$productCart->tax_data = json_encode([
+				'name'   => $tax->name,
+				'amount' => $tax->amount
+			]);
+		}
+
+		$productCart->save();
+
+		$cart   = $this->_getCart();
+		$totals = $this->_getCartTotals( $cart );
+
+		return [
+			'result'        => 'ok',
+			'message'       => Lang::get('factotum::ecommerce_cart.product_added'),
+			'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' ),
+
+			'totalProducts' => $totals['totalProducts'],
+			'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
+			'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
+			'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
+			'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
+		];
+	}
+
+
+	protected function removeProductFromCart( $productId, $quantity, $productVariantId = null )
+	{
+		$cart        = $this->_getCart();
+		$product     = Product::find( $productId );
+
+		if ( $product->has_variants ) {
+			$productCart = $this->_getProductCart( $cart->id, $product->id, $productVariantId );
+		} else {
+			$productCart = $this->_getProductCart( $cart->id, $product->id );
+		}
+
+		$productCart->quantity -= $quantity;
+
+		if ( $productCart->quantity < 0 ) {
+			$productCart->quantity = 0;
+		}
+
+		$removed = false;
+
+		// Se il prodotto è a quantità 0, rimuoverlo dal carrello
+		if ( $productCart->quantity == 0 ) {
+			$removed = $productCart->delete();
+			$productCart = null;
+		} else {
+			$productCart->product_price = $this->_calculateProductPrice( $product );
+
+			// SE NEL PERIODO DI CREAZIONE CARRELLO, LA TASSAZIONE VARIA, IL SINGOLO PRODOTTO PRENDE IL VALORE ATTUALE
+			$tax = Tax::find( $product->tax_id );
+			if ( $tax ) {
+				$productCart->tax_data = json_encode([
+					'name'   => $tax->name,
+					'amount' => $tax->amount
+				]);
+			}
+
+			$productCart->save();
+		}
+
+		$cart   = $this->_getCart();
+		$totals = $this->_getCartTotals( $cart );
+
+		return [
+			'result'        => 'ok',
+			'message'       => Lang::get('factotum::ecommerce_cart.product_removed'),
+			'removed'       => $removed,
+			'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' ),
+
+			'totalProducts' => $totals['totalProducts'],
+			'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
+			'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
+			'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
+			'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
+		];
+	}
+
+
+	protected function dropProductFromCart( $productId, $productVariantId = null )
+	{
+		$cart        = $this->_getCart();
+		$product     = Product::find($productId);
+
+		if ( $product->has_variants ) {
+			$productCart = $this->_getProductCart( $cart->id, $product->id, $productVariantId );
+		} else {
+			$productCart = $this->_getProductCart( $cart->id, $product->id );
+		}
+
+		$dropped = $productCart->delete();
+
+		$cart    = $this->_getCart();
+		$totals  = $this->_getCartTotals( $cart );
+
+		return [
+			'result'        => ( $dropped ? 'ok' : 'ko' ),
+			'message'       => ( $dropped ? Lang::get('factotum::ecommerce_cart.product_dropped') : Lang::get('factotum::ecommerce_cart.product_drop_error') ),
+			'removed'       => $dropped,
+			'price'         => '€ 0',
+
+			'totalProducts' => $totals['totalProducts'],
+			'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
+			'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
+			'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
+			'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
+		];
+	}
+
+
+	protected function emptyCart()
+	{
+		$cart   = $this->_getCart();
+		$result = CartProduct::where('cart_id', $cart->id)->delete();
+		$totals = $this->_getCartTotals( $cart );
+
+		return [
+			'result'        => 'ok',
+
+			'totalProducts' => $totals['totalProducts'],
+			'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
+			'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
+			'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
+			'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
+		];
+	}
 }

@@ -18,9 +18,9 @@ use Kaleidoscope\Factotum\ProductCategory;
 class ReadController extends Controller
 {
 
-    public function getProductBySlug( Request $request, $productSlug )
+    public function getProductDetail( Request $request )
     {
-		$product = Product::where( 'url', $productSlug )->first();
+	    $product = Product::where( 'abs_url', $request->getRequestUri() )->first();
 
         if ( $product ) {
 			$product->load([ 'brand', 'product_category', 'tax' ]);

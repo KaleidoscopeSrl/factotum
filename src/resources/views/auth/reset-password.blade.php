@@ -38,7 +38,7 @@
 									   value="{{ old('email') }}" required autocomplete="email" autofocus>
 
 								@error('email')
-								<p class="error" role="alert">{{ $message }}</p>
+								<p class="error" role="alert">@lang( 'factotum::auth.' . $message )</p>
 								@enderror
 							</div>
 
@@ -50,7 +50,7 @@
 									   class="@error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
 
 								@error('password')
-								<p class="error" role="alert">{{ $message }}</p>
+								<p class="error" role="alert">@lang( 'factotum::auth.' . $message )</p>
 								@enderror
 							</div>
 
@@ -62,7 +62,7 @@
 									   class="@error('password_confirmation') is-invalid @enderror" name="password_confirmation" required autocomplete="new-password">
 
 								@error('password_confirmation')
-								<p class="error" role="alert">{{ $message }}</p>
+								<p class="error" role="alert">@lang( 'factotum::auth.' . $message )</p>
 								@enderror
 							</div>
 

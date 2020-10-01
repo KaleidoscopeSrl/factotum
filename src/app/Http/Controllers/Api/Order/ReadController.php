@@ -30,7 +30,11 @@ class ReadController extends Controller
 		}
 
 		$query = Order::query();
-		$query->selectRaw('orders.*, first_name, last_name, company_name, (total_net+total_tax+total_shipping) AS total');
+
+		$rawQuery = 'orders.*, first_name, last_name, company_name, ';
+		$rawQuery .= '(total_net+total_shipping' . ( config('factotum.product_vat_included') ? '' : '+total_tax' ) . ') AS total';
+
+		$query->selectRaw( $rawQuery );
 		$query->join('users', 'users.id', '=', 'orders.customer_id');
 		$query->join('profiles', 'profiles.user_id', '=', 'users.id');
 
@@ -108,9 +112,11 @@ class ReadController extends Controller
 		$order = Order::find($id);
 
         if ( $order ) {
-        	$order->total = $order->total_net + $order->total_tax + $order->total_shipping;
+        	$order->total = $order->total_net + ( config('factotum.product_vat_included') ? 0 : $order->total_tax ) + $order->total_shipping;
 			$order->load([ 'customer', 'customer.profile' ]);
-			$order->products = OrderProduct::with('product')->where( 'order_id', $order->id )->get();
+			$order->products = OrderProduct::with([ 'product', 'product_variant' ])
+											->where( 'order_id', $order->id )
+											->get();
 
             return response()->json( [ 'result' => 'ok', 'order' => $order ]);
         }

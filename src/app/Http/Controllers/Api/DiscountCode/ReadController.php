@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\DiscountCode;
 use Illuminate\Http\Request;
 
 use Kaleidoscope\Factotum\DiscountCode;
+use Kaleidoscope\Factotum\ProductDiscountCode;
 
 
 class ReadController extends Controller
@@ -39,6 +40,8 @@ class ReadController extends Controller
 
 		}
 
+		$query->with('customer');
+		$query->with('customer.profile');
 		$query->orderBy($sort, $direction);
 
 		if ( $limit ) {
@@ -72,7 +75,10 @@ class ReadController extends Controller
 		$discountCode = DiscountCode::find( $id );
 
 		if ( $discountCode ) {
+			$discountCode->load('customer');
+			$discountCode->load('customer.profile');
 			$discountCode->load('products');
+
 			return response()->json( [ 'result' => 'ok', 'discount_code'  => $discountCode->toArray() ] );
 		}
 

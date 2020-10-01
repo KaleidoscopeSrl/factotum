@@ -10,6 +10,10 @@ class StoreCustomerAddress extends CustomFormRequest
 
 	public function authorize()
 	{
+		if ( config('factotum.guest_cart') ) {
+			return true;
+		}
+
 		$user = Auth::user();
 
 		$roleCustomer = Role::where('role', 'customer')->first();

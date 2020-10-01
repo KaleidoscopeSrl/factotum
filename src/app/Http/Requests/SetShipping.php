@@ -5,13 +5,19 @@ namespace Kaleidoscope\Factotum\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 
 use Kaleidoscope\Factotum\Role;
+use Kaleidoscope\Factotum\Traits\CartUtils;
 
 
 class SetShipping extends CustomFormRequest
 {
+	use CartUtils;
 
 	public function authorize()
 	{
+		if ( config('factotum.guest_cart') ) {
+			return true;
+		}
+
 		$user = Auth::user();
 
 		$roleCustomer = Role::where('role', 'customer')->first();
@@ -29,7 +35,13 @@ class SetShipping extends CustomFormRequest
 
 	public function rules()
 	{
-		$shippingOptions = join(',', array_keys( config('factotum.shipping_options') ) );
+		$opts = array_keys( $this->_getShippingOptions() );
+
+		if ( config('factotum.min_free_shipping') ) {
+			$opts[] = 'free';
+		}
+
+		$shippingOptions = join(',', $opts );
 
 		$rules = [
 			'shipping' => 'required|in:' . $shippingOptions,

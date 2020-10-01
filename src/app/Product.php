@@ -4,6 +4,9 @@ namespace Kaleidoscope\Factotum;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+
+use Kaleidoscope\Factotum\Library\Utility;
 
 
 class Product extends Model
@@ -16,7 +19,6 @@ class Product extends Model
 		'name',
 		'active',
 		'featured',
-		'status',
 		'description',
 		'image',
 		'thumb',
@@ -25,8 +27,11 @@ class Product extends Model
 		'discount_price',
 		'validity',
 		'brand_id',
-		'category_id',
+		'product_category_id',
 		'tax_id',
+
+		'quantity',
+		'has_variants',
 
 		'url',
 		'abs_url',
@@ -63,6 +68,10 @@ class Product extends Model
 		return $this->hasOne('Kaleidoscope\Factotum\ProductCategory', 'id', 'product_category_id');
 	}
 
+	public function product_variants() {
+		return $this->hasMany('Kaleidoscope\Factotum\ProductVariant');
+	}
+
 	public function tax() {
 		return $this->hasOne('Kaleidoscope\Factotum\Tax', 'id', 'tax_id');
 	}
@@ -79,6 +88,10 @@ class Product extends Model
 	// CUSTOM FILL
 	public function fill(array $attributes)
 	{
+		if ( isset($attributes['name']) ) {
+			$attributes['url'] = Str::slug( $attributes['name'] );
+		}
+
 		if ( isset($attributes['active']) ) {
 			if ( $attributes['active'] == '' ) {
 				$attributes['active'] = 0;
@@ -129,6 +142,100 @@ class Product extends Model
 		return parent::fill($attributes);
 	}
 
+
+	// CUSTOM SAVE
+	public function save( array $options = [] )
+	{
+		$shopBaseUrl = config('factotum.shop_base_url');
+
+		if ( $shopBaseUrl && substr($shopBaseUrl, 0, 1) != '/' ) {
+			$shopBaseUrl = '/' . $shopBaseUrl;
+		}
+
+		if ( $this->product_category ) {
+			$categories = array_reverse( $this->product_category->getFlatParentsArray() );
+
+			if ( count($categories) > 0 ) {
+				$catUrl = '';
+				foreach ( $categories as $cat ) {
+					$catUrl .= '/' . $cat->name;
+				}
+
+				$this->abs_url = ( $shopBaseUrl ? $shopBaseUrl : '' ) . $catUrl . '/' . $this->url;
+			} else {
+				$this->abs_url = ( $shopBaseUrl ? $shopBaseUrl : '' ) . '/' . $this->url;
+			}
+		} else {
+			$this->abs_url = $shopBaseUrl . '/' . $this->url;
+		}
+
+		$productSaved = parent::save($options);
+
+		$this->_saveAdditional( $this );
+
+		return $productSaved;
+	}
+
+
+
+
+	private function _saveAdditional( Product $product )
+	{
+		$data = request()->all();
+
+		if ( count($data) > 0 ) {
+
+			$productResizes         = config('factotum.product_resizes');
+			$productResizeOperation = config('factotum.product_resize_operation');
+
+			// Save Additional
+			if ( isset($data['image']) && isset($productResizes) ) {
+				$field                  = new ContentField;
+				$field->image_bw        = false;
+				$field->image_operation = ( $productResizeOperation ? $productResizeOperation : 'fit' );
+				$field->resizes         = json_encode( $productResizes );
+
+				if ( is_string($data['image']) || is_integer($data['image']) ) {
+					$imageId = $data['image'];
+				} elseif ( is_array($data['image']) ) {
+					$imageId = $data['image'][0]['id'];
+				}
+
+				Media::saveImageById( $field, $imageId );
+			}
+
+
+			$productGalleryResizes         = config('factotum.product_gallery_resizes');
+			$productGalleryResizeOperation = config('factotum.product_gallery_resize_operation');
+
+			if ( isset($data['gallery']) && isset($productGalleryResizes) ) {
+				$field                  = new ContentField;
+				$field->image_bw        = false;
+				$field->image_operation = ( $productGalleryResizeOperation ? $productGalleryResizeOperation : 'fit' );
+				$field->resizes         = json_encode( $productGalleryResizes );
+
+				if ( is_string($data['gallery']) ) {
+					$gallery = explode( ',', $data[ 'gallery' ] );
+				} else if ( is_array($data['gallery']) ) {
+					$tmp = [];
+					foreach ( $data['gallery'] as $media ) {
+						$tmp[] = $media['id'];
+					}
+					$gallery = $tmp;
+				}
+
+				foreach ( $gallery as $g ) {
+					Media::saveImageById( $field, $g );
+				}
+
+			}
+
+		}
+
+		return $product;
+	}
+
+
 	private function _getMediaFromValue( $value )
 	{
 		if ( $value ) {
@@ -137,8 +244,29 @@ class Product extends Model
 				return $value;
 			}
 
-			$media = Media::find($value);
-			return ( $media ? [ Media::find($value) ] : null );
+			if ( $value ) {
+				$media = Media::find($value);
+				$media = $media->toArray();
+
+				$productResizes = config('factotum.product_resizes');
+
+				if ( isset($productResizes) && $productResizes ) {
+					$mediaUrl = substr( $media['url'], 0, -4);
+					$ext      = substr( $media['filename'], strlen($media['filename'])-3, 3 );
+
+					if ( count($productResizes) > 0 ) {
+						$tmp = [];
+						foreach ( $productResizes as $size ) {
+							$tmp[] = $mediaUrl . '-' . $size['w'] . 'x' . $size['h'] . '.' . $ext ;
+						}
+						$media['sizes'] = $tmp;
+					}
+				}
+
+				return $media;
+			}
+
+			return $value;
 		}
 
 		return null;
@@ -147,8 +275,28 @@ class Product extends Model
 	private function _getMultipleMediaFromValue( $value )
 	{
 		if ( $value ) {
-			$media = Media::whereIn( 'id', explode(',', $value) )->get();
-			return $media;
+			$gallery = Media::whereIn( 'id', explode(',', $value) )->get();
+
+			$productGalleryResizes = config('factotum.product_gallery_resizes');
+
+			if ( isset($productGalleryResizes) && $productGalleryResizes ) {
+				foreach ( $gallery as $i => $media ) {
+					$mediaUrl = substr( $media['url'], 0, -4);
+					$ext      = substr( $media['filename'], strlen($media['filename'])-3, 3 );
+
+					if ( count($productGalleryResizes) > 0 ) {
+						$tmp = [];
+						foreach ( $productGalleryResizes as $size ) {
+							$tmp[] = $mediaUrl . '-' . $size['w'] . 'x' . $size['h'] . '.' . $ext ;
+						}
+						$media['sizes'] = $tmp;
+					}
+
+					$gallery[$i] = $media;
+				}
+			}
+
+			return $gallery;
 		}
 
 		return null;

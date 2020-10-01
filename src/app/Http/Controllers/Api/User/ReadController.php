@@ -4,6 +4,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\User;
 
 use Illuminate\Http\Request;
 
+use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\User;
 use Kaleidoscope\Factotum\Role;
 
@@ -60,6 +61,34 @@ class ReadController extends Controller
 	}
 
 
+	public function getListByRoleAndSearch( Request $request )
+	{
+		$search = $request->input('search');
+		$role   = Role::where( 'role', $request->input('role') )->first();
+
+		if ( $role ) {
+
+			if ( strlen($search) > 0 ) {
+				$users = User::with('profile')
+					->whereHas( 'profile', function($query) use ($search) {
+						$query->where( 'first_name', 'like', '%' . $search . '%' );
+						$query->orWhere( 'last_name', 'like', '%' . $search . '%' );
+					})
+					->where( 'role_id', $role->id )
+					->orderBy('id','DESC')
+					->get();
+
+				return response()->json( [ 'result' => 'ok', 'users' => $users ]);
+			}
+
+			return response()->json( [ 'result' => 'ok', 'users' => [] ]);
+
+		}
+
+		return $this->_sendJsonError( 'Users not found', 404 );
+	}
+
+
     public function getDetail(Request $request, $id)
     {
         $user = User::find($id);
@@ -75,7 +104,13 @@ class ReadController extends Controller
 
 	public function getListPaginated( Request $request )
 	{
-		return response()->json( [ 'result' => 'ok', 'users' => $this->_getListPaginated( $request ), 'total' => User::count() ]);
+		$result = $this->_getListPaginated( $request );
+
+		return response()->json( [
+			'result' => 'ok',
+			'users'  => $result['users'],
+			'total'  => $result['total']
+		]);
 	}
 
 
@@ -86,10 +121,12 @@ class ReadController extends Controller
 		if ( $role != '' ) {
 			$role = Role::where( 'role', $request->input('role') )->first();
 
+			$result = $this->_getListPaginated( $request, $role );
+
 			return response()->json( [
 				'result' => 'ok',
-				'users'  => $this->_getListPaginated( $request, $role ),
-				'total'  => User::where( 'role_id', $role->id )->count()
+				'users'  => $result['users'],
+				'total'  => $result['total']
 			]);
 		}
 
@@ -97,7 +134,7 @@ class ReadController extends Controller
 	}
 
 
-	private function _getListPaginated( Request $request, $role = '' )
+	private function _getListPaginated( Request $request, $role = null )
 	{
 		$limit     = $request->input('limit');
 		$offset    = $request->input('offset');
@@ -127,9 +164,15 @@ class ReadController extends Controller
 		$query->join('profiles', 'users.id', '=', 'profiles.user_id');
 		$query->join('roles', 'users.role_id', '=', 'roles.id');
 
+		if ( $role ) {
+			$query->where( 'role_id', $role->id );
+		}
+
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
-			$role = Role::where( 'role', 'customer' )->first();
-			$query->where( 'role_id', '!=', $role->id );
+			$customerRole = Role::where( 'role', 'customer' )->first();
+			if ( !$role || ( $role && $role->id != $customerRole->id ) ) {
+				$query->where( 'role_id', '!=', $customerRole->id );
+			}
 		}
 
 		if ( isset($filters) && count($filters) > 0 ) {
@@ -142,9 +185,6 @@ class ReadController extends Controller
 
 		}
 
-		if ( $role ) {
-			$query->where( 'role_id', $role->id );
-		}
 
 		if ( $sort == 'first_name' || $sort == 'last_name' ) {
 			$sort = 'profiles.' . $sort;
@@ -156,6 +196,8 @@ class ReadController extends Controller
 
 		$query->orderBy($sort, $direction);
 
+		$total = $query->count();
+
 		if ( $limit ) {
 			$query->take($limit);
 		}
@@ -164,7 +206,8 @@ class ReadController extends Controller
 			$query->skip($offset);
 		}
 
-		return $query->get();
+		// echo Utility::getSqlQuery($query);die;
+		return [ 'users' => $query->get(), 'total' => $total ];
 	}
 
 }

@@ -248,7 +248,7 @@ class FrontController extends Controller
 				if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 
 					// Check se prodotto
-					$product = Product::where( 'url', $this->uriParts[ count($this->uriParts) - 1 ] )->first();
+					$product = Product::where( 'abs_url', '/' . $this->uri )->first();
 
 					if ( $product ) {
 						$data['product'] = $product;
@@ -306,17 +306,25 @@ class FrontController extends Controller
 
 		if ( isset($data['product']) ) {
 
-			if ( file_exists( app_path('Http/Controllers/Ecommerce/Product/ReadController.php') ) ) {
-				return app('App\Http\Controllers\Ecommerce\Product\ReadController')->getProductBySlug($request, $this->uriParts[ count($this->uriParts) - 1 ]);
+			if ( file_exists( app_path('Http/Controllers/Web/Ecommerce/Product/ReadController.php') ) ) {
+				return app('App\Http\Controllers\Web\Ecommerce\Product\ReadController')->getProductDetail( $request );
 			}
 
-			return app('\Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Product\ReadController')->getProductBySlug($request, $this->uriParts[ count($this->uriParts) - 1 ]);
+			return app('\Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Product\ReadController')->getProductDetail( $request );
 
 		} elseif ( isset($data['productCategory']) ) {
+
+			if ( file_exists( app_path('Http/Controllers/Web/Ecommerce/ProductCategory/ReadController.php') ) ) {
+				return app('App\Http\Controllers\Web\Ecommerce\ProductCategory\ReadController')->getProductsByCategory($request, $this->uriParts[ count($this->uriParts) - 1 ]);
+			}
 
 			return app('\Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\ProductCategory\ReadController')->getProductsByCategory($request, $this->uriParts[ count($this->uriParts) - 1 ]);
 
 		} elseif ( isset($data['brand']) ) {
+
+			if ( file_exists( app_path('Http/Controllers/Web/Ecommerce/Brand/ReadController.php') ) ) {
+				return app('App\Http\Controllers\Web\Ecommerce\Brand\ReadController')->getProductsByBrand($request, $this->uriParts[ count($this->uriParts) - 1 ]);
+			}
 
 			return app('\Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Brand\ReadController')->getProductsByBrand($request, $this->uriParts[ count($this->uriParts) - 1 ]);
 

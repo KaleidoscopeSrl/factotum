@@ -84,8 +84,12 @@ class ReadController extends Controller
 	public function showThankyou( Request $request, $orderId )
 	{
 		try {
-			$user  = Auth::user();
-			$order = Order::where( 'customer_id', $user->id )->where('id', $orderId )->first();
+			if ( config('factotum.guest_cart') ) {
+				$order = Order::find( $orderId );
+			} else {
+				$user  = Auth::user();
+				$order = Order::where( 'customer_id', $user->id )->where('id', $orderId )->first();
+			}
 
 			$view = 'factotum::ecommerce.order.thank-you';
 

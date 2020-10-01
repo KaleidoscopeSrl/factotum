@@ -23,98 +23,31 @@ class UpdateController extends Controller
 	use CartUtils;
 
 
-	// IL PREZZO E' PER IL SINGOLO PRODOTTO; NON IL TOTALE
-	// SE NEL PERIODO DI CREAZIONE CARRELLO, IL PREZZO VARIA, IL SINGOLO PRODOTTO PRENDERA' IL VALORE ATTUALE
-	protected function _calculateProductPrice( Product $product )
-	{
-		$user = Auth::user();
-
-		// 1 - definire se si parte dal prezzo scontato o meno
-		$price = $product->basic_price;
-
-		if ( $product->discount_price != '' && $product->discount_price > 0 ) {
-			$price = $product->discount_price;
-		}
-
-
-		// 2 - le eventuali regole dei codici sconto per "tutti i clienti" e per il cliente corrente
-		$allCustomersDiscountCodes = DiscountCode::whereRaw('(all_customers = ? OR customer_id = ?)', [1, $user->id])
-													->whereHas('products', function($q) use($product) {
-														$q->where('product_id', $product->id);
-													})->get();
-
-		if ( $allCustomersDiscountCodes->count() > 0 ) {
-			$totalPercentageDiscount = 0;
-
-			foreach ( $allCustomersDiscountCodes as $dc ) {
-				if ( $dc->type == 'percentage' ) {
-					$totalPercentageDiscount += $dc->discount;
-				} else {
-					$price -= $dc->discount;
-				}
-			}
-
-			if ( $totalPercentageDiscount > 0 ) {
-				$price = $price - $price / 100 * $totalPercentageDiscount;
-			}
-		}
-
-		return $price;
-	}
-
-
-
     public function addProduct( AddProductToCart $request )
     {
 		try {
 
 			$productId = $request->input('product_id');
 			$quantity  = $request->input('quantity');
+			$product   = Product::find($productId);
 
-			$product = Product::find( $productId );
-			$cart    = $this->_getCart();
-
-			$productCart = $this->_getProductCart( $cart->id, $product->id );
-
-			// AUMENTO LA QUANTITA'
-			$productCart->quantity += $quantity;
-
-			$productCart->product_price = $this->_calculateProductPrice( $product );
-
-			// SE NEL PERIODO DI CREAZIONE CARRELLO, LA TASSAZIONE VARIA, IL SINGOLO PRODOTTO PRENDE IL VALORE ATTUALE
-			$tax = Tax::find( $product->tax_id );
-
-			if ( $tax ) {
-				$productCart->tax_data = json_encode([
-					'name'   => $tax->name,
-					'amount' => $tax->amount
-				]);
+			if ( $product->has_variants ) {
+				$productVariantId = $request->input('product_variant_id');
 			}
 
-			$productCart->save();
+			$result = $this->addProductToCart( $productId, $quantity, $productVariantId );
 
-			session()->flash( 'product_added', Lang::get('factotum::ecommerce_cart.product_added') );
-
-			$cart   = $this->_getCart();
-			$totals = $this->_getCartTotals( $cart );
-
-			$result = [
-				'result'        => 'ok',
-				'message'       => Lang::get('factotum::ecommerce_cart.product_added'),
-				'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' ),
-
-				'totalProducts' => $totals['totalProducts'],
-				'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
-				'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
-				'totalShipping' => ( $totals['totalShipping'] ? '€ ' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
-				'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
-			];
-
-			return $request->wantsJson() ? json_encode( $result ) : redirect()->back();
+			if ( $result['result'] == 'ok' ) {
+				session()->flash( 'product_added', $result['message'] );
+				return $request->wantsJson() ? response()->json( $result ) : redirect()->back();
+			} else {
+				session()->flash( 'error', $result['message'] );
+				return $request->wantsJson() ? response()->json(['result' => 'ko', 'error' => $result['message'] ], 403) : view($this->_getServerErrorView());
+			}
 
 		} catch ( \Exception $ex ) {
 			session()->flash( 'error', $ex->getMessage() );
-			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
+			return $request->wantsJson() ? response()->json(['result' => 'ko', 'error' => $ex->getMessage() ], 403) : view($this->_getServerErrorView());
 		}
 
     }
@@ -124,61 +57,18 @@ class UpdateController extends Controller
 	public function removeProduct( RemoveProductFromCart $request )
 	{
 		try {
+
 			$productId = $request->input('product_id');
 			$quantity  = $request->input('quantity');
+			$product   = Product::find($productId);
 
-			$cart        = $this->_getCart();
-			$product     = Product::find( $productId );
-			$productCart = $this->_getProductCart( $cart->id, $product->id );
-
-			$productCart->quantity -= $quantity;
-
-			if ( $productCart->quantity < 0 ) {
-				$productCart->quantity = 0;
+			if ( $product->has_variants ) {
+				$productVariantId = $request->input('product_variant_id');
 			}
 
-			$removed = false;
-
-			// Se il prodotto è a quantità 0, rimuoverlo dal carrello
-			if ( $productCart->quantity == 0 ) {
-
-				$removed = $productCart->delete();
-				$productCart = null;
-
-			} else {
-
-				$productCart->product_price = $this->_calculateProductPrice( $product );
-
-				// SE NEL PERIODO DI CREAZIONE CARRELLO, LA TASSAZIONE VARIA, IL SINGOLO PRODOTTO PRENDE IL VALORE ATTUALE
-				$tax = Tax::find( $product->tax_id );
-				if ( $tax ) {
-					$productCart->tax_data = json_encode([
-						'name'   => $tax->name,
-						'amount' => $tax->amount
-					]);
-				}
-
-				$productCart->save();
-
-			}
+			$result = $this->removeProductFromCart( $productId, $quantity, $productVariantId );
 
 			session()->flash( 'product_removed', Lang::get('factotum::ecommerce_cart.product_removed') );
-
-			$cart   = $this->_getCart();
-			$totals = $this->_getCartTotals( $cart );
-
-			$result = [
-				'result'        => 'ok',
-				'message'       => Lang::get('factotum::ecommerce_cart.product_removed'),
-				'removed'       => $removed,
-				'price'         => ( $productCart ? '€ ' . number_format( $productCart->quantity * $productCart->product_price, 2, ',', '.' ) : '€ 0' ),
-
-				'totalProducts' => $totals['totalProducts'],
-				'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
-				'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
-				'totalShipping' => ( $totals['totalShipping'] ? '€ ' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
-				'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
-			];
 
 			return $request->wantsJson() ? json_encode( $result ) : redirect()->back();
 
@@ -195,38 +85,23 @@ class UpdateController extends Controller
 	public function dropProduct( DropProductFromCart $request )
 	{
 		try {
+
 			$productId = $request->input('product_id');
+			$product   = Product::find($productId);
 
-			$cart        = $this->_getCart();
-			$product     = Product::find($productId);
-			$productCart = $this->_getProductCart($cart->id, $product->id);
-			$dropped     = $productCart->delete();
+			if ( $product->has_variants ) {
+				$productVariantId = $request->input('product_variant_id');
+			}
 
-			if ( $dropped ) {
+			$result = $this->dropProductFromCart( $productId, $productVariantId );
+
+			if ( $result['result'] == 'ok' ) {
 				session()->flash( 'product_dropped', Lang::get('factotum::ecommerce_cart.product_dropped') );
 			} else {
 				session()->flash( 'error', Lang::get('factotum::ecommerce_cart.product_drop_error') );
 			}
 
-			$cart   = $this->_getCart();
-			$totals = $this->_getCartTotals( $cart );
-
-			$result = [
-				'result'        => ( $dropped ? 'ok' : 'ko' ),
-				'message'       => ( $dropped ? Lang::get('factotum::ecommerce_cart.product_dropped') : Lang::get('factotum::ecommerce_cart.product_drop_error') ),
-				'removed'       => $dropped,
-				'price'         => '€ 0',
-
-				'totalProducts' => $totals['totalProducts'],
-				'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
-				'totalTaxes'    => '€ ' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
-				'totalShipping' => ( $totals['totalShipping'] ? '€ ' . number_format( $totals['totalShipping'], 2, ',', '.' ) : '-' ),
-				'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
-
-			];
-
 			return $request->wantsJson() ? json_encode($result) : redirect()->back();
-
 
 		} catch ( \Exception $ex ) {
 

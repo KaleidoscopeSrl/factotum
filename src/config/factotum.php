@@ -81,12 +81,10 @@ return [
 		'updated_at'
 	],
 
-
 	'thumb_size' => [
 		'width'  => 100,
 		'height' => 100
 	],
-
 
 	'main_site_language' => 'it-IT',
 
@@ -98,13 +96,48 @@ return [
 	'analytics_client_id' => '',
 	'analytics_site_id'   => '',
 
+
+	// ECOMMERCE CONFIGURATION
+
 	'brands_via_pim'             => false,
 	'product_categories_via_pim' => false,
 	'products_via_pim'           => false,
 
-	'version' => '5.0.8',
+	'product_resizes' => [
+		0 => [
+			'w' => 1920,
+			'h' => 1080
+		],
+		1 => [
+			'w' => 812,
+			'h' => 812
+		],
+		2 => [
+			'w'  => 487,
+			'h' => 487
+		],
+		3 => [
+			'w' => 220,
+			'h' => 220
+		]
+	],
+	'product_resize_operation' => 'fit',
 
-	// TODO: move to database and management
+	'product_gallery_resizes' => [
+		0 => [
+			'w' => 960,
+			'h' => 960
+		],
+		1 => [
+			'w' => 375,
+			'h' => 375
+		]
+	],
+
+	'product_gallery_resize_operation' => 'fit',
+
+	'shop_base_url' => 'shop',
+
 	'payment_methods' => [
 		'stripe',
 		'paypal',
@@ -112,11 +145,26 @@ return [
 		'custom-payment'
 	],
 
-	// TODO: move to database and management
 	'shipping_options' => [
-		'pick-up' => 0,
-		'IT'      => 15,
-		'abroad'  => 30,
-	]
+		'pick-up' => [
+			'standard' => 0
+		],
+		'IT' => [
+			'standard' => 7,
+			'express'  => 14
+		],
+		'other'  => [
+			'standard' => 30
+		],
+	],
+
+	'guest_cart' => false,
+
+	'product_vat_included' => false,
+
+	'min_free_shipping' => 65,
+
+
+	'version' => '5.0.10',
 
 ];

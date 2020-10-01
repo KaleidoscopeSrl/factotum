@@ -18,11 +18,12 @@ Route::group([
 	});
 
 	Route::group(['middleware' => 'can:read,Kaleidoscope\Factotum\User'], function() {
-		Route::post('/list',                   'ReadController@getList');
-		Route::post('/list-by-role',           'ReadController@getListByRole');
-		Route::post('/list-paginated',         'ReadController@getListPaginated');
-		Route::post('/list-by-role-paginated', 'ReadController@getListByRolePaginated');
-		Route::get('/detail/{id}',             'ReadController@getDetail');
+		Route::post('/list',                    'ReadController@getList');
+		Route::post('/list-by-role',            'ReadController@getListByRole');
+		Route::post('/list-paginated',          'ReadController@getListPaginated');
+		Route::post('/list-by-role-paginated',  'ReadController@getListByRolePaginated');
+		Route::post('/list-by-role-and-search', 'ReadController@getListByRoleAndSearch');
+		Route::get('/detail/{id}',              'ReadController@getDetail');
 	});
 
 	Route::group(['middleware' => 'can:update,Kaleidoscope\Factotum\User,id'], function() {
@@ -31,7 +32,8 @@ Route::group([
 
 	Route::group(['middleware' => 'can:delete,Kaleidoscope\Factotum\User,id'], function() {
 		Route::delete('/delete/{id}',       'DeleteController@remove');
-		Route::post('/delete-users',        'DeleteController@removeUsers');
 	});
+
+	Route::post('/delete-users',        'DeleteController@removeUsers');
 
 });

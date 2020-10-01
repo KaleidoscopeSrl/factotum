@@ -17,7 +17,9 @@ class DiscountCode extends Model
 		'amount',
 		'type',
 		'customer_id',
-		'all_customers'
+		'all_customers',
+		'brand_id',
+		'fiscal_code'
 	];
 
 
@@ -29,14 +31,14 @@ class DiscountCode extends Model
 
 
 	// RELATIONS
-//	public function event()
-//	{
-//		return $this->hasOne('App\Event', 'id', 'event_id');
-//	}
-
 	public function products()
 	{
 		return $this->belongsToMany( 'Kaleidoscope\Factotum\Product', 'product_discount_code' );
+	}
+
+	public function customer()
+	{
+		return $this->hasOne('Kaleidoscope\Factotum\User', 'id', 'customer_id');
 	}
 
 }

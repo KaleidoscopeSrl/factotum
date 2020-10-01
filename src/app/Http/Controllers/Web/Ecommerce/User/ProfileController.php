@@ -82,9 +82,16 @@ class ProfileController extends Controller
 	public function saveCustomerAddress( StoreCustomerAddress $request, $type, $customerAddressId = '' )
 	{
 		$data = $request->all();
+
 		try {
 
-			$user = Auth::user();
+			if ( config('factotum.guest_cart') ) {
+				$userId = $request->session()->get('user_id');
+				$user   = User::find($userId);
+			} else {
+				$user = Auth::user();
+			}
+
 
 			if ( $user ) {
 				if ( $customerAddressId ) {

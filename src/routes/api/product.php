@@ -22,8 +22,8 @@ Route::group([
 		Route::get('/number-by-status',              'ReadController@getNumberByStatus');
 		Route::get('/list',                          'ReadController@getList');
 		Route::post('/list-paginated',               'ReadController@getListPaginated');
+		Route::post('/list-by-search',               'ReadController@getListBySearch');
 		Route::get('/detail/{id}',                   'ReadController@getDetail');
-
 	});
 
 	Route::group(['middleware' => 'can:update,Kaleidoscope\Factotum\Product,id'], function() {

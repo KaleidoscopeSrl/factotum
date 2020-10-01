@@ -46,25 +46,19 @@ class EcommerceTableSeeder extends Seeder
 		$admin->save();
 	}
 
-	private function _setOrder()
+
+	private function _setGuestUser()
 	{
-		$contentField = new ContentField;
-		$contentField->content_type_id = $orderContentType->id;
-		$contentField->name            = 'order_status';
-		$contentField->label           = 'Stato Ordine';
-		$contentField->type            = 'select';
-		$contentField->mandatory       = true;
-		$templates = [
-			[ 'value' => 'waiting_payment',   'label' => 'In attesa di pagamento' ],
-			[ 'value' => 'progress',          'label' => 'In lavorazione' ],
-			[ 'value' => 'waiting',           'label' => 'In sospeso' ],
-			[ 'value' => 'done',              'label' => 'Completato' ],
-			[ 'value' => 'canceled',          'label' => 'Annullato' ],
-			[ 'value' => 'refunded',          'label' => 'Rimborsato' ],
-			[ 'value' => 'failed',            'label' => 'Fallito' ],
-		];
-		$contentField->options = json_encode( $templates );
-		$contentField->save();
+		$customerRole = Role::where('role', 'customer')->first();
+
+		DB::table('users')->where('email', 'guest@kaleidoscope.it')->delete();
+
+		DB::table('users')->insert([
+			'email'    => 'guest@kaleidoscope.it',
+			'password' => bcrypt(Str::random(8)),
+			'role_id'  => $customerRole->id,
+			'editable' => false
+		]);
 	}
 
 
@@ -72,6 +66,7 @@ class EcommerceTableSeeder extends Seeder
     {
 		$this->_setCustomerRole();
 		$this->_changeAdminCapabilities();
+		$this->_setGuestUser();
     }
 
 }

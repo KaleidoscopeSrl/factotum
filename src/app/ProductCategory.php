@@ -17,7 +17,6 @@ class ProductCategory extends Model
 		'label',
 		'lang',
 		'image',
-		'icon',
 		'description',
 		'order_no'
 	];
@@ -32,7 +31,7 @@ class ProductCategory extends Model
 
 	public function products()
 	{
-		return $this->belongsToMany('Kaleidoscope\Factotum\Product');
+		return $this->hasMany('Kaleidoscope\Factotum\Product' );
 	}
 
 

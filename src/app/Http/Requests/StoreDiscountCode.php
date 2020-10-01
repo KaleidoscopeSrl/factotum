@@ -23,9 +23,11 @@ class StoreDiscountCode extends CustomFormRequest
 			'products'    => 'required',
 		];
 
-		$data = $this->all();
+		$id = request()->route('id');
 
-		$this->merge($data);
+		if ( $id ) {
+			$rules['code'] = 'required|alpha_num|unique:discount_codes,id,' . $id;
+		}
 
 		return $rules;
 	}

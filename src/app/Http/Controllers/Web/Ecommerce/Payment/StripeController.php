@@ -11,6 +11,7 @@ use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 
 use Kaleidoscope\Factotum\Library\PayPalClient;
 use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\User;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 
 
@@ -26,7 +27,7 @@ class StripeController extends Controller
 	public function initPaymentInit(Request $request)
 	{
 		try {
-			$user   = Auth::user();
+			$user   = $this->_getUser();
 			$cart   = $this->_getCart();
 			$totals = $this->_getCartTotals( $cart );
 
@@ -52,11 +53,11 @@ class StripeController extends Controller
 							'email' => $user->email,
 							'phone' => $user->profile->phone,
 							'address' => [
-								'line1'       => $invoiceAddress->invoice_address,
-								'city'        => $invoiceAddress->invoice_city,
-								'postal_code' => $invoiceAddress->invoice_zip,
-								'state'       => $invoiceAddress->invoice_province,
-								'country'     => $invoiceAddress->invoice_country,
+								'line1'       => $invoiceAddress->address,
+								'city'        => $invoiceAddress->city,
+								'postal_code' => $invoiceAddress->zip,
+								'state'       => $invoiceAddress->province,
+								'country'     => $invoiceAddress->country,
 							]
 						],
 						'stripeIntentID' => $intent->id
@@ -71,12 +72,15 @@ class StripeController extends Controller
 			return $request->wantsJson() ? json_encode([ 'result' => 'ko', 'message' => 'Error on creating intent. Missing cart data' ]) : view( $this->_getServerErrorView() );
 
 		} catch ( \Exception $ex ) {
+
 			session()->flash( 'error', $ex->getMessage() );
+
 			return $request->wantsJson() ? json_encode([
 				'result' => 'ko',
 				'error' => $ex->getMessage(),
 				'trace' => $ex->getTrace()
 			]) : view( $this->_getServerErrorView() );
+
 		}
 
 	}
@@ -92,17 +96,20 @@ class StripeController extends Controller
 
 			if ( $stripeIntentId && $cart->stripe_intent_id == $stripeIntentId ) {
 
-				$order = $this->_createOrderFromCart( $cart );
-				$order->payment_type   = 'stripe';
+				$order               = $this->_createOrderFromCart( $cart );
+				$order->payment_type = 'stripe';
 				$order->save();
 
 				$order->setTransactionId( $transactionId );
 				$order->sendNewOrderNotifications();
 
+				$shopBaseUrl = config('factotum.shop_base_url');
+				$redirectUrl = url( ( $shopBaseUrl ? $shopBaseUrl : '' ) . '/order/thank-you/' . $order->id );
+
 				$result = [
 					'result'   => 'ok',
 					'order_id' => $order->id,
-					'redirect' => url('/order/thank-you/' . $order->id )
+					'redirect' => $redirectUrl
 				];
 
 				return $request->wantsJson() ? json_encode($result) : redirect()->back();

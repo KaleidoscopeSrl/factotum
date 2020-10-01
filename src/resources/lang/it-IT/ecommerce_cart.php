@@ -9,6 +9,7 @@ return [
 	'product_removed' => 'Prodotto rimosso dal carrello!',
 
 	'product_dropped'    => 'Prodotto rimosso dal carrello!',
-	'product_drop_error' => 'Impossibile rimuovere un prodotto dal carrello!'
+	'product_drop_error' => 'Impossibile rimuovere un prodotto dal carrello!',
 
+	'max_quantity_reached' => 'Quantità massima raggiunta!'
 ];
