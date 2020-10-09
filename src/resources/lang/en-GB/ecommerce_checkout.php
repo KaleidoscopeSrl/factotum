@@ -9,8 +9,10 @@ return [
 	'shipping_italy'   => 'Express Delivery in Italy',
 	'shipping_abroad'  => 'Express Delivery abroad',
 
-	'shipping_IT_express'  => 'Italy express',
-	'shipping_IT_standard' => 'Italy standard',
+	'shipping_IT_express'  => 'Italy - Express',
+	'shipping_IT_standard' => 'Italy - Standard',
+
+	'shipping_other_standard' => 'Abroad - Standard',
 
 	'delivery_address_title' => 'delivery address',
 	'invoice_address_title'  => 'invoice address',

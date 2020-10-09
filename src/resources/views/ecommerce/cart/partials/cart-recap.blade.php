@@ -31,7 +31,7 @@
             <td class="tar">
                 <span class="total-shipping">
                     @if( $totalShipping )
-                        {{ '€ ' . number_format( $totalShipping, 2, ',', '.' ) }}
+						{!! $totalShipping !!}
                     @else
                         -
                     @endif

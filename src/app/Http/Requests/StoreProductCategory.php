@@ -19,6 +19,7 @@ class StoreProductCategory extends CustomFormRequest
 
 		$productCategoriesViaPim = config('factotum.product_categories_via_pim');
 
+		// TODO: categoria unique ma solo su categorie non "deleted_at"
 		if ( !$productCategoriesViaPim ) {
 
 			$rules = [

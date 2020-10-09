@@ -31,8 +31,10 @@ class UpdateController extends Controller
 		if ( $orders && count($orders) > 0 ) {
 			foreach ( $orders as $orderId ) {
 				$order = Order::find($orderId);
-				$order->status = $status;
-				$order->save();
+				if ( $order ) {
+					$order->status = $status;
+					$order->save();
+				}
 			}
 		}
 

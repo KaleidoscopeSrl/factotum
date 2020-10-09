@@ -53,6 +53,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('label', 255);
 			$table->text('description')->nullable();
 			$table->string('lang', 5);
+			$table->boolean('show_in_home');
 
 			$table->bigInteger('image')->unsigned()->nullable(true);
 

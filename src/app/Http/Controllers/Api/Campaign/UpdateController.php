@@ -21,15 +21,4 @@ class UpdateController extends Controller
 		return response()->json( [ 'result' => 'ok', 'campaign'  => $campaign ] );
 	}
 
-	public function updateFilter(StoreCampaignFilter $request, $id)
-	{
-		$filter = $request->input('filter');
-
-		$campaign = Campaign::find( $id );
-		$campaign->filter = $filter;
-		$campaign->save();
-
-		return response()->json( [ 'result' => 'ok', 'campaign'  => $campaign ] );
-	}
-
 }

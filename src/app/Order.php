@@ -112,7 +112,7 @@ class Order extends Model
 			$customer = User::with('profile')->find( $this->customer_id );
 		}
 
-		if ( file_exists(app_path('Notifications/NewOrderToCustomerNotification.php')) ) {
+		if ( file_exists(app_path('Notifications/OrderStatusChangeToCustomerNotification.php')) ) {
 			Notification::send( $customer, new \App\Notifications\OrderStatusChangeToCustomerNotification( $customer, $this ) );
 		} else {
 			Notification::send( $customer, new OrderStatusChangeToCustomerNotification( $customer, $this ) );

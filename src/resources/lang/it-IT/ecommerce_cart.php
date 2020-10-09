@@ -11,5 +11,8 @@ return [
 	'product_dropped'    => 'Prodotto rimosso dal carrello!',
 	'product_drop_error' => 'Impossibile rimuovere un prodotto dal carrello!',
 
-	'max_quantity_reached' => 'Quantità massima raggiunta!'
+	'max_quantity_reached' => 'Quantità massima raggiunta!',
+
+	'free_shipping' => 'Gratuita',
+	'shipping_not_calculated' => '<small>Calcolata alla cassa</small>'
 ];

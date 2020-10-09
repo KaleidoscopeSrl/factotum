@@ -242,7 +242,6 @@ trait CartUtils
 
 			if ( $deliveryAddress ) {
 				$countryCode = strtoupper($deliveryAddress->country);
-
 			}
 
 			if ( $countryCode ) {
@@ -256,6 +255,18 @@ trait CartUtils
 							'label'  => Lang::get('factotum::ecommerce_checkout.shipping_' . $countryCode . '_' . $shippingType )
 						];
 					}
+
+				} else {
+
+					$shippingTypes = $shippingOptions[ 'other' ];
+
+					foreach ( $shippingTypes as $shippingType => $amount ) {
+						$tmp[ 'other_' . $shippingType ] = [
+							'amount' => $amount,
+							'label'  => Lang::get('factotum::ecommerce_checkout.shipping_other_' . $shippingType )
+						];
+					}
+
 				}
 
 			} else {

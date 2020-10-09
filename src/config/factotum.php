@@ -165,6 +165,6 @@ return [
 	'min_free_shipping' => 65,
 
 
-	'version' => '5.0.10',
+	'version' => '5.0.11',
 
 ];

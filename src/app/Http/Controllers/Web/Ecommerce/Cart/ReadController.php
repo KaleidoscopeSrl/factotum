@@ -52,6 +52,7 @@ class ReadController extends Controller
 
 			$result = [
 				'result'        => 'ok',
+				'cart_id'       => $cart->id,
 				'totalProducts' => $totals['totalProducts'],
 				'totalPartial'  => '€' . number_format( $totals['totalPartial'], 2, ',', '.' ),
 				'totalTaxes'    => '€' . number_format( $totals['totalTaxes'], 2, ',', '.' ),

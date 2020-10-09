@@ -25,6 +25,9 @@ class Brand extends Model
 		'deleted_at'
 	];
 
+	protected $appends = [
+		'total_products'
+	];
 
 	public function products() {
 		return $this->hasMany('Kaleidoscope\Factotum\Product');
@@ -43,6 +46,11 @@ class Brand extends Model
 		}
 
 		return null;
+	}
+
+	public function getTotalProductsAttribute()
+	{
+		return Product::where('brand_id', $this->id)->count();
 	}
 
 }

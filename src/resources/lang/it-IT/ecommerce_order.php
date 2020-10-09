@@ -22,4 +22,13 @@ return [
 	'refunded'         => 'Rimborsato',
 	'failed'           => 'Fallito',
 
+
+	'product'        => 'Prodotto',
+	'quantity'       => 'Quantità',
+	'price'          => 'Prezzo',
+	'total_partial'  => 'Subtotale',
+	'total_taxes'    => 'Totale Tasse',
+	'total_shipping' => 'Totale Spedizione',
+	'payment_method' => 'Metodo di pagamento',
+	'total'          => 'Totale'
 ];

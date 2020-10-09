@@ -62,7 +62,13 @@ class ReadController extends Controller
 				$query->where('active', true );
 			}
 
+			if ( isset($filters['featured']) && $filters['featured'] ) {
+				$query->where('featured', true );
+			}
+
 		}
+
+		$totalCountQuery = clone $query;
 
 		$query->orderBy($sort, $direction);
 
@@ -76,7 +82,7 @@ class ReadController extends Controller
 
 		$products = $query->get();
 
-        return response()->json( [ 'result' => 'ok', 'products' => $products, 'total' => Product::count() ]);
+        return response()->json( [ 'result' => 'ok', 'products' => $products, 'total' => $totalCountQuery->count() ]);
     }
 
 
@@ -92,7 +98,7 @@ class ReadController extends Controller
 	{
 		$search = $request->input('search');
 
-		$query = Product::where( 'title', 'like', '%' . $search . '%' )
+		$query = Product::where( 'name', 'like', '%' . $search . '%' )
 						->orWhere( 'code', 'like', '%' . $search . '%'  );
 
 		$productList = $query->get();

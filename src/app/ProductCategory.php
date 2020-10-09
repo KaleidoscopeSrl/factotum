@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class ProductCategory extends Model
@@ -18,7 +19,8 @@ class ProductCategory extends Model
 		'lang',
 		'image',
 		'description',
-		'order_no'
+		'order_no',
+		'show_in_home'
 	];
 
 	protected $hidden = [
@@ -26,7 +28,8 @@ class ProductCategory extends Model
 	];
 
 	protected $appends = [
-		'abs_url'
+		'abs_url',
+		'total_products'
 	];
 
 	public function products()
@@ -260,6 +263,22 @@ class ProductCategory extends Model
 	public function getAbsUrlAttribute( $value )
 	{
 		return $value;
+	}
+
+	public function getTotalProductsAttribute()
+	{
+		$tmp = [ $this->id ];
+		$childs = $this->singleCategoryFlatTreeChildsArray( null, null );
+
+		if ( $childs && count($childs) > 0 ) {
+			foreach ( $childs as $c ) {
+				$tmp[] = $c->id;
+			}
+		}
+
+		return DB::table('products')
+					->whereIn('product_category_id', $tmp)
+					->count();
 	}
 
 }

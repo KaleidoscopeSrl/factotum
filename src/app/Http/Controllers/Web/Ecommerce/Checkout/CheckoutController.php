@@ -56,6 +56,10 @@ class CheckoutController extends Controller
 												->where( 'customer_id', $user->id )
 												->orderBy('default_address', 'DESC')
 												->get();
+		} else {
+			$request->session()->remove('delivery_address');
+			$request->session()->remove('invoice_address');
+			$request->session()->remove('shipping');
 		}
 
 
@@ -296,6 +300,9 @@ class CheckoutController extends Controller
 
 				if ( $deliveryAddress ) {
 					$request->session()->put('delivery_address', $deliveryAddress->id );
+					$request->session()->remove('invoice_address');
+					$request->session()->remove('shipping');
+
 					return $request->wantsJson() ? json_encode([ 'result' => 'ok' ]) : redirect()->back();
 				}
 			}

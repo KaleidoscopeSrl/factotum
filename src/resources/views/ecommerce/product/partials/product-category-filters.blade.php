@@ -12,7 +12,8 @@
 
 			<div class="container-fluid col-no-pl col-no-pr">
 				<div class="row clearfix">
-					<div class="col col-xs-6 col-sm-6">
+
+					<div class="col col-xs-6 col-sm-6 @if ( isset($hideBrands) ) col-xs-push-6 @endif">
 
 						<div class="field field-inline">
 							<label for="items_per_page">Mostra</label>
@@ -26,22 +27,27 @@
 						</div>
 
 					</div>
-					<div class="col col-xs-12 col-sm-6">
 
-						@if ( isset($brands) && $brands->count() > 0 )
-							<div class="field field-inline">
-								<label for="brand_filter">Filtra per</label>
 
-								<select name="brand_filter" id="brand_filter">
-									<option value="">Brand</option>
-									@foreach( $brands as $br )
-										<option value="{{ $br->id }}" @if( !isset($brandsFiltered) && $brandFilter == $br->id ) selected @endif>{{ $br->name }}</option>
-									@endforeach
-								</select>
-							</div>
-						@endif
+					@if ( !isset($hideBrands) )
+						<div class="col col-xs-12 col-sm-6">
 
-					</div>
+							@if ( isset($brands) && $brands->count() > 0 )
+								<div class="field field-inline">
+									<label for="brand_filter">Filtra per</label>
+
+									<select name="brand_filter" id="brand_filter">
+										<option value="">Brand</option>
+										@foreach( $brands as $br )
+											<option value="{{ $br->id }}" @if( !isset($brandsFiltered) && $brandFilter == $br->id ) selected @endif>{{ $br->name }}</option>
+										@endforeach
+									</select>
+								</div>
+							@endif
+
+						</div>
+					@endif
+
 				</div>
 			</div>
 
