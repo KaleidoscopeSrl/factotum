@@ -60,7 +60,8 @@ class Order extends Model
 	}
 
 	public function products() {
-		return $this->belongsToMany('Kaleidoscope\Factotum\Product', 'order_product');
+		return $this->belongsToMany('Kaleidoscope\Factotum\Product', 'order_product')
+					->withPivot('product_variant_id', 'quantity', 'product_price', 'tax_data');
 	}
 
 

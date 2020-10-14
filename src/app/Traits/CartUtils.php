@@ -58,27 +58,32 @@ trait CartUtils
 	{
 		try {
 
+			$cart = null;
 			$user = $this->_getUser();
 
 			if ( isset($user) && $user ) {
 
 				if ( config('factotum.guest_cart') ) {
 
-					$cart = Cart::where( 'customer_id', $user->id )
-								->orderBy( 'id', 'DESC' )
-								->first();
+					$cartId = request()->session()->get('cart_id');
+
+					if ( $cartId ) {
+						$cart = Cart::find( $cartId );
+					}
 
 					if ( !$cart && !$dontCreateNew ) {
 						$cart = new Cart;
 						$cart->customer_id = $user->id;
 						$cart->expires_at  = date('Y-m-d H:i:s', strtotime( $this->_cartDuration ) );
 						$cart->save();
+
+						request()->session()->put( 'cart_id', $cart->id );
 					}
 
 				} else {
 
 					$cart = Cart::where( 'customer_id', $user->id )
-								->where('expires_at', '>=', date('Y-m-d H:i:s'))
+								->where( 'expires_at', '>=', date('Y-m-d H:i:s') )
 								->first();
 
 					if ( !$cart && !$dontCreateNew ) {
@@ -90,10 +95,10 @@ trait CartUtils
 
 				}
 
-				$cart->load('products');
-
-				return $cart;
-
+				if ( $cart ) {
+					$cart->load('products');
+					return $cart;
+				}
 			}
 
 			return null;
@@ -242,7 +247,7 @@ trait CartUtils
 	}
 
 
-	protected function _getShippingOptions( $countryCode = null)
+	protected function _getShippingOptions( $countryCode = null )
 	{
 		try {
 
@@ -286,6 +291,10 @@ trait CartUtils
 						];
 					}
 
+				}
+				
+				if ( $cartTotals ) {
+					
 				}
 
 			} else {
@@ -430,11 +439,15 @@ trait CartUtils
 						$cart->order_id = $order->id;
 						$cart->save();
 
+						if ( config('factotum.guest_cart') ) {
+							Cart::where('customer_id', $user->id)->delete();
+						}
+
 						request()->session()->remove('delivery_address');
 						request()->session()->remove('invoice_address');
 						request()->session()->remove('shipping');
-
-						$cart->delete();
+						request()->session()->remove('cart_id');
+						request()->session()->remove('user_id');
 					}
 
 					return $order;

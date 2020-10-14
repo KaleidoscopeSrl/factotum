@@ -22,8 +22,8 @@ class FactotumNewsletterSetup extends Migration
 			$table->string('title', 64);
 			$table->string('subject', 255);
 
-			$table->text('content')->nullable();
-			$table->text('design')->nullable();
+			$table->longText('content')->nullable();
+			$table->longText('design')->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();

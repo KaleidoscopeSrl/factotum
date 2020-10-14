@@ -28,6 +28,18 @@ class CheckoutController extends Controller
 
 	use CartUtils;
 
+	private function _redirectHome( Request $request )
+	{
+		if ( config('factotum.guest_cart') ) {
+			$request->session()->remove('user_id');
+			$request->session()->remove('delivery_address');
+			$request->session()->remove('invoice_address');
+			$request->session()->remove('shipping');
+		}
+
+		return redirect('/');
+	}
+
 	// STEP 1: the user must choose the delivery address (he can add a new one)
 	// STEP 2: the user must choose the invoice address (he can add a new one)
 	// STEP 3: the user must choose a shipping method
@@ -36,13 +48,19 @@ class CheckoutController extends Controller
 
 	public function prepareCheckout( Request $request )
 	{
-		$cart         = $this->_getCart( true );
-		$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
-		$totals       = $this->_getCartTotals( $cart );
+		$cart = $this->_getCart( true );
 
-		if ( $totals['totalProducts'] == 0 ) {
-			return redirect('/');
+		if ( $cart ) {
+			$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
+			$totals       = $this->_getCartTotals( $cart );
+
+			if ( $totals['totalProducts'] == 0 ) {
+				return $this->_redirectHome( $request );
+			}
+		} else {
+			return $this->_redirectHome( $request);
 		}
+
 
 		if ( !config('factotum.guest_cart') ) {
 			// 1 . Get all the customers addresses
@@ -57,6 +75,7 @@ class CheckoutController extends Controller
 												->orderBy('default_address', 'DESC')
 												->get();
 		} else {
+
 			$request->session()->remove('delivery_address');
 			$request->session()->remove('invoice_address');
 			$request->session()->remove('shipping');
@@ -408,14 +427,19 @@ class CheckoutController extends Controller
 				$cart->save();
 			}
 
+			$user = $this->_getUser();
+
 			$result = [
 				'result'        => 'ok',
 				'shipping'      => true,
 
+				'cart' => $cart,
+
 //				'delivery_address' => $request->session()->get('delivery_address'),
 //				'invoice_address'  => $request->session()->get('invoice_address'),
-//				'user' => $this->_getUser(),
 
+				'user_id' => $user->id,
+				'cart_id' => $cart->id,
 
 				'totalProducts' => $totals['totalProducts'],
 				'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
