@@ -60,6 +60,12 @@ class FactotumGenerateSitemap extends Command
 							);
 					}
 
+					if ( !file_exists(public_path('sitemaps/' . $contentType->content_type . '_sitemap.xml' )) ) {
+						$handle = fopen( public_path('sitemaps/' . $contentType->content_type . '_sitemap.xml' ), 'a+' );
+						fwrite( $handle, '', null);
+						fclose( $handle );
+					}
+
 					$sitemap->writeToFile( public_path('sitemaps/' . $contentType->content_type . '_sitemap.xml' ));
 
 					$this->info($contentType->content_type . '_sitemap.xml generated');
@@ -101,6 +107,13 @@ class FactotumGenerateSitemap extends Command
 				}
 
 				$finalSitemapIndexes[] = 'sitemaps/product_categories_sitemap.xml';
+
+				if ( !file_exists(public_path('sitemaps/product_categories_sitemap.xml' )) ) {
+					$handle = fopen( public_path('sitemaps/product_categories_sitemap.xml' ), 'a' );
+					fwrite( $handle, '', null);
+					fclose( $handle );
+				}
+
 				$sitemap->writeToFile( public_path('sitemaps/product_categories_sitemap.xml' ));
 
 				$this->info('product_categories_sitemap.xml generated');
@@ -121,6 +134,13 @@ class FactotumGenerateSitemap extends Command
 				}
 
 				$finalSitemapIndexes[] = 'sitemaps/products_sitemap.xml';
+
+				if ( !file_exists(public_path('sitemaps/products_sitemap.xml' )) ) {
+					$handle = fopen( public_path('sitemaps/products_sitemap.xml' ), 'a+' );
+					fwrite( $handle, '', null);
+					fclose( $handle );
+				}
+
 				$sitemap->writeToFile( public_path('sitemaps/products_sitemap.xml' ));
 
 				$this->info('products_sitemap.xml generated');
@@ -133,6 +153,13 @@ class FactotumGenerateSitemap extends Command
 			foreach( $finalSitemapIndexes as $index ) {
 				$sitemapIndex->add( '/' . $index );
 			}
+
+			if ( !file_exists(public_path('sitemap.xml' )) ) {
+				$handle = fopen( public_path('sitemap.xml' ), 'a+' );
+				fwrite( $handle, '', null);
+				fclose( $handle );
+			}
+
 			$sitemapIndex->writeToFile( public_path('sitemap.xml') );
 			$this->info('sitemap.xml index generated');
 		}

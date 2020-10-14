@@ -2,6 +2,8 @@
 
 return [
 
+	// TODO: Aggiungere colonne non nominabili per ecommerce e modulo campagne
+
 	'prohibited_content_types' => [
 		'users', 'user',
 		'profiles', 'profile',
@@ -56,6 +58,7 @@ return [
 		'fit'    => 'Fit'
 	],
 
+	// TODO: Aggiungere colonne non nominabili per ecommerce e modulo campagne
 
 	'prohibited_content_field_names' => [
 		'id',
@@ -165,6 +168,6 @@ return [
 	'min_free_shipping' => 65,
 
 
-	'version' => '5.0.11',
+	'version' => '5.0.17',
 
 ];

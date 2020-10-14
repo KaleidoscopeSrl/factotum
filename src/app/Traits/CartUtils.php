@@ -54,7 +54,7 @@ trait CartUtils
 	}
 	
 
-	protected function _getCart()
+	protected function _getCart( $dontCreateNew = false )
 	{
 		try {
 
@@ -62,13 +62,32 @@ trait CartUtils
 
 			if ( isset($user) && $user ) {
 
-				$cart = Cart::where( 'customer_id', $user->id )->where('expires_at', '>=', date('Y-m-d H:i:s'))->first();
+				if ( config('factotum.guest_cart') ) {
 
-				if ( !$cart ) {
-					$cart = new Cart;
-					$cart->customer_id = $user->id;
-					$cart->expires_at  = date('Y-m-d H:i:s', strtotime( $this->_cartDuration ) );
-					$cart->save();
+					$cart = Cart::where( 'customer_id', $user->id )
+								->orderBy( 'id', 'DESC' )
+								->first();
+
+					if ( !$cart && !$dontCreateNew ) {
+						$cart = new Cart;
+						$cart->customer_id = $user->id;
+						$cart->expires_at  = date('Y-m-d H:i:s', strtotime( $this->_cartDuration ) );
+						$cart->save();
+					}
+
+				} else {
+
+					$cart = Cart::where( 'customer_id', $user->id )
+								->where('expires_at', '>=', date('Y-m-d H:i:s'))
+								->first();
+
+					if ( !$cart && !$dontCreateNew ) {
+						$cart = new Cart;
+						$cart->customer_id = $user->id;
+						$cart->expires_at  = date('Y-m-d H:i:s', strtotime( $this->_cartDuration ) );
+						$cart->save();
+					}
+
 				}
 
 				$cart->load('products');

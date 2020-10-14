@@ -36,7 +36,7 @@ class CheckoutController extends Controller
 
 	public function prepareCheckout( Request $request )
 	{
-		$cart         = $this->_getCart();
+		$cart         = $this->_getCart( true );
 		$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
 		$totals       = $this->_getCartTotals( $cart );
 
@@ -168,7 +168,7 @@ class CheckoutController extends Controller
 		$data = $request->all();
 
 		try {
-			$cart = $this->_getCart();
+			$cart = $this->_getCart( true );
 
 			if ( $cart ) {
 				$order = $this->_createOrderFromCart( $cart );
@@ -400,7 +400,7 @@ class CheckoutController extends Controller
 			$notes    = $request->input('notes', null);
 			$request->session()->put('shipping', $shipping );
 
-			$cart   = $this->_getCart();
+			$cart   = $this->_getCart( true );
 			$totals = $this->_getCartTotals($cart);
 
 			if ( $notes ) {
@@ -415,6 +415,7 @@ class CheckoutController extends Controller
 //				'delivery_address' => $request->session()->get('delivery_address'),
 //				'invoice_address'  => $request->session()->get('invoice_address'),
 //				'user' => $this->_getUser(),
+
 
 				'totalProducts' => $totals['totalProducts'],
 				'totalPartial'  => '€ ' . number_format( $totals['totalPartial'], 2, ',', '.' ),
@@ -434,7 +435,7 @@ class CheckoutController extends Controller
 	public function getShipping( Request $request, $countryCode = null )
 	{
 		$shippingOptions = $this->_getShippingOptions( $countryCode );
-		$cart            = $this->_getCart();
+		$cart            = $this->_getCart( true );
 		$totals          = $this->_getCartTotals($cart);
 
 		$view = 'factotum::ecommerce.ajax.shipping-options';
