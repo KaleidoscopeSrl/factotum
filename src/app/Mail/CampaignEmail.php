@@ -67,6 +67,7 @@ class CampaignEmail extends Mailable implements ShouldQueue
 			$view = 'email.campaign.campaign_email';
 		}
 
+		$this->theme = 'empty';
 
 		$email = $this->subject( $this->_subject )
 						->markdown( $view, $this->_viewData );
