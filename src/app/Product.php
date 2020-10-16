@@ -103,7 +103,11 @@ class Product extends Model
 
 			// Main image
 			if ( isset($image) && is_array($image) && count($image) > 0 ) {
-				$attributes['image'] = $image[0]['id'];
+				if ( isset($image[0]['id']) ) {
+					$attributes['image'] = $image[0]['id'];
+				} else {
+					$attributes['image'] = $image[0];
+				}
 			} else if ( isset($image) && is_string($image) ) {
 				$attributes['image'] = ( substr($image, 0, 4) == 'http' ? $image : null );
 			} else {

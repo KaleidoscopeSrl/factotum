@@ -14,5 +14,10 @@ return [
 	'max_quantity_reached' => 'Quantità massima raggiunta!',
 
 	'free_shipping' => 'Gratuita',
-	'shipping_not_calculated' => '<small>Calcolata alla cassa</small>'
+	'shipping_not_calculated' => '<small>Calcolata alla cassa</small>',
+
+	'discount_code_form_title'            => 'Codice Sconto',
+	'discount_code_form_placeholder'      => 'Codice Sconto',
+	'discount_code_form_apply_cta_label'  => 'Applica',
+	'discount_code_form_remove_cta_label' => 'Rimuovi',
 ];

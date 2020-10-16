@@ -14,6 +14,11 @@ return [
 	'max_quantity_reached' => 'Max quantity reached!',
 
 	'free_shipping' => 'Free',
-	'shipping_not_calculated' => '<small>Calculated on checkout</small>'
+	'shipping_not_calculated' => '<small>Calculated on checkout</small>',
+
+	'discount_code_form_title'            => 'Coupon Code',
+	'discount_code_form_placeholder'      => 'Coupon Code',
+	'discount_code_form_apply_cta_label'  => 'Apply',
+	'discount_code_form_remove_cta_label' => 'Remove',
 
 ];

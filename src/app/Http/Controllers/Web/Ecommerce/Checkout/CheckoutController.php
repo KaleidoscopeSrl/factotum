@@ -37,6 +37,7 @@ class CheckoutController extends Controller
 			$request->session()->remove('shipping');
 		}
 
+		// TODO: redirect to shop cart
 		return redirect('/');
 	}
 
@@ -470,7 +471,7 @@ class CheckoutController extends Controller
 
 		return $request->wantsJson() ? json_encode([
 			'result'           => 'ok',
-			'shipping_options' => view( $view )->with([ 'shippingOptions' => $shippingOptions, 'total' => $totals['total'] ])->render()
+			'shipping_options' => view( $view )->with([ 'shippingOptions' => $shippingOptions, 'totalPartial' => $totals['totalPartial'] ])->render()
 		]) : redirect()->back();
 	}
 

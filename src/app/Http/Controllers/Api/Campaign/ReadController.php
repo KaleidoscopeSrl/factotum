@@ -28,7 +28,6 @@ class ReadController extends Controller
 		$sort      = $request->input('sort');
 		$direction = $request->input('direction');
 
-
 		if ( !$sort ) {
 			$sort = 'id';
 		}
@@ -40,6 +39,8 @@ class ReadController extends Controller
 		$query = Campaign::query();
 		$query->with('campaign_template');
 		$query->orderBy($sort, $direction);
+
+		$total = $query->count();
 
 		if ( $limit ) {
 			$query->take($limit);
@@ -57,7 +58,7 @@ class ReadController extends Controller
 			}
 		}
 
-		return response()->json( [ 'result' => 'ok', 'campaigns' => $campaigns ]);
+		return response()->json( [ 'result' => 'ok', 'campaigns' => $campaigns, 'total' => $total ]);
 	}
 
 

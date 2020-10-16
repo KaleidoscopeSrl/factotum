@@ -44,6 +44,8 @@ class ReadController extends Controller
 		$query->with('customer.profile');
 		$query->orderBy($sort, $direction);
 
+		$total = $query->count();
+
 		if ( $limit ) {
 			$query->take($limit);
 		}
@@ -52,9 +54,9 @@ class ReadController extends Controller
 			$query->skip($offset);
 		}
 
-		$products = $query->get();
+		$discountCodes = $query->get();
 
-		return response()->json( [ 'result' => 'ok', 'discount_codes' => $products ]);
+		return response()->json( [ 'result' => 'ok', 'discount_codes' => $discountCodes, 'total' => $total ]);
 	}
 
 

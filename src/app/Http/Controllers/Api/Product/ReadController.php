@@ -68,7 +68,7 @@ class ReadController extends Controller
 
 		}
 
-		$totalCountQuery = clone $query;
+		$total = $query->count();
 
 		$query->orderBy($sort, $direction);
 
@@ -82,7 +82,7 @@ class ReadController extends Controller
 
 		$products = $query->get();
 
-        return response()->json( [ 'result' => 'ok', 'products' => $products, 'total' => $totalCountQuery->count() ]);
+        return response()->json( [ 'result' => 'ok', 'products' => $products, 'total' => $total ]);
     }
 
 

@@ -38,6 +38,8 @@ class ReadController extends Controller
 		$query = CampaignTemplate::query();
 		$query->orderBy($sort, $direction);
 
+		$total = $query->count();
+
 		if ( $limit ) {
 			$query->take($limit);
 		}
@@ -48,7 +50,7 @@ class ReadController extends Controller
 
 		$campaignTemplates = $query->get();
 
-		return response()->json( [ 'result' => 'ok', 'campaign_templates' => $campaignTemplates ]);
+		return response()->json( [ 'result' => 'ok', 'campaign_templates' => $campaignTemplates, 'total' => $total ]);
 	}
 
 

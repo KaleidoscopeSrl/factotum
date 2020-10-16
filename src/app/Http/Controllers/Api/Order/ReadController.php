@@ -83,6 +83,7 @@ class ReadController extends Controller
 			$query->orderBy($sort, $direction);
 		}
 
+		$total = $query->count();
 
         if ( $limit ) {
 			$query->take($limit);
@@ -93,7 +94,6 @@ class ReadController extends Controller
 		}
 
 		$orders = $query->get();
-		$total  = ( $filtersActive ? $orders->count() : Order::count() );
 
         return response()->json( [ 'result' => 'ok', 'orders' => $orders, 'total' => $total ]);
     }
