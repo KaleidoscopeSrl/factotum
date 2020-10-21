@@ -237,7 +237,7 @@ trait CartUtils
 
 				}
 
-				$partialPart   = $initialTotalPartial - $totalPartial;
+				$partialPart = $initialTotalPartial - $totalPartial;
 				if ( !config('factotum.product_vat_included') ) {
 					$taxesPart = $initialTotalTaxes - $totalTaxes;
 				} else {

@@ -56,6 +56,8 @@ class ReadController extends Controller
 				'discountCode'  => $this->_getTemporaryDiscountCode(),
 			])->render();
 
+			$totals['totalPartial'] += $totals['totalDiscount'];
+
 			$result = [
 				'result'        => 'ok',
 				'cart_id'       => $cart->id,
