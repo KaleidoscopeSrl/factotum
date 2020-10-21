@@ -37,9 +37,13 @@ class CheckoutController extends Controller
 			$request->session()->remove('shipping');
 		}
 
-		// TODO: redirect to shop cart
-		return redirect('/');
+		if ( config('factotum.shop_base_url') ) {
+			return redirect('/' . config('factotum.shop_base_url'));
+		} else {
+			return redirect('/');
+		}
 	}
+
 
 	// STEP 1: the user must choose the delivery address (he can add a new one)
 	// STEP 2: the user must choose the invoice address (he can add a new one)
@@ -150,10 +154,12 @@ class CheckoutController extends Controller
 
 					// All the totals
 					'totalProducts'     => $totals['totalProducts'],
+					'totalDiscount'     => $totals['totalDiscount'],
 					'totalPartial'      => $totals['totalPartial'],
 					'totalTaxes'        => $totals['totalTaxes'],
 					'totalShipping'     => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
 					'total'             => $totals['total'],
+					'discountCode'      => $this->_getTemporaryDiscountCode(),
 
 					// Possible options
 					'deliveryAddresses' => ( isset($deliveryAddresses) ? $deliveryAddresses : null ),

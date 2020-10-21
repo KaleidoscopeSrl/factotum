@@ -25,12 +25,15 @@ class ReadController extends Controller
 		$result = [
 			'result'        => 'ok',
 			'totalProducts' => 0,
+			'totalDiscount' => 0,
 			'totalPartial'  => 0,
 			'totalTaxes'    => 0,
 			'totalShipping' => 0,
 			'total'         => 0,
 			'html'          => ''
 		];
+		
+		$cartPage = $request->input('cart_page');
 
 		if ( $cart ) {
 			$totals       = $this->_getCartTotals( $cart );
@@ -44,16 +47,20 @@ class ReadController extends Controller
 				'cart'          => $cart,
 				'cartProducts'  => $cartProducts,
 				'totalProducts' => $totals['totalProducts'],
+				'totalDiscount' => $totals['totalDiscount'],
 				'totalPartial'  => $totals['totalPartial'],
 				'totalTaxes'    => $totals['totalTaxes'],
 				'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
 				'total'         => $totals['total'],
+				'cartPage'      => $cartPage,
+				'discountCode'  => $this->_getTemporaryDiscountCode(),
 			])->render();
 
 			$result = [
 				'result'        => 'ok',
 				'cart_id'       => $cart->id,
 				'totalProducts' => $totals['totalProducts'],
+				'totalDiscount' => '€' . number_format( $totals['totalDiscount'], 2, ',', '.' ),
 				'totalPartial'  => '€' . number_format( $totals['totalPartial'], 2, ',', '.' ),
 				'totalTaxes'    => '€' . number_format( $totals['totalTaxes'], 2, ',', '.' ),
 				'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
@@ -83,10 +90,12 @@ class ReadController extends Controller
 			'cart'          => $cart,
 			'cartProducts'  => $cartProducts,
 			'totalProducts' => $totals['totalProducts'],
+			'totalDiscount' => $totals['totalDiscount'],
 			'totalPartial'  => $totals['totalPartial'],
 			'totalTaxes'    => $totals['totalTaxes'],
 			'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
 			'total'         => $totals['total'],
+			'discountCode'  => $this->_getTemporaryDiscountCode(),
 			'metatags' => [
 				'title'       => Lang::get('factotum::ecommerce_cart.cart_title'),
 				'description' => Lang::get('factotum::ecommerce_cart.cart_description')

@@ -64,6 +64,9 @@ class Order extends Model
 					->withPivot('product_variant_id', 'quantity', 'product_price', 'tax_data');
 	}
 
+	public function discount_code() {
+		return $this->hasOne('Kaleidoscope\Factotum\DiscountCode', 'id', 'discount_code_id');
+	}
 
 	public function setTransactionId( $transactionId = '' )
 	{

@@ -176,6 +176,7 @@ trait CartUtils
 		$totalTaxes    = 0;
 		$totalShipping = 0;
 		$totalProducts = 0;
+		$totalDiscount = 0;
 
 		if ( isset($cart) ) {
 
@@ -194,7 +195,59 @@ trait CartUtils
 
 			}
 
-			$total  = $totalPartial;
+			// Apply discount code
+			$discountCode = $this->_getTemporaryDiscountCode();
+
+			if ( $discountCode ) {
+
+				$initialTotalPartial = $totalPartial;
+				$initialTotalTaxes   = $totalTaxes;
+
+				if ( $discountCode->type == 'percentage' ) {
+					$totalPartial = $totalPartial - ( $totalPartial / 100 * $discountCode->discount );
+
+					if ( $totalPartial < 0 ) {
+						$totalPartial = 0;
+					}
+
+					$totalTaxes = $totalTaxes - ( $totalTaxes / 100 * $discountCode->discount );
+					if ( $totalTaxes < 0 ) {
+						$totalTaxes = 0;
+					}
+
+				} elseif ( $discountCode->type == 'price' ) {
+
+					if ( $discountCode->discount > $totalPartial ) {
+						$totalPartial = 0;
+						$totalTaxes = 0;
+					} else {
+						$perc = $discountCode->discount / $totalPartial * 100;
+
+						$totalPartial = $totalPartial - ( $totalPartial / 100 * $perc );
+
+						if ( $totalPartial < 0 ) {
+							$totalPartial = 0;
+						}
+
+						$totalTaxes = $totalTaxes - ( $totalTaxes / 100 * $perc );
+						if ( $totalTaxes < 0 ) {
+							$totalTaxes = 0;
+						}
+					}
+
+				}
+
+				$partialPart   = $initialTotalPartial - $totalPartial;
+				if ( !config('factotum.product_vat_included') ) {
+					$taxesPart = $initialTotalTaxes - $totalTaxes;
+				} else {
+					$taxesPart = 0;
+				}
+				$totalDiscount = $partialPart + $taxesPart;
+			}
+
+
+			$total = $totalPartial;
 			if ( !config('factotum.product_vat_included') ) {
 				$total += $totalTaxes;
 			}
@@ -216,6 +269,7 @@ trait CartUtils
 			'totalTaxes'    => $totalTaxes,
 			'totalShipping' => $totalShipping,
 			'totalProducts' => $totalProducts,
+			'totalDiscount' => $totalDiscount,
 		];
 	}
 
@@ -361,6 +415,18 @@ trait CartUtils
 	}
 
 
+	protected function _getTemporaryDiscountCode()
+	{
+		$discountCode = request()->session()->get( 'discount_code' );
+
+		if ( $discountCode ) {
+			return DiscountCode::find( $discountCode );
+		}
+
+		return null;
+	}
+
+
 	protected function _createOrderFromCart( Cart $cart )
 	{
 		try {
@@ -382,8 +448,11 @@ trait CartUtils
 				$order->total_tax      = $totals['totalTaxes'];
 				$order->total_shipping = $totals['totalShipping'];
 
-				// TODO: manage discount code on purchasing
-				// $order->discount_code_id = $user->id;
+				$discountCode = $this->_getTemporaryDiscountCode();
+
+				if ( $discountCode ) {
+					$order->discount_code_id = $discountCode->id;
+				}
 
 				$order->phone = $user->profile->phone;
 
@@ -448,6 +517,7 @@ trait CartUtils
 						request()->session()->remove('shipping');
 						request()->session()->remove('cart_id');
 						request()->session()->remove('user_id');
+						request()->session()->remove('discount_code');
 					}
 
 					return $order;

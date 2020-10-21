@@ -40,6 +40,7 @@ class ReadController extends Controller
 
 		}
 
+		$query->with('orders');
 		$query->with('customer');
 		$query->with('customer.profile');
 		$query->orderBy($sort, $direction);
@@ -62,7 +63,7 @@ class ReadController extends Controller
 
 	public function getList( Request $request, $eventId )
 	{
-		$discountCodes = DiscountCode::where( 'event_id', $eventId )->with('tickets')->get();
+		$discountCodes = DiscountCode::all();
 
 		if ( $discountCodes->count() > 0 ) {
 			return response()->json( [ 'result' => 'ok', 'discount_codes'  => $discountCodes ] );
@@ -79,7 +80,7 @@ class ReadController extends Controller
 		if ( $discountCode ) {
 			$discountCode->load('customer');
 			$discountCode->load('customer.profile');
-			$discountCode->load('products');
+			$discountCode->load('orders');
 
 			return response()->json( [ 'result' => 'ok', 'discount_code'  => $discountCode->toArray() ] );
 		}

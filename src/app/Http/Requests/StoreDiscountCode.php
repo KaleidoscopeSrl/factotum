@@ -20,7 +20,6 @@ class StoreDiscountCode extends CustomFormRequest
 			'amount'      => 'required|numeric',
 			'type'        => 'required',
 			'customer_id' => 'required_if:all_customers,false',
-			'products'    => 'required',
 		];
 
 		$id = request()->route('id');

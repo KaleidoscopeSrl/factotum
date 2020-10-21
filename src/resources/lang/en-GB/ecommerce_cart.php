@@ -18,7 +18,8 @@ return [
 
 	'discount_code_form_title'            => 'Coupon Code',
 	'discount_code_form_placeholder'      => 'Coupon Code',
-	'discount_code_form_apply_cta_label'  => 'Apply',
+	'discount_code_form_apply_cta_label'  => 'apply',
 	'discount_code_form_remove_cta_label' => 'Remove',
+	'discount_code_valid'                 => 'Valid!'
 
 ];

@@ -2,18 +2,22 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Cart;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
-use Kaleidoscope\Factotum\DiscountCode;
+
 use Kaleidoscope\Factotum\Http\Requests\AddProductToCart;
 use Kaleidoscope\Factotum\Http\Requests\RemoveProductFromCart;
 use Kaleidoscope\Factotum\Http\Requests\DropProductFromCart;
+use Kaleidoscope\Factotum\Http\Requests\ApplyDiscountCodeOnCart;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 
 use Kaleidoscope\Factotum\Product;
 use Kaleidoscope\Factotum\Tax;
+use Kaleidoscope\Factotum\DiscountCode;
+use Kaleidoscope\Factotum\Order;
 use Kaleidoscope\Factotum\Traits\CartUtils;
 
 
@@ -111,5 +115,47 @@ class UpdateController extends Controller
 		}
 	}
 
+
+
+	public function applyDiscountCode( ApplyDiscountCodeOnCart $request )
+	{
+		try {
+
+			$data = $request->all();
+
+			$discountCode = DiscountCode::where( 'code', $data['discount_code'] )->first();
+			$usedOnOrders = Order::where('discount_code_id', $discountCode->id)->count();
+
+			if ( $discountCode && $discountCode->amount == $usedOnOrders ) {
+				return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => 'Discount Code already used.' ]) : view($this->_getServerErrorView());
+			}
+
+			$request->session()->put('discount_code', $discountCode->id );
+
+			return $request->wantsJson() ? json_encode(['result' => 'ok']) : redirect()->back();
+
+		} catch ( \Exception $ex ) {
+
+			session()->flash( 'error', $ex->getMessage() );
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
+
+		}
+	}
+
+
+
+	public function removeDiscountCode( Request $request )
+	{
+		try {
+
+			$request->session()->remove('discount_code');
+
+			return $request->wantsJson() ? json_encode(['result' => 'ok']) : redirect()->back();
+
+		} catch ( \Exception $ex ) {
+			session()->flash( 'error', $ex->getMessage() );
+			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
+		}
+	}
 
 }

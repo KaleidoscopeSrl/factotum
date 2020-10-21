@@ -113,7 +113,7 @@ class ReadController extends Controller
 
         if ( $order ) {
         	$order->total = $order->total_net + ( config('factotum.product_vat_included') ? 0 : $order->total_tax ) + $order->total_shipping;
-			$order->load([ 'customer', 'customer.profile' ]);
+			$order->load([ 'customer', 'discount_code', 'customer.profile' ]);
 			$order->products = OrderProduct::with([ 'product', 'product_variant' ])
 											->where( 'order_id', $order->id )
 											->get();
