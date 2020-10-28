@@ -26,7 +26,24 @@
 			"content_types": "Content Types",
 			"custom_fields": "Custom Fields",
 
-		"languages": "Languages"
+		"campaign": "Campaigns",
+			"newsletters": "Newsletter",
+			"newsletter_templates": "Template",
+
+		"languages": "Languages",
+
+		"shop": "Shop",
+			"customers": "Customers",
+			"brands": "Brands",
+			"taxes": "Taxes",
+			"products": "Products",
+			"product_categories": "Product Categories",
+			"discount_codes": "Discount Codes",
+			"customer_addresses": "Addresses",
+			"catalogue": "Catalogue",
+			"payments": "Payments",
+			"orders": "Orders",
+			"carts": "Carts"
 	},
 
 	"breadcrumbs": {
@@ -68,8 +85,55 @@
 
 		"content-field": "Custom Fields",
 			"new_content_field": "New Custom Field",
-			"edit_content_field": "Edit Custom Field"
+			"edit_content_field": "Edit Custom Field",
 
+		"brand": "Brands",
+			"new_brand": "New Brand",
+			"edit_brand": "Edit Brand",
+
+		"product-category": "Product Categories",
+			"new_product_category": "New Product Category",
+			"edit_product_category": "Edit Product Category",
+
+		"product": "Products",
+			"new_product": "New Product",
+			"edit_product": "Edit Product",
+
+		"tax": "Taxes",
+			"new_tax": "New Tax",
+			"edit_tax": "Edit Tax",
+
+		"discount-code": "Discount Codes",
+			"new_discount_code": "New Discount Code",
+			"edit_discount_code": "Edit Discount Code",
+
+		"customer": "Customers",
+			"new_customer": "New Customer",
+			"edit_customer": "Edit Customer",
+
+		"customer-address": "Customer Addresses",
+			"new_customer_address": "New Customer Address",
+			"edit_customer_address": "Edit Customer Address",
+
+		"order": "Orders",
+			"new_order": "New Order",
+			"edit_order": "Edit Order",
+
+		"cart": "Carts",
+			"new_cart": "New Cart",
+			"detail_cart": "Details Cart",
+
+		"campaign": "Campaigns",
+			"new_campaign": "New Campaign",
+			"edit_campaign": "Edit Campaign",
+
+		"campaign-template": "Campaign Template",
+			"new_campaign_template": "New Campaign Template",
+			"edit_campaign_template": "Edit Campaign Template",
+
+		"product-variant": "Product Variants",
+			"new_product_variant": "New Product Variant",
+			"edit_product_variant": "Edit Product Variant"
 	},
 
 	"deleteDialogs": {
@@ -164,7 +228,6 @@
 	},
 
 
-
 	"capabilities": {
 		"title": "Capabilities",
 		"new_capability": "New Capability",
@@ -183,6 +246,8 @@
 
 
 
+
+
 	"roles": {
 		"title": "Roles",
 		"new_role": "New Role",
@@ -193,6 +258,14 @@
 		"manage_users": "Manage Users",
 		"manage_media": "Manage Media",
 		"manage_settings": "Manage Settings",
+		"manage_newsletters": "Manage Newsletters",
+		"manage_brands": "Manage Brands",
+		"manage_products": "Manage Producs",
+		"manage_orders": "Manage Orders",
+		"manage_discount_codes": "Manage Discount Codees",
+		"manage_product_categories": "Manage Products Categories",
+		"manage_carts": "Manage Carts",
+		"manage_taxes": "Manage Taxes",
 		"save_success": "Role saved!"
 	},
 
@@ -215,7 +288,8 @@
 		"first_name": "First Name",
 		"last_name": "Last Name",
 		"avatar_line_1": "Size 100x100. Format .JPG / .PNG. Max 2MB.",
-		"save_success": "User saved!"
+		"save_success": "User saved!",
+		"created_at": "Registration date"
 	},
 
 	"deleteUserDialog": {
@@ -231,6 +305,7 @@
 	"custom_fields": {
 		"title": "Custom Fields",
 		"fields": "fields",
+		"hidden": "Hidden Field",
 		"text": "Text Field",
 		"email": "Email",
 		"url": "URL",
@@ -282,7 +357,7 @@
 		"resize": "Resize",
 		"fit": "Fit",
 		"max_file_size": "Max File Size (in MB)",
-		"max_file_size_hint": "Insert the max file size for an uploaded file, the value must be below 16",
+		"max_file_size_hint": "Insert the max file size for an uploaded file, the value must be below 256",
 		"allowed_types": "Allowed Types",
 		"allowed_types_hint": "Insert the list of accepted extensions",
 		"accepted_extensions": "Allowed Types..."
@@ -346,8 +421,6 @@
 		"operation_completed": "Operation completed!"
 	},
 
-
-
 	"sitemap": {
 		"title": "Sitemap Generator",
 		"line_1": "Use this tool to select the contents that you want to include in the sitemap.",
@@ -360,8 +433,11 @@
 
 
 
+
+
 	"validations": {
 		"required": "The field is required.",
+		"invalid": "The field is invalid.",
 		"role_required": "The field Role is required.",
 		"email_required": "The field Email is required.",
 		"email_not_valid": "The field Email is not in the right format.",
@@ -372,7 +448,9 @@
 		"last_name_required": "The field Cognome is required.",
 		"content_type_required": "The field Content Type is required.",
 		"parent_category_not_valid": "Parent Category not valid",
-		"seo_focus_key": "The Focus Keyword is not in the right format. Only numbers, letters and spaces allowed."
+		"file_not_valid_extension": "The file does not have a valid extension.",
+		"file_too_big": "The file is too big.",
+		"max": "The field has a value greater that allowed one"
 	},
 
 	"add": "Add",
@@ -395,10 +473,20 @@
 	"status": "Status",
 	"actions": "Actions",
 	"formats": "Formats",
-
 	"mandatory": "Mandatory",
+	"readonly": "Read-Only",
 	"back_to_list": "Back to List",
-
+	"filter": "Filter",
+	"filter_by": "Filter by:",
+	"search_by_name": "Search by name",
+	"search_by_category": "Search by category",
+	"from_date": "From Date",
+	"to_date": "To Date",
+	"actions_group": "Actions on Group",
+	"delete": "Delete",
+	"set_status": "Set Status",
+	"apply": "Apply",
+	"refresh": "Refresh",
 
 	"paginator": {
 		"prev_page": "Previous Page",
@@ -462,6 +550,282 @@
 				"external_links": "The Content contains external links. Cool!"
 			}
 		}
-	}
+	},
 
+	"brands": {
+		"code": "Code",
+		"brand": "Brand",
+		"order_no": "Order no.",
+		"name": "Name",
+
+		"save_success": "Brand saved!"
+	},
+
+	"deleteBrandDialog": {
+		"success": "Brand successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+	"product_categories": {
+		"label": "Label",
+		"name": "Name",
+		"parent_category": "Parent Category",
+		"no_parent": "No parent",
+		"description": "Description",
+		"image": "Image",
+		"icon": "Icon",
+		"order_no": "Order no.",
+		"save_success": "Product Category saved!"
+	},
+
+	"deleteProductCategoryDialog": {
+		"success": "Product Category successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+	"products": {
+		"details": "Product Details",
+		"label": "Label",
+		"code": "Code",
+		"name": "Name",
+		"brand": "Brand",
+		"product_category": "Product Category",
+		"parent_category": "Parent Category",
+		"no_parent": "No parent",
+		"new_product": "New Product",
+		"product_active": "Product Active",
+		"basic_price": "Basic Price",
+		"discount_price": "Discount Price",
+		"basic_price_no_vat": "Basic Price (NO VAT)",
+		"discount_price_no_vat": "Discount Price (NO VAT)",
+		"barcode": "Barcode",
+		"featured": "Featured",
+		"has_variants": "Has variants",
+		"tax": "Applied Tax",
+		"last_update": "Last Update",
+		"created_at": "Created at",
+		"order_no": "Order no",
+		"description": "Description",
+		"total_active_products": "Total active products",
+		"total_inactive_products": "Total inactive products",
+		"save_success": "Product saved!",
+		"seo_title": "SEO Title",
+		"seo_description": "SEO Description",
+		"seo_canonical_url": "SEO Canonical URL",
+		"seo_robots_indexing": "Meta Robots Indexing",
+		"seo_robots_following": "Meta Robots Following",
+		"seo_focus_key": "Focus Keyword",
+		"social_sharing": "Social Sharing",
+		"set_category": "Set Category",
+		"activate_products": "Activate Products",
+		"deactivate_products": "Deactivate Products",
+		"duplicate_success": "Product duplicated with success!",
+		"multiple_help": "Drag and Drop here the products that you want to associate",
+		"quantity": "Quantity",
+		"product_variants": "Product Variants",
+		"additional_content": "Additional Content",
+		"related_products": "Related products"
+	},
+
+	"deleteProductDialog": {
+		"success": "Product successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+	"taxes": {
+		"amount": "Amount",
+		"name": "Name",
+		"description": "Description on invoice",
+		"save_success": "Tax saved!"
+	},
+
+	"deleteTaxDialog": {
+		"success": "Tax successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+	"discount_codes": {
+		"amount": "Amount",
+		"code": "Discount Code",
+		"discount": "Discount",
+		"type": "Type",
+		"euro_discount": "EURO Discount",
+		"percentage_discount": "PERCENTAGE Discount",
+		"select_products": "Select the products to which apply the discount",
+		"select_customer": "Select the customer",
+		"all_the_customers": "All the customers",
+		"customer": "Customer",
+		"save_success": "Discount Code saved!"
+	},
+
+	"deleteDiscountCodeDialog": {
+		"success": "Discount Code successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+	"customers": {
+		"title": "Customers",
+		"new_customer": "New Customer",
+		"edit_customer": "Edit Customer",
+		"password_line_1": "Password length almost 8 characters. If you don't want to change the password, keep the text field empty.",
+		"first_name": "First Name",
+		"last_name": "Last Name",
+		"avatar_line_1": "Size 100x100. Format .JPG / .PNG. Max 2MB.",
+		"save_success": "Customer saved!"
+	},
+
+	"deleteCustomerDialog": {
+		"success": "Customer successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+	"customer_addresses": {
+		"title": "Customer Addresses",
+		"new_customer_address": "New Customer Address",
+		"edit_customer_address": "Edit Customer Address",
+		"customer": "Customer",
+		"address": "Address",
+		"zip": "Zip",
+		"city": "City",
+		"province": "Province",
+		"country": "Country",
+		"type": "Type",
+		"invoice": "Invoice",
+		"delivery": "Delivery",
+		"save_success": "Customer Address saved!"
+	},
+
+	"deleteCustomerAddressDialog": {
+		"success": "Customer Address successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+
+	"orders": {
+		"title": "Orders",
+		"new_order": "New Order",
+		"edit_order": "Edit Order",
+		"customer": "Customer",
+		"delivery": "Delivery",
+		"status": "Status",
+		"total": "Total",
+		"payment_type": "Payment Method",
+
+		"progress": "Progress",
+		"waiting_payment": "Waiting Payment",
+		"payment_accepted": "Payment accepted",
+		"waiting": "Waiting",
+		"shipped": "Shipped",
+		"done": "Done",
+		"canceled": "Canceled",
+		"refunded": "Refunded",
+		"failed": "Failed",
+
+		"save_success": "Order saved!",
+		"stripe": "Debit/Credit card",
+		"paypal": "PayPal",
+		"bank-transfer": "Bank Transfer",
+		"custom-payment": "Custom Payment",
+
+		"order_date": "Order Date",
+		"total": "Total",
+		"products": "Products",
+		"change_order_status": "Change order status",
+		"notes": "Notes",
+		"delivery_address": "Delivery Address",
+		"invoice_address": "Invoice Address",
+		"payment": "Payment",
+		"transaction_id": "Transaction ID",
+		"amount": "Amount",
+		"product": "Product",
+		"product_price": "Product price",
+		"product_price_with_vat": "Product price (VAT inc)",
+		"product_price_without_vat": "Product price (NO VAT inc)",
+		"quantity": "Quantity",
+		"product_tax": "Product taxes",
+		"product_total": "Total amount",
+		"product_total_with_vat": "Total amount (VAT inc)",
+		"product_total_without_vat": "Total amount (NO VAT inc)",
+		"created_at": "Order Date"
+	},
+
+	"deleteOrderDialog": {
+		"success": "Order successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+	"carts": {
+		"order_id": "#Relative Order",
+		"customer": "Customer",
+		"total": "Total",
+		"expired": "Abandoned Cart",
+		"deleted": "Deleted Cart",
+		"expires_at": "Expires at",
+		"cart_date": "Cart Date",
+		"products": "Products",
+		"notes": "Notes",
+		"product": "Product",
+		"product_price": "Product price (without taxes)",
+		"quantity": "Quantity",
+		"product_tax": "Product Taxes",
+		"product_total": "Total amount (with taxes)"
+	},
+
+	"deleteCartDialog": {
+		"success": "Cart successfully removed",
+		"cancel": "Operation canceled"
+	},
+
+	"campaigns": {
+		"title": "Title",
+		"template": "Template",
+		"new_template": "New Template",
+		"recipients": "Recipients",
+		"sent_at": "Sent at",
+		"marketing_list_guid": "Recipients List",
+		"or_create_new_template": "Or create a new template",
+		"save_success": "Campaign successfully saved!",
+		"not_sent_yet": "Not sent yet",
+		"marketing_list": "Marketing List",
+		"send": "Send Campaign",
+		"send_campaign_title": "Are you sure to send the campaign?",
+		"send_campaign_text": "Do you confirm?",
+		"total_email_sent": "email sent successfully!"
+	},
+
+	"campaign_templates": {
+		"title": "Title",
+		"subject": "Subject",
+		"attachments": "Attachments",
+		"save_success": "Campaign Template successfully saved!"
+	},
+
+	"campaign_emails": {
+		"title": "Recipients",
+		"search_recipient": "Search recipient...",
+		"recipient_fullname": "Fullname",
+		"status": "Email status",
+		"recipient_activities": "Recipient activities",
+		"status_unkwown": "Status Unkwown",
+		"delivered": "Delivered",
+		"opened": "Opened",
+		"clicked": "Clicked",
+		"permanent_failure": "Permanent failure",
+		"temporary_failure": "Temporary failure",
+		"unsubscribed": "Unsubscribed",
+		"complained": "Spam Complained"
+	},
+
+	"product_variants": {
+		"label": "Label",
+		"quantity": "Quantity",
+		"description": "Description",
+		"max_quantity_reached": "Max product variants quantity reached",
+		"save_success": "Product Variant successfully saved!"
+	},
+
+	"deleteProductVariantDialog": {
+		"success": "Product Variant successfully removed",
+		"cancel": "Operation canceled"
+	}
 }

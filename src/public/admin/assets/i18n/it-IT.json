@@ -26,7 +26,24 @@
 			"content_types": "Tipi di contenuto",
 			"custom_fields": "Campi Personalizzati",
 
-		"languages": "Lingue"
+		"campaign": "Campagne",
+			"newsletters": "Newsletter",
+			"newsletter_templates": "Template",
+
+		"languages": "Lingue",
+
+		"shop": "Shop",
+			"customers": "Clienti",
+			"brands": "Marche",
+			"products": "Prodotti",
+			"product_categories": "Categorie Prodotto",
+			"taxes": "Tasse",
+			"discount_codes": "Codici Sconto",
+			"customer_addresses": "Indirizzi",
+			"catalogue": "Catalogo",
+			"payments": "Pagamenti",
+			"orders": "Ordini",
+			"carts": "Carrelli"
 	},
 
 	"breadcrumbs": {
@@ -68,8 +85,55 @@
 
 		"content-field": "Campi Personalizzati",
 			"new_content_field": "Nuovo Campo Personalizzato",
-			"edit_content_field": "Modifica Campo Personalizzato"
+			"edit_content_field": "Modifica Campo Personalizzato",
 
+		"brand": "Marche",
+			"new_brand": "Nuova Marca",
+			"edit_brand": "Modifica Marca",
+
+		"product-category": "Categorie Prodotto",
+			"new_product_category": "Nuova Categoria Prodotto",
+			"edit_product_category": "Modifica Categoria Prodotto",
+
+		"product": "Prodotti",
+			"new_product": "Nuovo Prodotto",
+			"edit_product": "Modifica Prodotto",
+
+		"tax": "Tasse",
+			"new_tax": "Nuova Tassa",
+			"edit_tax": "Modifica Tassa",
+
+		"discount-code": "Codici Sconto",
+			"new_discount_code": "Nuovo Codice Sconto",
+			"edit_discount_code": "Modifica Codice Sconto",
+
+		"customer": "Clienti",
+			"new_customer": "Nuovo Cliente",
+			"edit_customer": "Modifica Cliente",
+
+		"customer-address": "Indirizzi Clienti",
+			"new_customer_address": "Nuovo Indirizzo Cliente",
+			"edit_customer_address": "Modifica Indirizzo Cliente",
+
+		"order": "Ordini",
+			"new_order": "Nuovo Ordine",
+			"edit_order": "Modifica Ordine",
+
+		"cart": "Carrelli",
+			"new_cart": "Nuovo Carrello",
+			"detail_cart": "Dettaglio Carrello",
+
+		"campaign": "Campagne",
+			"new_campaign": "Nuova Campagna",
+			"edit_campaign": "Modifica Campagna",
+
+		"campaign-template": "Template Campagne",
+			"new_campaign_template": "Nuovo Template Campagna",
+			"edit_campaign_template": "Modifica Template Campagna",
+
+		"product-variant": "Varianti Prodotto",
+			"new_product_variant": "Nuovo Variante Prodotto",
+			"edit_product_variant": "Modifica Variante Prodotto"
 	},
 
 	"deleteDialogs": {
@@ -194,6 +258,14 @@
 		"manage_users": "Gestione Utenti",
 		"manage_media": "Gestione Media",
 		"manage_settings": "Gestione Impostazioni",
+		"manage_newsletters": "Gestione Newsletter",
+		"manage_brands": "Gestione Brand",
+		"manage_products": "Gestione Prodotti",
+		"manage_orders": "Gestione Ordini",
+		"manage_discount_codes": "Gestione Codici Sconto",
+		"manage_product_categories": "Gestione Categorie Prodotto",
+		"manage_carts": "Gestione Carrelli",
+		"manage_taxes": "Gestione Tasse",
 		"save_success": "Ruolo salvato con successo!"
 	},
 
@@ -216,7 +288,8 @@
 		"first_name": "Nome",
 		"last_name": "Cognome",
 		"avatar_line_1": "Dimensioni consigliate 100x100. Immagine nel formato .JPG / .PNG. Max 2MB.",
-		"save_success": "Utente salvato con successo!"
+		"save_success": "Utente salvato con successo!",
+		"created_at": "Data registrazione"
 	},
 
 	"deleteUserDialog": {
@@ -229,15 +302,10 @@
 
 
 
-
-
-
-
 	"custom_fields": {
 		"title": "Campi Personalizzati",
-
 		"fields": "campi",
-
+		"hidden": "Campo Nascosto",
 		"text": "Campo di Testo",
 		"email": "Email",
 		"url": "URL",
@@ -256,9 +324,7 @@
 		"gallery": "Gallery",
 		"linked_content": "Linked Content",
 		"multiple_linked_content": "Multiple Linked Content",
-
 		"save_success": "Campo Personalizzato salvato con successo!",
-
 		"single_title": "Campo Personalizzato",
 		"field_type": "Tipo di Campo",
 		"field_label": "Etichetta Campo",
@@ -291,7 +357,7 @@
 		"resize": "Ridimensiona",
 		"fit": "Adatta",
 		"max_file_size": "Dimensione Massima File (in MB)",
-		"max_file_size_hint": "Inserire il valore della dimensione massima del file che un utente può caricare, il valore inserito deve comunque essere inferire a 16",
+		"max_file_size_hint": "Inserire il valore della dimensione massima del file che un utente può caricare, il valore inserito deve comunque essere inferire a 256",
 		"allowed_types": "Tipi di estensione file accettati",
 		"allowed_types_hint": "Inserire l'elenco delle estensioni del file accettate",
 		"accepted_extensions": "Estensioni accettate..."
@@ -301,8 +367,6 @@
 		"success": "Campo eliminato con successo",
 		"cancel": "Operazione annullata"
 	},
-
-
 
 
 
@@ -334,21 +398,12 @@
 
 
 
-
-
-
-
 	"settings": {
 		"title": "Impostazioni",
 		"placeholder": "Scegli Homepage per la lingua"
 	},
 
 
-
-
-
-	"tools": {
-	},
 
 	"resize_media": {
 		"title": "Ridimensiona Media",
@@ -382,6 +437,7 @@
 
 	"validations": {
 		"required": "Il campo è obbligatorio.",
+		"invalid": "Il campo non è valido.",
 		"role_required": "Il campo Ruolo è obbligatorio.",
 		"email_required": "Il campo Email è obbligatorio.",
 		"email_not_valid": "Il campo Email non è nel formato corretto.",
@@ -393,7 +449,8 @@
 		"content_type_required": "Il campo Tipologia di Contenuto è obbligatorio.",
 		"parent_category_not_valid": "Categoria Genitore non accettata",
 		"file_not_valid_extension": "Il file non ha la corretta estensione.",
-		"file_too_big": "Il file è troppo grande."
+		"file_too_big": "Il file è troppo grande.",
+		"max": "Il campo ha un valore maggiore al massimo consentito"
 	},
 
 	"add": "Aggiungi",
@@ -416,9 +473,20 @@
 	"status": "Stato",
 	"actions": "Azioni",
 	"formats": "Formati",
-
 	"mandatory": "Obbligatorio",
+	"readonly": "Sola Lettura",
 	"back_to_list": "Torna alla Lista",
+	"filter": "Filtra",
+	"filter_by": "Filtra per:",
+	"search_by_name": "Cerca per nome",
+	"search_by_category": "Cerca per categoria",
+	"from_date": "Data Da",
+	"to_date": "Data A",
+	"actions_group": "Azioni di gruppo",
+	"delete": "Elimina",
+	"set_status": "Cambia stato",
+	"apply": "Applica",
+	"refresh": "Aggiorna",
 
 	"paginator": {
 		"prev_page": "Pagina precedente",
@@ -483,5 +551,282 @@
 				"external_links": "Il testo contiene link esterni. Ottimo!"
 			}
 		}
+	},
+
+
+	"brands": {
+		"code": "Codice",
+		"brand": "Marca",
+		"order_no": "Ordinamento",
+		"name": "Nome",
+
+		"save_success": "Brand salvato con successo"
+	},
+
+	"deleteBrandDialog": {
+		"success": "Brand eliminato con successo",
+		"cancel": "Operazione annullata"
+	},
+
+	"product_categories": {
+		"label": "Etichetta",
+		"name": "Nome",
+		"parent_category": "Categoria Genitore",
+		"no_parent": "Nessun genitore",
+		"description": "Descrizione",
+		"image": "Immagine Categoria Prodotto",
+		"icon": "Icona Categoria Prodotto",
+		"order_no": "Ordinamento Categoria Prodotto",
+		"save_success": "Categoria Prodotto salvata con successo"
+	},
+
+	"deleteProductCategoryDialog": {
+		"success": "Categoria Prodotto eliminata con successo",
+		"cancel": "Operazione annullata"
+	},
+
+	"products": {
+		"details": "Dettagli Prodotto",
+		"label": "Etichetta",
+		"code": "Codice",
+		"name": "Nome",
+		"brand": "Marca",
+		"product_category": "Categoria Prodotto",
+		"parent_category": "Categoria Genitore",
+		"no_parent": "Nessun genitore",
+		"new_product": "Nuovo Prodotto",
+		"product_active": "Prodotto Attivo",
+		"basic_price": "Prezzo Listino",
+		"discount_price": "Prezzo Scontato",
+		"basic_price_no_vat": "Prezzo Listino (IVA esclusa)",
+		"discount_price_no_vat": "Prezzo Scontato (IVA esclusa)",
+		"barcode": "Codice a barre",
+		"featured": "Prodotto In Evidenza",
+		"has_variants": "Prodotto con varianti",
+		"tax": "Tassa applicata",
+		"last_update": "Ultimo aggiornamento",
+		"created_at": "Data creazione",
+		"order_no": "Ordinamento",
+		"description": "Descrizione",
+		"total_active_products": "Totale prodotti attivi",
+		"total_inactive_products": "Totale prodotti inattivi",
+		"save_success": "Prodotto salvato con successo",
+		"seo_title": "Titolo SEO",
+		"seo_description": "Descrizione SEO",
+		"seo_canonical_url": "URL Canonical SEO",
+		"seo_robots_indexing": "Meta Robots Indexing",
+		"seo_robots_following": "Meta Robots Following",
+		"seo_focus_key": "Frase Chiave",
+		"social_sharing": "Social Sharing",
+		"set_category": "Imposta Categoria",
+		"activate_products": "Attiva Prodotti",
+		"deactivate_products": "Disattiva Prodotti",
+		"duplicate_success": "Prodotto duplicato con successo",
+		"multiple_help": "Trascina qui sotto i prodotti che vuoi associare",
+		"quantity": "Quantità",
+		"product_variants": "Varianti Prodotto",
+		"additional_content": "Contenuto Aggiuntivo",
+		"related_products": "Prodotti Correlati"
+	},
+
+	"deleteProductDialog": {
+		"success": "Prodotto eliminato con successo",
+		"cancel": "Operazione annullata"
+	},
+
+	"taxes": {
+		"amount": "Percentuale",
+		"name": "Nome",
+		"description": "Descrizione su fattura",
+		"save_success": "Tassa salvata con successo"
+	},
+
+	"deleteTaxDialog": {
+		"success": "Tassa eliminata con successo",
+		"cancel": "Operazione annullata"
+	},
+
+	"discount_codes": {
+		"amount": "Quantità",
+		"code": "Codice Sconto",
+		"discount": "Sconto",
+		"type": "Tipologia",
+		"euro_discount": "Sconto in EURO",
+		"percentage_discount": "Sconto in PERCENTUALE",
+		"select_products": "Seleziona i prodotti su cui applicare lo sconto",
+		"select_customer": "Seleziona il cliente",
+		"all_the_customers": "Tutti i clienti",
+		"customer": "Cliente",
+		"save_success": "Codice Sconto salvato con successo"
+	},
+
+	"deleteDiscountCodeDialog": {
+		"success": "Codice Sconto eliminato con successo",
+		"cancel": "Operazione annullata"
+	},
+
+	"customers": {
+		"title": "Clienti",
+		"new_customer": "Crea Utente",
+		"edit_customer": "Modifica Utente",
+		"password_line_1": "Password lunga almeno 8 caratteri. Se non vuoi modificare la password precedente, lascia il campo vuoto.",
+		"first_name": "Nome",
+		"last_name": "Cognome",
+		"avatar_line_1": "Dimensioni consigliate 100x100. Immagine nel formato .JPG / .PNG. Max 2MB.",
+		"save_success": "Cliente salvato con successo!"
+	},
+
+	"deleteCustomerDialog": {
+		"success": "Cliente eliminato con successo",
+		"cancel": "Operazione annullata"
+	},
+
+	"customer_addresses": {
+		"title": "Indirizzi Clienti",
+		"new_customer_address": "Crea Indirizzo Cliente",
+		"edit_customer_address": "Modifica Indirizzo Cliente",
+		"customer": "Cliente",
+		"address": "Indirizzo",
+		"zip": "CAP",
+		"city": "Città",
+		"province": "Provincia",
+		"country": "Nazione",
+		"type": "Tipologia",
+		"invoice": "Fatturazione",
+		"delivery": "Consegna",
+		"save_success": "Indirizzo Cliente salvato con successo!"
+	},
+
+	"deleteCustomerAddressDialog": {
+		"success": "Indirizzo Cliente eliminato con successo",
+		"cancel": "Operazione annullata"
+	},
+
+	"orders": {
+		"title": "Ordini",
+		"new_order": "Nuovo Ordine",
+		"edit_order": "Modifica Ordine",
+		"customer": "Cliente",
+		"delivery": "Consegna",
+		"status": "Stato",
+		"total": "Totale",
+		"payment_type": "Metodo di pagamento",
+
+		"progress": "In lavorazione",
+		"waiting_payment": "In attesa di pagamento",
+		"payment_accepted": "Pagamento accettato",
+		"waiting": "In sospeso",
+		"shipped": "Spedito",
+		"done": "Completato",
+		"canceled": "Annullato",
+		"refunded": "Rimborsato",
+		"failed": "Fallito",
+
+		"save_success": "Ordine salvato con successo!",
+		"stripe": "Carta di credito/debito",
+		"paypal": "PayPal",
+		"bank-transfer": "Bonifico",
+		"custom-payment": "Pagamento personalizzato",
+
+		"order_date": "Data Ordine",
+		"total": "Totale",
+		"products": "Prodotti",
+		"change_order_status": "Cambia stato ordine",
+		"notes": "Note",
+		"delivery_address": "Indirizzo di consegna",
+		"invoice_address": "Indirizzo di fatturazione",
+		"payment": "Pagamento",
+		"transaction_id": "ID Transazione",
+		"amount": "Totale",
+		"product": "Prodotto",
+		"product_price": "Prezzo singolo",
+		"product_price_with_vat": "Prezzo singolo (con IVA)",
+		"product_price_without_vat": "Prezzo singolo (senza IVA)",
+		"quantity": "Quantità",
+		"product_tax": "Tasse applicate",
+		"product_total": "Totale (tasse incluse)",
+		"product_total_with_vat": "Totale (con IVA)",
+		"product_total_without_vat": "Totale (senza IVA",
+		"created_at": "Data ordine"
+	},
+
+	"deleteOrderDialog": {
+		"success": "Ordine eliminato con successo",
+		"cancel": "Operazione annullata"
+	},
+
+	"carts": {
+		"order_id": "#Ordine Collegato",
+		"customer": "Cliente",
+		"total": "Totale",
+		"expired": "Carrello Abbandonato",
+		"deleted": "Carrello Eliminato",
+		"expires_at": "Scade il",
+		"cart_date": "Data Carrello",
+		"products": "Prodotti",
+		"notes": "Note",
+		"product": "Prodotto",
+		"product_price": "Prezzo singolo (tasse escluse)",
+		"quantity": "Quantità",
+		"product_tax": "Tasse applicate",
+		"product_total": "Totale (tasse incluse)"
+	},
+
+	"deleteCartDialog": {
+		"success": "Carrello eliminato con successo",
+		"cancel": "Operazione annullata"
+	},
+
+	"campaigns": {
+		"title": "Titolo",
+		"template": "Template",
+		"new_template": "Nuovo Template",
+		"recipients": "Destinatari",
+		"sent_at": "Inviata il",
+		"marketing_list_guid": "Lista Destinatari",
+		"or_create_new_template": "Oppure crea un nuovo template",
+		"save_success": "Campagna salvata con successo!",
+		"not_sent_yet": "Non ancora inviata",
+		"marketing_list": "Lista Marketing",
+		"send": "Invia Campagna",
+		"send_campaign_title": "Sei sicuro di voler inviare la campagna?",
+		"send_campaign_text": "Confermi l'invio della campagna?",
+		"total_email_sent": "email inviate con successo!"
+	},
+
+	"campaign_templates": {
+		"title": "Titolo",
+		"subject": "Oggetto Email",
+		"attachments": "Allegati",
+		"save_success": "Template Campagna salvata con successo!"
+	},
+
+	"campaign_emails": {
+		"title": "Destinatari",
+		"search_recipient": "Cerca destinatario...",
+		"recipient_fullname": "Nome e cognome",
+		"status": "Stato email",
+		"recipient_activities": "Attività del destinatario",
+		"status_unkwown": "Stato sconosciuto",
+		"delivered": "Email Consegnata",
+		"opened": "Email Aperta",
+		"clicked": "Email Cliccata",
+		"permanent_failure": "Impossibile recapitare email",
+		"temporary_failure": "Momentaneamente impossibile recapitare email",
+		"unsubscribed": "Disiscritto",
+		"complained": "Email Segnalata come spam"
+	},
+
+	"product_variants": {
+		"label": "Etichetta",
+		"quantity": "Quantità",
+		"description": "Descrizione",
+		"max_quantity_reached": "Massima quantità di varianti prodotto raggiunta",
+		"save_success": "Variante Prodotto salvata con successo!"
+	},
+
+	"deleteProductVariantDialog": {
+		"success": "Variante Prodotto rimossa con successo",
+		"cancel": "Operazione annullata"
 	}
 }

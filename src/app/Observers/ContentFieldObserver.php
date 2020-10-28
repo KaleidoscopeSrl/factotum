@@ -44,6 +44,7 @@ class ContentFieldObserver
 				return 'TIMESTAMP';
 			break;
 
+			case 'hidden':
 			case 'textarea':
 			case 'wysiwyg':
 			case 'gallery':

@@ -154,10 +154,12 @@ class FactotumServiceProvider extends ServiceProvider
 			__DIR__ . '/resources/views'      => resource_path( 'views' )
 		], 'factotum-views');
 
+
 		$this->publishes([
-			// VIEWS
-			__DIR__ . '/resources/views/email'      => resource_path( 'views/email' )
-		], 'factotum-emails-views');
+			// LANGS
+			__DIR__ . '/resources/lang'      => resource_path( 'lang' )
+		], 'factotum-langs');
+
 
 		$this->publishes([
 			__DIR__ . '/public/admin'         => public_path('admin'),
@@ -383,7 +385,7 @@ class FactotumServiceProvider extends ServiceProvider
 		 *
 		 */
 
-		if ( !$overridingRoutes ) {
+		if ( $overridingRoutes ) {
 
 			// Public routes
 			Route::group([
