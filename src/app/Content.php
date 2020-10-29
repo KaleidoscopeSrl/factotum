@@ -64,7 +64,7 @@ class Content extends Model
 	}
 
 
-	private function _saveAdditionalContent( Content $content )
+	protected function _saveAdditionalContent( Content $content )
 	{
 		$data = request()->all();
 
@@ -189,7 +189,7 @@ class Content extends Model
 	}
 
 
-	private static function getQuery( $args )
+	protected static function getQuery( $args )
 	{
 		$query = Content::whereNull( 'parent_id' );
 
@@ -236,7 +236,7 @@ class Content extends Model
 	}
 
 
-	private static function _getChildContents( $args )
+	protected static function _getChildContents( $args )
 	{
 		$query = self::getQuery( $args );
 		$query->with('user.profile')->with('categories');
@@ -266,7 +266,7 @@ class Content extends Model
 	}
 
 
-	private static function _parseChildsTree( $contents )
+	protected static function _parseChildsTree( $contents )
 	{
 		foreach ( $contents as $c ) {
 			if ( $c->childs->count() > 0 ) {

@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 class FactotumInstallation extends Command
 {
 
-	protected $signature = 'factotum:install {--reinstall} {--module=}';
+	protected $signature = 'factotum:install {--reinstall}';
 
 
 	protected $description = 'Install Factotum CMS';
@@ -16,7 +16,6 @@ class FactotumInstallation extends Command
 	private $install;
 	private $installEcommerce;
 	private $installNewsletter;
-	private $installPIM;
 	private $reInstall;
 
 	private $migrationPath;
@@ -28,7 +27,6 @@ class FactotumInstallation extends Command
 		$this->install           = false;
 		$this->installEcommerce  = false;
 		$this->installNewsletter = false;
-		$this->installPIM        = false;
 		$this->reInstall         = false;
 		$this->migrationPath     = 'vendor/kaleidoscope/' . ( env('APP_ENV') == 'local' ? 'dev-' : '')
 									. 'factotum/database/migrations';
@@ -47,10 +45,6 @@ class FactotumInstallation extends Command
 
 		if ( $this->installNewsletter ) {
 			$paths[] = $this->migrationPath . '/0000_00_00_000002_factotum_newsletter_setup.php';
-		}
-
-		if ( $this->installPimMapping ) {
-			$paths[] = $this->migrationPath . '/0000_00_00_000003_factotum_pim_setup.php';
 		}
 
 		$paths[] = $this->migrationPath . '/0000_00_00_000000_factotum_setup.php';
@@ -104,14 +98,6 @@ class FactotumInstallation extends Command
 			$this->info('Newsletter Migration done.');
 		}
 
-
-		if ( $this->installPIM ) {
-			$this->info('PIM Migration running...');
-			$this->call('migrate', [
-				'--path' => $this->migrationPath . '/0000_00_00_000003_factotum_pim_setup.php'
-			] );
-			$this->info('PIM Migration done.');
-		}
 	}
 
 
@@ -158,24 +144,6 @@ class FactotumInstallation extends Command
 
 	public function handle()
 	{
-		$module = $this->option('module');
-
-		if ( $module ) {
-			if ( $module == 'pim' ) {
-				$this->info('PIM Migration running...');
-				$this->call('migrate', [
-					'--path' => $this->migrationPath . '/0000_00_00_000003_factotum_pim_setup.php'
-				] );
-				$this->info('PIM Migration done.');
-
-			} else {
-
-				$this->info('Not supported yet.');
-			}
-
-			exit;
-		}
-
 
 		$this->reInstall = $this->option('reinstall');
 
@@ -190,11 +158,6 @@ class FactotumInstallation extends Command
 		if ( $this->confirm('Do you want to install the Newsletter Module') ) {
 			$this->installNewsletter = true;
 		}
-
-		if ( $this->confirm('Do you want to install the PIM Mapping') ) {
-			$this->installPIM = true;
-		}
-
 
 		if ( !$this->install ) {
 			$this->info('Nothing to do.');
