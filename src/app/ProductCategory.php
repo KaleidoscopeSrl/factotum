@@ -93,6 +93,10 @@ class ProductCategory extends Model
 			$query = ProductCategory::whereNull( 'parent_id' )->orderBy('order_no');
 		}
 
+		if ( request()->input('lang') ) {
+			$query->where( 'lang', request()->input('lang') );
+		}
+
 		if ( isset($filters) && count($filters) > 0 ) {
 
 			if ( isset($filters['term']) && strlen($filters['term']) > 0 ) {

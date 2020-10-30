@@ -19,6 +19,7 @@ class ReadController extends Controller
 		$sort      = $request->input('sort');
 		$direction = $request->input('direction');
 		$filters   = $request->input('filters', null);
+		$lang      = $request->input('lang');
 
 
 		if ( !$sort ) {
@@ -31,6 +32,9 @@ class ReadController extends Controller
 
 		$query = Product::with([ 'brand', 'product_category' ]);
 
+		if ( $lang ) {
+			$query->where( 'lang', $lang );
+		}
 
 		if ( isset($filters) && count($filters) > 0 ) {
 

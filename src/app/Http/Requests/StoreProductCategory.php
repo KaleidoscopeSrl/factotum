@@ -24,13 +24,13 @@ class StoreProductCategory extends CustomFormRequest
 
 			$rules = [
 				'label' => 'required|max:255',
-				'name'  => 'required|max:50|unique:product_categories',
+				'name'  => 'required|max:50|unique:product_categories,name,parent_id',
 			];
 
 			$id = request()->route('id');
 
 			if ( $id ) {
-				$rules['name'] = 'required|unique:product_categories,name,' . $id;
+				$rules['name'] = 'required|unique:product_categories,name,parent_id,' . $id;
 			}
 
 		}
