@@ -385,7 +385,7 @@ class FactotumServiceProvider extends ServiceProvider
 		 *
 		 */
 
-		if ( $overridingRoutes ) {
+		if ( !$overridingRoutes ) {
 
 			// Public routes
 			Route::group([
