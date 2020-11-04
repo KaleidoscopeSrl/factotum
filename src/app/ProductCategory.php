@@ -280,7 +280,7 @@ class ProductCategory extends Model
 			}
 		}
 
-		return DB::table('products')
+		return DB::table('product_product_category')
 					->whereIn('product_category_id', $tmp)
 					->count();
 	}

@@ -40,7 +40,8 @@ class ReadController extends Controller
 			$query  = DB::table('products')
 						->select('products.*', 'brands.name AS brand_name')
 						->join('brands', 'brands.id', '=', 'products.brand_id')
-						->whereIn('product_category_id', $tmp);
+						->join('product_product_category', 'product_product_category.product_id', '=', 'products.id')
+						->whereIn('product_product_category.product_category_id', $tmp);
 
 			if ( $brandFilter ) {
 				$query->where( 'brand_id', $brandFilter );

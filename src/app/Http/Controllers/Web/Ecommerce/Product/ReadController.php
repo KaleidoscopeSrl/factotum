@@ -23,9 +23,9 @@ class ReadController extends Controller
 	    $product = Product::where( 'abs_url', $request->getRequestUri() )->first();
 
         if ( $product ) {
-			$product->load([ 'brand', 'product_category', 'tax' ]);
+			$product->load([ 'brand', 'product_categories', 'tax' ]);
 
-			$categories = array_reverse( $product->product_category->getFlatParentsArray() );
+			$categories = array_reverse( $product->product_categories() );
 
 			$view = 'factotum::ecommerce.product.product';
 			if ( file_exists( resource_path('views/ecommerce/product/product.blade.php') ) ) {
@@ -87,7 +87,10 @@ class ReadController extends Controller
 			}
 
 			$tmp = array_unique( $tmp );
-			$query->whereIn( 'product_category_id', $tmp );
+
+			$query->whereHas('product_categories', function ($q) use ($tmp) {
+				$q->whereIn('id', $tmp);
+			});
 		}
 
 		$products = $query->get();
