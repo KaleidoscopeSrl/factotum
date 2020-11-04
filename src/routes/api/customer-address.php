@@ -19,6 +19,7 @@ Route::group([
 
 	Route::group(['middleware' => 'can:read,Kaleidoscope\Factotum\CustomerAddress'], function() {
 		Route::get('/list',                          'ReadController@getList');
+		Route::get('/list-by-customer/{customerId}', 'ReadController@getListByCustomer');
 		Route::post('/list-paginated',               'ReadController@getListPaginated');
 		Route::get('/detail/{id}',                   'ReadController@getDetail');
 	});

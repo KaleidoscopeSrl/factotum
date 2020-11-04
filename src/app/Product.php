@@ -246,6 +246,10 @@ class Product extends Model
 
 			if ( substr($value, 0, 4) == 'http' ) {
 				return $value;
+				return [
+					'thumb' => $value,
+					'url'   => $value,
+				];
 			}
 
 			if ( $value ) {

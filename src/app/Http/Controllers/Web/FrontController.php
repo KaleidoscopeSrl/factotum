@@ -124,7 +124,12 @@ class FrontController extends Controller
 							if ( $contentType ) {
 								$contentType = $contentType->toArray();
 
-								list($orderBy, $sort) = explode('-', $content->content_list_order);
+								$orderBy = 'id';
+								$sort = 'ASC';
+
+								if ( isset($content->content_list_order) && $content->content_list_order != '' ) {
+									list($orderBy, $sort) = explode('-', $content->content_list_order);
+								}
 
 								$contentSearch = new ContentSearch($contentType);
 								$contentSearch->onlyPublished();

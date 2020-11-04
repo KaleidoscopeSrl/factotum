@@ -87,6 +87,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->integer('quantity')->default(0);
 			
 			$table->boolean('has_variants')->nullable()->default(null);
+			$table->boolean('virtual')->nullable()->default(null);
 
 			$table->text('attributes')->nullable()->default(null);
 
@@ -327,6 +328,23 @@ class FactotumEcommerceSetup extends Migration
 			$table->timestamps();
 		});
 
+
+		Schema::create('invoices', function (Blueprint $table) {
+			$table->id();
+
+			$table->bigInteger('order_id')->unsigned();
+			$table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+
+			$table->integer('number')->default(0);
+			$table->decimal('total_net', 10, 2 );
+			$table->decimal('total_tax', 10, 2 );
+			$table->decimal('total_shipping', 10, 2 );
+			$table->text('shop_address')->nullable();
+			$table->text('notes')->nullable();
+
+			$table->timestamps();
+			$table->softDeletes();
+		});
 	}
 
 
@@ -344,6 +362,7 @@ class FactotumEcommerceSetup extends Migration
 		Schema::drop('taxes');
 		Schema::drop('customer_addresses');
 		Schema::drop('order_product');
+		Schema::drop('invoices');
 		Schema::drop('orders');
 		Schema::drop('cart_product');
 		Schema::drop('carts');

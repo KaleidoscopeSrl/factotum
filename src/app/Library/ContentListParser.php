@@ -94,6 +94,10 @@ class ContentListParser {
 							$content->{$fieldName} = $this->_getFileData( $content->{$fieldName} );
 						}
 
+						if ( $field->type == 'multiselect' ) {
+							$content->{$fieldName} = ( isset($content->{$fieldName}) ? json_decode( $content->{$fieldName} ) : '' );
+						}
+
 						if ( $field->type == 'image_upload' ) {
 							$content->{$fieldName} = $this->_getImageData( $content->{$fieldName}, $field );
 						}

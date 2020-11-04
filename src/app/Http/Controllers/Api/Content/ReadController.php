@@ -182,7 +182,7 @@ class ReadController extends Controller
 						break;
 
 						case 'multiselect':
-							$content->{$contentField->name} = ( isset($dataContent->{$contentField->name}) ? explode( ';', $dataContent->{$contentField->name} ) : '' );
+							$content->{$contentField->name} = ( isset($dataContent->{$contentField->name}) ? json_decode( $dataContent->{$contentField->name} ) : '' );
 						break;
 
 						case 'checkbox':

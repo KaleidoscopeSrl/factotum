@@ -21,19 +21,22 @@ class PrintProductCategoriesHelper {
 	private static function print_product_categories_items( $productCategories, $baseURL, $level = 0, $productCategory = null, $showChilds = true )
 	{
 		$html = '';
+
 		$html .= '<ul class="category-' . $level
 				. ( $baseURL && strstr( request()->getRequestUri(), $baseURL ) ? ' active' : '')
 				. '"><div class="hidden">' . $baseURL . '</div>' . "\n";
 
 		foreach( $productCategories as $item ) {
 
-			$html .= '<li class="category-item category-item-' . $level . '">' . "\n";
+			$active = ( $productCategory && ($item->id == $productCategory->id || $item->id == $productCategory->parent_id ) ? true : false );
+
+			$html .= '<li class="category-item category-item-' . $level . ( $active ? ' active' : '') .  '">' . "\n";
 			$html .= '<div class="flexed">' . "\n";
 			$html .= '<a href="' . $baseURL . '/' . $item->name . '"'
-					.' class="' . ( $productCategory && $item->id == $productCategory->id ? 'active' : '' ) . '">' . ucfirst(strtolower($item->label)) . ' (' . $item->total_products . ')</a>' . "\n";
+					.' class="' . ( $active ? 'active' : '' ) . '">' . ucfirst(strtolower($item->label)) . ' (' . $item->total_products . ')</a>' . "\n";
 
 			if ( $showChilds && $item->childs->count() > 0 ) {
-				$html .= '<button class="toggle-subcategory"><i class="fi flaticon-down-arrow"></i></button>';
+				$html .= '<button class="toggle-subcategory' . ( $active ? ' active' : '' ) . '"><span class="more">[+]</span><span class="less">[-]</span></button>';
 			} else {
 				$html .= '<div class="no-button"></div>';
 			}

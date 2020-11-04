@@ -26,7 +26,6 @@ class ContentField extends Model
 		'image_bw',
 		'resizes',
 
-
 		'linked_content_type_id'
 	];
 

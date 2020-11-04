@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 use Kaleidoscope\Factotum\CategoryContent;
+use Kaleidoscope\Factotum\ContentType;
 
 class ContentSearch {
 
@@ -34,9 +35,19 @@ class ContentSearch {
 	];
 
 
-	public function __construct( array $contentType )
+	public function __construct( $contentType )
 	{
-		$this->_contentType = $contentType;
+		if ( is_string($contentType) ) {
+			$this->_contentType = ContentType::where('content_type', $contentType)->first()->toArray();
+		} elseif ( is_array($contentType) ) {
+			$this->_contentType = $contentType;
+		} elseif ( $contentType instanceof ContentType ) {
+			$this->_contentType = $contentType->toArray();
+		}
+
+		if ( !$this->_contentType ) {
+			throw new \Exception('Content Type definition missing.');
+		}
 
 		$this->_model = json_decode( Storage::get( 'models/' . $this->_contentType['content_type'] . '.json' ) );
 
@@ -47,10 +58,10 @@ class ContentSearch {
 
 		$this->_query = DB::table('contents')
 							->select( DB::raw( $this->_cols ) )
-							->leftJoin( $contentType['content_type'], 'contents.id', '=', $contentType['content_type'] . '.content_id')
+							->leftJoin( $this->_contentType['content_type'], 'contents.id', '=', $this->_contentType['content_type'] . '.content_id')
 							->leftJoin( 'users', 'users.id', '=', 'contents.user_id')
 							->leftJoin( 'profiles', 'profiles.user_id', '=', 'users.id')
-							->where( 'contents.content_type_id', '=', $contentType['id']);
+							->where( 'contents.content_type_id', '=', $this->_contentType['id']);
 
 		$this->_loadCategories = false;
 

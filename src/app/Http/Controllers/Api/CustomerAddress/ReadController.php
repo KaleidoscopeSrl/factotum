@@ -70,6 +70,15 @@ class ReadController extends Controller
 	}
 
 
+	public function getListByCustomer( Request $request, $customerId )
+	{
+		$customerAddresses = CustomerAddress::where('customer_id', $customerId)
+											->orderBy('id', 'DESC')->get();
+
+		return response()->json( [ 'result' => 'ok', 'customer_addresses' => $customerAddresses ]);
+	}
+
+
     public function getDetail(Request $request, $id)
     {
 		$customerAddress = CustomerAddress::find($id);

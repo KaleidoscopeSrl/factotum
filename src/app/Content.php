@@ -27,10 +27,6 @@ class Content extends Model
 		'is_home',
 		'order_no',
 
-		'link',
-		'link_title',
-		'link_open_in',
-
 		'seo_title',
 		'seo_description',
 		'seo_canonical_url',
@@ -102,6 +98,11 @@ class Content extends Model
 
 
 					foreach ( $contentFields as $field ) {
+
+						// Multiselect
+						if ( isset( $data[ $field->name ] ) && $field->type == 'multiselect' && $data[$field->name] != '' ) {
+							$data[$field->name] = json_encode($data[$field->name]);
+						}
 
 						// Date fields
 						if ( isset( $data[ $field->name ] ) && $field->type == 'date' && $data[$field->name] != '' ) {
@@ -275,6 +276,35 @@ class Content extends Model
 			}
 		}
 		return $contents;
+	}
+
+
+	private static function _parseFlatTreeParents( $contents, $level = 0 )
+	{
+		$result = [];
+		foreach ( $contents as $c ) {
+
+			$parent = null;
+			if ( $c->parent ) {
+				$parent = $c->parent;
+			}
+
+			unset($c->parent);
+
+			$result[] = $c;
+
+			if ( $parent ) {
+				$level = $level + 1;
+				$result = array_merge( $result, self::_parseFlatTreeParents( [ $parent ], $level ) );
+			}
+		}
+
+		return $result;
+	}
+
+	public function getFlatParentsArray()
+	{
+		return Content::_parseFlatTreeParents( [ $this ], 0 );
 	}
 
 
