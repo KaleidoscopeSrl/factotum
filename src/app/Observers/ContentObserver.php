@@ -30,7 +30,7 @@ class ContentObserver
 
 
 
-	private function generateURLs( Content $content )
+	protected function generateURLs( Content $content )
 	{
 		$contentType = ContentType::find( $content->content_type_id );
 
@@ -62,7 +62,7 @@ class ContentObserver
 	}
 
 
-	private function generateHierarchyURL( $content )
+	protected function generateHierarchyURL( $content )
 	{
 		$parents = Content::with('parentRecursive')->whereId( $content->id )->get();
 		$parents = $parents->toArray();
@@ -77,7 +77,7 @@ class ContentObserver
 	}
 
 
-	private function reverseParentsHierarchy( $parents, $final = [] )
+	protected function reverseParentsHierarchy( $parents, $final = [] )
 	{
 		foreach ( $parents as $item ) {
 			if ( isset($item['parent_recursive']) && $item['parent_recursive'] ) {
@@ -93,7 +93,7 @@ class ContentObserver
 	}
 
 
-	private function updateChildsAbsURL( $childs, $parent )
+	protected function updateChildsAbsURL( $childs, $parent )
 	{
 		foreach ( $childs as $item ) {
 			DB::table('contents')

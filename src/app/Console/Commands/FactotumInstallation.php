@@ -97,6 +97,7 @@ class FactotumInstallation extends Command
 			] );
 			$this->info('Newsletter Migration done.');
 		}
+
 	}
 
 
@@ -143,6 +144,7 @@ class FactotumInstallation extends Command
 
 	public function handle()
 	{
+
 		$this->reInstall = $this->option('reinstall');
 
 		if ( $this->confirm('Are you sure?') ) {

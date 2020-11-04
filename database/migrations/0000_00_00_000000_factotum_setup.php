@@ -39,6 +39,7 @@ class FactotumSetup extends Migration
 			$table->string('type', 50);
 			$table->integer('order_no')->unsigned()->nullable(true);
 			$table->boolean('mandatory')->nullable(true);
+			$table->boolean('readonly')->nullable(true);
 			$table->string('hint', 255)->nullable(true);
 			$table->text('options')->nullable(true);
 			$table->integer('max_file_size')->unsigned()->nullable(true);
