@@ -43,12 +43,16 @@ class UpdateController extends Controller
 	public function changeProductsCategory(Request $request)
 	{
 		$products   = $request->input('products');
-		$categoryId = $request->input('category_id');
+		$categories = $request->input('categories');
 
 		if ( $products && count($products) > 0 ) {
 			foreach ( $products as $prodId ) {
 				$prod = Product::find($prodId);
-				$prod->product_category_id = $categoryId;
+
+				foreach ( $categories as $category ) {
+					$prod->product_categories()->attach( $category );
+				}
+
 				$prod->save();
 			}
 		}

@@ -201,6 +201,20 @@ class FactotumEcommerceSetup extends Migration
 		});
 
 
+		// Create products - product categories tables
+		Schema::create('product_product_category', function (Blueprint $table) {
+			$table->id();
+
+			$table->bigInteger('product_category_id')->unsigned();
+			$table->foreign('product_category_id')->references('id')->on('product_categories')->onDelete('cascade');
+
+			$table->bigInteger('product_id')->unsigned();
+			$table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
+			$table->timestamps();
+		});
+
+
 		// Create cart products tables
 		Schema::create('cart_product', function (Blueprint $table) {
 			$table->id();

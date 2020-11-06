@@ -26,7 +26,7 @@ class StoreProduct extends CustomFormRequest
 		if ( !$productsViaPim ) {
 
 			$rules = [
-				'code'                 => 'required|max:16|unique:products,code',
+				'code'                 => 'required|max:16|unique:products,code,lang',
 				'name'                 => 'required|max:128',
 				'basic_price'          => 'required|numeric',
 			];
@@ -41,7 +41,7 @@ class StoreProduct extends CustomFormRequest
 				$rules['code'] = [
 					'required',
 					'max:16',
-					Rule::unique('products', 'code')->ignore($id),
+					Rule::unique('products', 'code')->ignore($id)->where('lang', '<>', request()->input('lang') ),
 				];
 			}
 

@@ -19,6 +19,7 @@ class ReadController extends Controller
 		$sort      = $request->input('sort');
 		$direction = $request->input('direction');
 		$filters   = $request->input('filters', null);
+		$lang      = $request->input('lang');
 
 
 		if ( !$sort ) {
@@ -29,8 +30,11 @@ class ReadController extends Controller
 			$direction = 'DESC';
 		}
 
-		$query = Product::with([ 'brand', 'product_category' ]);
+		$query = Product::with([ 'brand', 'product_categories', 'product_categories.parent' ]);
 
+		if ( $lang ) {
+			$query->where( 'lang', $lang );
+		}
 
 		if ( isset($filters) && count($filters) > 0 ) {
 
@@ -51,7 +55,11 @@ class ReadController extends Controller
 				}
 
 				$tmp = array_unique( $tmp );
-				$query->whereIn( 'product_category_id', $tmp );
+
+
+				$query->whereHas('product_categories', function ($q) use ($tmp) {
+					$q->whereIn('id', $tmp);
+				});
 			}
 
 			if ( isset($filters['brand_id']) && $filters['brand_id'] ) {
@@ -115,7 +123,7 @@ class ReadController extends Controller
 		$product = Product::find($id);
 
         if ( $product ) {
-			$product->load([ 'brand', 'product_category', 'tax', 'product_variants' ]);
+			$product->load([ 'brand', 'product_categories', 'tax', 'product_variants' ]);
             return response()->json( [ 'result' => 'ok', 'product' => $product ]);
         }
 

@@ -64,6 +64,10 @@ class FrontController extends Controller
 												 ->loadCategories(true)
 												 ->search();
 
+				if ( $content ) {
+					$content[0] = $this->_loadAdditionalData( $content[0] );
+				}
+
 				return ( $content ? $content[0] : null );
 
 			} else {
@@ -78,6 +82,12 @@ class FrontController extends Controller
 
 		}
 
+	}
+
+	// Overwritable method
+	protected function _loadAdditionalData( $content )
+	{
+		return $content;
 	}
 
 
