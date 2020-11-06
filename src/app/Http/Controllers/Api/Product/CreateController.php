@@ -12,7 +12,7 @@ use Kaleidoscope\Factotum\Product;
 class CreateController extends Controller
 {
 
-	public function create(StoreProduct $request)
+	public function create( StoreProduct $request )
 	{
 		$data = $request->all();
 

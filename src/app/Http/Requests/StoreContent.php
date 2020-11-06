@@ -4,6 +4,7 @@ namespace Kaleidoscope\Factotum\Http\Requests;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 use Kaleidoscope\Factotum\Content;
 use Kaleidoscope\Factotum\ContentField;
@@ -11,30 +12,25 @@ use Kaleidoscope\Factotum\ContentType;
 
 class StoreContent extends CustomFormRequest
 {
-	/**
-	 * Determine if the user is authorized to make this request.
-	 *
-	 * @return bool
-	 */
+
 	public function authorize()
 	{
 		return true;
 	}
 
-	/**
-	 * Get the validation rules that apply to the request.
-	 *
-	 * @return array
-	 */
 	public function rules()
 	{
 		$rules = [
 			'title'   => 'required|max:255',
-			'url'     => 'required|max:191',
 			'status'  => 'required',
 		];
 
 		$data = $this->all();
+
+		$urlRules = [
+			'required',
+			'max:191'
+		];
 
 		$id = request()->route('id');
 
@@ -47,7 +43,7 @@ class StoreContent extends CustomFormRequest
 				$alreadyExist = Content::where('url', '=', $data['url'])->count();
 
 				if ( $alreadyExist > 0 ) {
-					$rules['url'] .= '|unique:contents,id,' . $id;
+					$urlRules[] = Rule::unique('contents')->ignore($id);
 				}
 			}
 
@@ -58,12 +54,13 @@ class StoreContent extends CustomFormRequest
 
 			$alreadyExist = Content::where('url', '=', $data['url'])->count();
 
-			if ($alreadyExist > 0) {
-				$rules['url'] .= '|unique:contents';
+			if ( $alreadyExist > 0 ) {
+				$urlRules[] = Rule::unique('contents');
 			}
 
 		}
 
+		$rules['url'] = $urlRules;
 
 		if ( isset($data['content_type_id']) ) {
 			$contentFields = ContentField::where( 'content_type_id', '=', $data['content_type_id'] )->get();
