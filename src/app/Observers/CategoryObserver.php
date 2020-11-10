@@ -8,7 +8,7 @@ class CategoryObserver
 {
 
 	/**
-	 * Listen to the ContentType deleting event.
+	 * Listen to the Category deleting event.
 	 *
 	 * @param  Category  $content
 	 * @return void

@@ -53,7 +53,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('label', 255);
 			$table->text('description')->nullable();
 			$table->string('lang', 5);
-			$table->boolean('show_in_home');
+			$table->boolean('show_in_home')->nullable();
 
 			$table->bigInteger('image')->unsigned()->nullable(true);
 
@@ -97,9 +97,6 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('brand_id')->unsigned()->nullable();
 			$table->foreign('brand_id')->references('id')->on('brands');
 
-			$table->bigInteger('product_category_id')->unsigned()->nullable();
-			$table->foreign('product_category_id')->references('id')->on('product_categories');
-
 			$table->bigInteger('tax_id')->unsigned()->nullable();
 			$table->foreign('tax_id')->references('id')->on('taxes')->onDelete('cascade');
 
@@ -136,7 +133,8 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('status', 16);
 			$table->decimal('total_net', 10, 2 );
 			$table->decimal('total_tax', 10, 2 );
-			$table->decimal('total_shipping', 10, 2 );
+			$table->decimal('total_shipping_net', 10, 2 );
+			$table->decimal('total_shipping_tax', 10, 2 );
 			$table->text('notes')->nullable();
 
 			$table->string('phone', 64)->nullable();
@@ -352,7 +350,8 @@ class FactotumEcommerceSetup extends Migration
 			$table->integer('number')->default(0);
 			$table->decimal('total_net', 10, 2 );
 			$table->decimal('total_tax', 10, 2 );
-			$table->decimal('total_shipping', 10, 2 );
+			$table->decimal('total_shipping_net', 10, 2 );
+			$table->decimal('total_shipping_tax', 10, 2 );
 			$table->text('shop_address')->nullable();
 			$table->text('notes')->nullable();
 
@@ -380,6 +379,7 @@ class FactotumEcommerceSetup extends Migration
 		Schema::drop('orders');
 		Schema::drop('cart_product');
 		Schema::drop('carts');
+		Schema::drop('product_product_category');
 		Schema::drop('products');
 		Schema::drop('product_categories');
 		Schema::drop('brands');

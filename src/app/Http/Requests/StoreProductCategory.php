@@ -3,6 +3,8 @@
 namespace Kaleidoscope\Factotum\Http\Requests;
 
 
+use Kaleidoscope\Factotum\ProductCategory;
+
 class StoreProductCategory extends CustomFormRequest
 {
 
@@ -24,13 +26,28 @@ class StoreProductCategory extends CustomFormRequest
 
 			$rules = [
 				'label' => 'required|max:255',
-				'name'  => 'required|max:50|unique:product_categories,name,parent_id',
+				'name'  => 'required|max:50',
 			];
+
+			$productCategory = ProductCategory::where( 'parent_id', $data['parent_id'] )
+											->where( 'name', $data['name'] )
+											->first();
+
+			if ( $productCategory ) {
+				$rules['name'] .= '|unique:product_categories,name,parent_id';
+			}
 
 			$id = request()->route('id');
 
 			if ( $id ) {
-				$rules['name'] = 'required|unique:product_categories,name,parent_id,' . $id;
+				$productCategory = ProductCategory::where( 'parent_id', $data['parent_id'] )
+													->where( 'name', $data['name'] )
+													->where( 'id', '!=', $id )
+													->first();
+
+				if ( $productCategory ) {
+					$rules['name'] .= '|unique:product_categories,name,parent_id,' . $id;
+				}
 			}
 
 		}

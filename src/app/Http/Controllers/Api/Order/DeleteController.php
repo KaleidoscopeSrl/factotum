@@ -30,7 +30,7 @@ class DeleteController extends Controller
 
 	public function removeOrders(Request $request)
 	{
-		$orders = $request->input('Orders');
+		$orders = $request->input('orders');
 
 		if ( $orders && count($orders) > 0 ) {
 			Order::whereIn( 'id', $orders )->delete();

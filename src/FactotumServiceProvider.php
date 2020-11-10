@@ -25,6 +25,7 @@ use Kaleidoscope\Factotum\Policies\ProductPolicy;
 use Kaleidoscope\Factotum\Policies\ProductVariantPolicy;
 use Kaleidoscope\Factotum\Policies\TaxPolicy;
 use Kaleidoscope\Factotum\Policies\DiscountCodePolicy;
+use Kaleidoscope\Factotum\Policies\InvoicePolicy;
 use Kaleidoscope\Factotum\Policies\OrderPolicy;
 use Kaleidoscope\Factotum\Policies\CustomerAddressPolicy;
 use Kaleidoscope\Factotum\Policies\CartPolicy;
@@ -39,6 +40,7 @@ use Kaleidoscope\Factotum\Observers\CategoryObserver;
 use Kaleidoscope\Factotum\Observers\DiscountCodeObserver;
 use Kaleidoscope\Factotum\Observers\OrderObserver;
 use Kaleidoscope\Factotum\Observers\ProductObserver;
+use Kaleidoscope\Factotum\Observers\ProductCategoryObserver;
 
 
 
@@ -51,6 +53,7 @@ use Kaleidoscope\Factotum\Console\Commands\FactotumCreateStorageFolders;
 use Kaleidoscope\Factotum\Console\Commands\FactotumCreateSymbolicLinks;
 use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
 use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateSitemap;
+use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateProductImages;
 use Kaleidoscope\Factotum\Console\Commands\DumpAutoload;
 
 
@@ -83,6 +86,7 @@ class FactotumServiceProvider extends ServiceProvider
 				ProductVariant::class    => ProductVariantPolicy::class,
 				Tax::class               => TaxPolicy::class,
 				DiscountCode::class      => DiscountCodePolicy::class,
+				Invoice::class           => InvoicePolicy::class,
 				Order::class             => OrderPolicy::class,
 				Cart::class              => CartPolicy::class,
 				CustomerAddress::class   => CustomerAddressPolicy::class
@@ -181,7 +185,8 @@ class FactotumServiceProvider extends ServiceProvider
 				FactotumCreateStorageFolders::class,
 				FactotumCreateSymbolicLinks::class,
 				FactotumInstallation::class,
-				FactotumGenerateSitemap::class
+				FactotumGenerateSitemap::class,
+				FactotumGenerateProductImages::class
 			]);
 
 		}
@@ -196,6 +201,7 @@ class FactotumServiceProvider extends ServiceProvider
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 			Order::observe(OrderObserver::class);
 			Product::observe(ProductObserver::class);
+			ProductCategory::observe(ProductCategoryObserver::class);
 			DiscountCode::observe(DiscountCodeObserver::class);
 		}
 
@@ -237,6 +243,7 @@ class FactotumServiceProvider extends ServiceProvider
 				require __DIR__ . '/routes/api/product.php';
 				require __DIR__ . '/routes/api/customer-address.php';
 				require __DIR__ . '/routes/api/order.php';
+				require __DIR__ . '/routes/api/invoice.php';
 				require __DIR__ . '/routes/api/cart.php';
 				require __DIR__ . '/routes/api/tax.php';
 				require __DIR__ . '/routes/api/discount-code.php';

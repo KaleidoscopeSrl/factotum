@@ -100,12 +100,23 @@ return [
 	'analytics_site_id'   => '',
 
 
-	// ECOMMERCE CONFIGURATION
+	// PIM CONFIGURATION
 
 	'brands_via_pim'             => false,
 	'product_categories_via_pim' => false,
 	'products_via_pim'           => false,
 
+	// ECOMMERCE CONFIGURATION
+	
+	// BASIC
+	'shop_owner_vat_number'  => env('SHOP_OWNER_VAT_NUMBER', '0000000000'),
+	'shop_owner_sdi'         => env('SHOP_OWNER_SDI',        '0000000'),
+
+	'shop_base_url'        => 'shop',
+	'guest_cart'           => false,
+	'product_vat_included' => false,
+
+	// PRODUCTS
 	'product_resizes' => [
 		0 => [
 			'w' => 1920,
@@ -136,11 +147,10 @@ return [
 			'h' => 375
 		]
 	],
-
 	'product_gallery_resize_operation' => 'fit',
 
-	'shop_base_url' => 'shop',
-
+	
+	// PAYMENTS
 	'payment_methods' => [
 		'stripe',
 		'paypal',
@@ -148,6 +158,10 @@ return [
 		'custom-payment'
 	],
 
+
+	// SHIPPING
+	'min_free_shipping'     => 65,
+	'shipping_vat_included' => false,
 	'shipping_options' => [
 		'pick-up' => [
 			'standard' => 0
@@ -161,13 +175,12 @@ return [
 		],
 	],
 
-	'guest_cart' => false,
 
-	'product_vat_included' => false,
+	// INVOICES
+	'invoice_start_number'   => 60,
+	'invoice_logo'           => '/assets/media/img/invoice-logo.png',
 
-	'min_free_shipping' => 65,
 
-
-	'version' => '5.0.21',
+	'version' => '5.0.22',
 
 ];

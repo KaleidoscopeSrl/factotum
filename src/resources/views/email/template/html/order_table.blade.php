@@ -33,7 +33,7 @@
 
 <tr>
 <td colspan="2"><strong>@lang('factotum::ecommerce_order.total_partial')</strong></td>
-<td>€ {{ number_format( $order->total_net, 2, ',', '.' )  }}</td>
+<td>€ {{ number_format( $order->total_net + $order->total_tax, 2, ',', '.' )  }}</td>
 </tr>
 
 @if( !config('factotum.product_vat_included') )
@@ -47,7 +47,7 @@
 
 <tr>
 <td colspan="2"><strong>@lang('factotum::ecommerce_order.total_shipping')</strong></td>
-<td>€ {{ number_format( $order->total_shipping, 2, ',', '.' )  }}</td>
+<td>€ {{ number_format( $order->total_shipping_net + $order->total_shipping_tax, 2, ',', '.' )  }}</td>
 </tr>
 
 <tr>
@@ -81,17 +81,7 @@
 
 <tr>
 <td colspan="2"><strong>@lang('factotum::ecommerce_order.total')</strong></td>
-
-@if( !config('factotum.product_vat_included') )
-
-<td>€ {{ number_format( $order->total_net + $order->total_tax + $order->total_shipping, 2, ',', '.' )  }}</td>
-
-@else
-
-<td>€ {{ number_format( $order->total_net + $order->total_shipping, 2, ',', '.' )  }}</td>
-
-@endif
-
+<td>€ {{ number_format( $order->total_net + $order->total_tax + $order->total_shipping_net + $order->total_shipping_tax, 2, ',', '.' )  }}</td>
 </tr>
 </tbody>
 </table>

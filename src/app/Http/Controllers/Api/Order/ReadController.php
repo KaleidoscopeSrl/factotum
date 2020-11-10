@@ -31,8 +31,7 @@ class ReadController extends Controller
 
 		$query = Order::query();
 
-		$rawQuery = 'orders.*, first_name, last_name, company_name, ';
-		$rawQuery .= '(total_net+total_shipping' . ( config('factotum.product_vat_included') ? '' : '+total_tax' ) . ') AS total';
+		$rawQuery = 'orders.*, first_name, last_name, company_name ';
 
 		$query->selectRaw( $rawQuery );
 		$query->join('users', 'users.id', '=', 'orders.customer_id');
@@ -112,7 +111,6 @@ class ReadController extends Controller
 		$order = Order::find($id);
 
         if ( $order ) {
-        	$order->total = $order->total_net + ( config('factotum.product_vat_included') ? 0 : $order->total_tax ) + $order->total_shipping;
 			$order->load([ 'customer', 'discount_code', 'customer.profile' ]);
 			$order->products = OrderProduct::with([ 'product', 'product_variant' ])
 											->where( 'order_id', $order->id )

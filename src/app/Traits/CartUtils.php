@@ -444,9 +444,20 @@ trait CartUtils
 				$order->customer_id = $user->id;
 				$order->status      = 'waiting_payment';
 
-				$order->total_net      = $totals['totalPartial'];
-				$order->total_tax      = $totals['totalTaxes'];
-				$order->total_shipping = $totals['totalShipping'];
+				$order->total_net = ( $totals['totalPartial'] - $totals['totalTaxes'] );
+				$order->total_tax = $totals['totalTaxes'];
+
+				$totalShippingNet = 0;
+				$totalShippingTax = 0;
+				if ( config('factotum.shipping_vat_included') ) {
+					$totalShippingTax = ( $totals['totalShipping'] / 100 * 22 );
+					$totalShippingNet = $totals['totalShipping'] - $totalShippingTax;
+				} else {
+					$totalShippingNet = $totals['totalShipping'];
+				}
+
+				$order->total_shipping_net = $totalShippingNet;
+				$order->total_shipping_tax = $totalShippingTax;
 
 				$discountCode = $this->_getTemporaryDiscountCode();
 
@@ -567,7 +578,7 @@ trait CartUtils
 			$productCart = $this->_getProductCart( $cart->id, $product->id );
 		}
 
-		$checkQuantity = $productCart->quantity + $quantity;
+		$checkQuantity        = $productCart->quantity + $quantity;
 		$checkQuantityAgaints = ( $product->has_variants ? $productVariant->quantity : $product->quantity );
 
 		if ( $checkQuantity > $checkQuantityAgaints) {
@@ -713,4 +724,5 @@ trait CartUtils
 			'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
 		];
 	}
+
 }

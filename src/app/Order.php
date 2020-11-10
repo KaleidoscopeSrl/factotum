@@ -28,8 +28,16 @@ class Order extends Model
 	// "refuned": rimborsato
 
 	protected $fillable = [
+		'cart_id',
 		'customer_id',
 		'status',
+
+		'total_net',
+		'total_tax',
+		'total_shipping_net',
+		'total_shipping_tax',
+
+		'discount_code_id',
 
 		'phone',
 
@@ -45,16 +53,27 @@ class Order extends Model
 		'invoice_city',
 		'invoice_zip',
 		'invoice_province',
-		'invoice_country'
-	];
+		'invoice_country',
 
+		'payment_type',
+		'transaction_id',
+
+		'notes',
+		'customer_user_agent',
+	];
 
 
 	protected $hidden = [
 		'deleted_at'
 	];
 
+	protected $appends = [
+		'total'
+	];
 
+
+
+	// RELATIONS
 	public function customer() {
 		return $this->hasOne('Kaleidoscope\Factotum\User', 'id', 'customer_id');
 	}
@@ -67,6 +86,10 @@ class Order extends Model
 	public function discount_code() {
 		return $this->hasOne('Kaleidoscope\Factotum\DiscountCode', 'id', 'discount_code_id');
 	}
+
+
+
+
 
 	public function setTransactionId( $transactionId = '' )
 	{
@@ -125,6 +148,37 @@ class Order extends Model
 
 
 	// MUTATORS
+	public function getTotalAttribute()
+	{
+		$total  = $this->total_net;
+		$total += $this->total_shipping_net;
+		$total += $this->total_tax;
+		$total += $this->total_shipping_tax;
+
+		return $total;
+	}
+
+	public function getTotalNetAttribute($value)
+	{
+		return (float)$value;
+	}
+
+	public function getTotalTaxAttribute($value)
+	{
+		return (float)$value;
+	}
+
+	public function getTotalShippingNetAttribute($value)
+	{
+		return (float)$value;
+	}
+
+	public function getTotalShippingTaxAttribute($value)
+	{
+		return (float)$value;
+	}
+
+
 	public function getCreatedAtAttribute($value)
 	{
 		return ( $value ? strtotime($value) * 1000 : null );

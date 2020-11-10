@@ -174,63 +174,71 @@ class Product extends Model
 
 		if ( count($data) > 0 ) {
 
-			$productResizes = config('factotum.product_resizes');
-			$productResizeOperation = config('factotum.product_resize_operation');
-
 			// Save Additional
 			if ( isset($data['product_category_ids']) ) {
-
 				foreach ( $data['product_category_ids'] as $product_category_id ) {
-
 					$product->product_categories()->attach( $product_category_id );
-
 				}
-
 			}
-//			if ( isset($data['image']) && isset($productResizes) ) {
-//				$field                  = new ContentField;
-//				$field->image_bw        = false;
-//				$field->image_operation = ( $productResizeOperation ? $productResizeOperation : 'fit' );
-//				$field->resizes         = json_encode( $productResizes );
-//
-//				if ( is_string($data['image']) || is_integer($data['image']) ) {
-//					$imageId = $data['image'];
-//				} elseif ( is_array($data['image']) ) {
-//					$imageId = $data['image'][0]['id'];
-//				}
-//
-//				Media::saveImageById( $field, $imageId );
-//			}
 
+			$this->generateMainImage( $data );
 
-//			$productGalleryResizes         = config('factotum.product_gallery_resizes');
-//			$productGalleryResizeOperation = config('factotum.product_gallery_resize_operation');
-//
-//			if ( isset($data['gallery']) && isset($productGalleryResizes) ) {
-//				$field                  = new ContentField;
-//				$field->image_bw        = false;
-//				$field->image_operation = ( $productGalleryResizeOperation ? $productGalleryResizeOperation : 'fit' );
-//				$field->resizes         = json_encode( $productGalleryResizes );
-//
-//				if ( is_string($data['gallery']) ) {
-//					$gallery = explode( ',', $data[ 'gallery' ] );
-//				} else if ( is_array($data['gallery']) ) {
-//					$tmp = [];
-//					foreach ( $data['gallery'] as $media ) {
-//						$tmp[] = $media['id'];
-//					}
-//					$gallery = $tmp;
-//				}
-//
-//				foreach ( $gallery as $g ) {
-//					Media::saveImageById( $field, $g );
-//				}
-//
-//			}
+			$this->generateGalleryImages( $data );
 
 		}
 
 		return $product;
+	}
+
+
+	public function generateMainImage( $data )
+	{
+		$productResizes         = config('factotum.product_resizes');
+		$productResizeOperation = config('factotum.product_resize_operation');
+
+		if ( isset($data['image']) && isset($productResizes) ) {
+			$field                  = new ContentField;
+			$field->image_bw        = false;
+			$field->image_operation = ( $productResizeOperation ? $productResizeOperation : 'fit' );
+			$field->resizes         = json_encode( $productResizes );
+
+			if ( is_string($data['image']) || is_integer($data['image']) ) {
+				$imageId = $data['image'];
+			} elseif ( is_array($data['image']) ) {
+				$imageId = $data['image'][0]['id'];
+			}
+
+			Media::saveImageById( $field, $imageId );
+		}
+	}
+
+
+	public function generateGalleryImages( $data )
+	{
+		$productGalleryResizes         = config('factotum.product_gallery_resizes');
+		$productGalleryResizeOperation = config('factotum.product_gallery_resize_operation');
+
+		if ( isset($data['gallery']) && isset($productGalleryResizes) ) {
+			$field                  = new ContentField;
+			$field->image_bw        = false;
+			$field->image_operation = ( $productGalleryResizeOperation ? $productGalleryResizeOperation : 'fit' );
+			$field->resizes         = json_encode( $productGalleryResizes );
+
+			if ( is_string($data['gallery']) ) {
+				$gallery = explode( ',', $data[ 'gallery' ] );
+			} else if ( is_array($data['gallery']) ) {
+				$tmp = [];
+				foreach ( $data['gallery'] as $media ) {
+					$tmp[] = $media['id'];
+				}
+				$gallery = $tmp;
+			}
+
+			foreach ( $gallery as $g ) {
+				Media::saveImageById( $field, $g );
+			}
+
+		}
 	}
 
 
