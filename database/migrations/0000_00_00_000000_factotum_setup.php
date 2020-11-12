@@ -51,6 +51,7 @@ class FactotumSetup extends Migration
 			$table->text('resizes')->nullable(true);
 			$table->bigInteger('linked_content_type_id')->unsigned()->nullable(true)->default(null);
 			$table->foreign('linked_content_type_id')->references('id')->on('content_types')->onDelete('cascade');
+			$table->text('rules')->nullable(true);
 			$table->unique(array('content_type_id', 'name'));
 			$table->timestamps();
 		});

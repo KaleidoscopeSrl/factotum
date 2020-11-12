@@ -360,7 +360,11 @@
 		"max_file_size_hint": "Insert the max file size for an uploaded file, the value must be below 256",
 		"allowed_types": "Allowed Types",
 		"allowed_types_hint": "Insert the list of accepted extensions",
-		"accepted_extensions": "Allowed Types..."
+		"accepted_extensions": "Allowed Types...",
+		"rules_label": "Showing rules",
+		"rules_operation": "Seleziona operatore",
+		"rules_content_fields": "Seleziona Campo Personalizzato",
+		"rules_value": "Value"
 	},
 
 	"deleteCustomFieldDialog": {

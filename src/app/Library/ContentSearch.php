@@ -43,13 +43,14 @@ class ContentSearch {
 		$this->_fields    = (isset($this->_model->fields)    ? (array) $this->_model->fields    : [] );
 		$this->_relations = (isset($this->_model->relations) ? (array) $this->_model->relations : [] );
 
-		$this->_cols = join( ',', array_merge( $this->_cols, array_keys( $this->_fields ) ) );
+		$this->_cols = join( ',', array_merge( $this->_cols, array_keys( $this->_fields ), [ $contentType['content_type'].'.id as elem_id' ] ) );
 
 		$this->_query = DB::table('contents')
 							->select( DB::raw( $this->_cols ) )
 							->leftJoin( $contentType['content_type'], 'contents.id', '=', $contentType['content_type'] . '.content_id')
 							->leftJoin( 'users', 'users.id', '=', 'contents.user_id')
 							->leftJoin( 'profiles', 'profiles.user_id', '=', 'users.id')
+							->whereNull( 'deleted_at')
 							->where( 'contents.content_type_id', '=', $contentType['id']);
 
 		$this->_loadCategories = false;
