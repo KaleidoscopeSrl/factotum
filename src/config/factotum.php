@@ -181,6 +181,6 @@ return [
 	'invoice_logo'           => '/assets/media/img/invoice-logo.png',
 
 
-	'version' => '5.0.24',
+	'version' => '5.0.25',
 
 ];
