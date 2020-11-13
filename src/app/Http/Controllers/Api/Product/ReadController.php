@@ -56,9 +56,8 @@ class ReadController extends Controller
 
 				$tmp = array_unique( $tmp );
 
-
 				$query->whereHas('product_categories', function ($q) use ($tmp) {
-					$q->whereIn('id', $tmp);
+					$q->whereIn('product_category_id', $tmp);
 				});
 			}
 

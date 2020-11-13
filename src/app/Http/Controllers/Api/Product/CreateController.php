@@ -33,6 +33,7 @@ class CreateController extends Controller
 		$absUrl      = $newProduct->abs_url . '-clone-2';
 
 		$productExist = Product::withTrashed()->where('code', $productCode)->first();
+
 		if ( $productExist ) {
 			$productCode .= '_' . Str::random(5);
 			$absUrl      .= '_' . Str::random(5);

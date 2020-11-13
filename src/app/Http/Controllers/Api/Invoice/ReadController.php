@@ -111,9 +111,9 @@ class ReadController extends Controller
 			    $invoiceDay['total_tax'] += ( $invoice->total_tax + $invoice->total_shipping_tax );
 			    $invoiceDay['total']     += $invoice->total;
 
-			    $invoiceDay['total_net'] = (float) number_format( $invoiceDay['total_net'], 2 );
-			    $invoiceDay['total_tax'] = (float) number_format( $invoiceDay['total_tax'], 2 );
-			    $invoiceDay['total']     = (float) number_format( $invoiceDay['total'], 2 );
+			    $invoiceDay['total_net'] = $invoiceDay['total_net'];
+			    $invoiceDay['total_tax'] = $invoiceDay['total_tax'];
+			    $invoiceDay['total']     = $invoiceDay['total'];
 
 			    $invoicesGrouped[ $day ] = $invoiceDay;
 		    }
@@ -125,9 +125,9 @@ class ReadController extends Controller
 		    $totals['total']     += $day['total'];
 	    }
 
-	    $totals['total_net'] = (float) number_format( $totals['total_net'], 2 );
-	    $totals['total_tax'] = (float) number_format( $totals['total_tax'], 2 );
-	    $totals['total']     = (float) number_format( $totals['total'], 2 );
+	    $totals['total_net'] = (float) $totals['total_net'];
+	    $totals['total_tax'] = (float) $totals['total_tax'];
+	    $totals['total']     = (float) $totals['total'];
 
 	    return response()->json( [ 'result' => 'ok', 'invoices' => $invoicesGrouped, 'totals' => $totals ]);
     }

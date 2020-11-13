@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 use Kaleidoscope\Factotum\Library\Utility;
 
@@ -150,14 +151,6 @@ class Product extends Model
 	// CUSTOM SAVE
 	public function save( array $options = [] )
 	{
-		$shopBaseUrl = config('factotum.shop_base_url');
-
-		if ( $shopBaseUrl && substr($shopBaseUrl, 0, 1) != '/' ) {
-			$shopBaseUrl = '/' . $shopBaseUrl;
-		}
-
-		$this->abs_url = $shopBaseUrl . '/' . $this->url;
-
 		$productSaved = parent::save($options);
 
 		$this->_saveAdditional( $this );
@@ -176,10 +169,15 @@ class Product extends Model
 
 			// Save Additional
 			if ( isset($data['product_category_ids']) ) {
-				foreach ( $data['product_category_ids'] as $product_category_id ) {
+				ProductProductCategory::where( 'product_id', $product->id )->delete();
+
+				$productCategoryIds = array_unique($data['product_category_ids']);
+				foreach ( $productCategoryIds as $product_category_id ) {
 					$product->product_categories()->attach( $product_category_id );
 				}
 			}
+
+			$this->generateAbsUrl();
 
 			$this->generateMainImage( $data );
 
@@ -188,6 +186,38 @@ class Product extends Model
 		}
 
 		return $product;
+	}
+
+
+	public function generateAbsUrl()
+	{
+		$shopBaseUrl = config('factotum.shop_base_url');
+
+		if ( $shopBaseUrl && substr($shopBaseUrl, 0, 1) != '/' ) {
+			$shopBaseUrl = '/' . $shopBaseUrl;
+		}
+
+		if ( $this->product_categories()->count() > 0 ) {
+			$firstCategory = $this->product_categories()->first();
+			$categories    = array_reverse( $firstCategory->getFlatParentsArray() );
+
+			if ( count($categories) > 0 ) {
+				$catUrl = '';
+				foreach ( $categories as $cat ) {
+					$catUrl .= '/' . $cat->name;
+				}
+
+				$absUrl = ( $shopBaseUrl ? $shopBaseUrl : '' ) . $catUrl . '/' . $this->url;
+			} else {
+				$absUrl = ( $shopBaseUrl ? $shopBaseUrl : '' ) . '/' . $this->url;
+			}
+		} else {
+			$absUrl = $shopBaseUrl . '/' . $this->url;
+		}
+
+		$affected = DB::table('products')
+						->where( 'id', $this->id )
+						->update([ 'abs_url' => $absUrl ]);
 	}
 
 

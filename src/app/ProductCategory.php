@@ -32,11 +32,10 @@ class ProductCategory extends Model
 		'total_products'
 	];
 
-	public function products()
-	{
-		return $this->hasMany('Kaleidoscope\Factotum\Product' );
-	}
 
+	public function products() {
+		return $this->belongsToMany('Kaleidoscope\Factotum\Product', 'product_product_category');
+	}
 
 	public function parent() {
 		return $this->belongsTo( 'Kaleidoscope\Factotum\ProductCategory', 'parent_id');

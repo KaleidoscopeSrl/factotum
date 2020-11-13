@@ -188,8 +188,13 @@ trait CartUtils
 					$totalPartial  += $cp->quantity * $cp->product_price;
 
 					if ( $cp->tax_data ) {
-						$tax         = $cp->tax_data;
-						$totalTaxes += ( ( $cp->quantity * $cp->product_price ) / 100 * $tax['amount'] );
+						$tax = $cp->tax_data;
+
+						if ( config('factotum.product_vat_included') ) {
+							$totalTaxes   += ( ( $cp->quantity * $cp->product_price ) / 122 * $tax['amount'] );
+						} else {
+							$totalTaxes += ( ( $cp->quantity * $cp->product_price ) / 100 * $tax['amount'] );
+						}
 					}
 				}
 
@@ -248,7 +253,9 @@ trait CartUtils
 
 
 			$total = $totalPartial;
-			if ( !config('factotum.product_vat_included') ) {
+			if ( config('factotum.product_vat_included') ) {
+				$totalPartial = $total - $totalTaxes;
+			} else {
 				$total += $totalTaxes;
 			}
 
@@ -444,13 +451,14 @@ trait CartUtils
 				$order->customer_id = $user->id;
 				$order->status      = 'waiting_payment';
 
-				$order->total_net = ( $totals['totalPartial'] - $totals['totalTaxes'] );
+				$order->total_net = $totals['totalPartial'];
 				$order->total_tax = $totals['totalTaxes'];
 
 				$totalShippingNet = 0;
 				$totalShippingTax = 0;
+
 				if ( config('factotum.shipping_vat_included') ) {
-					$totalShippingTax = ( $totals['totalShipping'] / 100 * 22 );
+					$totalShippingTax = ( $totals['totalShipping'] / 122 * 22 );
 					$totalShippingNet = $totals['totalShipping'] - $totalShippingTax;
 				} else {
 					$totalShippingNet = $totals['totalShipping'];
@@ -506,10 +514,10 @@ trait CartUtils
 								$productVariant = ProductVariant::find( $cp->product_variant_id );
 								$productVariant->quantity = $productVariant->quantity - $cp->quantity;
 								$productVariant->save();
-							} else {
-								$product->quantity = $product->quantity - $cp->quantity;
-								$product->save();
 							}
+
+							$product->quantity = $product->quantity - $cp->quantity;
+							$product->save();
 						}
 
 					}

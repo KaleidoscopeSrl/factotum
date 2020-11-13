@@ -195,7 +195,10 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->integer('quantity')->default(0);
 
+			$table->integer('order_no')->nullable(true);
+
 			$table->timestamps();
+			$table->softDeletes();
 		});
 
 
@@ -338,6 +341,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->text('tax_data')->nullable();
 
 			$table->timestamps();
+			$table->softDeletes();
 		});
 
 

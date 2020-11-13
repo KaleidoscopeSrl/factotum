@@ -29,7 +29,7 @@ Route::group([
 	Route::group(['middleware' => 'can:update,Kaleidoscope\Factotum\Product,id'], function() {
 		Route::post('/update/{id}',                  'UpdateController@update');
 		Route::post('/change-products-status',       'UpdateController@changeProductsStatus');
-		Route::post('/change-products-category',     'UpdateController@changeProductsCategory');
+		Route::post('/change-products-categories',   'UpdateController@changeProductsCategories');
 	});
 
 	Route::group(['middleware' => 'can:delete,Kaleidoscope\Factotum\Product,id'], function() {

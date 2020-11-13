@@ -222,43 +222,46 @@ class InvoicePdf extends Fpdf\FPDF
 	{
 		$this->SetFont('Helvetica', '', 8);
 
-		$productName = $orderProduct->product->name;
+		if ( $orderProduct->product ) {
+			$productName = $orderProduct->product->name;
 
-		if ( $orderProduct->product_variant ) {
-			$productName .= ' (' . $orderProduct->product_variant->label . ')';
+			if ( $orderProduct->product_variant ) {
+				$productName .= ' (' . $orderProduct->product_variant->label . ')';
+			}
+
+			// Product Name
+			$this->Cell(
+				$this->_productTableHeaderWidths[0], $this->_productTableRowHeight,
+				$productName,
+				'LR', 0, 'L'
+			);
+
+			// Product Quantity
+			$this->Cell(
+				$this->_productTableHeaderWidths[1], $this->_productTableRowHeight,
+				$orderProduct->quantity,
+				'LR', 0, 'L'
+			);
+
+			// Product Single Price
+			$this->Cell(
+				$this->_productTableHeaderWidths[2], $this->_productTableRowHeight,
+				EURO . ' ' . number_format( $orderProduct->product_price, 2, ',', '.' ),
+				'LR', 0, 'L'
+			);
+
+			// Partial Total
+			$this->Cell(
+				$this->_productTableHeaderWidths[3], $this->_productTableRowHeight,
+				EURO . ' ' . number_format( $orderProduct->product_price * $orderProduct->quantity, 2, ',', '.' ),
+				'LR', 0, 'L'
+			);
+
+			$this->Ln();
+			$this->SetX(15);
+			$this->Line( $this->GetX(), $this->GetY(), 195, $this->GetY() );
 		}
 
-		// Product Name
-		$this->Cell(
-			$this->_productTableHeaderWidths[0], $this->_productTableRowHeight,
-			$productName,
-			'LR', 0, 'L'
-		);
-
-		// Product Quantity
-		$this->Cell(
-			$this->_productTableHeaderWidths[1], $this->_productTableRowHeight,
-			$orderProduct->quantity,
-			'LR', 0, 'L'
-		);
-
-		// Product Single Price
-		$this->Cell(
-			$this->_productTableHeaderWidths[2], $this->_productTableRowHeight,
-			EURO . ' ' . number_format( $orderProduct->product_price, 2, ',', '.' ),
-			'LR', 0, 'L'
-		);
-
-		// Partial Total
-		$this->Cell(
-			$this->_productTableHeaderWidths[3], $this->_productTableRowHeight,
-			EURO . ' ' . number_format( $orderProduct->product_price * $orderProduct->quantity, 2, ',', '.' ),
-			'LR', 0, 'L'
-		);
-
-		$this->Ln();
-		$this->SetX(15);
-		$this->Line( $this->GetX(), $this->GetY(), 195, $this->GetY() );
 	}
 
 

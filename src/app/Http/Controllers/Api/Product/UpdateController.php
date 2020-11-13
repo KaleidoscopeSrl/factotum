@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use Kaleidoscope\Factotum\Http\Requests\StoreProduct;
 use Kaleidoscope\Factotum\Product;
+use Kaleidoscope\Factotum\ProductCategory;
+use Kaleidoscope\Factotum\ProductProductCategory;
 
 
 class UpdateController extends Controller
@@ -40,20 +42,15 @@ class UpdateController extends Controller
 	}
 
 
-	public function changeProductsCategory(Request $request)
+	public function changeProductsCategories(Request $request)
 	{
 		$products   = $request->input('products');
-		$categories = $request->input('categories');
+		$categories = $request->input('product_category_ids');
 
 		if ( $products && count($products) > 0 ) {
-			foreach ( $products as $prodId ) {
-				$prod = Product::find($prodId);
-
-				foreach ( $categories as $category ) {
-					$prod->product_categories()->attach( $category );
-				}
-
-				$prod->save();
+			foreach ( $products as $product ) {
+				$product = Product::find($product);
+				$product->save();
 			}
 		}
 

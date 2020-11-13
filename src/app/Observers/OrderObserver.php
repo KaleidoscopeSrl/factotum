@@ -24,7 +24,7 @@ class OrderObserver
 		$invoice->total_tax          = $order->total_tax;
 		$invoice->total_shipping_net = $order->total_shipping_net;
 		$invoice->total_shipping_tax = $order->total_shipping_tax;
-		$invoice->shop_address   = env('SHOP_OWNER_ADDRESS');
+		$invoice->shop_address       = env('SHOP_OWNER_ADDRESS');
 		$invoice->save();
 	}
 

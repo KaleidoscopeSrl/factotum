@@ -41,7 +41,7 @@ use Kaleidoscope\Factotum\Observers\DiscountCodeObserver;
 use Kaleidoscope\Factotum\Observers\OrderObserver;
 use Kaleidoscope\Factotum\Observers\ProductObserver;
 use Kaleidoscope\Factotum\Observers\ProductCategoryObserver;
-
+use Kaleidoscope\Factotum\Observers\ProductVariantObserver;
 
 
 use Kaleidoscope\Factotum\Console\Commands\FactotumCleanFolders;
@@ -135,9 +135,11 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		// Middlewares
-		$this->getRouter()->pushMiddlewareToGroup('session_start', \Illuminate\Session\Middleware\StartSession::class);
-		$this->getRouter()->pushMiddlewareToGroup('preflight',     \Kaleidoscope\Factotum\Http\Middleware\PreflightResponse::class);
-		$this->getRouter()->pushMiddlewareToGroup('cors',          \Fruitcake\Cors\HandleCors::class);
+		$this->getRouter()->pushMiddlewareToGroup('session_start',     \Illuminate\Session\Middleware\StartSession::class);
+		$this->getRouter()->pushMiddlewareToGroup('preflight',         \Kaleidoscope\Factotum\Http\Middleware\PreflightResponse::class);
+		$this->getRouter()->pushMiddlewareToGroup('cors',              \Fruitcake\Cors\HandleCors::class);
+		$this->getRouter()->pushMiddlewareToGroup('add_access_token',  \Kaleidoscope\Factotum\Http\Middleware\AddHeaderAccessToken::class);
+
 
 
 		// Config, Resources and Public
@@ -202,6 +204,7 @@ class FactotumServiceProvider extends ServiceProvider
 			Order::observe(OrderObserver::class);
 			Product::observe(ProductObserver::class);
 			ProductCategory::observe(ProductCategoryObserver::class);
+			ProductVariant::observe(ProductVariantObserver::class);
 			DiscountCode::observe(DiscountCodeObserver::class);
 		}
 
@@ -227,6 +230,7 @@ class FactotumServiceProvider extends ServiceProvider
 		Route::group([
 			'prefix'     => 'api/v1',
 			'middleware' => [
+				'add_access_token',
 				'api',
 				'auth:api',
 				'cors',

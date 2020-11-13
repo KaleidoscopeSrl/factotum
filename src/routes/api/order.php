@@ -30,6 +30,7 @@ Route::group([
 
 	Route::group(['middleware' => 'can:delete,Kaleidoscope\Factotum\Order,id'], function() {
 		Route::delete('/delete/{id}',                'DeleteController@remove');
+		Route::post('/delete-orders',                'DeleteController@removeOrders');
 	});
 
 });

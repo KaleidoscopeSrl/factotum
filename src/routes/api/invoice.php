@@ -26,6 +26,7 @@ Route::group([
 
 	Route::group(['middleware' => 'can:read,Kaleidoscope\Factotum\Invoice'], function() {
 		Route::post('/generate-pdf-by-month',        'PdfController@generateByMonth');
+		Route::get('/view-invoice/{orderId}',        'PdfController@viewInvoiceByOrderId');
 	});
 
 });
