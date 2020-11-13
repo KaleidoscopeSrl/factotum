@@ -26,7 +26,9 @@ class ContentField extends Model
 		'image_bw',
 		'resizes',
 
-		'linked_content_type_id'
+		'linked_content_type_id',
+
+		'rules',
 	];
 
 	public function content_type()
@@ -47,6 +49,11 @@ class ContentField extends Model
 	}
 
 	public function getAllowedTypesAttribute($value)
+	{
+		return ( $value ? json_decode( $value, true ) : null );
+	}
+
+	public function getRulesAttribute($value)
 	{
 		return ( $value ? json_decode( $value, true ) : null );
 	}
