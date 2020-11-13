@@ -10,7 +10,7 @@
         "name": "Filippo Matteo Riggio",
         "email": "filippo@kaleidoscope.it"
       }
-    ]
+    ],
     "require": {
         "php": "^7.1.3",
         "doctrine/dbal": "^2.8",
