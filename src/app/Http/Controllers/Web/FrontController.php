@@ -52,7 +52,8 @@ class FrontController extends Controller
 							->select( DB::raw('*') )
 							->where([
 								'status' => 'publish',
-								'url'    => $uri
+								'url'    => $uri,
+								'lang'   => $this->currentLanguage
 							])
 							->first();
 
@@ -61,6 +62,7 @@ class FrontController extends Controller
 				$contentType   = ContentType::find($content->content_type_id)->toArray();
 				$contentSearch = new ContentSearch( $contentType );
 				$content       = $contentSearch->addWhereCondition( 'url', '=', $uri )
+												 ->addWhereCondition( 'lang', '=', $this->currentLanguage )
 												 ->onlyPublished()
 												 ->loadCategories(true)
 												 ->search();
