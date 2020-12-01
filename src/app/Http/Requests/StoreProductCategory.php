@@ -37,6 +37,10 @@ class StoreProductCategory extends CustomFormRequest
 				$rules['name'] .= '|unique:product_categories,name,parent_id';
 			}
 
+			if ( $productCategory->name == $data['name'] ) {
+				unset( $rules['name'] );
+			}
+
 			$id = request()->route('id');
 
 			if ( $id ) {

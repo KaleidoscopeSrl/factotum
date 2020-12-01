@@ -91,9 +91,9 @@ class ProductCategory extends Model
 	private static function _getChildCategories( $category = null, $pagination = null, $filters = null )
 	{
 		if ( $category ) {
-			$query = ProductCategory::where( 'id', $category->id )->orderBy('order_no');
+			$query = ProductCategory::where( 'id', $category->id )->orderBy('order_no', 'ASC');
 		} else {
-			$query = ProductCategory::whereNull( 'parent_id' )->orderBy('order_no');
+			$query = ProductCategory::whereNull( 'parent_id' )->orderBy('order_no', 'ASC');
 		}
 
 		if ( request()->input('lang') ) {
