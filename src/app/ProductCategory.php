@@ -208,7 +208,9 @@ class ProductCategory extends Model
 				$absUrl = '/' . $c->name;
 			}
 
-			DB::raw('UPDATE product_categories SET abs_url = ? WHERE id = ?', [ $absUrl, $c->id ]);
+			DB::table('product_categories')
+				->where('id', $c->id)
+				->update([ 'abs_url' => $absUrl ]);
 
 			if ( $childs ) {
 				$level = $level + 1;
@@ -301,10 +303,6 @@ class ProductCategory extends Model
 		return null;
 	}
 
-	public function getAbsUrlAttribute( $value )
-	{
-		return $value;
-	}
 
 	public function getTotalProductsAttribute()
 	{
