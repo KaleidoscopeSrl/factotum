@@ -14,6 +14,7 @@ class ProductCategory extends Model
 
 	protected $fillable = [
 		'parent_id',
+		'abs_url',
 		'name',
 		'label',
 		'lang',
@@ -28,7 +29,6 @@ class ProductCategory extends Model
 	];
 
 	protected $appends = [
-		'abs_url',
 		'total_products'
 	];
 
@@ -58,6 +58,10 @@ class ProductCategory extends Model
 	}
 
 
+	public function getFlatChildsArray()
+	{
+		return ProductCategory::_parseFlatTreeChilds( [ $this ], 0 );
+	}
 
 
 	public static function treeChildsArray( $pagination = null, $filters = null )
@@ -136,6 +140,7 @@ class ProductCategory extends Model
 		return $categories;
 	}
 
+
 	public function singleCategoryFlatTreeChildsArray( $pagination = null, $filters = null )
 	{
 		$categories = self::_getChildCategories( $this, $pagination, $filters );
@@ -163,7 +168,6 @@ class ProductCategory extends Model
 
 			// TODO: fix label repeat stuff
 			// $c->label = str_repeat('-', $level ) . $c->label;
-			$c->label = $c->label;
 
 			if ( $parent ) {
 				$c->abs_url = $parent->abs_url . '/' . $c->name;
@@ -182,10 +186,44 @@ class ProductCategory extends Model
 		return $result;
 	}
 
+	
 
-	public function getFlatChildsArray()
+	private static function _rewriteChildsAbsUrl( $categories, $level = 0, $parent = null )
 	{
-		return ProductCategory::_parseFlatTreeChilds( [ $this ], 0 );
+		foreach ( $categories as $c ) {
+
+			$childs = null;
+
+			if ( $c->childs->count() > 0 ) {
+				$childs = $c->childs;
+			}
+
+			unset($c->childs);
+
+			$absUrl = '';
+
+			if ( $parent ) {
+				$absUrl = $parent->abs_url . '/' . $c->name;
+			} else {
+				$absUrl = '/' . $c->name;
+			}
+
+			DB::raw('UPDATE product_categories SET abs_url = ? WHERE id = ?', [ $absUrl, $c->id ]);
+
+			if ( $childs ) {
+				$level = $level + 1;
+				self::_rewriteChildsAbsUrl($childs, $level, $c);
+			}
+		}
+
+	}
+
+
+	public function save( $options = [] )
+	{
+		ProductCategory::_rewriteChildsAbsUrl( [ $this ], 0 );
+
+		parent::save();
 	}
 
 

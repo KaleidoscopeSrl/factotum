@@ -51,6 +51,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('parent_id')->unsigned()->nullable(true);
 			$table->string('name', 50);
 			$table->string('label', 255);
+			$table->string('abs_url', 255 )->nullable();
 			$table->text('description')->nullable();
 			$table->string('lang', 5);
 			$table->boolean('show_in_home')->nullable();
