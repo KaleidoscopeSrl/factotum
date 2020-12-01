@@ -202,11 +202,18 @@ class ProductCategory extends Model
 
 			$absUrl = '';
 
-			if ( $parent ) {
-				$absUrl = $parent->abs_url . '/' . $c->name;
-			} else {
-				$absUrl = '/' . $c->name;
+			$lang = $c->lang;
+
+			if ( $c->lang != config('factotum.main_site_language') ) {
+				$absUrl .= '/' . $lang;
 			}
+
+			if ( $parent ) {
+				$absUrl .= $parent->abs_url . '/' . $c->name;
+			} else {
+				$absUrl .= '/' . $c->name;
+			}
+
 
 			DB::table('product_categories')
 				->where('id', $c->id)
