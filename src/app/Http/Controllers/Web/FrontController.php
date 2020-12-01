@@ -12,6 +12,7 @@ use Kaleidoscope\Factotum\Library\ContentSearch;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Category;
 use Kaleidoscope\Factotum\Content;
+use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Notifications\NewOrderToCustomerNotification;
 use Kaleidoscope\Factotum\Product;
 use Kaleidoscope\Factotum\ProductCategory;
@@ -51,7 +52,8 @@ class FrontController extends Controller
 							->select( DB::raw('*') )
 							->where([
 								'status' => 'publish',
-								'url'    => $uri
+								'url'    => $uri,
+								'lang'   => $this->currentLanguage
 							])
 							->first();
 
@@ -60,6 +62,7 @@ class FrontController extends Controller
 				$contentType   = ContentType::find($content->content_type_id)->toArray();
 				$contentSearch = new ContentSearch( $contentType );
 				$content       = $contentSearch->addWhereCondition( 'url', '=', $uri )
+												 ->addWhereCondition( 'lang', '=', $this->currentLanguage )
 												 ->onlyPublished()
 												 ->loadCategories(true)
 												 ->search();
@@ -77,6 +80,7 @@ class FrontController extends Controller
 			}
 
 		} else {
+			$content = $this->_loadAdditionalData( $content);
 
 			return $content;
 
@@ -129,6 +133,7 @@ class FrontController extends Controller
 
 						case 'content_list':
 							$contentType = ContentType::where( 'content_type', $content->content_type_to_list )->first();
+
 							$contentList = new LengthAwarePaginator( [], 0, 10, null );
 
 							if ( $contentType ) {
@@ -156,7 +161,9 @@ class FrontController extends Controller
 									$contentSearch->addPagination($content->content_list_pagination);
 								}
 
+
 								$contentList = $contentSearch->search();
+								
 							}
 
 
@@ -241,6 +248,7 @@ class FrontController extends Controller
 								  ->search();
 
 		if ( $content->count() > 0 ) {
+			$content[0] = $this->_loadAdditionalData( $content[0] );
 			return $this->_switchContent( $content[0] );
 		}
 

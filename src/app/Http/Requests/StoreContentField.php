@@ -103,6 +103,12 @@ class StoreContentField extends CustomFormRequest
 			$data['resizes'] = null;
 		}
 
+		if ( isset($data['rules']) && $data['rules'] ) {
+			$data['rules'] = json_encode( $data['rules'] );
+		} else {
+			$data['rules'] = null;
+		}
+
 		if ( $id ) {
 			$contentField              = ContentField::find($id);
 			$data['old_content_field'] = $contentField->name;

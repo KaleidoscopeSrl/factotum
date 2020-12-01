@@ -360,7 +360,11 @@
 		"max_file_size_hint": "Inserire il valore della dimensione massima del file che un utente può caricare, il valore inserito deve comunque essere inferire a 256",
 		"allowed_types": "Tipi di estensione file accettati",
 		"allowed_types_hint": "Inserire l'elenco delle estensioni del file accettate",
-		"accepted_extensions": "Estensioni accettate..."
+		"accepted_extensions": "Estensioni accettate...",
+		"rules_label": "Regole di visualizzazione",
+		"rules_operation": "Seleziona operatore",
+		"rules_content_fields": "Seleziona Campo Personalizzato",
+		"rules_value": "Valore"
 	},
 
 	"deleteCustomFieldDialog": {

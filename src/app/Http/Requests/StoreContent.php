@@ -68,9 +68,45 @@ class StoreContent extends CustomFormRequest
 			if ( $contentFields->count() > 0 ) {
 				foreach ( $contentFields as $cf ) {
 
+					$checkMandatory = true;
+
+					// Se il campo ha regole di visualizzazione controllo che sia visibile per la rule require
+					if ( $cf->rules ) {
+						$checkMandatory = false;
+
+						foreach ( $cf->rules as $cfRuleSet ) {
+							$checkSet = true;
+
+							foreach ( $cfRuleSet as $cfRule ) {
+
+								switch ( $cfRule['operator'] ) {
+									case '=' :
+										$checkRule = $data[ $cfRule['contentField'] ] === $cfRule['value'];
+										break;
+									case '<>' :
+										$checkRule = $data[ $cfRule['contentField'] ] !== $cfRule['value'];
+										break;
+									case '<' :
+										$checkRule = $cfRule['value'] < $data[ $cfRule['contentField'] ];
+										break;
+									case '>' :
+										$checkRule = $cfRule['value'] > $data[ $cfRule['contentField'] ];
+										break;
+									default:
+										$checkRule = false;
+								}
+
+								$checkSet = $checkSet && $checkRule;
+
+							}
+
+							$checkMandatory = $checkMandatory || $checkSet;
+						}
+					}
+
 					$rule = [];
 
-					if ( $cf->mandatory ) {
+					if ( $checkMandatory && $cf->mandatory ) {
 						$rule[] = 'required';
 					}
 
