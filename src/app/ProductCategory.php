@@ -204,13 +204,14 @@ class ProductCategory extends Model
 
 			$lang = $c->lang;
 
-			if ( $c->lang != config('factotum.main_site_language') ) {
-				$absUrl .= '/' . $lang;
-			}
-
 			if ( $parent ) {
 				$absUrl .= $parent->abs_url . '/' . $c->name;
 			} else {
+
+				if ( $c->lang != config('factotum.main_site_language') ) {
+					$absUrl .= '/' . $lang;
+				}
+
 				$absUrl .= '/' . $c->name;
 			}
 
