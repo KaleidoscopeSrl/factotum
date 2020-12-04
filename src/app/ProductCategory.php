@@ -219,6 +219,8 @@ class ProductCategory extends Model
 				->where('id', $c->id)
 				->update([ 'abs_url' => $absUrl ]);
 
+			$c->abs_url = $absUrl;
+
 			if ( $childs ) {
 				$level = $level + 1;
 				self::_rewriteChildsAbsUrl($childs, $level, $c);
@@ -230,7 +232,7 @@ class ProductCategory extends Model
 
 	public function save( $options = [] )
 	{
-		ProductCategory::_rewriteChildsAbsUrl( [ $this ], 0 );
+		ProductCategory::_rewriteChildsAbsUrl( [ $this ], 0, $this->parent );
 
 		parent::save();
 	}
