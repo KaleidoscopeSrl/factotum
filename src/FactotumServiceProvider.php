@@ -128,8 +128,9 @@ class FactotumServiceProvider extends ServiceProvider
 			$this->app['config']->get('view', []), require __DIR__ . '/config/view.php'
 		));
 
-		$this->app['config']->set( 'filesystems', array_merge(
-			$this->app['config']->get('filesystems', []), require __DIR__ . '/config/filesystems.php'
+		$this->app['config']->set( 'filesystems', array_replace_recursive(
+			require __DIR__ . '/config/filesystems.php',
+			$this->app['config']->get('filesystems', []),
 		));
 
 
