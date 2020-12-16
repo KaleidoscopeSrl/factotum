@@ -27,7 +27,10 @@ class ContentTypeObserver
 			$table->foreign('content_type_id')->references('id')->on('content_types')->onDelete('cascade');
 			$table->bigInteger('content_id')->unsigned();
 			$table->foreign('content_id')->references('id')->on('contents')->onDelete('cascade');
+			$table->longText('custom_content')->nullable();
+			$table->longText('custom_design')->nullable();
 		});
+
 
 		$filename = 'models/' . $contentType->content_type . '.json';
 		if ( !Storage::disk('local')->exists( $filename ) ) {
@@ -48,6 +51,36 @@ class ContentTypeObserver
 	}
 
 
+
+	/**
+	 * Listen to the ContentType updating event.
+	 *
+	 * @param  ContentType  $contentType
+	 * @return void
+	 */
+	public function updating(ContentType $contentType)
+	{
+		if ( !Schema::hasColumn( $contentType->content_type, 'custom_content' ) )
+		{
+			Schema::table( $contentType->content_type, function (Blueprint $table) {
+				$table->longText('custom_content')->nullable()->after('content_id');
+			});
+		}
+
+		if ( !Schema::hasColumn( $contentType->content_type, 'custom_design' ) )
+		{
+			Schema::table( $contentType->content_type, function (Blueprint $table) {
+				$table->longText('custom_design')->nullable()->after('custom_content');
+			});
+		}
+
+		if ( !Schema::hasColumn( 'content_types', 'static_content' ) )
+		{
+			Schema::table( 'content_types', function (Blueprint $table) {
+				$table->boolean('static_content')->nullable(true)->default(0)->after('visible');
+			});
+		}
+	}
 
 
 	/**

@@ -24,6 +24,7 @@ class FactotumSetup extends Migration
 			$table->string('icon', 64)->nullable(true);
 			$table->integer('sitemap_in')->unsigned()->default(0);
 			$table->boolean('visible')->default(true)->nullable(true);
+			$table->boolean('static_content')->default(false)->nullable(true);
 			$table->timestamps();
 		});
 

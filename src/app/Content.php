@@ -97,6 +97,15 @@ class Content extends Model
 					);
 
 
+					if ( $contentType->static_content &&
+						isset( $data['custom_design'] ) &&
+						isset( $data['custom_content'] ) )
+					{
+						$additionalValues[ 'custom_design' ]  = $data['custom_design'];
+						$additionalValues[ 'custom_content' ] = $data['custom_content'];
+					}
+
+
 					foreach ( $contentFields as $field ) {
 
 						// Multiselect

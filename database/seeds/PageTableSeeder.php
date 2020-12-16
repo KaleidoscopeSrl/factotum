@@ -42,6 +42,7 @@ class PageTableSeeder extends Seeder
 		$contentField->label           = 'Page Template';
 		$contentField->type            = 'select';
 		$contentField->mandatory       = true;
+		$contentField->static_content  = true;
 		$templates = [
 			[ 'value' => 'basic',         'label' => 'Basic Page Template' ],
 			[ 'value' => 'content_list',  'label' => 'Content List Page Template' ],
