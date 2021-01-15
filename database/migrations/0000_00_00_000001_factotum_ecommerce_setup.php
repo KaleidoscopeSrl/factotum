@@ -21,6 +21,10 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->string('code', 8);
 			$table->string('name', 50);
+			$table->string('url', 255);
+			$table->string('abs_url', 255);
+			$table->string('seo_title', 60);
+			$table->text('seo_description');
 
 			$table->bigInteger('logo')->unsigned()->nullable();
 			$table->foreign('logo')->references('id')->on('media');

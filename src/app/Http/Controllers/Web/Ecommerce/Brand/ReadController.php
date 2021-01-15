@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Lang;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 use Kaleidoscope\Factotum\Brand;
 
@@ -13,7 +14,7 @@ class ReadController extends Controller
 {
 	protected $_productsPerPage = 48;
 
-    public function getProductsByBrand(Request $request, $brandCode)
+    public function getProductsByBrand(Request $request, $brandUrl)
     {
     	$itemsPerPage    = $request->input('items_per_page', $this->_productsPerPage );
     	if ( !is_integer($itemsPerPage) ) {
@@ -21,7 +22,7 @@ class ReadController extends Controller
 		}
 		$brandFilter     = $request->input('brand_filter');
 		$brandsFilter    = $request->input('brands');
-		$brand           = Brand::where( 'code', $brandCode )->first();
+		$brand           = Brand::where( 'url', $brandUrl )->first();
 		$brandsFiltered  = null;
 
 		if ( $brandsFilter ) {
@@ -54,6 +55,10 @@ class ReadController extends Controller
 
 			return view( $view )
 						->with([
+							'metatags' => [
+								'title'       => $brand->seo_title,
+								'description' => $brand->seo_description
+							],
 							'itemsPerPage'         => $products->perPage(),
 							'brandFilter'          => $brandFilter,
 							'brandsFiltered'       => $brandsFiltered,

@@ -1,15 +1,15 @@
 {
-    "name": "kaleidoscope/dev-factotum",
+    "name": "kaleidoscope/factotum",
     "description": "Laravel-based CMS baked by Kaleidoscope Srl",
     "keywords": ["cms", "laravel"],
     "license": "MIT",
     "language": "php",
     "type": "cms-project",
     "authors": [
-      {
-        "name": "Filippo Matteo Riggio",
-        "email": "filippo@kaleidoscope.it"
-      }
+        {
+            "name": "Filippo Matteo Riggio",
+            "email": "filippo@kaleidoscope.it"
+        }
     ],
     "require": {
         "php": "^7.1.3",
@@ -31,17 +31,8 @@
             "src/app/Observers"
         ],
         "psr-4": {
-            "Kaleidoscope\\Factotum\\":                       "src",
-            "Kaleidoscope\\Factotum\\Console\\":              "src/app/Console",
-            "Kaleidoscope\\Factotum\\Console\\Commands\\":    "src/app/Console/Commands",
-            "Kaleidoscope\\Factotum\\Library\\":              "src/app/Library",
-            "Kaleidoscope\\Factotum\\Helpers\\":              "src/app/Helpers",
-            "Kaleidoscope\\Factotum\\Http\\Middleware\\":     "src/app/Http/Middleware",
-            "Kaleidoscope\\Factotum\\Http\\Requests\\":       "src/app/Http/Requests",
-            "Kaleidoscope\\Factotum\\Http\\Policies\\":       "src/app/Http/Policies",
-            "Kaleidoscope\\Factotum\\Observers\\":            "src/app/Observers",
-            "Kaleidoscope\\Factotum\\Mail\\":                 "src/app/Mail",
-            "Kaleidoscope\\Factotum\\Filters\\":              "src/app/Filters"
+            "Kaleidoscope\\Factotum\\":  "src",
+            "Kaleidoscope\\Factotum\\":  "src/app"
         },
         "files": [
             "src/app/Library/ContentSearch.php",

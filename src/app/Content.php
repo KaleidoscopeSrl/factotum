@@ -13,7 +13,6 @@ class Content extends Model
 {
 	public static $FIRE_EVENTS = true;
 
-
 	protected $fillable = [
 		'parent_id', 'user_id', 'content_type_id',
 		'status',

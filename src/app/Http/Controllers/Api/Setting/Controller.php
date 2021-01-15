@@ -5,15 +5,21 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Lang;
 use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
 
+use Kaleidoscope\Factotum\Traits\CartUtils;
 use Kaleidoscope\Factotum\Http\Requests\StoreSetting;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Content;
 
 
+
 class Controller extends ApiBaseController
 {
+	
+	use CartUtils;
+
 
 	public function getSettings( Request $request )
 	{
@@ -84,6 +90,37 @@ class Controller extends ApiBaseController
 		}
 
 		return response()->json(['result' => 'ok']);
+	}
+	
+	
+	public function getShippingOptions( Request $request )
+	{
+		return response()->json([ 'result' => 'ok', 'shipping_options' => $this->_getShippingOptions() ]);
+	}
+
+
+	public function getPaymentOptions( Request $request )
+	{
+		$paymentOptions = config('factotum.payment_methods');
+		$tmp = [];
+
+		if ( in_array( 'stripe', $paymentOptions ) ) {
+			$tmp[ 'stripe' ] = Lang::get('factotum::ecommerce_checkout.credit_or_debit_cart');
+		}
+		
+		if ( in_array( 'paypal', $paymentOptions ) ) {
+			$tmp[ 'paypal' ] = 'PayPal';
+		}
+		
+		if ( in_array( 'bank-transfer', $paymentOptions ) ) {
+			$tmp[ 'bank-transfer' ] = Lang::get('factotum::ecommerce_checkout.bank_transfer');
+		}
+		
+		if ( in_array( 'custom-payment', $paymentOptions ) ) {
+			$tmp[ 'custom-payment' ] = Lang::get('factotum::ecommerce_checkout.custom_payment_in_agreement_with');
+		}
+
+		return response()->json([ 'result' => 'ok', 'payment_options' => $tmp ]);
 	}
 
 }

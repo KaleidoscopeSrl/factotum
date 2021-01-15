@@ -197,7 +197,7 @@ class CheckoutController extends Controller
 			$cart = $this->_getCart( true );
 
 			if ( $cart ) {
-				$order = $this->_createOrderFromCart( $cart );
+				$order               = $this->_createOrderFromCart( $cart );
 				$order->payment_type = $data['pay-with'];
 				$order->save();
 				$order->sendNewOrderNotifications();

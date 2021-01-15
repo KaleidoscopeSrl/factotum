@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
-use Kaleidoscope\Factotum\Policies\CampaignEmailPolicy;
 use Laravel\Passport\Passport;
 
 use Kaleidoscope\Factotum\Policies\UserPolicy;
 use Kaleidoscope\Factotum\Policies\RolePolicy;
+use Kaleidoscope\Factotum\Policies\CampaignEmailPolicy;
 use Kaleidoscope\Factotum\Policies\CapabilityPolicy;
 use Kaleidoscope\Factotum\Policies\ContentTypePolicy;
 use Kaleidoscope\Factotum\Policies\ContentFieldPolicy;
@@ -55,7 +55,6 @@ use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
 use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateSitemap;
 use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateProductImages;
 use Kaleidoscope\Factotum\Console\Commands\DumpAutoload;
-
 
 
 class FactotumServiceProvider extends ServiceProvider

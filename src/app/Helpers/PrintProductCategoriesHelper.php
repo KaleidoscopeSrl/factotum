@@ -12,6 +12,9 @@ class PrintProductCategoriesHelper {
 											->where('parent_id', '=', null)
 											->orderBy('label', 'ASC')
 											->get();
+		
+//		echo '<pre>';
+//		print_r($productCategories->toArray());die;
 
 		if ( $productCategories->count() > 0 ) {
 			echo self::print_product_categories_items( $productCategories, $baseURL, 0, $productCategory, $showChilds );

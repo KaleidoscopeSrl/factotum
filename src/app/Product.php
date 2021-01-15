@@ -164,7 +164,9 @@ class Product extends Model
 	protected function _saveAdditional( Product $product )
 	{
 		$data = request()->all();
-
+		
+		$this->generateAbsUrl();
+		
 		if ( count($data) > 0 ) {
 
 			// Save Additional
@@ -176,9 +178,7 @@ class Product extends Model
 					$product->product_categories()->attach( $product_category_id );
 				}
 			}
-
-			$this->generateAbsUrl();
-
+			
 			$this->generateMainImage( $data );
 
 			$this->generateGalleryImages( $data );

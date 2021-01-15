@@ -163,7 +163,7 @@ return [
 	'min_free_shipping'     => 65,
 	'shipping_vat_included' => false,
 	'shipping_options' => [
-		'pick-up' => [
+		'pick_up' => [
 			'standard' => 0
 		],
 		'IT' => [

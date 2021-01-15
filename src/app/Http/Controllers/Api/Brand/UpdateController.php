@@ -7,7 +7,7 @@ use Kaleidoscope\Factotum\Brand;
 class UpdateController extends Controller
 {
 
-    public function update(StoreBrand $request, $id)
+    public function update( StoreBrand $request, $id )
     {
 		$data = $request->all();
 

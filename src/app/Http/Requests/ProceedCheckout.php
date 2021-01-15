@@ -4,10 +4,14 @@ namespace Kaleidoscope\Factotum\Http\Requests;
 
 use Illuminate\Support\Facades\Auth;
 use Kaleidoscope\Factotum\Role;
+use Kaleidoscope\Factotum\Traits\CartUtils;
 
 
 class ProceedCheckout extends CustomFormRequest
 {
+
+	use CartUtils;
+
 
 	public function authorize()
 	{
@@ -29,7 +33,7 @@ class ProceedCheckout extends CustomFormRequest
 	public function rules()
 	{
 		$paymentOptions  = join(',', config('factotum.payment_methods') );
-		$shippingOptions = join(',', array_keys( config('factotum.shipping_options') ) );
+		$shippingOptions = join(',', array_keys( $this->_getShippingOptions() ) );
 
 		$rules = [
 			'delivery-address' => 'required|numeric|exists:customer_addresses,id',

@@ -321,7 +321,12 @@ class ProductCategory extends Model
 				$tmp[] = $c->id;
 			}
 		}
-
+		
+		$tmp = array_unique($tmp);
+		
+//		echo '<pre>';
+//		print_r( join(',', $tmp) );
+		// 130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,207,152,153,154,155,156,157,158,159,197,198,199
 		return DB::table('product_product_category')
 					->whereIn('product_category_id', $tmp)
 					->count();

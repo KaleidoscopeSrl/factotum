@@ -61,7 +61,6 @@ class ContentSearch {
 							->leftJoin( $this->_contentType['content_type'], 'contents.id', '=', $this->_contentType['content_type'] . '.content_id')
 							->leftJoin( 'users', 'users.id', '=', 'contents.user_id')
 							->leftJoin( 'profiles', 'profiles.user_id', '=', 'users.id')
-							->whereNull( 'deleted_at')
 							->where( 'contents.content_type_id', '=', $this->_contentType['id']);
 
 
