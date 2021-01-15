@@ -147,6 +147,15 @@ class ReadController extends Controller
 								->first();
 
 
+			if ( $contentType->static_content &&
+				$dataContent->custom_design &&
+				$dataContent->custom_content ) {
+
+				$content->{'custom_design'}  = $dataContent->custom_design;
+				$content->{'custom_content'} = $dataContent->custom_content;
+			}
+
+
 			if ( $contentFields && $contentFields->count() > 0 ) {
 
 				foreach ( $contentFields as $contentField ) {

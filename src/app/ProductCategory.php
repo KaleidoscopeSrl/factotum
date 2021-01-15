@@ -204,13 +204,14 @@ class ProductCategory extends Model
 
 			$lang = $c->lang;
 
-			if ( $c->lang != config('factotum.main_site_language') ) {
-				$absUrl .= '/' . $lang;
-			}
-
 			if ( $parent ) {
 				$absUrl .= $parent->abs_url . '/' . $c->name;
 			} else {
+
+				if ( $c->lang != config('factotum.main_site_language') ) {
+					$absUrl .= '/' . $lang;
+				}
+
 				$absUrl .= '/' . $c->name;
 			}
 
@@ -218,6 +219,8 @@ class ProductCategory extends Model
 			DB::table('product_categories')
 				->where('id', $c->id)
 				->update([ 'abs_url' => $absUrl ]);
+
+			$c->abs_url = $absUrl;
 
 			if ( $childs ) {
 				$level = $level + 1;
@@ -230,7 +233,7 @@ class ProductCategory extends Model
 
 	public function save( $options = [] )
 	{
-		ProductCategory::_rewriteChildsAbsUrl( [ $this ], 0 );
+		ProductCategory::_rewriteChildsAbsUrl( [ $this ], 0, $this->parent );
 
 		parent::save();
 	}

@@ -57,6 +57,8 @@ class FrontController extends Controller
 							])
 							->first();
 
+
+
 			if ( $content ) {
 
 				$contentType   = ContentType::find($content->content_type_id)->toArray();

@@ -17,7 +17,8 @@ class ContentType extends Model
 		'icon',
 		'sitemap_in',
 		'label',
-		'visible'
+		'visible',
+		'static_content'
 	];
 
 	public function content_fields() {
