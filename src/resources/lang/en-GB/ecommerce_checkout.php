@@ -50,4 +50,6 @@ return [
 	'pay_with_credit_or_debit_cart'    => 'Pay with Credit or Debit card',
 	'custom_payment_in_agreement_with' => 'Payment in agreement with',
 	'bank_transfer'                    => 'Bank Transfer',
+	
+	'issue_bank_transfer_to' => 'Issue Bank Transfer To'
 ];

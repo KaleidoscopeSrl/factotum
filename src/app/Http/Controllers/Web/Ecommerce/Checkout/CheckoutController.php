@@ -429,6 +429,11 @@ class CheckoutController extends Controller
 			$cart   = $this->_getCart( true );
 			$totals = $this->_getCartTotals($cart);
 
+			if ( $shipping ) {
+				$cart->shipping = $shipping;
+				$cart->save();
+			}
+
 			if ( $notes ) {
 				$cart->notes = $notes;
 				$cart->save();

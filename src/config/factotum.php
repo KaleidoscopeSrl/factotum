@@ -180,7 +180,12 @@ return [
 	'invoice_start_number'   => 60,
 	'invoice_logo'           => '/assets/media/img/invoice-logo.png',
 
+	'shop_managers' => env('APP_ENV') == 'production' ? [
+		'shop@customer.it'
+	] : [
+		'local@developer.com'
+	],
 
-	'version' => '5.0.26',
+	'version' => '5.0.27',
 
 ];

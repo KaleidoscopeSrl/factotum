@@ -40,7 +40,7 @@ class NewOrderToCustomerNotification extends Notification
 		}
 
 		$intro = 'Ciao <strong>' . $this->customer->profile->first_name . ' ' . $this->customer->profile->last_name . '</strong>, '
-			. 'grazie per il tuo ordine.<br>A breve verrà messo in lavorazione per effettuare la spedizione.';
+				. 'a seguire il dettaglio del tuo ordine.';
 
 		$intro = new HtmlString( $intro );
 

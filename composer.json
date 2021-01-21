@@ -17,8 +17,7 @@
 		"doctrine/dbal": "~2.3",
         "intervention/image": "^2.4.2",
         "barryvdh/laravel-debugbar": "^3.1.5",
-		"laravel/framework": "^8.12",
-		"laravel/passport": "^10.1",
+        "laravel/framework": "8.*",
 		"laravel/ui": "^2.1",
         "spatie/laravel-sitemap": "^5.7",
         "stripe/stripe-php": "^7.37"

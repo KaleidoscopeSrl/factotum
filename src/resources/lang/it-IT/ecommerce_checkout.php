@@ -50,4 +50,6 @@ return [
 	'pay_with_credit_or_debit_cart'    => 'Paga con Carta di debito o credito',
 	'custom_payment_in_agreement_with' => 'Pagamento secondo accordi',
 	'bank_transfer'                    => 'Bonifico',
+
+	'issue_bank_transfer_to' => 'Bonifico da Intestare a'
 ];

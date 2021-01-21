@@ -467,6 +467,7 @@ trait CartUtils
 				$order->cart_id     = $cart->id;
 				$order->customer_id = $user->id;
 				$order->status      = 'waiting_payment';
+				$order->shipping    = $cart->shipping;
 
 				$order->total_net = $totals['totalPartial'];
 				$order->total_tax = $totals['totalTaxes'];
@@ -748,6 +749,16 @@ trait CartUtils
 			'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
 			'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
 		];
+	}
+
+
+	protected function addNoteToCart( $notes )
+	{
+		$cart        = $this->_getCart();
+		$cart->notes = $notes;
+		$cart->save();
+
+		return true;
 	}
 
 }

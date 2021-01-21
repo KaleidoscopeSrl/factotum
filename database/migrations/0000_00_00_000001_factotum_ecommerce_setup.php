@@ -136,6 +136,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('discount_code_id')->unsigned()->nullable();
 
 			$table->string('status', 16);
+			$table->string('shipping', 32);
 			$table->decimal('total_net', 10, 2 );
 			$table->decimal('total_tax', 10, 2 );
 			$table->decimal('total_shipping_net', 10, 2 );
