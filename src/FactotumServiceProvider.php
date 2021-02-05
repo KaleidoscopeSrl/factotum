@@ -107,8 +107,9 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		// Configurations
-		$this->app['config']->set( 'auth', array_merge(
-			$this->app['config']->get('auth', []), require __DIR__ . '/config/auth.php'
+		$this->app['config']->set( 'auth', array_replace_recursive(
+			require __DIR__ . '/config/auth.php',
+			$this->app['config']->get('auth', [])
 		));
 
 		$this->app['config']->set( 'cors', array_merge(
