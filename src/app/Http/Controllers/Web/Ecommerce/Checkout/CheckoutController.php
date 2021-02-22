@@ -197,7 +197,7 @@ class CheckoutController extends Controller
 			$cart = $this->_getCart( true );
 
 			if ( $cart ) {
-				$order = $this->_createOrderFromCart( $cart );
+				$order               = $this->_createOrderFromCart( $cart );
 				$order->payment_type = $data['pay-with'];
 				$order->save();
 				$order->sendNewOrderNotifications();
@@ -428,6 +428,11 @@ class CheckoutController extends Controller
 
 			$cart   = $this->_getCart( true );
 			$totals = $this->_getCartTotals($cart);
+
+			if ( $shipping ) {
+				$cart->shipping = $shipping;
+				$cart->save();
+			}
 
 			if ( $notes ) {
 				$cart->notes = $notes;

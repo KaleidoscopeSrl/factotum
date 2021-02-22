@@ -167,7 +167,12 @@ class ContentListParser {
 
 	private function _getFileData($value)
 	{
-		return ( $value ? Media::find( $value )->toArray() : null );
+		$media = null;
+		if ( $value ) {
+			$media = Media::find( $value );
+		}
+
+		return ( $media ? $media->toArray() : null );
 	}
 
 

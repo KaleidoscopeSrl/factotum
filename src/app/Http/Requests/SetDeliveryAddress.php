@@ -28,11 +28,9 @@ class SetDeliveryAddress extends CustomFormRequest
 
 	public function rules()
 	{
-		$rules = [
+		return [
 			'address_id' => 'required|numeric|exists:customer_addresses,id',
 		];
-
-		return $rules;
 	}
 
 }

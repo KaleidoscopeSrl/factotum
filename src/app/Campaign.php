@@ -17,7 +17,6 @@ class Campaign extends Model
 	];
 
 	protected $hidden = [
-		'created_at',
 		'updated_at',
 		'deleted_at'
 	];
@@ -32,9 +31,15 @@ class Campaign extends Model
 		return $this->hasMany('Kaleidoscope\Factotum\CampaignEmail', 'campaign_id', 'id');
 	}
 
+	// MUTATORS
 	public function getSentDateAttribute($value)
 	{
 		return ( $value ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->timestamp : null );
+	}
+	
+	public function getCreatedAtAttribute($value)
+	{
+		return ( $value ? strtotime($value) * 1000 : null );
 	}
 
 }

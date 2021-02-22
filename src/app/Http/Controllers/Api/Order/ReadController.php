@@ -78,6 +78,10 @@ class ReadController extends Controller
 
 			$query->orderBy('total_net', $direction);
 
+		} else if ( $sort == 'total_shipping' ) {
+			
+			$query->orderBy('total_shipping_net', $direction);
+			
 		} else {
 			$query->orderBy($sort, $direction);
 		}

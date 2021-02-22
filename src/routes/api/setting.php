@@ -18,6 +18,10 @@ Route::group([
 	Route::get('/product-categories-via-pim',        'Controller@productCategoriesViaPim');
 	Route::get('/products-via-pim',                  'Controller@productsViaPim');
 
+	Route::get('/get-shipping-options',              'Controller@getShippingOptions' );
+	Route::get('/get-payment-options',               'Controller@getPaymentOptions' );
+
+
 	Route::group(['middleware' => 'can:manage-settings,Kaleidoscope\Factotum\Role'], function() {
 		Route::post('/save-homepage-languages',       'Controller@saveHomepageByLanguage');
 	});

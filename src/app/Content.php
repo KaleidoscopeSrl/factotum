@@ -13,7 +13,6 @@ class Content extends Model
 {
 	public static $FIRE_EVENTS = true;
 
-
 	protected $fillable = [
 		'parent_id', 'user_id', 'content_type_id',
 		'status',
@@ -42,10 +41,11 @@ class Content extends Model
 		'updated_at',
 	];
 
+
 	protected $casts = [
-		'fb_title'       => 'string|null',
-		'fb_description' => 'string|null',
-		'fb_image'       => 'int|null',
+		'fb_title'       => 'string',
+		'fb_description' => 'string',
+		'fb_image'       => 'int',
 	];
 
 

@@ -28,13 +28,12 @@ class Controller extends BaseController
 
 	public function __construct()
 	{
-		$this->pageContentType = ContentType::where( 'content_type', 'page')->first();
-
-		if ( $this->pageContentType ) {
-			$this->pageContentType = $this->pageContentType->toArray();
-		}
-
 		$this->middleware(function ($request, $next) {
+			$this->pageContentType = ContentType::where( 'content_type', 'page' )->first();
+
+			if ( $this->pageContentType ) {
+				$this->pageContentType = $this->pageContentType->toArray();
+			}
 
 			$this->_setupVariables( $request );
 			$currentLang = $this->_getCurrentLanguage( $request );

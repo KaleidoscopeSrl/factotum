@@ -8,7 +8,8 @@ return [
 	'shipping_pick_up' => 'Ritiro presso la nostra sede',
 	'shipping_italy'   => 'Consegna in tutta Italia tramite Corriere Espresso',
 	'shipping_abroad'  => 'Consegna per l\'estero tramite Corriere Espresso',
-
+	
+	'shipping_pick_up_standard' => 'Ritiro presso la nostra sede',
 
 	'shipping_IT_express'  => 'Espressa - Italia',
 	'shipping_IT_standard' => 'Standard - Italia',
@@ -47,5 +48,8 @@ return [
 	'agree_terms_conditions'           => 'Aderisco ai termini e condizioni',
 	'credit_or_debit_cart'             => 'Carta di debito o credito',
 	'pay_with_credit_or_debit_cart'    => 'Paga con Carta di debito o credito',
-	'custom_payment_in_agreement_with' => 'Pagamento secondo accordi'
+	'custom_payment_in_agreement_with' => 'Pagamento secondo accordi',
+	'bank_transfer'                    => 'Bonifico',
+
+	'issue_bank_transfer_to' => 'Bonifico da Intestare a'
 ];

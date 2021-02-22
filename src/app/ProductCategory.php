@@ -64,9 +64,9 @@ class ProductCategory extends Model
 	}
 
 
-	public static function treeChildsArray( $pagination = null, $filters = null )
+	public static function treeChildsArray( $pagination = null, $filters = null, $orderBy = 'order_no', $sortBy = 'ASC' )
 	{
-		$categories = self::_getChildCategories( null, $pagination, $filters );
+		$categories = self::_getChildCategories( null, $pagination, $filters, $orderBy, $sortBy );
 
 		if ( $categories->count() > 0 ) {
 			$categories = self::_parseChildsTree( $categories );
@@ -76,9 +76,9 @@ class ProductCategory extends Model
 	}
 
 
-	public static function treeChildsObjects( $pagination = null, $filters = null )
+	public static function treeChildsObjects( $pagination = null, $filters = null, $orderBy = 'order_no', $sortBy = 'ASC' )
 	{
-		$categories = self::_getChildCategories( null, $pagination, $filters );
+		$categories = self::_getChildCategories( null, $pagination, $filters, $orderBy, $sortBy );
 
 		if ( $categories->count() > 0 ) {
 			$categories = self::_parseChildsTree( $categories );
@@ -88,12 +88,12 @@ class ProductCategory extends Model
 	}
 
 
-	private static function _getChildCategories( $category = null, $pagination = null, $filters = null )
+	private static function _getChildCategories( $category = null, $pagination = null, $filters = null, $orderBy = 'order_no', $sortBy = 'ASC' )
 	{
 		if ( $category ) {
-			$query = ProductCategory::where( 'id', $category->id )->orderBy('order_no', 'ASC');
+			$query = ProductCategory::where( 'id', $category->id )->orderBy($orderBy, $sortBy);
 		} else {
-			$query = ProductCategory::whereNull( 'parent_id' )->orderBy('order_no', 'ASC');
+			$query = ProductCategory::whereNull( 'parent_id' )->orderBy($orderBy, $sortBy);
 		}
 
 		if ( request()->input('lang') ) {
@@ -129,9 +129,9 @@ class ProductCategory extends Model
 	}
 
 
-	public static function flatTreeChildsArray( $pagination = null, $filters = null )
+	public static function flatTreeChildsArray( $pagination = null, $filters = null, $orderBy = 'order_no', $sortBy = 'ASC' )
 	{
-		$categories = self::_getChildCategories( null, $pagination, $filters );
+		$categories = self::_getChildCategories( null, $pagination, $filters, $orderBy, $sortBy );
 
 		if ( $categories->count() > 0 ) {
 			$categories = self::_parseFlatTreeChilds( $categories );
@@ -141,9 +141,9 @@ class ProductCategory extends Model
 	}
 
 
-	public function singleCategoryFlatTreeChildsArray( $pagination = null, $filters = null )
+	public function singleCategoryFlatTreeChildsArray( $pagination = null, $filters = null, $orderBy = 'order_no', $sortBy = 'ASC' )
 	{
-		$categories = self::_getChildCategories( $this, $pagination, $filters );
+		$categories = self::_getChildCategories( $this, $pagination, $filters, $orderBy, $sortBy );
 
 		if ( $categories->count() > 0 ) {
 			$categories = self::_parseFlatTreeChilds( $categories );
@@ -324,7 +324,12 @@ class ProductCategory extends Model
 				$tmp[] = $c->id;
 			}
 		}
-
+		
+		$tmp = array_unique($tmp);
+		
+//		echo '<pre>';
+//		print_r( join(',', $tmp) );
+		// 130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,207,152,153,154,155,156,157,158,159,197,198,199
 		return DB::table('product_product_category')
 					->whereIn('product_category_id', $tmp)
 					->count();

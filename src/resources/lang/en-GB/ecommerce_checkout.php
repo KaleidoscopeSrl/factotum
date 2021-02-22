@@ -8,6 +8,8 @@ return [
 	'shipping_pick_up' => 'Pick-up to our shop',
 	'shipping_italy'   => 'Express Delivery in Italy',
 	'shipping_abroad'  => 'Express Delivery abroad',
+	
+	'shipping_pick_up_standard' => 'Pick-up to our shop',
 
 	'shipping_IT_express'  => 'Italy - Express',
 	'shipping_IT_standard' => 'Italy - Standard',
@@ -46,5 +48,8 @@ return [
 	'agree_terms_conditions'           => 'I agree with Terms & Conditions',
 	'credit_or_debit_cart'             => 'Credit or Debit card',
 	'pay_with_credit_or_debit_cart'    => 'Pay with Credit or Debit card',
-	'custom_payment_in_agreement_with' => 'Payment in agreement with'
+	'custom_payment_in_agreement_with' => 'Payment in agreement with',
+	'bank_transfer'                    => 'Bank Transfer',
+	
+	'issue_bank_transfer_to' => 'Issue Bank Transfer To'
 ];

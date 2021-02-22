@@ -80,6 +80,23 @@
 </tr>
 
 <tr>
+<td colspan="2"><strong>@lang('factotum::ecommerce_checkout.shipping_title')</strong></td>
+
+@if( $order->shipping == 'pick_up_standard' )
+<td>Ritiro presso la sede</td>
+@endif
+
+@if( $order->shipping == 'IT_standard' )
+<td>Standard Italia</td>
+@endif
+
+@if( $order->shipping == 'other_standard' )
+<td>Standard Estero</td>
+@endif
+</tr>
+
+
+<tr>
 <td colspan="2"><strong>@lang('factotum::ecommerce_order.total')</strong></td>
 <td>€ {{ number_format( $order->total_net + $order->total_tax + $order->total_shipping_net + $order->total_shipping_tax, 2, ',', '.' )  }}</td>
 </tr>
@@ -152,3 +169,34 @@
 		</tbody>
 	</table>
 </div>
+
+
+@if ( $order->payment_type == 'bank-transfer' )
+<div class="table">
+	<table cellpadding="0" cellspacing="0" border="0" class="order-table">
+		<thead>
+			<tr>
+				<td>@lang('factotum::ecommerce_checkout.issue_bank_transfer_to')</td>
+			</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>{{ env('SHOP_OWNER_NAME') }}</td>
+		</tr>
+		<tr>
+			<td>{{ env('SHOP_OWNER_BANK_NAME') }}</td>
+		</tr>
+		<tr>
+			<td>IBAN: {{ env('SHOP_OWNER_BANK_IBAN') }}</td>
+		</tr>
+		<tr>
+			<td>
+				Effettua il pagamento tramite bonifico bancario.
+				<strong>Usa il numero dell’ordine come causale.</strong><br>
+				<u>Il tuo ordine non verrà spedito finché i fondi non risulteranno trasferiti sul nostro conto corrente.</u>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+@endif

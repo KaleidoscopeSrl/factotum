@@ -2,24 +2,33 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Auth;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use Illuminate\Validation\ValidationException;
+
 use Kaleidoscope\Factotum\Cart;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller;
 use Kaleidoscope\Factotum\Traits\CartUtils;
 
+
 class AuthController extends Controller
 {
-	protected $redirectTo = '/';
+	protected $redirectTo = '/auth/login';
 
 	use AuthenticatesUsers;
 
 	use CartUtils;
+	
+	public function redirectTo()
+	{
+		return '/auth/login';
+	}
 
-	public function showLoginForm(Request $request)
+	public function showLoginForm( Request $request )
 	{
 		if ( $request->input('abandonedCart') ) {
 			$request->session()->put('force_extend_cart', 1);
@@ -37,6 +46,34 @@ class AuthController extends Controller
 							'description' => Lang::get('factotum::auth.login_description')
 						]
 					]);
+	}
+	
+	
+	protected function sendFailedLoginResponse(Request $request)
+	{
+		$exception = ValidationException::withMessages([
+			$this->username() => [trans('auth.failed')],
+		]);
+
+		$exception->redirectTo = '/auth/login';
+
+		throw $exception;
+	}
+	
+
+	protected function sendLoginResponse(Request $request)
+	{
+		$request->session()->regenerate();
+		
+		$this->clearLoginAttempts($request);
+		
+		if ($response = $this->authenticated($request, $this->guard()->user())) {
+			return $response;
+		}
+		
+		return $request->wantsJson()
+			? new JsonResponse([], 204)
+			: redirect()->intended( '/' );
 	}
 
 

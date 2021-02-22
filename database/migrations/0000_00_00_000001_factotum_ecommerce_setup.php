@@ -21,6 +21,10 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->string('code', 8);
 			$table->string('name', 50);
+			$table->string('url', 255);
+			$table->string('abs_url', 255);
+			$table->string('seo_title', 60);
+			$table->text('seo_description');
 
 			$table->bigInteger('logo')->unsigned()->nullable();
 			$table->foreign('logo')->references('id')->on('media');
@@ -132,6 +136,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->bigInteger('discount_code_id')->unsigned()->nullable();
 
 			$table->string('status', 16);
+			$table->string('shipping', 32);
 			$table->decimal('total_net', 10, 2 );
 			$table->decimal('total_tax', 10, 2 );
 			$table->decimal('total_shipping_net', 10, 2 );

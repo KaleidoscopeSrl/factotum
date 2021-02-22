@@ -163,7 +163,7 @@ return [
 	'min_free_shipping'     => 65,
 	'shipping_vat_included' => false,
 	'shipping_options' => [
-		'pick-up' => [
+		'pick_up' => [
 			'standard' => 0
 		],
 		'IT' => [
@@ -180,7 +180,12 @@ return [
 	'invoice_start_number'   => 60,
 	'invoice_logo'           => '/assets/media/img/invoice-logo.png',
 
+	'shop_managers' => env('APP_ENV') == 'production' ? [
+		'shop@customer.it'
+	] : [
+		'local@developer.com'
+	],
 
-	'version' => '5.0.25',
+	'version' => '5.0.27',
 
 ];

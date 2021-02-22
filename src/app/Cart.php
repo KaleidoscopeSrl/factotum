@@ -16,7 +16,8 @@ class Cart extends Model
 		'expires_at',
 		'payment_type',
 		'paypal_order_id',
-		'stripe_intent_id'
+		'stripe_intent_id',
+		'shipping'
 	];
 
 

@@ -39,7 +39,7 @@ class StripeController extends Controller
 				]);
 
 				if ( $intent ) {
-					$cart->payment_type = 'stripe';
+					$cart->payment_type     = 'stripe';
 					$cart->stripe_intent_id = $intent->id;
 					$cart->save();
 
@@ -96,7 +96,12 @@ class StripeController extends Controller
 
 			if ( $stripeIntentId && $cart->stripe_intent_id == $stripeIntentId ) {
 
-				$order               = $this->_createOrderFromCart( $cart );
+				$order = $this->_createOrderFromCart( $cart );
+
+				if ( !$order ) {
+					return $request->wantsJson() ? json_encode([ 'result' => 'ko', 'message' => 'Error on setting stripe transaction id' ]) : view( $this->_getServerErrorView() );
+				}
+
 				$order->payment_type = 'stripe';
 				$order->save();
 

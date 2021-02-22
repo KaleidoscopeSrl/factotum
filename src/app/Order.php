@@ -31,6 +31,7 @@ class Order extends Model
 		'cart_id',
 		'customer_id',
 		'status',
+		'shipping',
 
 		'total_net',
 		'total_tax',
@@ -68,7 +69,8 @@ class Order extends Model
 	];
 
 	protected $appends = [
-		'total'
+		'total',
+		'total_shipping'
 	];
 
 
@@ -117,17 +119,20 @@ class Order extends Model
 			Notification::send( $customer, new NewOrderToCustomerNotification( $customer, $this ) );
 		}
 
-		$roles = Role::where('manage_orders', 1)->get();
+		$shopManagers = config('factotum.shop_managers');
 
-		if ( $roles->count() > 0 ) {
-			$tmp = [];
-			foreach ($roles as $r ) {
-				$tmp[] = $r->id;
+		if ( count($shopManagers) > 0 ) {
+			if ( file_exists(app_path('Notifications/NewOrderToShopOwnerNotification.php')) ) {
+				$notification = new \App\Notifications\NewOrderToShopOwnerNotification( $customer, $this );
+			} else {
+				$notification = new NewOrderToShopOwnerNotification( $customer, $this );
 			}
-			$users = User::whereIn('role_id', $tmp)->get();
 
-			Notification::send( $users, new NewOrderToShopOwnerNotification( $customer, $this ) );
+			foreach ( $shopManagers as $shopManager ) {
+				Notification::route( 'mail', $shopManager )->notify( $notification );
+			}
 		}
+
 	}
 
 
@@ -166,6 +171,15 @@ class Order extends Model
 	public function getTotalTaxAttribute($value)
 	{
 		return (float)$value;
+	}
+	
+	public function getTotalShippingAttribute()
+	{
+		$totalShipping = 0;
+		$totalShipping += $this->total_shipping_net;
+		$totalShipping += $this->total_shipping_tax;
+		
+		return $totalShipping;
 	}
 
 	public function getTotalShippingNetAttribute($value)

@@ -274,6 +274,10 @@ class FrontController extends Controller
 
 					// Check se prodotto
 					$product = Product::where( 'abs_url', '/' . $this->uri )->first();
+					
+					if ( !$product ) {
+						$product = Product::where( 'url', $this->uri )->first();
+					}
 
 					if ( $product ) {
 						$data['product'] = $product;
@@ -288,7 +292,7 @@ class FrontController extends Controller
 					}
 
 					// Check se brand
-					$brand = Brand::where( 'code', $this->uriParts[ count($this->uriParts) - 1 ] )->first();
+					$brand = Brand::where( 'url', $this->uriParts[ count($this->uriParts) - 1 ] )->first();
 					if ( $brand ) {
 						$data['brand'] = $brand;
 						return $data;

@@ -21,14 +21,27 @@ use Kaleidoscope\Factotum\User;
 
 trait CartUtils
 {
-	protected $_cartDuration = '+3 days';
 
-	
+	protected $_cartDuration = '+3 days';
+	protected $_user;
+	protected $_cart;
+
+
+	protected function _setUser( $user ) {
+		$this->_user = $user;
+	}
+
+
+	protected function _setCart( $cart ) {
+		$this->_cart = $cart;
+	}
+
+
 	protected function _getUser()
 	{
 		if ( config('factotum.guest_cart') ) {
 
-			if ( !request()->session()->exists('user_id') ) {
+			if (!request()->session()->exists('user_id')) {
 				$customerRole = Role::where('role', 'customer')->first();
 
 				$user           = new User;
@@ -41,9 +54,13 @@ trait CartUtils
 				request()->session()->put('user_id', $user->id);
 			} else {
 				$userId = request()->session()->get('user_id');
-				$user   = User::find( $userId );
+				$user   = User::find($userId);
 			}
-			
+
+		} else if ( isset($this->_user) && $this->_user ) {
+
+			$user = $this->_user;
+
 		} else {
 
 			$user = Auth::user();
@@ -83,6 +100,7 @@ trait CartUtils
 				} else {
 
 					$cart = Cart::where( 'customer_id', $user->id )
+								->whereNull( 'order_id' )
 								->where( 'expires_at', '>=', date('Y-m-d H:i:s') )
 								->first();
 
@@ -313,17 +331,17 @@ trait CartUtils
 		try {
 
 			$shippingOptions = config('factotum.shipping_options');
+
 			$deliveryAddress = $this->_getTemporaryDeliveryAddress();
 
 			$tmp = [];
 
-			if ( isset( $shippingOptions['pick-up']) ) {
-				$tmp['pick-up'] = [
-					'amount' => $shippingOptions['pick-up']['standard'],
+			if ( isset( $shippingOptions['pick_up']) ) {
+				$tmp['pick_up_standard'] = [
+					'amount' => $shippingOptions['pick_up']['standard'],
 					'label'  => Lang::get('factotum::ecommerce_checkout.shipping_pick_up')
 				];
 			}
-			
 
 			if ( $deliveryAddress ) {
 				$countryCode = strtoupper($deliveryAddress->country);
@@ -353,10 +371,6 @@ trait CartUtils
 					}
 
 				}
-				
-				if ( $cartTotals ) {
-					
-				}
 
 			} else {
 
@@ -370,7 +384,6 @@ trait CartUtils
 				}
 
 			}
-
 
 			return $tmp;
 
@@ -389,10 +402,12 @@ trait CartUtils
 
 			$user = $this->_getUser();
 
-			return  CustomerAddress::where('customer_id', $user->id)
-									->where('type', 'delivery')
-									->where('id', $addressId)
-									->first();
+			return  CustomerAddress::where([
+										'customer_id' => $user->id,
+										'type'        => 'delivery',
+										'id'          => $addressId
+									])
+								   	->first();
 		}
 
 		return null;
@@ -406,10 +421,12 @@ trait CartUtils
 		if ( $addressId ) {
 			$user = $this->_getUser();
 
-			return CustomerAddress::where('customer_id', $user->id)
-									->where('type', 'invoice')
-									->where('id', $addressId)
-									->first();
+			return CustomerAddress::where([
+										'customer_id' => $user->id,
+										'type'        => 'invoice',
+										'id'          => $addressId
+									])
+								  	->first();
 		}
 
 		return null;
@@ -450,6 +467,7 @@ trait CartUtils
 				$order->cart_id     = $cart->id;
 				$order->customer_id = $user->id;
 				$order->status      = 'waiting_payment';
+				$order->shipping    = $cart->shipping;
 
 				$order->total_net = $totals['totalPartial'];
 				$order->total_tax = $totals['totalTaxes'];
@@ -731,6 +749,16 @@ trait CartUtils
 			'totalShipping' => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
 			'total'         => '€ ' . number_format( $totals['total'], 2, ',', '.' ),
 		];
+	}
+
+
+	protected function addNoteToCart( $notes )
+	{
+		$cart        = $this->_getCart();
+		$cart->notes = $notes;
+		$cart->save();
+
+		return true;
 	}
 
 }
