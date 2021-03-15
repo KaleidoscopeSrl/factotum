@@ -17,6 +17,7 @@ Route::group([
 
 	Route::group(['middleware' => 'can:read,Kaleidoscope\Factotum\Media'], function() {
 		Route::post('/list',                   'ReadController@getList');
+		Route::post('/list-paginated',         'ReadController@getListPaginated');
 		Route::post('/detail/{id}',            'ReadController@getDetail');
 	});
 

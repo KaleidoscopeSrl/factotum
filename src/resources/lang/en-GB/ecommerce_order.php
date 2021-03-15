@@ -29,5 +29,6 @@ return [
 	'total_taxes'    => 'Total Taxes',
 	'total_shipping' => 'Total Shipping',
 	'payment_method' => 'Payment Method',
+	'shipping'       => 'Shipping',
 	'total'          => 'Total'
 ];

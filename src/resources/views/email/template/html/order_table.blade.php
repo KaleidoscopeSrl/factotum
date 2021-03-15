@@ -80,18 +80,22 @@
 </tr>
 
 <tr>
-<td colspan="2"><strong>@lang('factotum::ecommerce_checkout.shipping_title')</strong></td>
+<td colspan="2"><strong>@lang('factotum::ecommerce_order.shipping')</strong></td>
 
 @if( $order->shipping == 'pick_up_standard' )
-<td>Ritiro presso la sede</td>
+<td>@lang('factotum::ecommerce_checkout.shipping_pick_up_standard')</td>
 @endif
 
 @if( $order->shipping == 'IT_standard' )
-<td>Standard Italia</td>
+<td>@lang('factotum::ecommerce_checkout.shipping_IT_standard')</td>
+@endif
+
+@if( $order->shipping == 'IT_express' )
+<td>@lang('factotum::ecommerce_checkout.shipping_IT_express')</td>
 @endif
 
 @if( $order->shipping == 'other_standard' )
-<td>Standard Estero</td>
+<td>@lang('factotum::ecommerce_checkout.shipping_other_standard')</td>
 @endif
 </tr>
 

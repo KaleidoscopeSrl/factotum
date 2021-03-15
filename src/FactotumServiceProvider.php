@@ -56,7 +56,6 @@ use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateSitemap;
 use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateProductImages;
 use Kaleidoscope\Factotum\Console\Commands\DumpAutoload;
 
-
 class FactotumServiceProvider extends ServiceProvider
 {
 

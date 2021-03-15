@@ -14,14 +14,25 @@ class ProductCategory extends Model
 
 	protected $fillable = [
 		'parent_id',
-		'abs_url',
 		'name',
 		'label',
-		'lang',
-		'image',
+		'abs_url',
 		'description',
+		'lang',
+		'show_in_home',
+		'image',
 		'order_no',
-		'show_in_home'
+
+		'seo_title',
+		'seo_description',
+		'seo_canonical_url',
+		'seo_robots_indexing',
+		'seo_robots_following',
+		'seo_focus_key',
+
+		'fb_title',
+		'fb_description',
+		'fb_image'
 	];
 
 	protected $hidden = [

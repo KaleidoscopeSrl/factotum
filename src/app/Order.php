@@ -119,9 +119,9 @@ class Order extends Model
 			Notification::send( $customer, new NewOrderToCustomerNotification( $customer, $this ) );
 		}
 
-		$shopManagers = config('factotum.shop_managers');
+		$shopManagers = User::whereIn( 'role_id', Role::where( 'manage_orders', 1 )->pluck('id')->toArray() )->get();
+		if ( $shopManagers && $shopManagers->count() > 0 ) {
 
-		if ( count($shopManagers) > 0 ) {
 			if ( file_exists(app_path('Notifications/NewOrderToShopOwnerNotification.php')) ) {
 				$notification = new \App\Notifications\NewOrderToShopOwnerNotification( $customer, $this );
 			} else {
@@ -129,7 +129,7 @@ class Order extends Model
 			}
 
 			foreach ( $shopManagers as $shopManager ) {
-				Notification::route( 'mail', $shopManager )->notify( $notification );
+				Notification::route( 'mail', $shopManager->email )->notify( $notification );
 			}
 		}
 

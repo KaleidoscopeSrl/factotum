@@ -9,13 +9,13 @@ use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 use Kaleidoscope\Factotum\Http\Requests\SetOrderTransaction;
 
 use Kaleidoscope\Factotum\Order;
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 
 class UpdateController extends Controller
 {
 
-	use CartUtils;
+	use EcommerceUtils;
 
     public function setOrderTransaction( SetOrderTransaction $request )
     {

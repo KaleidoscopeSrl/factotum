@@ -84,7 +84,7 @@ class ReadController extends Controller
 		$customerAddress = CustomerAddress::find($id);
 
         if ( $customerAddress ) {
-			$customerAddress->load([ 'customer' ]);
+			$customerAddress->load([ 'customer', 'customer.profile' ]);
             return response()->json( [ 'result' => 'ok', 'customer_address' => $customerAddress ]);
         }
 

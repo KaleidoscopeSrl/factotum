@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Lang;
 use Kaleidoscope\Factotum\CartProduct;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 
 class ReadController extends Controller
 {
 
-	use CartUtils;
+	use EcommerceUtils;
 
 
 	public function ajaxGetCartPanel( Request $request )

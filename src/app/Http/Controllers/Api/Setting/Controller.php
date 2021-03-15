@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
 
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 use Kaleidoscope\Factotum\Http\Requests\StoreSetting;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Content;
@@ -18,7 +18,7 @@ use Kaleidoscope\Factotum\Content;
 class Controller extends ApiBaseController
 {
 	
-	use CartUtils;
+	use EcommerceUtils;
 
 
 	public function getSettings( Request $request )

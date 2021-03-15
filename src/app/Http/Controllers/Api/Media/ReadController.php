@@ -5,6 +5,8 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Media;
 use Illuminate\Http\Request;
 use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Media;
+use Kaleidoscope\Factotum\Product;
+use Kaleidoscope\Factotum\ProductCategory;
 
 class ReadController extends Controller
 {
@@ -69,6 +71,47 @@ class ReadController extends Controller
         	'media' => $mediaList,
 			'total' => Media::count()
 		]);
+	}
+
+
+	public function getListPaginated( Request $request )
+	{
+		$limit     = $request->input('limit');
+		$offset    = $request->input('offset');
+		$sort      = $request->input('sort');
+		$direction = $request->input('direction');
+		$filters   = $request->input('filters', null);
+
+
+		if ( !$sort ) {
+			$sort = 'id';
+		}
+
+		if ( !$direction ) {
+			$direction = 'DESC';
+		}
+
+		$query = Media::query();
+
+		if ( $request->input('filter') ) {
+			$query->whereRaw( 'LCASE(filename) like "%' . $request->input('filter') . '%"' );
+		}
+
+		$total = $query->count();
+
+		$query->orderBy($sort, $direction);
+
+		if ( $limit ) {
+			$query->take($limit);
+		}
+
+		if ( $offset ) {
+			$query->skip($offset);
+		}
+
+		$medias = $query->get();
+
+		return response()->json( [ 'result' => 'ok', 'medias' => $medias, 'total' => $total ]);
 	}
 
 

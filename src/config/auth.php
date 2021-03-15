@@ -99,4 +99,7 @@ return [
         ],
     ],
 
+	'verification' => [
+		'expire' => 1440,
+	],
 ];

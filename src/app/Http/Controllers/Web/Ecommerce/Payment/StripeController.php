@@ -10,14 +10,14 @@ use Kaleidoscope\Factotum\CustomerAddress;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 
 use Kaleidoscope\Factotum\Library\PayPalClient;
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 use Kaleidoscope\Factotum\User;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 
 
 class StripeController extends Controller
 {
-	use CartUtils;
+	use EcommerceUtils;
 
 	public function __construct()
 	{
@@ -30,6 +30,7 @@ class StripeController extends Controller
 			$user   = $this->_getUser();
 			$cart   = $this->_getCart();
 			$totals = $this->_getCartTotals( $cart );
+
 
 			if ( $totals && $totals['total'] > 0 ) {
 

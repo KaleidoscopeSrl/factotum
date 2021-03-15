@@ -125,8 +125,11 @@ class FactotumSetup extends Migration
 		Schema::create('media', function (Blueprint $table) {
 			$table->id();
 			$table->string('filename', 150)->unique();
+			$table->string('filename_webp', 150);
 			$table->string('thumb', 150)->nullable(true);
+			$table->string('thumb_webp', 150)->nullable(true);
 			$table->string('url', 255)->nullable(true);
+			$table->string('url_webp', 255)->nullable(true);
 			$table->bigInteger('user_id')->unsigned();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->string('mime_type', 50);
@@ -182,8 +185,23 @@ class FactotumSetup extends Migration
 			$table->foreign('parent_id')->references('id')->on('categories')->onDelete('cascade');
 			$table->string('name', 50);
 			$table->string('label', 255);
+			$table->string('abs_url', 255 )->nullable();
+			$table->text('description')->nullable();
 			$table->string('lang', 5);
 			$table->integer('order_no')->nullable(true);
+
+			$table->string('seo_title', 60)->nullable(true);
+			$table->text('seo_description')->nullable(true);
+			$table->string('seo_canonical_url', 255)->nullable(true);
+			$table->string('seo_robots_indexing', 10)->default('index')->nullable(true);
+			$table->string('seo_robots_following', 10)->default('follow')->nullable(true);
+			$table->string('seo_focus_key', 255)->nullable(true);
+
+			$table->string('fb_title', 255)->nullable(true);
+			$table->string('fb_description', 255)->nullable(true);
+			$table->bigInteger('fb_image')->unsigned()->nullable(true);
+			$table->foreign('fb_image')->references('id')->on('media');
+
 			$table->timestamps();
 		});
 

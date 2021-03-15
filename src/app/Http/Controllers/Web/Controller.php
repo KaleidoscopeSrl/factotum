@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\App;
 
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Content;
 
@@ -24,7 +24,7 @@ class Controller extends BaseController
 	protected $uriParts;
 	protected $pageContentType;
 
-	use CartUtils;
+	use EcommerceUtils;
 
 	public function __construct()
 	{

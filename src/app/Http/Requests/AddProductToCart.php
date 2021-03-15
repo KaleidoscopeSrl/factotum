@@ -43,7 +43,7 @@ class AddProductToCart extends CustomFormRequest
 		if ( $data['product_id'] ) {
 			$product = Product::find($data['product_id']);
 
-			if ( $product->has_variants ) {
+			if ( $product && $product->has_variants ) {
 				$rules['product_variant_id'] = 'required|numeric|exists:product_variants,id';
 
 				if ( $data['product_variant_id'] ) {
