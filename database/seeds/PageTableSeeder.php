@@ -24,6 +24,7 @@ class PageTableSeeder extends Seeder
 		$pageContentType->editable     = false;
 		$pageContentType->visible      = true;
 		$pageContentType->icon         = 'content';
+		$pageContentType->static_content  = true;
 		$pageContentType->save();
 
 		$capability = new Capability;
@@ -42,7 +43,6 @@ class PageTableSeeder extends Seeder
 		$contentField->label           = 'Page Template';
 		$contentField->type            = 'select';
 		$contentField->mandatory       = true;
-		$contentField->static_content  = true;
 		$templates = [
 			[ 'value' => 'basic',         'label' => 'Basic Page Template' ],
 			[ 'value' => 'content_list',  'label' => 'Content List Page Template' ],
