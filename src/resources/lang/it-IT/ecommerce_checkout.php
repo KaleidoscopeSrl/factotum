@@ -10,11 +10,9 @@ return [
 	'shipping_abroad'  => 'Consegna per l\'estero tramite Corriere Espresso',
 	
 	'shipping_pick_up_standard' => 'Ritiro presso la nostra sede',
-
-	'shipping_IT_express'  => 'Espressa - Italia',
-	'shipping_IT_standard' => 'Standard - Italia',
-
-	'shipping_other_standard' => 'Standard - Estero',
+	'shipping_IT_express'       => 'Espressa - Italia',
+	'shipping_IT_standard'      => 'Standard - Italia',
+	'shipping_other_standard'   => 'Standard - Estero',
 
 	'delivery_address_title' => 'Indirizzo di consegna',
 	'invoice_address_title'  => 'Indirizzo di fatturazione',

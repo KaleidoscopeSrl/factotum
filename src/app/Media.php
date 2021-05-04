@@ -19,6 +19,10 @@ class Media extends Model
 		'size',
 		'filename',
 		'thumb',
+		'url',
+		'filename_webp',
+		'thumb_webp',
+		'url_webp',
 		'caption', 'alt_text', 'description',
 		'mime_type'
 	];
@@ -163,10 +167,12 @@ class Media extends Model
 		}
 
 		$thumbSize     = config('factotum.thumb_size');
-		$thumbFilename = $origFilename . '-thumb.' . $ext;
+		$thumbFilename     = $origFilename . '-thumb.' . $ext;
+		$thumbFilenameWebP = $origFilename . '-thumb.webp';
 
 		$origImage->fit( $thumbSize['width'], $thumbSize['height'], function ($constraint) { $constraint->upsize(); });
 		$origImage->save( $thumbFilename, 90 );
+		$origImage->encode('webp')->save( $thumbFilename, 90 );
 		$origImage->destroy();
 
 		return $origImage;
@@ -179,24 +185,29 @@ class Media extends Model
 
 			$image = Image::make( storage_path( 'app/public/media/' . $media->id . '/' . $media->filename ) );
 
-			// Creo la thumb se è un immagine
-			if ( $image && strpos( $image->mime, 'image/') !== false &&
-				strpos( $image->mime, 'photoshop') === false ) {
+			$origFilename      = $image->dirname . '/' . $image->filename;
+			$ext               = $image->extension;
 
-				$origFilename  = $image->dirname . '/' . $image->filename;
-				$ext           = $image->extension;
-				$thumbFilename = $origFilename . '-thumb.' .  $ext;
+			$image->encode('webp')->save( $origFilename . '.webp', 90 );
+
+			// Creo la thumb se è un immagine
+			if ( $image && strpos( $image->mime, 'image/') !== false && strpos( $image->mime, 'photoshop') === false ) {
 
 				$thumbSize = config('factotum.thumb_size');
+
+				$thumbFilename     = $origFilename . '-thumb.' .  $ext;
+				$thumbFilenameWebp = $origFilename . '-thumb.webp';
 
 				$image->fit( $thumbSize['width'], $thumbSize['height'], function ($constraint) {
 					$constraint->upsize();
 				});
 
 				$image->save( $thumbFilename, 90 );
+				$image->encode('webp')->save( $thumbFilenameWebp, 90 );
 				$image->destroy();
 
-				$media->thumb = 'media/' . $media->id . '/' . $image->filename . '.' . $ext;
+				$media->thumb      = 'media/' . $media->id . '/' . $image->filename . '.' . $ext;
+				$media->thumb_webp = 'media/' . $media->id . '/' . $image->filename . '.webp';
 				$media->save();
 			}
 
@@ -215,6 +226,16 @@ class Media extends Model
 	}
 
 	public function getThumbAttribute($value)
+	{
+		return ( $value ? url( $value ) : null );
+	}
+
+	public function getUrlWebpAttribute($value)
+	{
+		return ( $value ? url( $value ) : null );
+	}
+
+	public function getThumbWebpAttribute($value)
 	{
 		return ( $value ? url( $value ) : null );
 	}

@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 use Kaleidoscope\Factotum\Cart;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller;
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 
 class AuthController extends Controller
@@ -21,7 +21,7 @@ class AuthController extends Controller
 
 	use AuthenticatesUsers;
 
-	use CartUtils;
+	use EcommerceUtils;
 	
 	public function redirectTo()
 	{

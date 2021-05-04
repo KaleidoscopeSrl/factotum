@@ -10,11 +10,9 @@ return [
 	'shipping_abroad'  => 'Express Delivery abroad',
 	
 	'shipping_pick_up_standard' => 'Pick-up to our shop',
-
-	'shipping_IT_express'  => 'Italy - Express',
-	'shipping_IT_standard' => 'Italy - Standard',
-
-	'shipping_other_standard' => 'Abroad - Standard',
+	'shipping_IT_express'       => 'Italy - Express',
+	'shipping_IT_standard'      => 'Italy - Standard',
+	'shipping_other_standard'   => 'Abroad - Standard',
 
 	'delivery_address_title' => 'delivery address',
 	'invoice_address_title'  => 'invoice address',

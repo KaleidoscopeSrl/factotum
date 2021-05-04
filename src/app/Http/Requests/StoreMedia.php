@@ -51,6 +51,9 @@ class StoreMedia extends CustomFormRequest
 		$data['filename']  = $file->getClientOriginalName();
 		$data['filename']  = Media::filenameAvailable( $data['filename'] );
 
+		$webpFilename = substr( $data['filename'],0 , strlen($data['filename']) - 3 );
+		$data['filename_webp'] = $webpFilename . 'webp';
+
 		if ( Str::contains( $data['mime_type'], 'image/' )  ) {
 			$imageSize = getimagesize( $file->path() );
 

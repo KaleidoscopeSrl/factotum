@@ -59,6 +59,11 @@ class ContentListParser {
 	}
 
 
+	/**
+	 * This function parse the results of a search and returns the list of contents parsed
+	 *
+	 * @return Collection
+	 */
 	public function getList()
 	{
 

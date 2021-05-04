@@ -11,7 +11,7 @@ use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 
 use Kaleidoscope\Factotum\Order;
 use Kaleidoscope\Factotum\OrderProduct;
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 
 class ReadController extends Controller

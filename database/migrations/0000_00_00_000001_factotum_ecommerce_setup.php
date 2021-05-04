@@ -53,6 +53,7 @@ class FactotumEcommerceSetup extends Migration
 		Schema::create('product_categories', function (Blueprint $table) {
 			$table->id();
 			$table->bigInteger('parent_id')->unsigned()->nullable(true);
+			$table->foreign('parent_id')->references('id')->on('product_categories')->onUpdate('cascade')->onDelete('cascade');
 			$table->string('name', 50);
 			$table->string('label', 255);
 			$table->string('abs_url', 255 )->nullable();
@@ -64,12 +65,20 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->integer('order_no')->nullable(true);
 
+			$table->string('seo_title', 60)->nullable(true);
+			$table->text('seo_description')->nullable(true);
+			$table->string('seo_canonical_url', 255)->nullable(true);
+			$table->string('seo_robots_indexing', 10)->default('index')->nullable(true);
+			$table->string('seo_robots_following', 10)->default('follow')->nullable(true);
+			$table->string('seo_focus_key', 255)->nullable(true);
+
+			$table->string('fb_title', 255)->nullable(true);
+			$table->string('fb_description', 255)->nullable(true);
+			$table->bigInteger('fb_image')->unsigned()->nullable(true);
+			$table->foreign('fb_image')->references('id')->on('media');
+
 			$table->timestamps();
 			$table->softDeletes();
-		});
-
-		Schema::table('product_categories', function (Blueprint $table) {
-			$table->foreign('parent_id')->references('id')->on('product_categories')->onUpdate('cascade')->onDelete('cascade');
 		});
 
 
@@ -180,6 +189,7 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->timestamp('expires_at')->nullable();
 			$table->text('notes')->nullable();
+			$table->string('shipping', 32);
 
 			$table->string('payment_type', 64)->nullable();
 			$table->string('paypal_order_id', 128)->nullable();

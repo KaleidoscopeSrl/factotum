@@ -2,11 +2,10 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Checkout;
 
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
-use Kaleidoscope\Factotum\CartProduct;
 use Kaleidoscope\Factotum\CustomerAddress;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 
@@ -18,31 +17,15 @@ use Kaleidoscope\Factotum\Http\Requests\StoreGuestCustomerDeliveryAddress;
 use Kaleidoscope\Factotum\Http\Requests\StoreGuestCustomerInvoiceAddress;
 
 use Kaleidoscope\Factotum\Profile;
-use Kaleidoscope\Factotum\Traits\CartUtils;
-
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 use Kaleidoscope\Factotum\User;
 
 
 class CheckoutController extends Controller
 {
 
-	use CartUtils;
+	use EcommerceUtils;
 
-	private function _redirectHome( Request $request )
-	{
-		if ( config('factotum.guest_cart') ) {
-			$request->session()->remove('user_id');
-			$request->session()->remove('delivery_address');
-			$request->session()->remove('invoice_address');
-			$request->session()->remove('shipping');
-		}
-
-		if ( config('factotum.shop_base_url') ) {
-			return redirect('/' . config('factotum.shop_base_url'));
-		} else {
-			return redirect('/');
-		}
-	}
 
 
 	// STEP 1: the user must choose the delivery address (he can add a new one)
@@ -53,155 +36,36 @@ class CheckoutController extends Controller
 
 	public function prepareCheckout( Request $request )
 	{
-		$cart = $this->_getCart( true );
-
-		if ( $cart ) {
-			$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
-			$totals       = $this->_getCartTotals( $cart );
-
-			if ( $totals['totalProducts'] == 0 ) {
-				return $this->_redirectHome( $request );
-			}
-		} else {
-			return $this->_redirectHome( $request);
-		}
-
-
-		if ( !config('factotum.guest_cart') ) {
-			// 1 . Get all the customers addresses
-			$user              = $this->_getUser();
-			$deliveryAddresses = CustomerAddress::where( 'type', 'delivery' )
-												->where( 'customer_id', $user->id )
-												->orderBy('default_address', 'DESC')
-												->get();
-
-			$invoiceAddresses  = CustomerAddress::where( 'type', 'invoice' )
-												->where( 'customer_id', $user->id )
-												->orderBy('default_address', 'DESC')
-												->get();
-		} else {
-
-			$request->session()->remove('delivery_address');
-			$request->session()->remove('invoice_address');
-			$request->session()->remove('shipping');
-		}
-
-
 		$view = 'factotum::ecommerce.checkout.checkout';
 
 		if ( file_exists( resource_path('views/ecommerce/checkout/checkout.blade.php') ) ) {
 			$view = 'ecommerce.checkout.checkout';
 		}
 
-		$deliveryAddress = $this->_getTemporaryDeliveryAddress();
-		$invoiceAddress  = $this->_getTemporaryInvoiceAddress();
-		$shipping        = $this->_getTemporaryShipping();
-		$shippingOptions = $this->_getShippingOptions();
+		$checkoutData = $this->_prepareCheckout();
 
-		$step = 'delivery-address';
-
-		if ( $deliveryAddress ) {
-			$step = 'invoice-address';
+		if ( $checkoutData instanceof \Illuminate\Http\RedirectResponse ) {
+			return redirect( $checkoutData->getTargetUrl() );
 		}
 
-		if ( $deliveryAddress && $invoiceAddress ) {
-			$step = 'shipping';
-		}
+		$viewData = array_merge( $checkoutData, [
+			'metatags' => [
+				'title'       => Lang::get('factotum::ecommerce_checkout.checkout_title'),
+				'description' => Lang::get('factotum::ecommerce_checkout.checkout_description')
+			]
+		]);
 
-		if ( $deliveryAddress && $invoiceAddress && $shipping ) {
-			$step = 'payment';
-		}
-
-
-		// Payment methods accepted
-		$paymentMethods = config('factotum.payment_methods');
-
-		$stripe        = null;
-		$paypal        = null;
-		$bankTransfer  = null;
-		$customPayment = null;
-
-		if ( isset($paymentMethods) && in_array('stripe', $paymentMethods) && env('STRIPE_PUBLIC_KEY') && env('STRIPE_SECRET_KEY') ) {
-			$stripe = [
-				'publicKey' => env('STRIPE_PUBLIC_KEY')
-			];
-		}
-
-		if ( isset($paymentMethods) && in_array('paypal', $paymentMethods) && env('PAYPAL_CLIENT_ID') && env('PAYPAL_CLIENT_SECRET') ) {
-			$paypal = [
-				'publicKey' => env('PAYPAL_CLIENT_ID')
-			];
-		}
-
-		if ( isset($paymentMethods) && in_array('bank-transfer', $paymentMethods) && env('SHOP_OWNER_BANK_NAME') && env('SHOP_OWNER_BANK_IBAN') ) {
-			$bankTransfer = true;
-		}
-
-		if ( isset($paymentMethods) && in_array('custom-payment', $paymentMethods) ) {
-			$customPayment = true;
-		}
-
-		$shop = [
-			'name'      => env('SHOP_OWNER_NAME'),
-			'bank_name' => env('SHOP_OWNER_BANK_NAME'),
-			'bank_iban' => env('SHOP_OWNER_BANK_IBAN'),
-		];
-
-		return view( $view )
-				->with([
-					'cart'              => $cart,
-					'cartProducts'      => $cartProducts,
-
-					// All the totals
-					'totalProducts'     => $totals['totalProducts'],
-					'totalDiscount'     => $totals['totalDiscount'],
-					'totalPartial'      => $totals['totalPartial'],
-					'totalTaxes'        => $totals['totalTaxes'],
-					'totalShipping'     => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
-					'total'             => $totals['total'],
-					'discountCode'      => $this->_getTemporaryDiscountCode(),
-
-					// Possible options
-					'deliveryAddresses' => ( isset($deliveryAddresses) ? $deliveryAddresses : null ),
-					'invoiceAddresses'  => ( isset($invoiceAddresses)  ? $invoiceAddresses  : null ),
-					'shippingOptions'   => $shippingOptions,
-
-					// Current values
-					'deliveryAddress'   => ( isset($deliveryAddress) ? $deliveryAddress : null ),
-					'invoiceAddress'    => ( isset($invoiceAddress)  ? $invoiceAddress  : null ),
-					'shipping'          => $shipping,
-
-					// Current step in checkout
-					'step'              => $step,
-
-					// Payments
-					'shop'          => $shop,
-					'stripe'        => $stripe,
-					'paypal'        => $paypal,
-					'bankTransfer'  => $bankTransfer,
-					'customPayment' => $customPayment,
-
-					'metatags' => [
-						'title'       => Lang::get('factotum::ecommerce_checkout.checkout_title'),
-						'description' => Lang::get('factotum::ecommerce_checkout.checkout_description')
-					]
-				]);
+		return view( $view )->with($viewData);
 	}
 
 
 	public function proceedCheckout( ProceedCheckout $request )
 	{
-		$data = $request->all();
-
 		try {
-			$cart = $this->_getCart( true );
 
-			if ( $cart ) {
-				$order               = $this->_createOrderFromCart( $cart );
-				$order->payment_type = $data['pay-with'];
-				$order->save();
-				$order->sendNewOrderNotifications();
+			$order = $this->_proceedCheckout();
 
+			if ( $order ) {
 				return redirect( url( '/order/thank-you/' . $order->id ) );
 			}
 
@@ -339,7 +203,6 @@ class CheckoutController extends Controller
 			session()->flash( 'error', $ex->getMessage() );
 			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
 		}
-		
 	}
 
 
