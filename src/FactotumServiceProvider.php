@@ -104,7 +104,6 @@ class FactotumServiceProvider extends ServiceProvider
 		// $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
 
-
 		// Configurations
 		$this->app['config']->set( 'auth', array_replace_recursive(
 			require __DIR__ . '/config/auth.php',
@@ -152,7 +151,7 @@ class FactotumServiceProvider extends ServiceProvider
 			__DIR__ . '/public/admin'         => public_path('admin'),
 
 			// MINISITE
-			__DIR__ . '/public/assets'        => public_path('assets'),
+//			__DIR__ . '/public/assets'        => public_path('assets'),
 			__DIR__ . '/public/robots.txt'    => public_path(''),
 		], 'factotum');
 
@@ -305,6 +304,7 @@ class FactotumServiceProvider extends ServiceProvider
 			$overridingRoutes = true;
 		}
 
+
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 
 			// Frontend Cart Routes
@@ -397,7 +397,7 @@ class FactotumServiceProvider extends ServiceProvider
 		 *
 		 */
 
-		if ( !$overridingRoutes ) {
+		if ( !file_exists( base_path('routes') . '/web.php' ) ) {
 
 			// Public routes
 			Route::group([
