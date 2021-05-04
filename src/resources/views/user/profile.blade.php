@@ -26,24 +26,6 @@
 								<div class="col col-xs-12 col-md-6">
 
 									<div class="field">
-										<label for="fiscal_code">Codice Fiscale (o Partita Iva)</label>
-
-										<input id="fiscal_code" type="text"
-											   class="form-control @error('fiscal_code') is-invalid @enderror" name="fiscal_code"
-											   value="{{ $user->fiscal_code }}"  required autofocus>
-
-										@error('fiscal_code')
-										<p class="error" role="alert">{{ $message }}</p>
-										@enderror
-									</div>
-
-								</div>
-							</div>
-
-							<div class="row clearfix">
-								<div class="col col-xs-12 col-md-6">
-
-									<div class="field">
 										<label for="first_name">Nome</label>
 
 										<input id="first_name" type="text"

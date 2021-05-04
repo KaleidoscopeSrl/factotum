@@ -10,7 +10,7 @@ return [
 	'new_customer_address_title'       => 'New Address',
 	'new_customer_address_description' => 'New Address',
 
-	'edit_customer_addresses_title'       => 'Edit Address',
-	'edit_customer_addresses_description' => 'Edit Address',
+	'edit_customer_address_title'       => 'Edit Address',
+	'edit_customer_address_description' => 'Edit Address',
 
 ];

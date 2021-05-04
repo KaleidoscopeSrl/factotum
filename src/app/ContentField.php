@@ -12,7 +12,13 @@ class ContentField extends Model
 
 	protected $fillable = [
 		'content_type_id',
-		'name', 'label', 'type', 'order_no', 'mandatory','readonly', 'hint',
+		'name',
+		'label',
+		'type',
+		'order_no',
+		'mandatory',
+		'readonly',
+		'hint',
 		'old_content_field',
 		'options',
 

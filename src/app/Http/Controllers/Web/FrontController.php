@@ -371,7 +371,7 @@ class FrontController extends Controller
 
 		} else {
 
-			return ( isset($data['view']) ? view( $data['view'] ) : view( 'errors.404' ) );
+			return response()->view( $this->_getNotFoundView() )->setStatusCode(404);
 
 		}
 	}

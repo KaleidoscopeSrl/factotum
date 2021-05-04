@@ -126,8 +126,8 @@ class FactotumSetup extends Migration
 			$table->id();
 			$table->string('filename', 150)->unique();
 			$table->string('filename_webp', 150);
-			$table->string('thumb', 150)->nullable(true);
-			$table->string('thumb_webp', 150)->nullable(true);
+			$table->string('thumb', 150)->nullable(true)->default(null);
+			$table->string('thumb_webp', 150)->nullable(true)->default(null);
 			$table->string('url', 255)->nullable(true);
 			$table->string('url_webp', 255)->nullable(true);
 			$table->bigInteger('user_id')->unsigned();

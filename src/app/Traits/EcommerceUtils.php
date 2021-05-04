@@ -6,10 +6,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 
+use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
+use PayPalCheckoutSdk\Orders\OrdersGetRequest;
+
 use Kaleidoscope\Factotum\Cart;
 use Kaleidoscope\Factotum\CartProduct;
 use Kaleidoscope\Factotum\CustomerAddress;
 use Kaleidoscope\Factotum\DiscountCode;
+use Kaleidoscope\Factotum\Library\PayPalClient;
 use Kaleidoscope\Factotum\Order;
 use Kaleidoscope\Factotum\OrderProduct;
 use Kaleidoscope\Factotum\Product;
@@ -17,6 +21,7 @@ use Kaleidoscope\Factotum\ProductVariant;
 use Kaleidoscope\Factotum\Role;
 use Kaleidoscope\Factotum\Tax;
 use Kaleidoscope\Factotum\User;
+
 
 
 trait EcommerceUtils
@@ -438,16 +443,22 @@ trait EcommerceUtils
 
 	protected function _getTemporaryShipping()
 	{
-		return ( request()->session()->get('shipping') ? request()->session()->get('shipping') : null );
+		if ( request()->hasSession() ) {
+			return ( request()->session()->get('shipping') ? request()->session()->get('shipping') : null );
+		}
+
+		return null;
 	}
 
 
 	protected function _getTemporaryDiscountCode()
 	{
-		$discountCode = request()->session()->get( 'discount_code' );
+		if ( request()->hasSession() ) {
+			$discountCode = request()->session()->get( 'discount_code' );
 
-		if ( $discountCode ) {
-			return DiscountCode::find( $discountCode );
+			if ( $discountCode ) {
+				return DiscountCode::find( $discountCode );
+			}
 		}
 
 		return null;
@@ -781,6 +792,7 @@ trait EcommerceUtils
 		}
 	}
 
+
 	protected function _prepareCheckout()
 	{
 		// 1. Get the cart
@@ -799,6 +811,8 @@ trait EcommerceUtils
 		}
 
 		$deliveryAddress = null;
+		$invoiceAddress  = null;
+		$shipping        = null;
 
 		// 2. Get delivery and invoice address, based if there is the guest cart or not
 		if ( !config('factotum.guest_cart') ) {
@@ -923,6 +937,260 @@ trait EcommerceUtils
 		}
 
 		return null;
+	}
+
+
+	/**
+	 * PAYMENT FUNCTIONS
+	 */
+
+	protected function _setupStripePayment()
+	{
+		\Stripe\Stripe::setApiKey( env('STRIPE_SECRET_KEY') );
+	}
+
+	protected function _initStripePayment()
+	{
+		try {
+			$user   = $this->_getUser();
+			$cart   = $this->_getCart();
+			$totals = $this->_getCartTotals( $cart );
+
+			if ( $totals && $totals['total'] > 0 ) {
+
+				$intent = \Stripe\PaymentIntent::create([
+					'amount'   => round( $totals['total'] * 100, 0 ), // Stirpe accepts 1099 for a 10.99 payment
+					'currency' => 'eur',
+				]);
+
+				if ( $intent ) {
+					$cart->payment_type     = 'stripe';
+					$cart->stripe_intent_id = $intent->id;
+					$cart->save();
+
+					$invoiceAddress = $this->_getTemporaryInvoiceAddress();
+
+					return [
+						'result'         => 'ok',
+						'clientSecret'   => $intent->client_secret,
+						'billingDetails' => [
+							'name'  => $user->profile->company_name,
+							'email' => $user->email,
+							'phone' => $user->profile->phone,
+							'address' => [
+								'line1'       => $invoiceAddress->address,
+								'city'        => $invoiceAddress->city,
+								'postal_code' => $invoiceAddress->zip,
+								'state'       => $invoiceAddress->province,
+								'country'     => $invoiceAddress->country,
+							]
+						],
+						'stripeIntentID' => $intent->id
+					];
+
+				}
+
+				return [ 'result' => 'ko', 'error' => 'Error on creating order' ];
+
+			}
+
+			return [ 'result' => 'ko', 'error' => 'Error on creating intent. Missing cart data' ];
+
+		} catch ( \Exception $ex ) {
+
+			session()->flash( 'error', $ex->getMessage() );
+			return [ 'result' => 'ko', 'error' => $ex->getMessage(), 'trace' => $ex->getTrace() ];
+
+		}
+	}
+
+
+	protected function _getStripeTransactionId( $stripeIntentId, $transactionId )
+	{
+		try {
+
+			$cart = $this->_getCart();
+
+			if ( $stripeIntentId && $cart->stripe_intent_id == $stripeIntentId ) {
+
+				$order = $this->_createOrderFromCart( $cart );
+
+				if ( !$order ) {
+					return [ 'result' => 'ko', 'message' => 'Error on setting stripe transaction id' ];
+				}
+
+				$order->payment_type = 'stripe';
+				$order->save();
+
+				$order->setTransactionId( $transactionId );
+				$order->sendNewOrderNotifications();
+
+				$shopBaseUrl = config('factotum.shop_base_url');
+				$redirectUrl = url( ( $shopBaseUrl ? $shopBaseUrl : '' ) . '/order/thank-you/' . $order->id );
+
+				$result = [
+					'result'   => 'ok',
+					'order_id' => $order->id,
+					'redirect' => $redirectUrl
+				];
+
+				return $result;
+
+			}
+
+			return [ 'result' => 'ko', 'message' => 'Error on setting stripe transaction id' ];
+
+		} catch ( \Exception $ex ) {
+			session()->flash( 'error', $ex->getMessage() );
+
+			return [
+				'result' => 'ko',
+				'error'  => $ex->getMessage(),
+				'trace'  => $ex->getTrace()
+			];
+		}
+
+	}
+
+
+	protected function _initPayPalPayment()
+	{
+		try {
+			$user   = $this->_getUser();
+			$cart   = $this->_getCart();
+			$totals = $this->_getCartTotals( $cart );
+
+			if ( $totals && $totals['total'] > 0 ) {
+
+				$ppRequest = new OrdersCreateRequest();
+				$ppRequest->prefer('return=representation');
+				$ppRequest->body = $this->_buildPayPalIntentRequestBody( $cart->id, $totals['total'] );
+
+				$client   = PayPalClient::client();
+				$response = $client->execute($ppRequest);
+
+				if ( $response->statusCode == 200 || $response->statusCode == 201 ) {
+					$cart->payment_type    = 'paypal';
+					$cart->paypal_order_id = $response->result->id;
+					$cart->save();
+
+					$invoiceAddress = $this->_getTemporaryInvoiceAddress();
+
+					$billingName = $user->profile->first_name . ' ' . $user->profile->last_name;
+					if ( isset($user->profile->company_name) && $user->profile->company_name ) {
+						$billingName = $user->profile->company_name;
+					}
+
+					return [
+						'result'         => 'ok',
+						'billingDetails' => [
+							'name'  => $billingName,
+							'email' => $user->email,
+							'phone' => $user->profile->phone,
+							'address' => [
+								'line1'       => $invoiceAddress->address,
+								'city'        => $invoiceAddress->city,
+								'postal_code' => $invoiceAddress->zip,
+								'state'       => $invoiceAddress->province,
+								'country'     => $invoiceAddress->country,
+							]
+						],
+						'paypalOrderID' => $response->result->id
+					];
+				}
+
+				return [ 'result' => 'ko', 'message' => 'Error on creating intent. Missing cart data' ];
+			}
+
+		} catch ( \Exception $ex ) {
+			session()->flash( 'error', $ex->getMessage() );
+
+			return [
+				'result' => 'ko',
+				'error'  => $ex->getMessage(),
+				'trace'  => $ex->getTrace()
+			];
+		}
+	}
+
+
+	protected function _buildPayPalIntentRequestBody( $cartId, $total )
+	{
+		$deliveryAddress = $this->_getTemporaryDeliveryAddress();
+
+		return [
+			'intent' => 'CAPTURE',
+			'purchase_units' => [
+				0 => [
+					'amount' => [
+						'currency_code' => 'EUR',
+						'value'         => round($total, 2)
+					],
+					'description' => 'Acquisto su ' . env('APP_NAME'),
+					'custom_id'   => $cartId,
+					'shipping' => [
+						'method'  => 'Corriere Espresso',
+						'address' => [
+							'address_line_1' => $deliveryAddress->address,
+							'admin_area_1'   => $deliveryAddress->province,
+							'admin_area_2'   => $deliveryAddress->city,
+							'postal_code'    => $deliveryAddress->zip,
+							'country_code'   => $deliveryAddress->country,
+						]
+					]
+				]
+			]
+		];
+	}
+
+
+	protected function _getPayPalTransactionId( $paypalOrderId )
+	{
+		try {
+			$cart = $this->_getCart();
+
+			if ( $paypalOrderId && $cart->paypal_order_id == $paypalOrderId ) {
+
+				$order               = $this->_createOrderFromCart( $cart );
+				$order->payment_type = 'paypal';
+				$order->save();
+
+				$client = PayPalClient::client();
+				$response = $client->execute(new OrdersGetRequest($paypalOrderId));
+
+				if ( $response->statusCode == 200 || $response->statusCode == 201 ) {
+
+					if ( isset($response->result->purchase_units[0]->payments->captures[0]) ) {
+						$transactionId = $response->result->purchase_units[0]->payments->captures[0]->id;
+
+						$order->setTransactionId( $transactionId );
+						$order->sendNewOrderNotifications();
+
+						$shopBaseUrl = config('factotum.shop_base_url');
+						$redirectUrl = url( ( $shopBaseUrl ? $shopBaseUrl : '' ) . '/order/thank-you/' . $order->id );
+
+						return [
+							'result'   => 'ok',
+							'order_id' => $order->id,
+							'redirect' => $redirectUrl
+						];
+					}
+
+				}
+
+			}
+
+			return [ 'result' => 'ko', 'message' => 'Error on getting paypal transaction id' ];
+
+		} catch ( \Exception $ex ) {
+			session()->flash( 'error', $ex->getMessage() );
+
+			return [
+				'result' => 'ko',
+				'error' => $ex->getMessage(),
+				'trace' => $ex->getTrace()
+			];
+		}
 	}
 
 }

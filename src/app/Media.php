@@ -15,7 +15,8 @@ class Media extends Model
 
 	protected $fillable = [
 		'user_id',
-		'width', 'height',
+		'width',
+		'height',
 		'size',
 		'filename',
 		'thumb',
@@ -23,7 +24,9 @@ class Media extends Model
 		'filename_webp',
 		'thumb_webp',
 		'url_webp',
-		'caption', 'alt_text', 'description',
+		'caption',
+		'alt_text',
+		'description',
 		'mime_type'
 	];
 
@@ -79,6 +82,7 @@ class Media extends Model
 				}
 			}
 		}
+
 		return $sizesNotExist;
 	}
 
@@ -166,7 +170,7 @@ class Media extends Model
 
 		}
 
-		$thumbSize     = config('factotum.thumb_size');
+		$thumbSize         = config('factotum.thumb_size');
 		$thumbFilename     = $origFilename . '-thumb.' . $ext;
 		$thumbFilenameWebP = $origFilename . '-thumb.webp';
 

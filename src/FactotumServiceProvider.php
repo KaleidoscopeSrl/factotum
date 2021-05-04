@@ -114,7 +114,8 @@ class FactotumServiceProvider extends ServiceProvider
 		));
 
 		$this->app['config']->set( 'database', array_merge(
-			$this->app['config']->get('database', []), require __DIR__ . '/config/database.php'
+			require __DIR__ . '/config/database.php',
+			$this->app['config']->get('database', [])
 		));
 
 		$this->app['config']->set( 'mail', array_replace_recursive(

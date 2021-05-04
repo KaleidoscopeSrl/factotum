@@ -69,7 +69,7 @@ class ReadController extends Controller
 						]);
         }
 
-        return view( $this->_getNotFoundView() );
+	    return response()->view( $this->_getNotFoundView() )->setStatusCode(404);
     }
 
 }

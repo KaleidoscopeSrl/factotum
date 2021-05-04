@@ -27,22 +27,17 @@ class StoreMedia extends CustomFormRequest
 	{
 		$rules = [];
 
-		$data = $this->all();
-
 		$id = request()->route('id');
 
 		if ( $id ) {
 			$rules['filename'] = 'required|unique:media,filename,' . $id;
 		}
 
-		$this->merge($data);
-
 		return $rules;
 	}
 
 	protected function getValidatorInstance()
 	{
-
 		$data = $this->all();
 
 		$file = request()->file('files');
