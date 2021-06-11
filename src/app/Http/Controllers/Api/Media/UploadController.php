@@ -26,15 +26,16 @@ class UploadController extends Controller
 		$media->fill($data);
 		$media->save();
 
-
 		$path = $request->file('files')->storeAs( $media->id, $media->filename, 'media' );
+		$webpPath = substr( $path, 0, strlen($path) - 3 ) . 'webp';
 
-		$media->url = 'media/' . $path;
+		$media->url      = 'media/' . $path;
+		$media->url_webp = 'media/' . $webpPath;
+
 		$media->save();
 
 
 		if ( $media->id ) {
-
 			if ( Str::contains( $media->mime_type, 'image/' )  ) {
 				$media = Media::generateThumb( $media );
 			}

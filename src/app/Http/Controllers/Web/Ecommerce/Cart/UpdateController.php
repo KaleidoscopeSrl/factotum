@@ -18,13 +18,13 @@ use Kaleidoscope\Factotum\Product;
 use Kaleidoscope\Factotum\Tax;
 use Kaleidoscope\Factotum\DiscountCode;
 use Kaleidoscope\Factotum\Order;
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 
 class UpdateController extends Controller
 {
 
-	use CartUtils;
+	use EcommerceUtils;
 
 
     public function addProduct( AddProductToCart $request )

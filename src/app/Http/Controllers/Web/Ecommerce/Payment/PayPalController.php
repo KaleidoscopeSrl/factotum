@@ -11,14 +11,14 @@ use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 use Kaleidoscope\Factotum\Order;
 
 
 class PayPalController extends Controller
 {
-	use CartUtils;
+	use EcommerceUtils;
 
 
 	public function initPaymentInit( Request $request )

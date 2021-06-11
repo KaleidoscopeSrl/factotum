@@ -8,6 +8,9 @@ use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
 
 use Kaleidoscope\Factotum\ContentType;
 use Kaleidoscope\Factotum\Content;
+use Kaleidoscope\Factotum\Category;
+use Kaleidoscope\Factotum\Product;
+use Kaleidoscope\Factotum\ProductCategory;
 
 
 class Controller extends ApiBaseController
@@ -46,14 +49,25 @@ class Controller extends ApiBaseController
 
 	public function checkSeoKeyword(Request $request)
 	{
-		$contentId = $request->input('id');
+		$entityId = $request->input('id');
 		$keyword   = $request->input('keyword');
+		$type      = $request->input('type');
 
 		if ( $keyword ) {
-			$query = Content::where( 'seo_focus_key', 'LIKE', '%' . $keyword . '%' );
 
-			if ( $contentId ) {
-				$query->where( 'id', '!=', $contentId );
+			if ( $type != 'product_category' && $type != 'product' && $type != 'category' ) {
+				$query = Content::where( 'seo_focus_key', 'LIKE', '%' . $keyword . '%' );
+			} else if ( $type == 'product_category' ) {
+				$query = ProductCategory::where( 'seo_focus_key', 'LIKE', '%' . $keyword . '%' );
+			} else if ( $type == 'category' ) {
+				$query = Category::where( 'seo_focus_key', 'LIKE', '%' . $keyword . '%' );
+			} else if ( $type == 'product' ) {
+				$query = Product::where( 'seo_focus_key', 'LIKE', '%' . $keyword . '%' );
+			}
+
+
+			if ( $entityId ) {
+				$query->where( 'id', '!=', $entityId );
 			}
 
 			$occurences = $query->count();

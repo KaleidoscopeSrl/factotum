@@ -31,7 +31,7 @@ class ReadController extends Controller
 
 		$query = Order::query();
 
-		$rawQuery = 'orders.*, first_name, last_name, company_name ';
+		$rawQuery = 'orders.*, first_name, last_name ';
 
 		$query->selectRaw( $rawQuery );
 		$query->join('users', 'users.id', '=', 'orders.customer_id');

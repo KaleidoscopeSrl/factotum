@@ -31,6 +31,7 @@ use Kaleidoscope\Factotum\Policies\CustomerAddressPolicy;
 use Kaleidoscope\Factotum\Policies\CartPolicy;
 use Kaleidoscope\Factotum\Policies\CampaignPolicy;
 use Kaleidoscope\Factotum\Policies\CampaignTemplatePolicy;
+use Kaleidoscope\Factotum\Policies\NewsletterSubscriptionPolicy;
 
 
 use Kaleidoscope\Factotum\Observers\ContentTypeObserver;
@@ -55,7 +56,6 @@ use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
 use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateSitemap;
 use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateProductImages;
 use Kaleidoscope\Factotum\Console\Commands\DumpAutoload;
-
 
 class FactotumServiceProvider extends ServiceProvider
 {
@@ -94,9 +94,10 @@ class FactotumServiceProvider extends ServiceProvider
 
 		if ( env('FACTOTUM_NEWSLETTER_INSTALLED') ) {
 			$policies[] = [
-				Campaign::class             => CampaignPolicy::class,
-				CampaignTemplate::class     => CampaignTemplatePolicy::class,
-				CampaignEmail::class        => CampaignEmailPolicy::class
+				Campaign::class                 => CampaignPolicy::class,
+				CampaignTemplate::class         => CampaignTemplatePolicy::class,
+				CampaignEmail::class            => CampaignEmailPolicy::class,
+				NewsletterSubscription::class   => NewsletterSubscriptionPolicy::class
 			];
 		}
 
@@ -104,10 +105,10 @@ class FactotumServiceProvider extends ServiceProvider
 		// $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
 
-
 		// Configurations
-		$this->app['config']->set( 'auth', array_merge(
-			$this->app['config']->get('auth', []), require __DIR__ . '/config/auth.php'
+		$this->app['config']->set( 'auth', array_replace_recursive(
+			require __DIR__ . '/config/auth.php',
+			$this->app['config']->get('auth', [])
 		));
 
 		$this->app['config']->set( 'cors', array_merge(
@@ -151,7 +152,7 @@ class FactotumServiceProvider extends ServiceProvider
 			__DIR__ . '/public/admin'         => public_path('admin'),
 
 			// MINISITE
-			__DIR__ . '/public/assets'        => public_path('assets'),
+//			__DIR__ . '/public/assets'        => public_path('assets'),
 			__DIR__ . '/public/robots.txt'    => public_path(''),
 		], 'factotum');
 
@@ -257,6 +258,7 @@ class FactotumServiceProvider extends ServiceProvider
 				require __DIR__ . '/routes/api/campaign.php';
 				require __DIR__ . '/routes/api/campaign-template.php';
 				require __DIR__ . '/routes/api/campaign-email.php';
+				require __DIR__ . '/routes/api/newsletter-subscription.php';
 			}
 
 			require __DIR__ . '/routes/api/capability.php';
@@ -303,6 +305,7 @@ class FactotumServiceProvider extends ServiceProvider
 
 			$overridingRoutes = true;
 		}
+
 
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 
@@ -396,7 +399,7 @@ class FactotumServiceProvider extends ServiceProvider
 		 *
 		 */
 
-		if ( !$overridingRoutes ) {
+		if ( !file_exists( base_path('routes') . '/web.php' ) ) {
 
 			// Public routes
 			Route::group([

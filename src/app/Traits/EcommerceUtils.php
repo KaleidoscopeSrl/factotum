@@ -19,7 +19,7 @@ use Kaleidoscope\Factotum\Tax;
 use Kaleidoscope\Factotum\User;
 
 
-trait CartUtils
+trait EcommerceUtils
 {
 
 	protected $_cartDuration = '+3 days';
@@ -73,7 +73,7 @@ trait CartUtils
 
 	protected function _getCart( $dontCreateNew = false )
 	{
-		try {
+		// try {
 
 			$cart = null;
 			$user = $this->_getUser();
@@ -90,6 +90,7 @@ trait CartUtils
 
 					if ( !$cart && !$dontCreateNew ) {
 						$cart = new Cart;
+
 						$cart->customer_id = $user->id;
 						$cart->expires_at  = date('Y-m-d H:i:s', strtotime( $this->_cartDuration ) );
 						$cart->save();
@@ -121,10 +122,10 @@ trait CartUtils
 
 			return null;
 
-		} catch ( \Exception $ex ) {
-			session()->flash( 'error', $ex->getFile() . ' - ' . $ex->getLine() . ' - ' . $ex->getMessage() );
-			return view('factotum::errors.500');
-		}
+//		} catch ( \Exception $ex ) {
+//			session()->flash( 'error', $ex->getFile() . ' - ' . $ex->getLine() . ' - ' . $ex->getMessage() );
+//			return view('factotum::errors.500');
+//		}
 	}
 
 
@@ -375,11 +376,13 @@ trait CartUtils
 			} else {
 
 				foreach ( $shippingOptions as $country => $shippingTypes ) {
-					foreach ( $shippingTypes as $shippingType => $amount ) {
-						$tmp[ $country . '_' . $shippingType ] = [
-							'amount' => $amount,
-							'label'  => Lang::get('factotum::ecommerce_checkout.shipping_' . $country . '_' . $shippingType )
-						];
+					if ( is_array($shippingTypes) ) {
+						foreach ( $shippingTypes as $shippingType => $amount ) {
+							$tmp[ $country . '_' . $shippingType ] = [
+								'amount' => $amount,
+								'label'  => Lang::get('factotum::ecommerce_checkout.shipping_' . $country . '_' . $shippingType )
+							];
+						}
 					}
 				}
 
@@ -759,6 +762,167 @@ trait CartUtils
 		$cart->save();
 
 		return true;
+	}
+
+
+	private function _redirectHome()
+	{
+		if ( config('factotum.guest_cart') ) {
+			request()->session()->remove('user_id');
+			request()->session()->remove('delivery_address');
+			request()->session()->remove('invoice_address');
+			request()->session()->remove('shipping');
+		}
+
+		if ( config('factotum.shop_base_url') ) {
+			return redirect('/' . config('factotum.shop_base_url'));
+		} else {
+			return redirect('/');
+		}
+	}
+
+	protected function _prepareCheckout()
+	{
+		// 1. Get the cart
+		$cart = $this->_getCart( true );
+
+		// 2. If the cart does not have products or if it does not exist, redirect to home
+		if ( $cart ) {
+			$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
+			$totals       = $this->_getCartTotals( $cart );
+
+			if ( $totals['totalProducts'] == 0 ) {
+				return $this->_redirectHome();
+			}
+		} else {
+			return $this->_redirectHome();
+		}
+
+		$deliveryAddress = null;
+
+		// 2. Get delivery and invoice address, based if there is the guest cart or not
+		if ( !config('factotum.guest_cart') ) {
+			// 1 . Get all the customers addresses
+			$user              = $this->_getUser();
+			$deliveryAddresses = CustomerAddress::where( 'type', 'delivery' )
+												->where( 'customer_id', $user->id )
+												->orderBy('default_address', 'DESC')
+												->get();
+
+			$invoiceAddresses  = CustomerAddress::where( 'type', 'invoice' )
+												->where( 'customer_id', $user->id )
+												->orderBy('default_address', 'DESC')
+												->get();
+		} else {
+//			request()->session()->remove('delivery_address');
+//			request()->session()->remove('invoice_address');
+//			request()->session()->remove('shipping');
+
+			$deliveryAddress = $this->_getTemporaryDeliveryAddress();
+			$invoiceAddress  = $this->_getTemporaryInvoiceAddress();
+		}
+
+		// 3. Get the current shipping and available shipping options
+		$shipping        = $this->_getTemporaryShipping();
+		$shippingOptions = $this->_getShippingOptions();
+
+
+		// 4. Define the current checkout step
+		$step = 'delivery-address';
+		if ( $deliveryAddress ) {
+			$step = 'invoice-address';
+		} else if ( $deliveryAddress && $invoiceAddress ) {
+			$step = 'shipping';
+		} else if ( $deliveryAddress && $invoiceAddress && $shipping ) {
+			$step = 'payment';
+		}
+
+
+		// 5. Get all the accepted payment methods
+		$paymentMethods = config('factotum.payment_methods');
+
+		$stripe        = null;
+		$paypal        = null;
+		$bankTransfer  = null;
+		$customPayment = null;
+
+		if ( isset($paymentMethods) && in_array('stripe', $paymentMethods) && env('STRIPE_PUBLIC_KEY') && env('STRIPE_SECRET_KEY') ) {
+			$stripe = [
+				'publicKey' => env('STRIPE_PUBLIC_KEY')
+			];
+		}
+
+		if ( isset($paymentMethods) && in_array('paypal', $paymentMethods) && env('PAYPAL_CLIENT_ID') && env('PAYPAL_CLIENT_SECRET') ) {
+			$paypal = [
+				'publicKey' => env('PAYPAL_CLIENT_ID')
+			];
+		}
+
+		if ( isset($paymentMethods) && in_array('bank-transfer', $paymentMethods) && env('SHOP_OWNER_BANK_NAME') && env('SHOP_OWNER_BANK_IBAN') ) {
+			$bankTransfer = true;
+		}
+
+		if ( isset($paymentMethods) && in_array('custom-payment', $paymentMethods) ) {
+			$customPayment = true;
+		}
+
+		$shop = [
+			'name'      => env('SHOP_OWNER_NAME'),
+			'bank_name' => env('SHOP_OWNER_BANK_NAME'),
+			'bank_iban' => env('SHOP_OWNER_BANK_IBAN'),
+		];
+
+
+		return [
+			'cart'              => $cart,
+			'cartProducts'      => $cartProducts,
+
+			// All the totals
+			'totalProducts'     => $totals['totalProducts'],
+			'totalDiscount'     => $totals['totalDiscount'],
+			'totalPartial'      => $totals['totalPartial'],
+			'totalTaxes'        => $totals['totalTaxes'],
+			'totalShipping'     => $this->_getTotalShipping( $totals['total'], $totals['totalShipping'], true ),
+			'total'             => $totals['total'],
+			'discountCode'      => $this->_getTemporaryDiscountCode(),
+
+			// Possible options
+			'deliveryAddresses' => ( isset($deliveryAddresses) ? $deliveryAddresses : null ),
+			'invoiceAddresses'  => ( isset($invoiceAddresses)  ? $invoiceAddresses  : null ),
+			'shippingOptions'   => $shippingOptions,
+
+			// Current values
+			'deliveryAddress'   => ( isset($deliveryAddress) ? $deliveryAddress : null ),
+			'invoiceAddress'    => ( isset($invoiceAddress)  ? $invoiceAddress  : null ),
+			'shipping'          => $shipping,
+
+			// Current step in checkout
+			'step'              => $step,
+
+			// Payments
+			'shop'          => $shop,
+			'stripe'        => $stripe,
+			'paypal'        => $paypal,
+			'bankTransfer'  => $bankTransfer,
+			'customPayment' => $customPayment,
+		];
+	}
+
+
+	protected function _proceedCheckout()
+	{
+		$cart = $this->_getCart( true );
+
+		if ( $cart ) {
+			$order               = $this->_createOrderFromCart( $cart );
+			$order->payment_type = request()->input('pay-with');
+			$order->save();
+			$order->sendNewOrderNotifications();
+
+			return $order;
+		}
+
+		return null;
 	}
 
 }

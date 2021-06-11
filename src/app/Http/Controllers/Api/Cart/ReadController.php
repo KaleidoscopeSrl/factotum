@@ -8,12 +8,12 @@ use Kaleidoscope\Factotum\Cart;
 use Kaleidoscope\Factotum\CartProduct;
 use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Order;
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 
 class ReadController extends Controller
 {
-	use CartUtils;
+	use EcommerceUtils;
 
     public function getListPaginated( Request $request )
     {

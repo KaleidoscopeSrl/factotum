@@ -11,7 +11,21 @@ class Category extends Model
 		'parent_id',
 		'name',
 		'label',
-		'lang'
+		'abs_url',
+		'description',
+		'lang',
+		'order_no',
+
+		'seo_title',
+		'seo_description',
+		'seo_canonical_url',
+		'seo_robots_indexing',
+		'seo_robots_following',
+		'seo_focus_key',
+
+		'fb_title',
+		'fb_description',
+		'fb_image'
 	];
 
 

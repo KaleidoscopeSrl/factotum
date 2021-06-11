@@ -5,12 +5,12 @@ namespace Kaleidoscope\Factotum\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 
 use Kaleidoscope\Factotum\Role;
-use Kaleidoscope\Factotum\Traits\CartUtils;
+use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 
 class SetShipping extends CustomFormRequest
 {
-	use CartUtils;
+	use EcommerceUtils;
 
 	public function authorize()
 	{

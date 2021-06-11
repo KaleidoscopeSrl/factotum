@@ -119,24 +119,17 @@ class Order extends Model
 			Notification::send( $customer, new NewOrderToCustomerNotification( $customer, $this ) );
 		}
 
-		$roles = Role::where('manage_orders', 1)->get();
+		$shopManagers = User::whereIn( 'role_id', Role::where( 'manage_orders', 1 )->pluck('id')->toArray() )->get();
+		if ( $shopManagers && $shopManagers->count() > 0 ) {
 
-		if ( $roles->count() > 0 ) {
-			$tmp = [];
-			foreach ($roles as $r ) {
-				$tmp[] = $r->id;
+			if ( file_exists(app_path('Notifications/NewOrderToShopOwnerNotification.php')) ) {
+				$notification = new \App\Notifications\NewOrderToShopOwnerNotification( $customer, $this );
+			} else {
+				$notification = new NewOrderToShopOwnerNotification( $customer, $this );
 			}
-			$users = User::whereIn('role_id', $tmp)->get();
 
-
-			if ( $users->count() > 0 ) {
-				foreach ( $users as $user ) {
-					if ( file_exists(app_path('Notifications/NewOrderToShopOwnerNotification.php')) ) {
-						Notification::send( $user, new \App\Notifications\NewOrderToShopOwnerNotification( $customer, $this ) );
-					} else {
-						Notification::send( $user, new NewOrderToShopOwnerNotification( $customer, $this ) );
-					}
-				}
+			foreach ( $shopManagers as $shopManager ) {
+				Notification::route( 'mail', $shopManager->email )->notify( $notification );
 			}
 
 		}

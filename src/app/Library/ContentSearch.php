@@ -2,6 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Library;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -54,7 +55,7 @@ class ContentSearch {
 		$this->_fields    = (isset($this->_model->fields)    ? (array) $this->_model->fields    : [] );
 		$this->_relations = (isset($this->_model->relations) ? (array) $this->_model->relations : [] );
 
-		$this->_cols = join( ',', array_merge( $this->_cols, array_keys( $this->_fields ), [ $contentType['content_type'].'.id as elem_id' ] ) );
+		$this->_cols = join( ',', array_merge( $this->_cols, array_keys( $this->_fields ), [ $this->_contentType['content_type'] . '.id as elem_id' ] ) );
 
 		$this->_query = DB::table('contents')
 							->select( DB::raw( $this->_cols ) )
@@ -161,7 +162,13 @@ class ContentSearch {
 		return $this;
 	}
 
-
+	/**
+	 * This function performs a query and returns all the contents that match the search conditions.
+	 *
+	 * @param bool $avoidDeepLinking
+	 *
+	 * @return Collection
+	 */
 	public function search( $avoidDeepLinking = false )
 	{
 		if ( $this->_pagination ) {

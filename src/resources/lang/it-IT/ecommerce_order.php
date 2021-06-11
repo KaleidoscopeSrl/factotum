@@ -30,5 +30,6 @@ return [
 	'total_taxes'    => 'Totale Tasse',
 	'total_shipping' => 'Totale Spedizione',
 	'payment_method' => 'Metodo di pagamento',
+	'shipping'       => 'Spedizione',
 	'total'          => 'Totale'
 ];
