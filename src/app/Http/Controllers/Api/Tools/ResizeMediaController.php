@@ -19,6 +19,20 @@ class ResizeMediaController extends ApiBaseController
 	{
 		$contentTypeId = $request->input('contentTypeId');
 
+		if ( $contentTypeId === 'all' ) {
+
+			$mediaList = [];
+
+			$media = Media::all();
+
+			foreach ( $media as $m ) {
+				$mediaList[$m->id][] = $m->id;
+			}
+
+			return response()->json( [ 'result'   => 'ok', 'mediaFields'    => $mediaList ] );
+
+		}
+
 		$contentType = ContentType::find($contentTypeId);
 
 		$contentFieldsImages = ContentField::whereIn( 'type', array( 'image_upload', 'gallery' ) )->where('content_type_id', $contentTypeId)->get();

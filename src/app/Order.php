@@ -119,18 +119,26 @@ class Order extends Model
 			Notification::send( $customer, new NewOrderToCustomerNotification( $customer, $this ) );
 		}
 
-		$shopManagers = config('factotum.shop_managers');
+		$roles = Role::where('manage_orders', 1)->get();
 
-		if ( count($shopManagers) > 0 ) {
-			if ( file_exists(app_path('Notifications/NewOrderToShopOwnerNotification.php')) ) {
-				$notification = new \App\Notifications\NewOrderToShopOwnerNotification( $customer, $this );
-			} else {
-				$notification = new NewOrderToShopOwnerNotification( $customer, $this );
+		if ( $roles->count() > 0 ) {
+			$tmp = [];
+			foreach ($roles as $r ) {
+				$tmp[] = $r->id;
+			}
+			$users = User::whereIn('role_id', $tmp)->get();
+
+
+			if ( $users->count() > 0 ) {
+				foreach ( $users as $user ) {
+					if ( file_exists(app_path('Notifications/NewOrderToShopOwnerNotification.php')) ) {
+						Notification::send( $user, new \App\Notifications\NewOrderToShopOwnerNotification( $customer, $this ) );
+					} else {
+						Notification::send( $user, new NewOrderToShopOwnerNotification( $customer, $this ) );
+					}
+				}
 			}
 
-			foreach ( $shopManagers as $shopManager ) {
-				Notification::route( 'mail', $shopManager )->notify( $notification );
-			}
 		}
 
 	}

@@ -297,6 +297,14 @@ class Product extends Model
 					if ( count($productResizes) > 0 ) {
 						$tmp = [];
 						foreach ( $productResizes as $size ) {
+							$width  = $size['w'];
+							$height = $size['h'];
+
+							$sizePath = storage_path( 'app/public/media/' . $media['id'] . '/' . substr( $media['filename'], 0, -4) . '-' . $width .'x' . $height . '.' . $ext);
+							if ( !file_exists($sizePath) ) {
+								Media::generateSize( $media, $size );
+							}
+
 							$tmp[] = $mediaUrl . '-' . $size['w'] . 'x' . $size['h'] . '.' . $ext ;
 						}
 						$media['sizes'] = $tmp;

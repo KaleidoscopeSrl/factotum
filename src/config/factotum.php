@@ -133,6 +133,10 @@ return [
 		3 => [
 			'w' => 220,
 			'h' => 220
+		],
+		4 => [
+			'w' => 300,
+			'h' => 300
 		]
 	],
 	'product_resize_operation' => 'fit',
@@ -180,11 +184,7 @@ return [
 	'invoice_start_number'   => 60,
 	'invoice_logo'           => '/assets/media/img/invoice-logo.png',
 
-	'shop_managers' => env('APP_ENV') == 'production' ? [
-		'shop@customer.it'
-	] : [
-		'local@developer.com'
-	],
+
 
 	'version' => '5.0.27',
 

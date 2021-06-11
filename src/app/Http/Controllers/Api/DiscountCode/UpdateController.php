@@ -13,11 +13,11 @@ class UpdateController extends Controller
 	{
 		$data = $request->all();
 
-		$products = $data['products'];
-
-		ProductDiscountCode::whereIn('product_id', $products)
-							->where('discount_code_id', $id)
-							->delete();
+//		$products = $data['products'];
+//
+//		ProductDiscountCode::whereIn('product_id', $products)
+//							->where('discount_code_id', $id)
+//							->delete();
 
 		$discountCode = DiscountCode::find($id);
 		$discountCode->fill($data);

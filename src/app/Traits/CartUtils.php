@@ -403,11 +403,11 @@ trait CartUtils
 			$user = $this->_getUser();
 
 			return  CustomerAddress::where([
-										'customer_id' => $user->id,
-										'type'        => 'delivery',
-										'id'          => $addressId
-									])
-								   	->first();
+				'customer_id' => $user->id,
+				'type'        => 'delivery',
+				'id'          => $addressId
+			])
+				->first();
 		}
 
 		return null;
