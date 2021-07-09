@@ -6,4 +6,4 @@
  * Time: 12:34
  */
 
-Route::options('{uri?}', 'Controller@optionsRequest')->where('uri', '.*');
+Route::options('{uri?}', 'ApiBaseController@optionsRequest')->where('uri', '.*');

@@ -6,8 +6,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-use Kaleidoscope\Factotum\CategoryContent;
-use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Models\CategoryContent;
+use Kaleidoscope\Factotum\Models\ContentType;
+
 
 class ContentSearch {
 

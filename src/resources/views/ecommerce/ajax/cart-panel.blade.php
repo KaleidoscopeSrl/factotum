@@ -43,6 +43,20 @@
 					</td>
 				</tr>
 
+				<tr class="discount-code-row @if ( !isset($discountCode) ) hidden @endif">
+					<td>
+						<span>
+							Discount code:
+							@if ( isset($discountCode) && $discountCode )
+								<strong>{{ $discountCode->code }}</strong>
+							@endif
+						</span>
+					</td>
+					<td class="tar">
+						<span class="total-discount">- {{ '€ ' . number_format( $totalDiscount, 2, ',', '.' ) }}</span>
+					</td>
+				</tr>
+
 				<tr>
 					<td>
 						<strong>Totale tasse</strong>

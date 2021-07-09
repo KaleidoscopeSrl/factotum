@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
 
+
 class DumpAutoload extends Command
 {
 

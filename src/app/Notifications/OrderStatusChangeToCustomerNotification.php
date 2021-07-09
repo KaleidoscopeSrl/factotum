@@ -6,9 +6,9 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\HtmlString;
-use Kaleidoscope\Factotum\OrderProduct;
 
-use Illuminate\Support\Facades\App;
+use Kaleidoscope\Factotum\Models\OrderProduct;
+
 
 class OrderStatusChangeToCustomerNotification extends Notification
 {

@@ -3,7 +3,9 @@
 namespace Kaleidoscope\Factotum\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Kaleidoscope\Factotum\User;
+
+use Kaleidoscope\Factotum\Models\User;
+
 
 class DiscountCodePolicy
 {

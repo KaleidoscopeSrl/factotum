@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Validation\ValidationException;
 
-use Kaleidoscope\Factotum\Cart;
+use Kaleidoscope\Factotum\Models\Cart;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller;
 use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
@@ -73,7 +73,7 @@ class AuthController extends Controller
 		
 		return $request->wantsJson()
 			? new JsonResponse([], 204)
-			: redirect()->intended( '/' );
+			: redirect()->intended( '/?login=ok' );
 	}
 
 

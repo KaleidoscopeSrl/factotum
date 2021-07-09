@@ -7,9 +7,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
-use Kaleidoscope\Factotum\Library\Utility;
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\ContentField;
 
 
 class ContentFieldObserver

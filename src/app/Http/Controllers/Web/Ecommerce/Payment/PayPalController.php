@@ -3,17 +3,13 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Payment;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
-use Kaleidoscope\Factotum\Library\PayPalClient;
 
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 
+use Kaleidoscope\Factotum\Library\PayPalClient;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 use Kaleidoscope\Factotum\Traits\EcommerceUtils;
-
-use Kaleidoscope\Factotum\Order;
 
 
 class PayPalController extends Controller
@@ -27,8 +23,6 @@ class PayPalController extends Controller
 			$user   = $this->_getUser();
 			$cart   = $this->_getCart();
 			$totals = $this->_getCartTotals( $cart );
-
-//			echo json_encode(['c' => $cart, 'u' => $user, 't' => $totals ]);die;
 
 			if ( $totals && $totals['total'] > 0 ) {
 
@@ -117,6 +111,7 @@ class PayPalController extends Controller
 	}
 
 
+	// TODO: passare su una funzione all'interno del Trait EcommercUtils
 	public function getTransactionId( Request $request )
 	{
 		try {
@@ -168,6 +163,13 @@ class PayPalController extends Controller
 				'trace' => $ex->getTrace()
 			]) : view( $this->_getServerErrorView() );
 		}
+	}
+
+
+	public function paymentError( Request $request )
+	{
+		$view = ( file_exists( resource_path('views/errors/payment-error.blade.php') ) ? 'errors.payment-error' : 'factotum::errors.payment-error' );
+		return view( $view );
 	}
 
 }

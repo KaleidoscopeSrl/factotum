@@ -3,8 +3,8 @@
 namespace Kaleidoscope\Factotum\Http\Requests;
 
 use Illuminate\Support\Facades\Auth;
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\Role;
+
+use Kaleidoscope\Factotum\Models\Role;
 
 
 class ApplyDiscountCodeOnCart extends CustomFormRequest

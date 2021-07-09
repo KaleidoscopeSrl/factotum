@@ -2,12 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Policies;
 
-use Illuminate\Http\Request;
-
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\Capability;
 use Illuminate\Auth\Access\HandlesAuthorization;
+
+use Kaleidoscope\Factotum\Models\Capability;
+use Kaleidoscope\Factotum\Models\ContentField;
+use Kaleidoscope\Factotum\Models\User;
+
 
 class ContentFieldPolicy
 {

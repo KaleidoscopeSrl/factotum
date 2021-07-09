@@ -4,11 +4,11 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\DiscountCode;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\DiscountCode;
-use Kaleidoscope\Factotum\ProductDiscountCode;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\DiscountCode;
 
 
-class ReadController extends Controller
+class ReadController extends ApiBaseController
 {
 
 	public function getListPaginated( Request $request )

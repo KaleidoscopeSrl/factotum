@@ -3,9 +3,12 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\DiscountCode;
 
 use Illuminate\Http\Request;
-use Kaleidoscope\Factotum\DiscountCode;
 
-class DeleteController extends Controller
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\DiscountCode;
+
+
+class DeleteController extends ApiBaseController
 {
 
 	public function remove(Request $request, $id)

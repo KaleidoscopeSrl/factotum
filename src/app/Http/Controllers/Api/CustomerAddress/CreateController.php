@@ -2,12 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\CustomerAddress;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreCustomerAddress;
+use Kaleidoscope\Factotum\Models\CustomerAddress;
 
-use Kaleidoscope\Factotum\CustomerAddress;
 
-
-class CreateController extends Controller
+class CreateController extends ApiBaseController
 {
 
 	public function create(StoreCustomerAddress $request)

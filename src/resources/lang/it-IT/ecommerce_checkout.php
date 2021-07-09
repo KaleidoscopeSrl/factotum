@@ -8,7 +8,8 @@ return [
 	'shipping_pick_up' => 'Ritiro presso la nostra sede',
 	'shipping_italy'   => 'Consegna in tutta Italia tramite Corriere Espresso',
 	'shipping_abroad'  => 'Consegna per l\'estero tramite Corriere Espresso',
-	
+
+	'shipping_free'             => 'Gratuito',
 	'shipping_pick_up_standard' => 'Ritiro presso la nostra sede',
 	'shipping_IT_express'       => 'Espressa - Italia',
 	'shipping_IT_standard'      => 'Standard - Italia',

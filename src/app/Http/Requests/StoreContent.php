@@ -6,9 +6,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\ContentField;
+
 
 class StoreContent extends CustomFormRequest
 {

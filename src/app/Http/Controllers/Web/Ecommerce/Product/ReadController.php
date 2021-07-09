@@ -8,11 +8,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
-
 use Kaleidoscope\Factotum\Http\Requests\SearchProduct;
-use Kaleidoscope\Factotum\Library\Utility;
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductCategory;
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\ProductCategory;
 
 
 class ReadController extends Controller

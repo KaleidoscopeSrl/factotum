@@ -4,13 +4,13 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Utility;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
 
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\Category;
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductCategory;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\Category;
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\ProductCategory;
 
 
 class Controller extends ApiBaseController

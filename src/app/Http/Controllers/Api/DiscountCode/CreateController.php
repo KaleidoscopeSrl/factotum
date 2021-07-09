@@ -2,11 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\DiscountCode;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreDiscountCode;
-use Kaleidoscope\Factotum\DiscountCode;
+use Kaleidoscope\Factotum\Models\DiscountCode;
 
 
-class CreateController extends Controller
+class CreateController extends ApiBaseController
 {
 
 	public function create( StoreDiscountCode $request )

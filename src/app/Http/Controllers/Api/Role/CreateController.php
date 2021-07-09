@@ -2,10 +2,11 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Role;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreRole;
-use Kaleidoscope\Factotum\Role;
+use Kaleidoscope\Factotum\Models\Role;
 
-class CreateController extends Controller
+class CreateController extends ApiBaseController
 {
 
     public function create(StoreRole $request)

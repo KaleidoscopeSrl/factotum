@@ -311,6 +311,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
 
 			$table->boolean('all_customers')->nullable();
+			$table->string('brands', 255)->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();
@@ -329,7 +330,6 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->timestamps();
 		});
-
 
 
 		Schema::table('orders', function (Blueprint $table) {
@@ -378,6 +378,46 @@ class FactotumEcommerceSetup extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 		});
+
+
+		Schema::create('product_attributes', function (Blueprint $table) {
+			$table->id();
+
+			$table->string('name', 191)->unique();
+			$table->string('label', 255);
+
+			$table->boolean('visible')->nullable();
+
+			$table->timestamps();
+		});
+
+
+		Schema::create('product_attribute_values', function (Blueprint $table) {
+			$table->id();
+
+			$table->bigInteger('product_attribute_id')->unsigned();
+			$table->foreign('product_attribute_id')->references('id')->on('product_attributes')->onUpdate('cascade')->onDelete('cascade');
+
+			$table->string('name', 191)->unique();
+			$table->string('label', 255);
+
+			$table->unique(['product_attribute_id', 'name']);
+
+			$table->timestamps();
+		});
+
+
+		Schema::create('product_product_attribute_value', function (Blueprint $table) {
+			$table->id();
+
+			$table->bigInteger('product_id')->unsigned();
+			$table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
+
+			$table->bigInteger('product_attribute_value_id')->unsigned();
+			$table->foreign('product_attribute_value_id', 'ppav_pav_id_foreign')->references('id')->on('product_attribute_values')->onUpdate('cascade')->onDelete('cascade');
+
+			$table->timestamps();
+		});
 	}
 
 
@@ -390,19 +430,23 @@ class FactotumEcommerceSetup extends Migration
 	{
 		Schema::disableForeignKeyConstraints();
 
-		Schema::drop('product_discount_code');
-		Schema::drop('discount_codes');
-		Schema::drop('taxes');
-		Schema::drop('customer_addresses');
-		Schema::drop('order_product');
-		Schema::drop('invoices');
-		Schema::drop('orders');
-		Schema::drop('cart_product');
-		Schema::drop('carts');
-		Schema::drop('product_product_category');
-		Schema::drop('products');
-		Schema::drop('product_categories');
-		Schema::drop('brands');
+		Schema::dropIfExists('product_discount_code');
+		Schema::dropIfExists('discount_codes');
+		Schema::dropIfExists('taxes');
+		Schema::dropIfExists('customer_addresses');
+		Schema::dropIfExists('order_product');
+		Schema::dropIfExists('invoices');
+		Schema::dropIfExists('orders');
+		Schema::dropIfExists('cart_product');
+		Schema::dropIfExists('carts');
+		Schema::dropIfExists('product_product_category');
+		Schema::dropIfExists('product_attributes');
+		Schema::dropIfExists('product_attribute_values');
+		Schema::dropIfExists('product_product_attribute_values');
+		Schema::dropIfExists('product_categories');
+		Schema::dropIfExists('product_variants');
+		Schema::dropIfExists('products');
+		Schema::dropIfExists('brands');
 
 		Schema::enableForeignKeyConstraints();
 	}

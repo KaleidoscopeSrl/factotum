@@ -2,13 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Media;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-
 use Kaleidoscope\Factotum\Library\Utility;
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
-use Kaleidoscope\Factotum\Media;
-use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 
 
 class Controller extends ApiBaseController

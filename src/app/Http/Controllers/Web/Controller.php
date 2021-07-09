@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\App;
 
 use Kaleidoscope\Factotum\Traits\EcommerceUtils;
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Content;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\Content;
 
 
 class Controller extends BaseController

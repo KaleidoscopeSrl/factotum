@@ -4,7 +4,8 @@ namespace Kaleidoscope\Factotum\Http\Requests;
 
 use Illuminate\Support\Str;
 
-use Kaleidoscope\Factotum\Media;
+use Kaleidoscope\Factotum\Models\Media;
+
 
 class StoreMedia extends CustomFormRequest
 {

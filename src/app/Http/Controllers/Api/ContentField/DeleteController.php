@@ -4,9 +4,10 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\ContentField;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\ContentField;
 
-class DeleteController extends Controller
+class DeleteController extends ApiBaseController
 {
 
     public function remove(Request $request, $id)

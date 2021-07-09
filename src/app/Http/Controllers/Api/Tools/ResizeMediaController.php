@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Media;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\ContentField;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\Media;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
+
 
 class ResizeMediaController extends ApiBaseController
 {

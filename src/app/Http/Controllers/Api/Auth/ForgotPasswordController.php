@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Mail\AuthForgottenPassword;
-use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Models\User;
 
 
-class ForgotPasswordController extends Controller
+class ForgotPasswordController extends ApiBaseController
 {
 
 

@@ -4,14 +4,13 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Cart;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Cart;
-use Kaleidoscope\Factotum\CartProduct;
-use Kaleidoscope\Factotum\Library\Utility;
-use Kaleidoscope\Factotum\Order;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Cart;
+use Kaleidoscope\Factotum\Models\CartProduct;
 use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 
-class ReadController extends Controller
+class ReadController extends ApiBaseController
 {
 	use EcommerceUtils;
 

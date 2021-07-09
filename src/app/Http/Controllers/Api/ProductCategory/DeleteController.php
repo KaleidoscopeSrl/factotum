@@ -4,9 +4,11 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\ProductCategory;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\ProductCategory;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\ProductCategory;
 
-class DeleteController extends Controller
+
+class DeleteController extends ApiBaseController
 {
 
     public function remove(Request $request, $id)

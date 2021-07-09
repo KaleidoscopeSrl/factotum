@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 use Kaleidoscope\Factotum\Http\Requests\StoreMedia;
-use Kaleidoscope\Factotum\Media;
-
+use Kaleidoscope\Factotum\Models\Media;
 
 
 class UploadController extends Controller

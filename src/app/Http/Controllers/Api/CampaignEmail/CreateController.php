@@ -2,12 +2,13 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\CampaignEmail;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreCampaignEmail;
 use Kaleidoscope\Factotum\Http\Requests\StoreMultipleCampaignEmail;
-use Kaleidoscope\Factotum\CampaignEmail;
+use Kaleidoscope\Factotum\Models\CampaignEmail;
 
 
-class CreateController extends Controller
+class CreateController extends ApiBaseController
 {
 
 	public function create( StoreCampaignEmail $request )

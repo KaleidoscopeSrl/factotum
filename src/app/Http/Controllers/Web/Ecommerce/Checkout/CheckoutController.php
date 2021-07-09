@@ -6,19 +6,17 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Checkout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 
-use Kaleidoscope\Factotum\CustomerAddress;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
-
 use Kaleidoscope\Factotum\Http\Requests\SetDeliveryAddress;
 use Kaleidoscope\Factotum\Http\Requests\SetInvoiceAddress;
 use Kaleidoscope\Factotum\Http\Requests\SetShipping;
 use Kaleidoscope\Factotum\Http\Requests\ProceedCheckout;
 use Kaleidoscope\Factotum\Http\Requests\StoreGuestCustomerDeliveryAddress;
 use Kaleidoscope\Factotum\Http\Requests\StoreGuestCustomerInvoiceAddress;
-
-use Kaleidoscope\Factotum\Profile;
 use Kaleidoscope\Factotum\Traits\EcommerceUtils;
-use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Models\Profile;
+use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Models\CustomerAddress;
 
 
 class CheckoutController extends Controller

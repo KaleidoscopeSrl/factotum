@@ -3,8 +3,10 @@
 namespace Kaleidoscope\Factotum\Observers;
 
 use Illuminate\Support\Facades\Request;
-use Kaleidoscope\Factotum\DiscountCode;
-use Kaleidoscope\Factotum\ProductDiscountCode;
+
+use Kaleidoscope\Factotum\Models\DiscountCode;
+use Kaleidoscope\Factotum\Models\ProductDiscountCode;
+
 
 class DiscountCodeObserver
 {

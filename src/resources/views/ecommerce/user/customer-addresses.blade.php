@@ -105,7 +105,7 @@
 
 						<br>
 
-						<div class="container-fluid col-no-pl col-no-pl">
+						<div class="container-fluid col-no-pl col-no-pr">
 
 							@if ( isset($invoiceAddresses) && $invoiceAddresses->count() > 0 )
 

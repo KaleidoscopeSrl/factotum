@@ -1,18 +1,12 @@
 <?php
 namespace Kaleidoscope\Factotum\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailBase;
+
 
 class VerifyEmailNotification extends VerifyEmailBase
 {
-	//	use Queueable;
 
 	public function __construct()
 	{

@@ -6,12 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
-use Kaleidoscope\Factotum\CustomerAddress;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
-
-use Kaleidoscope\Factotum\Order;
-use Kaleidoscope\Factotum\OrderProduct;
-use Kaleidoscope\Factotum\Traits\EcommerceUtils;
+use Kaleidoscope\Factotum\Models\Order;
+use Kaleidoscope\Factotum\Models\OrderProduct;
 
 
 class ReadController extends Controller

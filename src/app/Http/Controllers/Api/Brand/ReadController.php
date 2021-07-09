@@ -3,15 +3,16 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Brand;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Brand;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Brand;
 
 
-class ReadController extends Controller
+class ReadController extends ApiBaseController
 {
 
     public function getList()
     {
-        $brands = Brand::orderBy('id','DESC')->get();
+        $brands = Brand::orderBy('name', 'ASC')->get();
 
         return response()->json( [ 'result' => 'ok', 'brands' => $brands ]);
     }

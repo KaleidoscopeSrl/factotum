@@ -4,9 +4,11 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Tax;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Tax;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Tax;
 
-class ReadController extends Controller
+
+class ReadController extends ApiBaseController
 {
 
 	public function getList()

@@ -2,7 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Requests;
 
-use Kaleidoscope\Factotum\Capability;
+use Kaleidoscope\Factotum\Models\Capability;
 
 
 class StoreCapability extends CustomFormRequest

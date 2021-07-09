@@ -2,10 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Observers;
 
-use Illuminate\Support\Facades\DB;
-
-use Kaleidoscope\Factotum\ProductCategory;
-use Kaleidoscope\Factotum\ProductProductCategory;
+use Kaleidoscope\Factotum\Models\ProductCategory;
+use Kaleidoscope\Factotum\Models\ProductProductCategory;
 
 
 class ProductCategoryObserver

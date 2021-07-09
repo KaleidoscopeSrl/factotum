@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
-use Kaleidoscope\Factotum\Library\Utility;
-use Kaleidoscope\Factotum\ProductCategory;
-use Kaleidoscope\Factotum\Brand;
+use Kaleidoscope\Factotum\Models\ProductCategory;
+use Kaleidoscope\Factotum\Models\Brand;
+
 
 class ReadController extends Controller
 {

@@ -4,9 +4,9 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Mailgun;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller as ApiBaseController;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\CampaignEmail;
 
-use Kaleidoscope\Factotum\CampaignEmail;
 
 class Controller extends ApiBaseController
 {

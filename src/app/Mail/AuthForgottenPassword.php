@@ -5,9 +5,8 @@ namespace Kaleidoscope\Factotum\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Models\User;
 
 
 class AuthForgottenPassword extends Mailable

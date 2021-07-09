@@ -3,7 +3,8 @@
 namespace Kaleidoscope\Factotum\Filters;
 
 use Illuminate\Support\Facades\Auth;
-use Kaleidoscope\Factotum\Capability;
+
+use Kaleidoscope\Factotum\Models\Capability;
 
 
 trait CapabilityContentTypeFilter {

@@ -4,8 +4,9 @@ namespace Kaleidoscope\Factotum\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductProductCategory;
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\ProductProductCategory;
+
 
 class FactotumGenerateProductImages extends Command
 {

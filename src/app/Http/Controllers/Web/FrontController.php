@@ -6,20 +6,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-
-use Kaleidoscope\Factotum\Brand;
 use Kaleidoscope\Factotum\Library\ContentSearch;
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Category;
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\Library\Utility;
-use Kaleidoscope\Factotum\Notifications\NewOrderToCustomerNotification;
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductCategory;
 
-use Kaleidoscope\Factotum\Mail\AuthForgottenPassword;
-use Kaleidoscope\Factotum\Notifications\ResetPasswordNotification;
-use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Models\Brand;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\Category;
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\ProductCategory;
+use Kaleidoscope\Factotum\Models\User;
 
 
 class FrontController extends Controller
@@ -89,6 +83,7 @@ class FrontController extends Controller
 		}
 
 	}
+
 
 	// Overwritable method
 	protected function _loadAdditionalData( $content )
@@ -238,7 +233,6 @@ class FrontController extends Controller
 
 		}
 	}
-
 
 
 	protected function _getHomepage( Request $request )

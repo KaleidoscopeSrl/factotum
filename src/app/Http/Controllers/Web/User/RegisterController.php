@@ -10,8 +10,8 @@ use Illuminate\Http\Response;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller;
 use Kaleidoscope\Factotum\Http\Requests\RegisterUser;
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Profile;
+use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Models\Profile;
 
 
 class RegisterController extends Controller

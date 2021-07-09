@@ -4,9 +4,9 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Auth;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 
-class LogoutController extends Controller
+class LogoutController extends ApiBaseController
 {
 
 	public function logout(Request $request)

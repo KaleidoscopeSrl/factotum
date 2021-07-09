@@ -4,9 +4,11 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Tax;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Tax;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Tax;
 
-class DeleteController extends Controller
+
+class DeleteController extends ApiBaseController
 {
 
 	public function remove(Request $request, $id)

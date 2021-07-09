@@ -33,7 +33,8 @@
         ],
         "psr-4": {
             "Kaleidoscope\\Factotum\\":  "src",
-            "Kaleidoscope\\Factotum\\":  "src/app"
+            "Kaleidoscope\\Factotum\\":  "src/app",
+			"Kaleidoscope\\Factotum\\Models\\":  "src/app/Models"
         },
         "files": [
             "src/app/Library/ContentSearch.php",

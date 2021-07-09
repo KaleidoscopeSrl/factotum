@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
+
 class FactotumCreateStorageFolders extends Command
 {
 

@@ -2,9 +2,11 @@
 
 namespace Kaleidoscope\Factotum\Policies;
 
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\ContentType;
 use Illuminate\Auth\Access\HandlesAuthorization;
+
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\User;
+
 
 class ContentTypePolicy
 {

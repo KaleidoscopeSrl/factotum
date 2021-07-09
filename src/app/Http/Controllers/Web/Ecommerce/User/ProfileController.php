@@ -6,11 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 
-use Illuminate\Support\Facades\App;
-
 use Kaleidoscope\Factotum\Http\Requests\StoreCustomerAddress;
-use Kaleidoscope\Factotum\CustomerAddress;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
+use Kaleidoscope\Factotum\Models\CustomerAddress;
 
 
 class ProfileController extends Controller

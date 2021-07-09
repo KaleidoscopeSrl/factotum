@@ -4,10 +4,11 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Role;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Role;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Role;
 
 
-class ReadController extends Controller
+class ReadController extends ApiBaseController
 {
 
     public function getList()

@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 
-class LoginController extends Controller
+
+class LoginController extends ApiBaseController
 {
 
 	public function login(Request $request)

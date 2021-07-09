@@ -5,7 +5,7 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-use Kaleidoscope\Factotum\Media;
+use Kaleidoscope\Factotum\Models\Media;
 
 class DeleteController extends Controller
 {

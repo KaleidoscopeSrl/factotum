@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Notifications;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Lang;
 
+
 class ResetPasswordNotification extends BasicNotification
 {
 

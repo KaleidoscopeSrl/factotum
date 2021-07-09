@@ -2,8 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Http\Requests;
 
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\Models\ContentField;
+
 
 class StoreContentField extends CustomFormRequest
 {

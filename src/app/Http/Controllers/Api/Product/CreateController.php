@@ -3,13 +3,14 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Product;
 
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Str;
+
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreProduct;
-use Kaleidoscope\Factotum\Product;
+use Kaleidoscope\Factotum\Models\Product;
 
 
-class CreateController extends Controller
+class CreateController extends ApiBaseController
 {
 
 	public function create( StoreProduct $request )

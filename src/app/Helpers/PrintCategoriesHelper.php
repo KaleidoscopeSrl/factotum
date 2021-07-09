@@ -2,8 +2,9 @@
 
 namespace Kaleidoscope\Factotum\Helpers;
 
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Category;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\Category;
+
 
 class PrintCategoriesHelper {
 

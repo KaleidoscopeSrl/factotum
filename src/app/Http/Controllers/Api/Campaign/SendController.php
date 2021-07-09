@@ -5,13 +5,14 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Campaign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Mail\CampaignEmail as cEmail;
+use Kaleidoscope\Factotum\Models\Campaign;
+use Kaleidoscope\Factotum\Models\CampaignEmail;
+use Kaleidoscope\Factotum\Models\CampaignTemplate;
 
-use Kaleidoscope\Factotum\Campaign;
-use Kaleidoscope\Factotum\CampaignEmail;
-use Kaleidoscope\Factotum\CampaignTemplate;
 
-class SendController extends Controller
+class SendController extends ApiBaseController
 {
 
 	public function send(Request $request, $campaignId)

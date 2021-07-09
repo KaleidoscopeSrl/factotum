@@ -2,9 +2,11 @@
 
 namespace Kaleidoscope\Factotum\Policies;
 
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
+
+use Kaleidoscope\Factotum\Models\Role;
+use Kaleidoscope\Factotum\Models\User;
+
 
 class RolePolicy
 {

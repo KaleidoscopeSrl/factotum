@@ -4,11 +4,11 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\ProductVariant;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\ProductVariant;
-use Kaleidoscope\Factotum\Media;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\ProductVariant;
 
 
-class ReadController extends Controller
+class ReadController extends ApiBaseController
 {
 
 	public function getList(Request $request, $productId)

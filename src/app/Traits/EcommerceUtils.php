@@ -6,21 +6,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 
-use Kaleidoscope\Factotum\Cart;
-use Kaleidoscope\Factotum\CartProduct;
-use Kaleidoscope\Factotum\CustomerAddress;
-use Kaleidoscope\Factotum\DiscountCode;
 use Kaleidoscope\Factotum\Library\PayPalClient;
-use Kaleidoscope\Factotum\Order;
-use Kaleidoscope\Factotum\OrderProduct;
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductVariant;
-use Kaleidoscope\Factotum\Role;
-use Kaleidoscope\Factotum\Tax;
-use Kaleidoscope\Factotum\User;
+
+use Kaleidoscope\Factotum\Models\Cart;
+use Kaleidoscope\Factotum\Models\CartProduct;
+use Kaleidoscope\Factotum\Models\CustomerAddress;
+use Kaleidoscope\Factotum\Models\DiscountCode;
+use Kaleidoscope\Factotum\Models\Order;
+use Kaleidoscope\Factotum\Models\OrderProduct;
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\ProductVariant;
+use Kaleidoscope\Factotum\Models\Role;
+use Kaleidoscope\Factotum\Models\Tax;
+use Kaleidoscope\Factotum\Models\User;
 
 
 
@@ -30,6 +34,15 @@ trait EcommerceUtils
 	protected $_cartDuration = '+3 days';
 	protected $_user;
 	protected $_cart;
+	protected $_cartProducts;
+
+	protected $_total;
+	protected $_totalPartial;
+	protected $_totalTaxes;
+	protected $_totalShipping;
+	protected $_totalProducts;
+	protected $_totalDiscount;
+	protected $_totalDiscountTaxes;
 
 
 	protected function _setUser( $user ) {
@@ -193,114 +206,211 @@ trait EcommerceUtils
 	}
 
 
-	protected function _getCartTotals( $cart = null )
+
+	protected function _setTotalDiscountNoBrand( $discountCode )
 	{
-		$total         = 0;
-		$totalPartial  = 0;
-		$totalTaxes    = 0;
-		$totalShipping = 0;
-		$totalProducts = 0;
-		$totalDiscount = 0;
+		if ( $discountCode->type == 'percentage' ) {
 
-		if ( isset($cart) ) {
+			// TOTALE SCONTO = TOTALE PARZIALE / 100 * SCONTO
+			$this->_totalDiscount      = $this->_totalPartial / 100 * $discountCode->discount;
+			$this->_totalDiscountTaxes = $this->_totalTaxes / 100 * $discountCode->discount;
 
-			$cartProducts = CartProduct::where( 'cart_id', $cart->id )->get();
+		} elseif ( $discountCode->type == 'price' ) {
 
-			if ( $cartProducts->count() > 0 ) {
-				foreach( $cartProducts as $cp ) {
-					$totalProducts += $cp->quantity;
-					$totalPartial  += $cp->quantity * $cp->product_price;
+			if ( $discountCode->discount > $this->_totalPartial ) {
+				$this->_totalDiscount      = $this->_totalPartial;
+				$this->_totalDiscountTaxes = $this->_totalTaxes;
+			} else {
+				$perc = $discountCode->discount / $this->_totalPartial * 100;
 
-					if ( $cp->tax_data ) {
-						$tax = $cp->tax_data;
+				$this->_totalDiscount      = $this->_totalPartial / 100 * $perc;
+				$this->_totalDiscountTaxes = $this->_totalTaxes / 100 * $perc;
+			}
 
-						if ( config('factotum.product_vat_included') ) {
-							$totalTaxes   += ( ( $cp->quantity * $cp->product_price ) / 122 * $tax['amount'] );
+		}
+	}
+
+
+	protected function _setTotalDiscountByBrands( $discountCode )
+	{
+		$discountedBrands      = $discountCode->brands->pluck('id')->all();
+		$tmpTotalDiscount      = 0;
+		$tmpTotalDiscountTaxes = 0;
+
+		if ( $this->_cartProducts->count() > 0 ) {
+
+			foreach( $this->_cartProducts as $cp ) {
+
+				if ( in_array($cp->product->brand_id, $discountedBrands ) ) {
+
+					$tmpProductPrice = $cp->quantity * $cp->product_price;
+
+					if ( $discountCode->type == 'percentage' ) {
+						$tmpTotalDiscount = $tmpProductPrice / 100 * $discountCode->discount;
+
+						if ( $cp->tax_data ) {
+							$tax = $cp->tax_data;
+
+							if ( config('factotum.product_vat_included') ) {
+								$tmpProductTaxes = ( ( $cp->quantity * $cp->product_price ) / 122 * $tax['amount'] );
+							} else {
+								$tmpProductTaxes = ( ( $cp->quantity * $cp->product_price ) / 100 * $tax['amount'] );
+							}
+
+							$tmpTotalDiscountTaxes = $tmpProductTaxes / 100 * $discountCode->discount;
+						}
+
+					} elseif ( $discountCode->type == 'price' ) {
+						if ( $discountCode->discount > $this->_totalPartial ) {
+							$this->_totalDiscount      = $this->_totalPartial;
+							$this->_totalDiscountTaxes = $this->_totalTaxes;
 						} else {
-							$totalTaxes += ( ( $cp->quantity * $cp->product_price ) / 100 * $tax['amount'] );
+							$perc = $discountCode->discount / $tmpProductPrice * 100;
+							$tmpTotalDiscount      = $tmpProductPrice / 100 * $perc;
+
+							if ( $cp->tax_data ) {
+								$tax = $cp->tax_data;
+
+								if (config('factotum.product_vat_included')) {
+									$tmpProductTaxes = (($cp->quantity * $cp->product_price) / 122 * $tax['amount']);
+								} else {
+									$tmpProductTaxes = (($cp->quantity * $cp->product_price) / 100 * $tax['amount']);
+								}
+							}
+							$tmpTotalDiscountTaxes = $tmpProductTaxes / 100 * $perc;
 						}
 					}
-				}
 
+				}
 			}
+		}
+
+		$this->_totalDiscount      = $tmpTotalDiscount;
+		$this->_totalDiscountTaxes = $tmpTotalDiscountTaxes;
+	}
+
+
+	protected function _applyTotalDiscount()
+	{
+		$this->_totalPartial = $this->_totalPartial - $this->_totalDiscount;
+		if ( $this->_totalPartial < 0 ) {
+			$this->_totalPartial = 0;
+		}
+
+		$this->_totalTaxes = $this->_totalTaxes - $this->_totalDiscountTaxes;
+		if ( $this->_totalTaxes < 0 ) {
+			$this->_totalTaxes = 0;
+		}
+
+		if ( config('factotum.product_vat_included') ) {
+			$this->_total = $this->_totalPartial;
+		} else {
+			$this->_total = $this->_totalPartial + $this->_totalTaxes;
+		}
+	}
+
+
+	protected function _debugTotals()
+	{
+		echo 'Subtotale: ' . $this->_totalPartial;
+		echo '<hr>';
+		echo 'Tasse: ' . $this->_totalTaxes;
+		echo '<hr>';
+		echo 'Sconto: -' . $this->_totalDiscount;
+		echo '<hr>';
+		echo 'Sconto tasse: -' . $this->_totalDiscountTaxes;
+		echo '<hr>';
+		echo 'Totale Sconto: -' . ($this->_totalDiscount + $this->_totalDiscountTaxes);
+		echo '<hr>';
+		echo 'Totale: ' . $this->_total;
+		echo '<br><br><br>';
+	}
+
+
+	protected function _setCartPartialTotals()
+	{
+		$this->_cartProducts = CartProduct::where( 'cart_id', $this->_cart->id )->get();
+
+		if ( $this->_cartProducts->count() > 0 ) {
+			foreach( $this->_cartProducts as $cp ) {
+				$this->_totalProducts += $cp->quantity;
+				$this->_totalPartial  += $cp->quantity * $cp->product_price;
+
+				if ( $cp->tax_data ) {
+					$tax = $cp->tax_data;
+
+					if ( config('factotum.product_vat_included') ) {
+						$this->_totalTaxes += ( ( $cp->quantity * $cp->product_price ) / 122 * $tax['amount'] );
+					} else {
+						$this->_totalTaxes += ( ( $cp->quantity * $cp->product_price ) / 100 * $tax['amount'] );
+					}
+				}
+			}
+		}
+
+		if ( config('factotum.product_vat_included') ) {
+			$this->_total = $this->_totalPartial;
+		} else {
+			$this->_total = $this->_totalPartial + $this->_totalTaxes;
+		}
+	}
+
+
+	protected function _getCartTotals( $cart = null )
+	{
+		$this->_total              = 0;
+		$this->_totalPartial       = 0;
+		$this->_totalTaxes         = 0;
+		$this->_totalShipping      = 0;
+		$this->_totalProducts      = 0;
+		$this->_totalDiscount      = 0;
+		$this->_totalDiscountTaxes = 0;
+
+
+		if ( isset($cart) ) {
+			$this->_cart = $cart;
+
+			$this->_setCartPartialTotals();
 
 			// Apply discount code
 			$discountCode = $this->_getTemporaryDiscountCode();
 
 			if ( $discountCode ) {
-
-				$initialTotalPartial = $totalPartial;
-				$initialTotalTaxes   = $totalTaxes;
-
-				if ( $discountCode->type == 'percentage' ) {
-					$totalPartial = $totalPartial - ( $totalPartial / 100 * $discountCode->discount );
-
-					if ( $totalPartial < 0 ) {
-						$totalPartial = 0;
-					}
-
-					$totalTaxes = $totalTaxes - ( $totalTaxes / 100 * $discountCode->discount );
-					if ( $totalTaxes < 0 ) {
-						$totalTaxes = 0;
-					}
-
-				} elseif ( $discountCode->type == 'price' ) {
-
-					if ( $discountCode->discount > $totalPartial ) {
-						$totalPartial = 0;
-						$totalTaxes = 0;
-					} else {
-						$perc = $discountCode->discount / $totalPartial * 100;
-
-						$totalPartial = $totalPartial - ( $totalPartial / 100 * $perc );
-
-						if ( $totalPartial < 0 ) {
-							$totalPartial = 0;
-						}
-
-						$totalTaxes = $totalTaxes - ( $totalTaxes / 100 * $perc );
-						if ( $totalTaxes < 0 ) {
-							$totalTaxes = 0;
-						}
-					}
-
-				}
-
-				$partialPart = $initialTotalPartial - $totalPartial;
-				if ( !config('factotum.product_vat_included') ) {
-					$taxesPart = $initialTotalTaxes - $totalTaxes;
+				if ( $discountCode->brands && $discountCode->brands->count() > 0 ) {
+					$this->_setTotalDiscountByBrands( $discountCode );
 				} else {
-					$taxesPart = 0;
+					$this->_setTotalDiscountNoBrand( $discountCode );
 				}
-				$totalDiscount = $partialPart + $taxesPart;
+
+				$this->_applyTotalDiscount();
 			}
 
 
-			$total = $totalPartial;
-			if ( config('factotum.product_vat_included') ) {
-				$totalPartial = $total - $totalTaxes;
-			} else {
-				$total += $totalTaxes;
-			}
+//			$this->_total = $this->_totalPartial;
+//			if ( config('factotum.product_vat_included') ) {
+//				$totalPartial = $this->_total - $this->_totalTaxes;
+//			} else {
+//				$this->_total += $this->_totalTaxes;
+//			}
 
 			$shipping = $this->_getTemporaryShipping();
 
 			if ( $shipping ) {
 				$shippingOptions = $this->_getShippingOptions();
 				if ( isset($shippingOptions[$shipping]) ) {
-					$totalShipping = $shippingOptions[$shipping]['amount'];
-					$total        += $totalShipping;
+					$this->_totalShipping = $shippingOptions[$shipping]['amount'];
+					$this->_total        += $this->_totalShipping;
 				}
 			}
 		}
 
 		return [
-			'total'         => $total,
-			'totalPartial'  => $totalPartial,
-			'totalTaxes'    => $totalTaxes,
-			'totalShipping' => $totalShipping,
-			'totalProducts' => $totalProducts,
-			'totalDiscount' => $totalDiscount,
+			'total'         => $this->_total,
+			'totalPartial'  => $this->_totalPartial,
+			'totalTaxes'    => $this->_totalTaxes,
+			'totalShipping' => $this->_totalShipping,
+			'totalProducts' => $this->_totalProducts,
+			'totalDiscount' => $this->_totalDiscount,
 		];
 	}
 
@@ -828,10 +938,6 @@ trait EcommerceUtils
 												->orderBy('default_address', 'DESC')
 												->get();
 		} else {
-//			request()->session()->remove('delivery_address');
-//			request()->session()->remove('invoice_address');
-//			request()->session()->remove('shipping');
-
 			$deliveryAddress = $this->_getTemporaryDeliveryAddress();
 			$invoiceAddress  = $this->_getTemporaryInvoiceAddress();
 		}
@@ -857,6 +963,7 @@ trait EcommerceUtils
 
 		$stripe        = null;
 		$paypal        = null;
+		$scalaPay      = null;
 		$bankTransfer  = null;
 		$customPayment = null;
 
@@ -869,6 +976,12 @@ trait EcommerceUtils
 		if ( isset($paymentMethods) && in_array('paypal', $paymentMethods) && env('PAYPAL_CLIENT_ID') && env('PAYPAL_CLIENT_SECRET') ) {
 			$paypal = [
 				'publicKey' => env('PAYPAL_CLIENT_ID')
+			];
+		}
+
+		if ( isset($paymentMethods) && in_array('scalapay', $paymentMethods) && env('SCALAPAY_PUBLIC_KEY') && env('SCALAPAY_URL') ) {
+			$scalaPay = [
+				'publicKey' => env('SCALAPAY_PUBLIC_KEY')
 			];
 		}
 
@@ -917,6 +1030,7 @@ trait EcommerceUtils
 			'shop'          => $shop,
 			'stripe'        => $stripe,
 			'paypal'        => $paypal,
+			'scalaPay'      => $scalaPay,
 			'bankTransfer'  => $bankTransfer,
 			'customPayment' => $customPayment,
 		];
@@ -941,13 +1055,14 @@ trait EcommerceUtils
 
 
 	/**
-	 * PAYMENT FUNCTIONS
+	 * STRIPE PAYMENT FUNCTIONS
 	 */
 
 	protected function _setupStripePayment()
 	{
 		\Stripe\Stripe::setApiKey( env('STRIPE_SECRET_KEY') );
 	}
+
 
 	protected function _initStripePayment()
 	{
@@ -1035,7 +1150,6 @@ trait EcommerceUtils
 				];
 
 				return $result;
-
 			}
 
 			return [ 'result' => 'ko', 'message' => 'Error on setting stripe transaction id' ];
@@ -1049,9 +1163,12 @@ trait EcommerceUtils
 				'trace'  => $ex->getTrace()
 			];
 		}
-
 	}
 
+
+	/**
+	 * PAYPAL PAYMENT FUNCTIONS
+	 */
 
 	protected function _initPayPalPayment()
 	{
@@ -1192,5 +1309,243 @@ trait EcommerceUtils
 			];
 		}
 	}
+
+
+	/**
+	 * SCALAPAY PAYMENT FUNCTIONS
+	 */
+
+	protected function _initScalaPayPayment()
+	{
+		$requestData = $this->_buildScalaPayIntentRequestBody();
+
+		try {
+
+			$client = new Client([
+				'base_uri' => env('SCALAPAY_URL'),
+				'verify' => false
+			]);
+
+			$options = [
+				'headers' => [
+					'Authorization' => 'Bearer ' . env('SCALAPAY_API_KEY'),
+					'Accept'        => 'application/json',
+					'Content-Type'  => 'application/json',
+				],
+				'json' => $requestData
+			];
+
+			$response = $client->post('/v2/orders', $options);
+
+			if ($response->getStatusCode() == 200) {
+				$response = json_decode($response->getBody(), true);
+
+				if (count($response) > 0) {
+					return $response;
+				}
+			}
+
+		} catch ( RequestException $requestException ) {
+			session()->flash( 'error', $requestException->getMessage() );
+
+			$response = $requestException->getResponse();
+			$body     = json_decode( $response->getBody() );
+
+			return [
+				'result' => 'ko',
+				'error'  => $requestException->getMessage(),
+				'trace'  => $body,
+				'data'   => $requestData
+			];
+
+		} catch ( \Exception $ex ) {
+			session()->flash( 'error', $ex->getMessage() );
+
+			return [
+				'result' => 'ko',
+				'error'  => $ex->getMessage(),
+				'trace'  => $ex->getTrace()
+			];
+		}
+
+	}
+
+
+	protected function _buildScalaPayIntentRequestBody()
+	{
+		$user            = $this->_getUser();
+		$cart            = $this->_getCart();
+		$cartProducts    = CartProduct::where( 'cart_id', $cart->id )->get();
+		$totals          = $this->_getCartTotals( $cart );
+		$invoiceAddress  = $this->_getTemporaryInvoiceAddress();
+		$deliveryAddress = $this->_getTemporaryDeliveryAddress();
+		$shipping        = $this->_getTemporaryShipping();
+		$discountCode    = $this->_getTemporaryDiscountCode();
+
+		$requestData = [
+
+			'consumer' => [
+				'phoneNumber' => $user->profile->phone,
+				'givenNames'  => $user->profile->first_name,
+				'surname'     => $user->profile->last_name,
+				'email'       => $user->email
+			],
+
+			'billing' => [
+				'name'        => $user->profile->first_name . ' ' . $user->profile->last_name,
+				'line1'       => $invoiceAddress->address,
+				'suburb'      => $invoiceAddress->city,
+				'postcode'    => $invoiceAddress->zip,
+				'countryCode' => $invoiceAddress->country,
+				'phoneNumber' => $user->profile->phone,
+			],
+
+			'shipping' => [
+				'name'        => $user->profile->first_name . ' ' . $user->profile->last_name,
+				'line1'       => $deliveryAddress->address,
+				'suburb'      => $deliveryAddress->city,
+				'postcode'    => $deliveryAddress->zip,
+				'countryCode' => $deliveryAddress->country,
+				'phoneNumber' => $user->profile->phone,
+			],
+
+			'merchant' => [
+				'redirectConfirmUrl' => url('/payment/scalapay/get-transaction-id'),
+				'redirectCancelUrl'  => url('/payment/scalapay/payment-error'),
+			],
+
+			'merchantReference'       => 'cart-' . $cart->id,
+			'orderExpiryMilliseconds' => 6000000,
+
+			'totalAmount' => [
+				'currency' => 'EUR',
+				'amount'   => (string) $totals['total']
+			],
+
+			'shippingAmount' => [
+				'amount'   => (string) $totals['totalShipping'],
+				'currency' => 'EUR'
+			],
+
+			'taxAmount' => [
+				'amount'   => (string) $totals['totalTaxes'],
+				'currency' => 'EUR'
+			],
+
+		];
+
+		if ( $discountCode ) {
+			$requestData['discounts'] = [
+				[
+					'displayName' => $discountCode->code,
+					'amount' => [
+						'amount' => $totals['totalDiscount'],
+						'currency' => 'EUR'
+					]
+				]
+			];
+		}
+
+		if ( $cartProducts && $cartProducts->count() > 0 ) {
+			$requestData['items'] = [];
+			foreach ( $cartProducts as $cartProduct ) {
+				$requestData['items'][] = [
+					'name'     => $cartProduct->product->name,
+					'sku'      => $cartProduct->product->code,
+					'quantity' => $cartProduct->quantity,
+					'price'    => [
+						'amount'   => (string) $cartProduct->product_price,
+						'currency' => 'EUR'
+					]
+				];
+			}
+		}
+
+		return $requestData;
+	}
+
+
+	protected function _getScalaPayTransactionId( $scalaPayOrderId )
+	{
+		try {
+			$cart = $this->_getCart();
+
+			$client = new Client([
+				'base_uri' => env('SCALAPAY_URL'),
+				'verify' => false
+			]);
+
+			$options = [
+				'headers' => [
+					'Authorization' => 'Bearer ' . env('SCALAPAY_API_KEY'),
+					'Accept'        => 'application/json',
+					'Content-Type'  => 'application/json',
+				],
+				'json' => [
+					'token'             => $scalaPayOrderId,
+					'merchantReference' => 'cart-' . $cart->id,
+				]
+			];
+
+
+			$response = $client->post('/v2/payments/capture', $options);
+
+			if ($response->getStatusCode() == 200) {
+				$response = json_decode($response->getBody(), true);
+
+				if (count($response) > 0) {
+
+					$cart = $this->_getCart();
+
+					if ( $response && $response['status'] == 'APPROVED' ) {
+						$order               = $this->_createOrderFromCart( $cart );
+						$order->payment_type = 'scalapay';
+						$order->save();
+
+						$transactionId = $response['token'];
+
+						$order->setTransactionId( $transactionId );
+						$order->sendNewOrderNotifications();
+
+						$shopBaseUrl = config('factotum.shop_base_url');
+						$redirectUrl = url( ( $shopBaseUrl ? $shopBaseUrl : '' ) . '/order/thank-you/' . $order->id );
+
+						return [
+							'result'   => 'ok',
+							'order_id' => $order->id,
+							'redirect' => $redirectUrl
+						];
+					}
+
+					return [ 'result' => 'ko', 'message' => 'Error on pay with Scala Pay' ];
+				}
+			}
+
+		} catch ( RequestException $requestException ) {
+
+			session()->flash( 'error', $requestException->getMessage() );
+
+			$response = $requestException->getResponse();
+			$body     = json_decode( $response->getBody() );
+
+			return [
+				'result' => 'ko',
+				'error'  => $requestException->getMessage(),
+				'trace'  => $body
+			];
+
+		} catch ( \Exception $ex ) {
+
+			session()->flash( 'error', $ex->getMessage() );
+
+			return [
+				'result' => 'ko',
+				'error'  => $ex->getMessage(),
+				'trace'  => $ex->getTrace()
+			];
+
+		}
+	}
+
 
 }

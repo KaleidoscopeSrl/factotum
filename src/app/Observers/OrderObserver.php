@@ -2,8 +2,9 @@
 
 namespace Kaleidoscope\Factotum\Observers;
 
-use Kaleidoscope\Factotum\Invoice;
-use Kaleidoscope\Factotum\Order;
+use Kaleidoscope\Factotum\Models\Invoice;
+use Kaleidoscope\Factotum\Models\Order;
+
 
 class OrderObserver
 {

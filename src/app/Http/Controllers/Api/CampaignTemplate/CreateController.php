@@ -4,12 +4,13 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\CampaignTemplate;
 
 use Illuminate\Http\Request;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreCampaignTemplate;
-use Kaleidoscope\Factotum\CampaignTemplate;
-use Kaleidoscope\Factotum\CampaignAttachment;
+use Kaleidoscope\Factotum\Models\CampaignTemplate;
+use Kaleidoscope\Factotum\Models\CampaignAttachment;
 
 
-class CreateController extends Controller
+class CreateController extends ApiBaseController
 {
 
 	public function create( StoreCampaignTemplate $request )

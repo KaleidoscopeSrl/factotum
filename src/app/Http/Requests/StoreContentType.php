@@ -2,7 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Http\Requests;
 
-use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Models\ContentType;
+
 
 class StoreContentType extends CustomFormRequest
 {

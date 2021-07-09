@@ -2,10 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Observers;
 
-use Illuminate\Support\Facades\DB;
-
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductVariant;
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\ProductVariant;
 
 
 class ProductVariantObserver

@@ -7,8 +7,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Capability;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\Capability;
+
 
 class ContentTypeObserver
 {

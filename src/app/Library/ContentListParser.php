@@ -5,9 +5,10 @@ namespace Kaleidoscope\Factotum\Library;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 
-use Kaleidoscope\Factotum\Category;
-use Kaleidoscope\Factotum\CategoryContent;
-use Kaleidoscope\Factotum\Media;
+use Kaleidoscope\Factotum\Models\Category;
+use Kaleidoscope\Factotum\Models\CategoryContent;
+use Kaleidoscope\Factotum\Models\Media;
+
 
 class ContentListParser {
 

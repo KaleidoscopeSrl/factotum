@@ -4,12 +4,12 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Product;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductCategory;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\ProductCategory;
 
 
-class ReadController extends Controller
+class ReadController extends ApiBaseController
 {
 
     public function getListPaginated( Request $request )

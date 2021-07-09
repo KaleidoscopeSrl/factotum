@@ -2,9 +2,9 @@
 
 namespace Kaleidoscope\Factotum\Helpers;
 
-use Request;
+use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Content;
+use Kaleidoscope\Factotum\Models\Content;
 
 class PrintMenuHelper {
 

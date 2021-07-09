@@ -20,7 +20,6 @@ class CapabilityContentTypeScope implements Scope
 	 */
 	public function apply(Builder $builder, Model $model)
 	{
-		var_dump(Auth::user());
 //		if ( request()->attributes->get('role') == 'admin' ) {
 //			$builder->with('company');
 //		} else {

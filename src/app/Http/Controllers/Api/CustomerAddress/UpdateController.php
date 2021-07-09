@@ -2,13 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\CustomerAddress;
 
-use Illuminate\Http\Request;
-
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreCustomerAddress;
-use Kaleidoscope\Factotum\CustomerAddress;
+use Kaleidoscope\Factotum\Models\CustomerAddress;
 
 
-class UpdateController extends Controller
+class UpdateController extends ApiBaseController
 {
 
 	public function update(StoreCustomerAddress $request, $id)

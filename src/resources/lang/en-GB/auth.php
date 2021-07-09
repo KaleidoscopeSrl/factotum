@@ -14,6 +14,7 @@ return [
 	'failed' => 'Login failed',
 
 	'passwords' => [
+		'user'  => 'User not found',
 		'sent'  => 'Password Sent',
 		'reset' => 'Password Resetted',
 		'token' => 'Token not matching'

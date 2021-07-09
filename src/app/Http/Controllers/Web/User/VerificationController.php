@@ -10,7 +10,8 @@ use Illuminate\Http\Response;
 use Illuminate\Auth\Events\Verified;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller;
-use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Models\User;
+
 
 class VerificationController extends Controller
 {

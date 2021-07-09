@@ -5,11 +5,9 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Order;
 use Illuminate\Support\Facades\Auth;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
-
 use Kaleidoscope\Factotum\Http\Requests\SetOrderTransaction;
-
-use Kaleidoscope\Factotum\Order;
 use Kaleidoscope\Factotum\Traits\EcommerceUtils;
+use Kaleidoscope\Factotum\Models\Order;
 
 
 class UpdateController extends Controller

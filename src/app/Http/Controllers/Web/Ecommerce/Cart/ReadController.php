@@ -5,10 +5,9 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 
-use Kaleidoscope\Factotum\CartProduct;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
-
 use Kaleidoscope\Factotum\Traits\EcommerceUtils;
+use Kaleidoscope\Factotum\Models\CartProduct;
 
 
 class ReadController extends Controller

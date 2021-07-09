@@ -2,11 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\ContentField;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreContentField;
-use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\Models\ContentField;
 
 
-class CreateController extends Controller
+class CreateController extends ApiBaseController
 {
 
 	public function create( StoreContentField $request )

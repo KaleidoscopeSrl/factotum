@@ -4,11 +4,12 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Campaign;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Campaign;
-use Kaleidoscope\Factotum\CampaignEmail;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Campaign;
+use Kaleidoscope\Factotum\Models\CampaignEmail;
 
 
-class ReadController extends Controller
+class ReadController extends ApiBaseController
 {
 
 	public function getList( Request $request )

@@ -4,8 +4,8 @@ namespace Kaleidoscope\Factotum\Observers;
 
 use Illuminate\Support\Facades\DB;
 
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\ContentType;
 
 
 class ContentObserver

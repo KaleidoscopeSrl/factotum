@@ -2,13 +2,14 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Role;
 
-use Illuminate\Http\Request;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\DeleteRole;
-use Kaleidoscope\Factotum\Role;
-use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Models\Role;
+use Kaleidoscope\Factotum\Models\User;
 
-class DeleteController extends Controller
+
+class DeleteController extends ApiBaseController
 {
 
     public function remove(DeleteRole $request, $id)

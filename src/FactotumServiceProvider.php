@@ -19,16 +19,20 @@ use Kaleidoscope\Factotum\Policies\ContentFieldPolicy;
 use Kaleidoscope\Factotum\Policies\ContentPolicy;
 use Kaleidoscope\Factotum\Policies\MediaPolicy;
 use Kaleidoscope\Factotum\Policies\CategoryPolicy;
+
 use Kaleidoscope\Factotum\Policies\BrandPolicy;
 use Kaleidoscope\Factotum\Policies\ProductCategoryPolicy;
 use Kaleidoscope\Factotum\Policies\ProductPolicy;
 use Kaleidoscope\Factotum\Policies\ProductVariantPolicy;
+use Kaleidoscope\Factotum\Policies\ProductAttributePolicy;
+use Kaleidoscope\Factotum\Policies\ProductAttributeValuePolicy;
 use Kaleidoscope\Factotum\Policies\TaxPolicy;
 use Kaleidoscope\Factotum\Policies\DiscountCodePolicy;
 use Kaleidoscope\Factotum\Policies\InvoicePolicy;
 use Kaleidoscope\Factotum\Policies\OrderPolicy;
 use Kaleidoscope\Factotum\Policies\CustomerAddressPolicy;
 use Kaleidoscope\Factotum\Policies\CartPolicy;
+
 use Kaleidoscope\Factotum\Policies\CampaignPolicy;
 use Kaleidoscope\Factotum\Policies\CampaignTemplatePolicy;
 
@@ -54,7 +58,36 @@ use Kaleidoscope\Factotum\Console\Commands\FactotumCreateSymbolicLinks;
 use Kaleidoscope\Factotum\Console\Commands\FactotumInstallation;
 use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateSitemap;
 use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateProductImages;
+use Kaleidoscope\Factotum\Console\Commands\FactotumGenerateProductAttributesIndex;
 use Kaleidoscope\Factotum\Console\Commands\DumpAutoload;
+
+use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Models\Role;
+use Kaleidoscope\Factotum\Models\Capability;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\ContentField;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\Media;
+use Kaleidoscope\Factotum\Models\Category;
+
+use Kaleidoscope\Factotum\Models\Brand;
+use Kaleidoscope\Factotum\Models\ProductCategory;
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\ProductVariant;
+use Kaleidoscope\Factotum\Models\ProductAttribute;
+use Kaleidoscope\Factotum\Models\ProductAttributeValue;
+use Kaleidoscope\Factotum\Models\Tax;
+use Kaleidoscope\Factotum\Models\DiscountCode;
+use Kaleidoscope\Factotum\Models\Invoice;
+use Kaleidoscope\Factotum\Models\Order;
+use Kaleidoscope\Factotum\Models\Cart;
+use Kaleidoscope\Factotum\Models\CustomerAddress;
+
+use Kaleidoscope\Factotum\Models\Campaign;
+use Kaleidoscope\Factotum\Models\CampaignEmail;
+use Kaleidoscope\Factotum\Models\CampaignTemplate;
+
+
 
 class FactotumServiceProvider extends ServiceProvider
 {
@@ -78,16 +111,18 @@ class FactotumServiceProvider extends ServiceProvider
 
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 			$policies[] = [
-				Brand::class             => BrandPolicy::class,
-				ProductCategory::class   => ProductCategoryPolicy::class,
-				Product::class           => ProductPolicy::class,
-				ProductVariant::class    => ProductVariantPolicy::class,
-				Tax::class               => TaxPolicy::class,
-				DiscountCode::class      => DiscountCodePolicy::class,
-				Invoice::class           => InvoicePolicy::class,
-				Order::class             => OrderPolicy::class,
-				Cart::class              => CartPolicy::class,
-				CustomerAddress::class   => CustomerAddressPolicy::class
+				Brand::class                  => BrandPolicy::class,
+				ProductCategory::class        => ProductCategoryPolicy::class,
+				Product::class                => ProductPolicy::class,
+				ProductVariant::class         => ProductVariantPolicy::class,
+				ProductAttribute::class       => ProductAttributePolicy::class,
+				ProductAttributeValue::class  => ProductAttributeValuePolicy::class,
+				Tax::class                    => TaxPolicy::class,
+				DiscountCode::class           => DiscountCodePolicy::class,
+				Invoice::class                => InvoicePolicy::class,
+				Order::class                  => OrderPolicy::class,
+				Cart::class                   => CartPolicy::class,
+				CustomerAddress::class        => CustomerAddressPolicy::class
 			];
 		}
 
@@ -188,7 +223,8 @@ class FactotumServiceProvider extends ServiceProvider
 				FactotumCreateSymbolicLinks::class,
 				FactotumInstallation::class,
 				FactotumGenerateSitemap::class,
-				FactotumGenerateProductImages::class
+				FactotumGenerateProductImages::class,
+				FactotumGenerateProductAttributesIndex::class
 			]);
 
 		}
@@ -208,6 +244,19 @@ class FactotumServiceProvider extends ServiceProvider
 			DiscountCode::observe(DiscountCodeObserver::class);
 		}
 
+		$this->_setupRoutes();
+
+		// Final pieces and boobs
+		$this->_addValidators();
+	}
+
+
+
+
+	private function _setupRoutes()
+	{
+		Passport::routes();
+		Passport::enableImplicitGrant();
 
 		// Public Routes
 		Route::group([
@@ -243,6 +292,8 @@ class FactotumServiceProvider extends ServiceProvider
 			if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 				require __DIR__ . '/routes/api/brand.php';
 				require __DIR__ . '/routes/api/product-category.php';
+				require __DIR__ . '/routes/api/product-attribute.php';
+				require __DIR__ . '/routes/api/product-attribute-value.php';
 				require __DIR__ . '/routes/api/product-variant.php';
 				require __DIR__ . '/routes/api/product.php';
 				require __DIR__ . '/routes/api/customer-address.php';
@@ -271,6 +322,8 @@ class FactotumServiceProvider extends ServiceProvider
 			require __DIR__ . '/routes/api/utility.php';
 			require __DIR__ . '/routes/api/tool.php';
 		});
+
+
 
 		$factotumNs = 'Kaleidoscope\Factotum\Http\Controllers\Web';
 
@@ -390,15 +443,9 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 
-		/**
-		 *
-		 * PAY ATTENTION!
-		 * IF YOU OVERRIDE ONE OF THE DEFAULT FACTOTUM ROUTES, YOU SHOULD ALSO OVERRIDE THE MAIN public/web.php ROUTE FILE
-		 *
-		 */
-
+		// PAY ATTENTION!
+		// IF YOU OVERRIDE ONE OF THE DEFAULT FACTOTUM ROUTES, YOU SHOULD ALSO OVERRIDE THE MAIN public/web.php ROUTE FILE
 		if ( !file_exists( base_path('routes') . '/web.php' ) ) {
-
 			// Public routes
 			Route::group([
 				'middleware' => [
@@ -408,16 +455,8 @@ class FactotumServiceProvider extends ServiceProvider
 			], function ($router) {
 				require __DIR__ . '/routes/web/public/web.php';
 			});
-
 		}
 
-
-		Passport::routes();
-		Passport::enableImplicitGrant();
-
-
-		// Final pieces and boobs
-		$this->_addValidators();
 	}
 
 

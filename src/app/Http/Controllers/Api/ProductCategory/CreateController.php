@@ -2,11 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\ProductCategory;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreProductCategory;
-use Kaleidoscope\Factotum\ProductCategory;
+use Kaleidoscope\Factotum\Models\ProductCategory;
 
 
-class CreateController extends Controller
+class CreateController extends ApiBaseController
 {
 
     public function create(StoreProductCategory $request)

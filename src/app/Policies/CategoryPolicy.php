@@ -2,11 +2,13 @@
 
 namespace Kaleidoscope\Factotum\Policies;
 
-use Kaleidoscope\Factotum\Category;
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Capability;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
+
+use Kaleidoscope\Factotum\Models\Category;
+use Kaleidoscope\Factotum\Models\Capability;
+use Kaleidoscope\Factotum\Models\User;
+
 
 
 class CategoryPolicy

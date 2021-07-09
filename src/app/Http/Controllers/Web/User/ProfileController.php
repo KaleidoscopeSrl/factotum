@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Lang;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller;
 
 use Kaleidoscope\Factotum\Http\Requests\UpdateUser;
-use Kaleidoscope\Factotum\Profile;
+use Kaleidoscope\Factotum\Models\Profile;
 
 
 class ProfileController extends Controller

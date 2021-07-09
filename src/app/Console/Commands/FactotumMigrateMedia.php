@@ -6,8 +6,8 @@ use Illuminate\Console\Command;
 
 use Illuminate\Support\Facades\DB;
 
-use Kaleidoscope\Factotum\Media;
-use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Models\Media;
+use Kaleidoscope\Factotum\Models\User;
 
 
 class FactotumMigrateMedia extends Command

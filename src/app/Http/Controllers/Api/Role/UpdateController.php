@@ -2,10 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Role;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreRole;
-use Kaleidoscope\Factotum\Role;
+use Kaleidoscope\Factotum\Models\Role;
 
-class UpdateController extends Controller
+
+class UpdateController extends ApiBaseController
 {
 
     public function update(StoreRole $request, $id)

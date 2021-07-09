@@ -2,11 +2,11 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 
-use Kaleidoscope\Factotum\Content;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreContent;
+use Kaleidoscope\Factotum\Models\Content;
 
-
-class UpdateController extends Controller
+class UpdateController extends ApiBaseController
 {
 
 	public function update( StoreContent $request, $id )

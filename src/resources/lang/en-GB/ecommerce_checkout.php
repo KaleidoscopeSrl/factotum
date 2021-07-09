@@ -8,7 +8,8 @@ return [
 	'shipping_pick_up' => 'Pick-up to our shop',
 	'shipping_italy'   => 'Express Delivery in Italy',
 	'shipping_abroad'  => 'Express Delivery abroad',
-	
+
+	'shipping_free'             => 'Free',
 	'shipping_pick_up_standard' => 'Pick-up to our shop',
 	'shipping_IT_express'       => 'Italy - Express',
 	'shipping_IT_standard'      => 'Italy - Standard',
@@ -48,6 +49,7 @@ return [
 	'pay_with_credit_or_debit_cart'    => 'Pay with Credit or Debit card',
 	'custom_payment_in_agreement_with' => 'Payment in agreement with',
 	'bank_transfer'                    => 'Bank Transfer',
+	'pay_with_scalapay'                => 'Pay with Scala Pay',
 	
 	'issue_bank_transfer_to' => 'Issue Bank Transfer To'
 ];

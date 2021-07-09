@@ -5,16 +5,15 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
-use Kaleidoscope\Factotum\Category;
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\CategoryContent;
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Library\Utility;
-use Kaleidoscope\Factotum\Media;
-use stdClass;
 
-class ReadController extends Controller
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\ContentField;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\Media;
+
+
+class ReadController extends ApiBaseController
 {
 
 
@@ -39,37 +38,8 @@ class ReadController extends Controller
 			'query'           => $filter,
 		];
 
-//		$query = Content::with('user.profile')
-//						->with('categories')
-//						->where('content_type_id', $contentTypeId)
-//						->orderBy($sort, $direction);
-//
-//		if ( $lang ) {
-//			$query->where( 'lang', $lang );
-//		}
-//
-//		if ( $limit ) {
-//			$query->take($limit);
-//		}
-//
-//		if ( $offset ) {
-//			$query->skip($offset);
-//		}
-//
-//		if ( $contentId ) {
-//			$args['exclude'] = [ $contentId ];
-//			$query = $query->where('id', '<>' , $contentId);
-//		}
-//
-//		if ( $request->input('filter') ) {
-//			$query->where( 'title', 'like', '%' . $request->input('filter') . '%' );
-//		}
-//
-//		$contentList = $query->get();
 		$contentList = Content::treeChildsArray( $args );
 
-//		$q = Content::getQuery( $args );
-//		echo '<pre>'; print_r($args);
 
 		return response()->json( [
 			'result'   => 'ok',

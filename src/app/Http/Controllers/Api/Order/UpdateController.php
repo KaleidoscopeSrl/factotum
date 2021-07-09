@@ -4,11 +4,12 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Order;
 
 use Illuminate\Http\Request;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreOrder;
-use Kaleidoscope\Factotum\Order;
+use Kaleidoscope\Factotum\Models\Order;
 
 
-class UpdateController extends Controller
+class UpdateController extends ApiBaseController
 {
 
 	public function update(StoreOrder $request, $id)

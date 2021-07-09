@@ -5,9 +5,8 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use Illuminate\Support\Facades\Lang;
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
-use Kaleidoscope\Factotum\Brand;
+use Kaleidoscope\Factotum\Models\Brand;
 
 
 class ReadController extends Controller

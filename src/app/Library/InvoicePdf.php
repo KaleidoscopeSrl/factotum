@@ -1,11 +1,11 @@
 <?php
 namespace Kaleidoscope\Factotum\Library;
 
-use Kaleidoscope\Factotum\Order;
-use Kaleidoscope\Factotum\Invoice;
-
 use Illuminate\Support\Facades\Lang;
-use Kaleidoscope\Factotum\OrderProduct;
+
+use Kaleidoscope\Factotum\Models\OrderProduct;
+use Kaleidoscope\Factotum\Models\Invoice;
+
 
 define('EURO', chr(128));
 

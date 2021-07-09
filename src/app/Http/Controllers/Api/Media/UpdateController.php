@@ -4,7 +4,8 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Media;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Media;
+use Kaleidoscope\Factotum\Models\Media;
+
 
 class UpdateController extends Controller
 {

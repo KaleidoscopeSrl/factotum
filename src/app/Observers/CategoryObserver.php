@@ -2,7 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Observers;
 
-use Kaleidoscope\Factotum\Category;
+use Kaleidoscope\Factotum\Models\Category;
 
 class CategoryObserver
 {

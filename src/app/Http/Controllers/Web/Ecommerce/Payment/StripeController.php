@@ -52,4 +52,10 @@ class StripeController extends Controller
 	}
 
 
+	public function paymentError( Request $request )
+	{
+		$view = ( file_exists( resource_path('views/errors/payment-error.blade.php') ) ? 'errors.payment-error' : 'factotum::errors.payment-error' );
+		return view( $view );
+	}
+
 }

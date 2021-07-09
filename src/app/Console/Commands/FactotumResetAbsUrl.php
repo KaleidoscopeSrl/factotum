@@ -4,13 +4,9 @@ namespace Kaleidoscope\Factotum\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Illuminate\Support\Facades\DB;
 
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\Media;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\Content;
 
 
 class FactotumResetAbsUrl extends Command

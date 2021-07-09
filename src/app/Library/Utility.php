@@ -1,8 +1,10 @@
 <?php
+
 namespace Kaleidoscope\Factotum\Library;
 
 use Illuminate\Support\Str;
 use Image;
+
 
 class Utility
 {

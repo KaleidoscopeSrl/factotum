@@ -2,10 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\ProductCategory;
 
-use Kaleidoscope\Factotum\ProductCategory;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreProductCategory;
+use Kaleidoscope\Factotum\Models\ProductCategory;
 
-class UpdateController extends Controller
+
+class UpdateController extends ApiBaseController
 {
 
 	public function update(StoreProductCategory $request, $id)

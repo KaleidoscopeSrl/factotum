@@ -154,6 +154,7 @@ return [
 	'payment_methods' => [
 		'stripe',
 		'paypal',
+		'scalapay',
 		'bank-transfer',
 		'custom-payment'
 	],

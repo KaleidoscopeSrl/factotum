@@ -15,6 +15,7 @@ return [
 	'stripe'           => 'Credit / Debit Card',
 	'bank_transfer'    => 'Bank Transfer',
 	'cash_on_delivery' => 'Cash on delivery',
+	'scalapay'         => 'ScalaPay',
 
 	'product'      => 'Product',
 	'quantity'     => 'Qty',

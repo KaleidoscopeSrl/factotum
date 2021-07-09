@@ -3,10 +3,9 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Media;
 
 use Illuminate\Http\Request;
-use Kaleidoscope\Factotum\Library\Utility;
-use Kaleidoscope\Factotum\Media;
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductCategory;
+
+use Kaleidoscope\Factotum\Models\Media;
+
 
 class ReadController extends Controller
 {

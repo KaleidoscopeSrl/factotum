@@ -2,12 +2,13 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\User;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreUser;
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Profile;
+use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Models\Profile;
 
 
-class UpdateController extends Controller
+class UpdateController extends ApiBaseController
 {
 
 	public function update(StoreUser $request, $id)

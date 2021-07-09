@@ -2,12 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Policies;
 
-use Intervention\Image\Exception\NotFoundException;
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\Capability;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+use Kaleidoscope\Factotum\Models\Capability;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\User;
+
 
 class ContentPolicy
 {

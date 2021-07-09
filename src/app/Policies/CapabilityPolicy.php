@@ -2,9 +2,10 @@
 
 namespace Kaleidoscope\Factotum\Policies;
 
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Capability;
 use Illuminate\Auth\Access\HandlesAuthorization;
+
+use Kaleidoscope\Factotum\Models\User;
+
 
 class CapabilityPolicy
 {

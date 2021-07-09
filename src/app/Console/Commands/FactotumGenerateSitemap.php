@@ -3,6 +3,7 @@
 namespace Kaleidoscope\Factotum\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Spatie\Sitemap\SitemapIndex;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
@@ -13,11 +14,10 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 
-use Kaleidoscope\Factotum\ProductCategory;
-use Kaleidoscope\Factotum\Product;
-
 use Kaleidoscope\Factotum\Library\ContentSearch;
-use Kaleidoscope\Factotum\ContentType;
+
+use Kaleidoscope\Factotum\Models\ProductCategory;
+use Kaleidoscope\Factotum\Models\ContentType;
 
 
 class FactotumGenerateSitemap extends Command
@@ -45,7 +45,7 @@ class FactotumGenerateSitemap extends Command
 
 				$contentsToAdd = $contentSearch->search();
 
-				if ( $contentsToAdd->count() > 0 ) {
+				if ( $contentsToAdd && $contentsToAdd->count() > 0 ) {
 					$contentTypesInSitemap[] = $contentType;
 
 					$sitemap = Sitemap::create();
@@ -84,6 +84,7 @@ class FactotumGenerateSitemap extends Command
 
 
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
+
 			$categories = ProductCategory::whereNull('parent_id')->get();
 
 			if ( $categories->count() > 0 ) {
@@ -119,32 +120,45 @@ class FactotumGenerateSitemap extends Command
 				$this->info('product_categories_sitemap.xml generated');
 			}
 
-			$products = Product::all();
-			if ( $products->count() > 0 ) {
-				$sitemap = Sitemap::create();
+			$count = 1;
 
-				foreach ( $products as $product ) {
-					$url = ( $product->abs_url ? $product->abs_url : $product->url );
-					$sitemap
-						->add(
-							Url::create( $url )
-								->setPriority(0.7)
-								->setLastModificationDate( Carbon::createFromTimestamp( strtotime($product->updated_at) ) )
-						);
-				}
+			DB::table('products')
+				->whereNull('deleted_at')->orderBy('id', 'desc')
+				->chunk(1000, function ($products) use (&$count, &$finalSitemapIndexes) {
 
-				$finalSitemapIndexes[] = 'sitemaps/products_sitemap.xml';
+					if ( $products->count() > 0 ) {
+						$sitemap = Sitemap::create();
 
-				if ( !file_exists(public_path('sitemaps/products_sitemap.xml' )) ) {
-					$handle = fopen( public_path('sitemaps/products_sitemap.xml' ), 'a+' );
-					fwrite( $handle, '', null);
-					fclose( $handle );
-				}
+						foreach ( $products as $product ) {
+							$url = ( $product->abs_url ? $product->abs_url : $product->url );
+							$sitemap
+								->add(
+									Url::create( $url )
+										->setPriority(0.8)
+										->setChangeFrequency('weekly')
+										->setLastModificationDate( Carbon::createFromTimestamp( strtotime($product->updated_at) ) )
+								);
+						}
 
-				$sitemap->writeToFile( public_path('sitemaps/products_sitemap.xml' ));
+						$filename = 'sitemaps/products_sitemap_' . $count . '.xml';
 
-				$this->info('products_sitemap.xml generated');
-			}
+						$finalSitemapIndexes[] = $filename;
+
+						if ( !file_exists(public_path( $filename )) ) {
+							$handle = fopen( public_path( $filename ), 'a+' );
+							fwrite( $handle, '', null);
+							fclose( $handle );
+						}
+
+						$sitemap->writeToFile( public_path( $filename ));
+
+						$this->info($filename . ' generated');
+
+					}
+
+					$count++;
+			});
+
 		}
 
 

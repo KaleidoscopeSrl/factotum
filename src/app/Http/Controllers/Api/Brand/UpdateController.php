@@ -1,10 +1,12 @@
 <?php
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Brand;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreBrand;
-use Kaleidoscope\Factotum\Brand;
+use Kaleidoscope\Factotum\Models\Brand;
 
-class UpdateController extends Controller
+
+class UpdateController extends ApiBaseController
 {
 
     public function update( StoreBrand $request, $id )

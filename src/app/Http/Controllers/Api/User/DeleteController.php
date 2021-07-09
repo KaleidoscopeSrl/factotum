@@ -3,13 +3,14 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\User;
 
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Content;
+
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Models\Content;
 
 
-class DeleteController extends Controller
+class DeleteController extends ApiBaseController
 {
 
 	public function remove(Request $request, $id)

@@ -3,13 +3,12 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\ContentType;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Capability;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\ContentType;
 
 
-class ReadController extends Controller
+class ReadController extends ApiBaseController
 {
 
 	public function getList(Request $request)

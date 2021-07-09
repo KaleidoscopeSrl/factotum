@@ -6,8 +6,8 @@ use Illuminate\Console\Command;
 
 use Illuminate\Support\Facades\DB;
 
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\ContentField;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\ContentField;
 
 
 class FactotumMigrateContentTypeAndFields extends Command

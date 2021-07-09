@@ -15,6 +15,7 @@ return [
 	'stripe'           => 'Carta di Debito / Credito',
 	'bank_transfer'    => 'Bonifico',
 	'cash_on_delivery' => 'Contanti alla consegna',
+	'scalapay'         => 'ScalaPay',
 
 	'product'      => 'Prodotto',
 	'quantity'     => 'Qtà',

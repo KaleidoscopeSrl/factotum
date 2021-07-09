@@ -2,7 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Helpers;
 
-use Kaleidoscope\Factotum\ProductCategory;
+use Kaleidoscope\Factotum\Models\ProductCategory;
+
 
 class PrintProductCategoriesHelper {
 
@@ -13,15 +14,29 @@ class PrintProductCategoriesHelper {
 											->orderBy('label', 'ASC')
 											->get();
 		
-//		echo '<pre>';
-//		print_r($productCategories->toArray());die;
-
 		if ( $productCategories->count() > 0 ) {
 			echo self::print_product_categories_items( $productCategories, $baseURL, 0, $productCategory, $showChilds );
 		}
 	}
 
-	private static function print_product_categories_items( $productCategories, $baseURL, $level = 0, $productCategory = null, $showChilds = true )
+	public static function print_product_sub_categories( $baseURL = '', $productCategory, $showChilds = true )
+	{
+		echo self::print_product_categories_items( $productCategory->childs, $baseURL, 0, null, $showChilds );
+	}
+
+	public static function print_filtered_product_categories( $baseURL = '', $filters, $showChilds = true, $brand = null )
+	{
+		$productCategories = ProductCategory::with('childrenRecursive')
+											->where('parent_id', '=', null)
+											->orderBy('label', 'ASC')
+											->get();
+
+		if ( $productCategories->count() > 0 ) {
+			echo self::print_product_categories_items( $productCategories, $baseURL, 0, null, $showChilds, $filters, $brand );
+		}
+	}
+
+	private static function print_product_categories_items( $productCategories, $baseURL, $level = 0, $productCategory = null, $showChilds = true, $filters = [], $brand = null )
 	{
 		$html = '';
 
@@ -31,12 +46,33 @@ class PrintProductCategoriesHelper {
 
 		foreach( $productCategories as $item ) {
 
-			$active = ( $productCategory && ($item->id == $productCategory->id || $item->id == $productCategory->parent_id ) ? true : false );
+			if ( isset($filters) && count($filters) > 0 ) {
+				if ( !in_array($item->id, $filters ) ) {
+					continue;
+				}
+			}
+
+			if ( $item->total_products == 0 ) {
+				continue;
+			}
+
+			$active = false;
+			if ( strstr(request()->getRequestUri(), $item->name ) ) {
+				$active = true;
+			}
+
+			$itemUrl = $baseURL . '/' . $item->name;
+			if ( isset($brand) && $brand ) {
+				$itemUrl .= '?brands=' . $brand->id;
+			}
 
 			$html .= '<li class="category-item category-item-' . $level . ( $active ? ' active' : '') .  '">' . "\n";
 			$html .= '<div class="flexed">' . "\n";
-			$html .= '<a href="' . $baseURL . '/' . $item->name . '"'
-					.' class="' . ( $active ? 'active' : '' ) . '">' . ucfirst(strtolower($item->label)) . ' (' . $item->total_products . ')</a>' . "\n";
+			$html .= '<a href="' . $itemUrl . '"'
+					.' class="' . ( $active ? 'active' : '' ) . '">'
+					. ucfirst(strtolower($item->label))
+					// . ' (' . $item->total_products . ')'
+					. '</a>' . "\n";
 
 			if ( $showChilds && $item->childs->count() > 0 ) {
 				$html .= '<button class="toggle-subcategory' . ( $active ? ' active' : '' ) . '"><span class="more">[+]</span><span class="less">[-]</span></button>';

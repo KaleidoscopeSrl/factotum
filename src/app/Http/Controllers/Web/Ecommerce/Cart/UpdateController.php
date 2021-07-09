@@ -3,7 +3,6 @@
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Cart;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
 
@@ -13,12 +12,10 @@ use Kaleidoscope\Factotum\Http\Requests\DropProductFromCart;
 use Kaleidoscope\Factotum\Http\Requests\ApplyDiscountCodeOnCart;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
-
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\Tax;
-use Kaleidoscope\Factotum\DiscountCode;
-use Kaleidoscope\Factotum\Order;
 use Kaleidoscope\Factotum\Traits\EcommerceUtils;
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\DiscountCode;
+use Kaleidoscope\Factotum\Models\Order;
 
 
 class UpdateController extends Controller
@@ -130,7 +127,27 @@ class UpdateController extends Controller
 				return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => 'Discount Code already used.' ]) : view($this->_getServerErrorView());
 			}
 
-			$request->session()->put('discount_code', $discountCode->id );
+			$applicable = false;
+
+			if ( $discountCode->brands && $discountCode->brands->count() > 0 ) {
+				$cart = $this->_getCart();
+
+				if ( $cart && $cart->products->count() > 0 ) {
+					$tmpBrands = $discountCode->brands->pluck('id')->all();
+
+					foreach ( $cart->products as $product ) {
+						if ( in_array( $product->brand_id, $tmpBrands ) ) {
+							$applicable = true;
+						}
+					}
+				}
+			} else {
+				$applicable = true;
+			}
+
+			if ( $applicable ) {
+				$request->session()->put('discount_code', $discountCode->id );
+			}
 
 			return $request->wantsJson() ? json_encode(['result' => 'ok']) : redirect()->back();
 

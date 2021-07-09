@@ -4,21 +4,19 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Tools;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
 
-use Kaleidoscope\Factotum\Library\ContentSearch;
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Setting;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\ContentType;
 
-use Spatie\Sitemap\SitemapGenerator;
-use Spatie\Sitemap\Crawler;
 
-class SitemapController extends Controller
+class SitemapController extends ApiBaseController
 {
 
 	public function generate()
 	{
+		ini_set('memory_limit', -1);
+		ini_set('max_execution_time', 360);
+
 		Artisan::call('factotum:generate-sitemap');
 
 		return response()->json( [ 'result' => 'ok' ]);

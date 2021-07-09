@@ -4,10 +4,12 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Category;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Category;
-use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Category;
+use Kaleidoscope\Factotum\Models\ContentType;
 
-class ReadController extends Controller
+
+class ReadController extends ApiBaseController
 {
 
 

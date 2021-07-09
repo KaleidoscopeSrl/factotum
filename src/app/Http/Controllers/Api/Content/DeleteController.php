@@ -5,11 +5,14 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\ContentType;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\ContentType;
 
-class DeleteController extends Controller
+
+class DeleteController extends ApiBaseController
 {
+
 	public function remove(Request $request, $id)
 	{
 		$content = Content::find($id);
@@ -32,6 +35,6 @@ class DeleteController extends Controller
 		}
 
 		return $this->_sendJsonError( 'Content not found', 404 );
-
 	}
+
 }

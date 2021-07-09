@@ -1,10 +1,12 @@
 <?php
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Brand;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreBrand;
-use Kaleidoscope\Factotum\Brand;
+use Kaleidoscope\Factotum\Models\Brand;
 
-class CreateController extends Controller
+
+class CreateController extends ApiBaseController
 {
 
     public function create(StoreBrand $request)

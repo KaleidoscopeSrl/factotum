@@ -2,11 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\Tax;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreTax;
-use Kaleidoscope\Factotum\Tax;
+use Kaleidoscope\Factotum\Models\Tax;
 
 
-class UpdateController extends Controller
+class UpdateController extends ApiBaseController
 {
 
 	public function update( StoreTax $request, $id )
@@ -19,6 +20,5 @@ class UpdateController extends Controller
 
 		return response()->json( [ 'result' => 'ok', 'tax'  => $tax ] );
 	}
-
 
 }

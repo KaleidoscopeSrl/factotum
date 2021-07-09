@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Storage;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Library\InvoicePdf;
-use Kaleidoscope\Factotum\Library\Utility;
-use Kaleidoscope\Factotum\Invoice;
+use Kaleidoscope\Factotum\Models\Invoice;
 
-class PdfController extends Controller
+
+class PdfController extends ApiBaseController
 {
 
     public function generateByMonth( Request $request )

@@ -3,9 +3,10 @@
 namespace Kaleidoscope\Factotum\Http\Requests;
 
 use Illuminate\Support\Facades\Auth;
-use Kaleidoscope\Factotum\Product;
-use Kaleidoscope\Factotum\ProductVariant;
-use Kaleidoscope\Factotum\Role;
+
+use Kaleidoscope\Factotum\Models\Product;
+use Kaleidoscope\Factotum\Models\ProductVariant;
+use Kaleidoscope\Factotum\Models\Role;
 
 
 class AddProductToCart extends CustomFormRequest

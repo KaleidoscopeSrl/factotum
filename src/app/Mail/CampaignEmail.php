@@ -5,7 +5,7 @@ namespace Kaleidoscope\Factotum\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 
-use Kaleidoscope\Factotum\CampaignAttachment;
+use Kaleidoscope\Factotum\Models\CampaignAttachment;
 
 
 class CampaignEmail extends Mailable implements ShouldQueue

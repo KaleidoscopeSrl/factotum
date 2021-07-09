@@ -2,12 +2,13 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\CampaignTemplate;
 
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreCampaignTemplate;
-use Kaleidoscope\Factotum\CampaignAttachment;
-use Kaleidoscope\Factotum\CampaignTemplate;
+use Kaleidoscope\Factotum\Models\CampaignAttachment;
+use Kaleidoscope\Factotum\Models\CampaignTemplate;
 
 
-class UpdateController extends Controller
+class UpdateController extends ApiBaseController
 {
 
 	public function update(StoreCampaignTemplate $request, $id)

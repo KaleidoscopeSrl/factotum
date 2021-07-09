@@ -65,6 +65,12 @@
 </td>
 @endif
 
+@if ( $order->payment_type == 'scalapay' )
+<td>
+<strong>ScalaPay</strong>
+</td>
+@endif
+
 @if ( $order->payment_type == 'bank-transfer' )
 <td>
 <strong>@lang('factotum::ecommerce_checkout.bank_transfer')</strong>
@@ -81,6 +87,10 @@
 
 <tr>
 <td colspan="2"><strong>@lang('factotum::ecommerce_order.shipping')</strong></td>
+
+@if( $order->shipping == 'free' )
+<td>@lang('factotum::ecommerce_checkout.shipping_free')</td>
+@endif
 
 @if( $order->shipping == 'pick_up_standard' )
 <td>@lang('factotum::ecommerce_checkout.shipping_pick_up_standard')</td>

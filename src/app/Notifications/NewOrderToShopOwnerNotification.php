@@ -5,7 +5,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\HtmlString;
-use Kaleidoscope\Factotum\OrderProduct;
+
+use Kaleidoscope\Factotum\Models\OrderProduct;
+
 
 class NewOrderToShopOwnerNotification extends Notification
 {

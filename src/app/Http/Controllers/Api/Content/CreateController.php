@@ -7,14 +7,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Http\Requests\StoreContent;
-use Kaleidoscope\Factotum\Library\ContentSearch;
-use Kaleidoscope\Factotum\Media;
 
-class CreateController extends Controller
+use Kaleidoscope\Factotum\Library\ContentSearch;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Http\Requests\StoreContent;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\ContentField;
+use Kaleidoscope\Factotum\Models\ContentType;
+
+
+class CreateController extends ApiBaseController
 {
 
 	public function create( StoreContent $request )

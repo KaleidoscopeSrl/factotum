@@ -6,11 +6,11 @@ use Illuminate\Console\Command;
 
 use Illuminate\Support\Facades\DB;
 
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\Media;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\ContentField;
+use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\Media;
 
 
 class FactotumMigrateContents extends Command

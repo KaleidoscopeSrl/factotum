@@ -2,8 +2,8 @@
 
 namespace Kaleidoscope\Factotum\Http\Requests;
 
+use Kaleidoscope\Factotum\Models\ProductCategory;
 
-use Kaleidoscope\Factotum\ProductCategory;
 
 class StoreProductCategory extends CustomFormRequest
 {
