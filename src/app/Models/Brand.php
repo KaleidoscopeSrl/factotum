@@ -4,6 +4,8 @@ namespace Kaleidoscope\Factotum\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 
 class Brand extends Model
@@ -59,4 +61,21 @@ class Brand extends Model
 		return Product::where('brand_id', $this->id)->count();
 	}
 
+	// CUSTOM FILL
+	public function fill(array $attributes)
+	{
+		if ( isset( $attributes[ 'name' ] ) ) {
+			$attributes[ 'url' ] = Str::slug( $attributes[ 'name' ] );
+
+			$shopBaseUrl = config('factotum.shop_base_url');
+
+			if ( $shopBaseUrl && substr($shopBaseUrl, 0, 1) != '/' ) {
+				$shopBaseUrl = '/' . $shopBaseUrl;
+			}
+
+			$attributes[ 'abs_url' ] = $shopBaseUrl . '/brands/' . $this->url;
+		}
+
+		return parent::fill($attributes);
+	}
 }

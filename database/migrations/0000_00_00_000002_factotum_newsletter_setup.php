@@ -105,6 +105,13 @@ class FactotumNewsletterSetup extends Migration
 		});
 
 
+		Schema::create('newsletter_subscriptions', function (Blueprint $table) {
+			$table->id();
+			$table->string('email', 128)->unique();
+			$table->timestamps();
+		});
+
+
 		Schema::table('roles', function (Blueprint $table) {
 			$table->boolean('manage_newsletters')->nullable()->default(null)->after('manage_settings');
 		});

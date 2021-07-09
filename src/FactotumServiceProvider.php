@@ -35,6 +35,7 @@ use Kaleidoscope\Factotum\Policies\CartPolicy;
 
 use Kaleidoscope\Factotum\Policies\CampaignPolicy;
 use Kaleidoscope\Factotum\Policies\CampaignTemplatePolicy;
+use Kaleidoscope\Factotum\Policies\NewsletterSubscriptionPolicy;
 
 
 use Kaleidoscope\Factotum\Observers\ContentTypeObserver;
@@ -128,9 +129,10 @@ class FactotumServiceProvider extends ServiceProvider
 
 		if ( env('FACTOTUM_NEWSLETTER_INSTALLED') ) {
 			$policies[] = [
-				Campaign::class             => CampaignPolicy::class,
-				CampaignTemplate::class     => CampaignTemplatePolicy::class,
-				CampaignEmail::class        => CampaignEmailPolicy::class
+				Campaign::class                 => CampaignPolicy::class,
+				CampaignTemplate::class         => CampaignTemplatePolicy::class,
+				CampaignEmail::class            => CampaignEmailPolicy::class,
+				NewsletterSubscription::class   => NewsletterSubscriptionPolicy::class
 			];
 		}
 
@@ -308,6 +310,7 @@ class FactotumServiceProvider extends ServiceProvider
 				require __DIR__ . '/routes/api/campaign.php';
 				require __DIR__ . '/routes/api/campaign-template.php';
 				require __DIR__ . '/routes/api/campaign-email.php';
+				require __DIR__ . '/routes/api/newsletter-subscription.php';
 			}
 
 			require __DIR__ . '/routes/api/capability.php';

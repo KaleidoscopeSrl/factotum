@@ -131,6 +131,7 @@ class Order extends Model
 			foreach ( $shopManagers as $shopManager ) {
 				Notification::route( 'mail', $shopManager->email )->notify( $notification );
 			}
+
 		}
 	}
 

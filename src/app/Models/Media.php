@@ -188,6 +188,23 @@ class Media extends Model
 	}
 
 
+	public static function generateSize( $media, $resize )
+	{
+		$width  = $resize['w'];
+		$height = $resize['h'];
+
+		$ext      = substr( $media['filename'], strlen($media['filename'])-3, 3 );
+
+		$newFilename = storage_path( 'app/public/media/' . $media['id'] . '/' . substr( $media['filename'], 0, -4) . '-' . $width .'x' . $height . '.' . $ext);
+		$image       = Image::make( storage_path( 'app/public/media/' . $media['id'] . '/' . $media['filename'] ) );
+
+		$image->resize( $width, null, function ($constraint) { $constraint->aspectRatio(); });
+
+		$image->save( $newFilename, 100 );
+		$image->destroy();
+	}
+
+
 	public static function generateThumb( $media )
 	{
 		if ( File::exists( storage_path( 'app/public/media/' . $media->id . '/' . $media->filename ) ) ) {
