@@ -1,10 +1,10 @@
 <?php
 
+namespace Kaleidoscope\Factotum\Seeds;
+
 use Illuminate\Database\Seeder;
 
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\Role;
+use Kaleidoscope\Factotum\Models\Role;
 
 
 

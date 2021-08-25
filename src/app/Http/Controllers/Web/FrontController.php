@@ -52,7 +52,6 @@ class FrontController extends Controller
 							->first();
 
 
-
 			if ( $content ) {
 
 				$contentType   = ContentType::find($content->content_type_id)->toArray();
@@ -64,10 +63,10 @@ class FrontController extends Controller
 												 ->search();
 
 				if ( $content ) {
-					$content[0] = $this->_loadAdditionalData( $content[0] );
+					$content = $this->_loadAdditionalData( $content->first() );
 				}
 
-				return ( $content ? $content[0] : null );
+				return ( $content ? $content : null );
 
 			} else {
 
@@ -162,7 +161,6 @@ class FrontController extends Controller
 								$contentList = $contentSearch->search();
 								
 							}
-
 
 
 							return [  'view' => $content->page_template,
@@ -361,7 +359,12 @@ class FrontController extends Controller
 
 		} elseif ( isset( $data['data'] ) ) {
 
-			return view( $data['view'] )->with( $data['data'] );
+			$view = 'factotum::' . $data['view'];
+			if ( file_exists( resource_path('views/' . $data['view'] . '.blade.php') ) ) {
+				$view = $data['view'];
+			}
+
+			return view( $view )->with( $data['data'] );
 
 		} else {
 

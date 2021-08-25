@@ -1,6 +1,6 @@
 <?php
 
-namespace Kaleidoscope\Factotum;
+namespace Kaleidoscope\Factotum\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

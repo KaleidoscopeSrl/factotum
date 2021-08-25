@@ -18,5 +18,8 @@ return [
 		'sent'  => 'Password Sent',
 		'reset' => 'Password Resetted',
 		'token' => 'Token not matching'
-	]
+	],
+
+	'email_not_verified_title'       => 'Email Not Verified',
+	'email_not_verified_description' => 'Email Not Verified',
 ];

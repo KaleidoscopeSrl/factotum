@@ -1,8 +1,12 @@
 <?php
 
-use Illuminate\Database\Seeder;
+namespace Kaleidoscope\Factotum\Seeds;
 
-use Kaleidoscope\Factotum\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+use Kaleidoscope\Factotum\Models\User;
+
 
 class ProfilesTableSeeder extends Seeder
 {

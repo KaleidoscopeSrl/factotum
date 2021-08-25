@@ -42,7 +42,7 @@ class PrintMenuHelper {
 
 				} else {
 					$active = false;
-					$currUrl  = trim( Request::url(), '/' );
+					$currUrl  = trim( request()->url(), '/' );
 					$checkUrl = trim( $item->abs_url, '/' );
 					if ( $currUrl == $checkUrl || ( strstr( $currUrl, $checkUrl) && $checkUrl != url('')) ) {
 						$active = true;

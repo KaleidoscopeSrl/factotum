@@ -115,4 +115,10 @@ return [
 
     'attributes' => [],
 
+	'passwords' => [
+		'user'  => 'Utente non trovato',
+		'sent'  => 'Password Inviata',
+		'reset' => 'Password resettata',
+		'token' => 'Token non corrispondente'
+	],
 ];

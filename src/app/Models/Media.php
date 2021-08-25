@@ -124,7 +124,7 @@ class Media extends Model
 	// Dato un Campo e un MediaId, eseguo la funzione saveImage per quell'immagine
 	public static function saveImageById( $field, $mediaId )
 	{
-		$media = Media::find( $mediaId );
+		$media = Media::findOrFail( $mediaId );
 		if ( $media && in_array($media->mime_type, [ 'image/jpeg', 'image/png', 'image/gif' ]) ) {
 			return self::saveImage( $field, $media );
 		} elseif ( $media ) {
@@ -142,6 +142,7 @@ class Media extends Model
 		$origFilename = $origImage->dirname . '/' . $origImage->filename;
 		$ext          = $origImage->extension;
 		$operation    = $field->image_operation;
+
 
 		if ( $field->resizes ) {
 

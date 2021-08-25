@@ -19,6 +19,10 @@
 
 						<h3>Il tuo profilo</h3>
 
+						@if ( isset($completeProfile) )
+							<h2 class="red">@lang('factotum::user.should_complete_profile')</h2>
+						@endif
+
 						<form method="POST" action="/user/profile" class="container-fluid col-no-pl col-no-pr">
 							@csrf
 
@@ -123,7 +127,37 @@
 								</div>
 							</div>
 
+
+
 							<div class="row clearfix">
+								<div class="col col-xs-12">
+
+									<div class="field field-checkbox">
+										<input type="checkbox" name="newsletter" id="newsletter" @if( $user->profile->newsletter ) checked="checked" @endif value="1">
+										<label for="newsletter">Iscriviti alla nostra newsletter</label>
+									</div>
+
+								</div>
+								<div class="col col-xs-12">
+
+									<div class="field field-checkbox">
+										<input type="checkbox" name="privacy" id="privacy" @if( $user->profile->privacy ) checked="checked" @endif value="1">
+										<label for="privacy">
+											Dichiaro di aver letto, compreso ed acquisito
+											l'informativa sulla privacy ai sensi dell’art. 13
+											del D.Lgs. 196/2003
+										</label>
+									</div>
+
+								</div>
+								<div class="col col-xs-12">
+
+									<div class="field field-checkbox">
+										<input type="checkbox" name="terms_conditions" id="terms_conditions" @if( $user->profile->terms_conditions ) checked="checked" @endif value="1">
+										<label for="terms_conditions">Accetto i termini e le condizioni d'uso</label>
+									</div>
+
+								</div>
 								<div class="col col-xs-12">
 
 									<div class="cta-container">

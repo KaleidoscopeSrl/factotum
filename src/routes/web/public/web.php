@@ -1,8 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 
-// Route::get('/admin/{uri?}', function () { return redirect('/admin/' ); })->where('uri', '.*');
+Route::group([
+	'middleware' => 'web',
+	'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web'
+], function() {
 
+	Route::get('/{uri?}',  'FrontController@index')->where('uri', '.*');
+	Route::post('/{uri?}', 'FrontController@index')->where('uri', '.*');
 
-Route::get('/{uri?}',  '\Kaleidoscope\Factotum\Http\Controllers\Web\FrontController@index')->where('uri', '.*');
-Route::post('/{uri?}', '\Kaleidoscope\Factotum\Http\Controllers\Web\FrontController@index')->where('uri', '.*');
+});
+

@@ -67,6 +67,14 @@ class User extends Authenticatable implements MustVerifyEmail
 		return ($this->role->role == 'admin' ? true : false);
 	}
 
+	public function isProfileComplete()
+	{
+		if ( !$this->profile->phone || !$this->profile->privacy || ( env('FACTOTUM_ECOMMERCE_INSTALLED') && !$this->profile->terms_conditions ) ) {
+			return false;
+		}
+
+		return true;
+	}
 
 	public function canConfigure($contentTypeID)
 	{

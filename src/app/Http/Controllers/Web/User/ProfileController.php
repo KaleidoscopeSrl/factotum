@@ -2,6 +2,7 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Web\User;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
@@ -14,10 +15,13 @@ use Kaleidoscope\Factotum\Models\Profile;
 class ProfileController extends Controller
 {
 
-	public function showProfileForm()
+	public function showProfileForm( Request $request )
 	{
+		$completeProfile = $request->input('complete_profile');
+
 		return view('factotum::user.profile')->with([
-			'user'     => Auth::user(),
+			'user'            => Auth::user(),
+			'completeProfile' => ( isset($completeProfile) ? true : false ),
 			'metatags' => [
 				'title'       => Lang::get('factotum::user.profile_title'),
 				'description' => Lang::get('factotum::user.profile_description')

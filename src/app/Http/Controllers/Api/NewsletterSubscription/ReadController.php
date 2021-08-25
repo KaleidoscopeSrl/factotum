@@ -4,12 +4,12 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\NewsletterSubscription;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 
-use Kaleidoscope\Factotum\NewsletterSubscription;
+use Kaleidoscope\Factotum\Models\NewsletterSubscription;
 
 
-class ReadController extends Controller
+class ReadController extends ApiBaseController
 {
 
 	public function getListPaginated( Request $request )

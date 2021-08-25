@@ -1,6 +1,10 @@
 <?php
 
+namespace Kaleidoscope\Factotum\Seeds;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 
 class RolesTableSeeder extends Seeder
 {

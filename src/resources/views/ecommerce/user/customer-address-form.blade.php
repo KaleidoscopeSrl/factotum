@@ -82,14 +82,13 @@
 								<div class="col col-xs-12 col-md-6">
 
 									<div class="field">
-										<label for="province">Provincia</label>
+										<label for="prov">Provincia *</label>
 
-										<input id="province" type="text"
-											   value="@if( isset($address) ){{ $address->province }}@endif"
-											   class="@error('province') is-invalid @enderror" name="province"
-											   required autofocus>
+										<div class="province-field-wrapper">
+											@include('factotum::ecommerce.user.ajax.province-select')
+										</div>
 
-										@error('province')
+										@error('prov')
 										<p class="error" role="alert">{{ $message }}</p>
 										@enderror
 									</div>

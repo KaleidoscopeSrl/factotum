@@ -17,7 +17,9 @@ use Kaleidoscope\Factotum\Traits\EcommerceUtils;
 
 class AuthController extends Controller
 {
-	protected $redirectTo = '/auth/login';
+	protected $redirectTo                 = '/auth/login';
+	protected $redirectToEmailNotVerified = '/auth/email-not-verified';
+	protected $successRedirectTo          = '/?login=ok';
 
 	use AuthenticatesUsers;
 
@@ -27,6 +29,7 @@ class AuthController extends Controller
 	{
 		return '/auth/login';
 	}
+
 
 	public function showLoginForm( Request $request )
 	{
@@ -49,6 +52,24 @@ class AuthController extends Controller
 	}
 	
 	
+	public function showEmailNotVerified( Request $request )
+	{
+
+		$view = 'factotum::auth.email-not-verified';
+		if ( file_exists( resource_path('views/auth/email-not-verified.blade.php') ) ) {
+			$view = 'auth.email-not-verified';
+		}
+
+		return view($view)
+				->with([
+					'metatags' => [
+						'title'       => Lang::get('factotum::auth.email_not_verified_title'),
+						'description' => Lang::get('factotum::auth.email_not_verified_description')
+					]
+				]);
+	}
+
+
 	protected function sendFailedLoginResponse(Request $request)
 	{
 		$exception = ValidationException::withMessages([
@@ -73,16 +94,26 @@ class AuthController extends Controller
 		
 		return $request->wantsJson()
 			? new JsonResponse([], 204)
-			: redirect()->intended( '/?login=ok' );
+			: redirect()->intended( $this->successRedirectTo );
 	}
 
 
 	protected function authenticated(Request $request, $user)
 	{
+		$user = Auth::user();
+
+		if ( !$user->email_verified_at ) {
+			Auth::logout();
+			return $request->wantsJson() ? new JsonResponse([], 401) : redirect( $this->redirectToEmailNotVerified );
+		}
+
+		if ( !$user->isProfileComplete() ) {
+			$this->successRedirectTo = '/user/profile?complete_profile=1';
+		}
+
 		if ( env('FACTOTUM_ECOMMERCE_INSTALLED') ) {
 
 			if ( $request->session()->get('force_extend_cart') ) {
-				$user = Auth::user();
 				$cart = Cart::where( 'customer_id', $user->id )->orderBy('id', 'DESC')->first();
 				$cart->expires_at  = date('Y-m-d H:i:s',  time() + 120 );
 				$cart->save();

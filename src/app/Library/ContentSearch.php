@@ -32,8 +32,9 @@ class ContentSearch {
 		'seo_title', 'seo_description', 'seo_canonical_url', 'seo_robots_indexing', 'seo_robots_following',
 		'fb_title', 'fb_description', 'fb_image',
 		'contents.created_at', 'contents.updated_at',
-		'profiles.first_name', 'profiles.last_name',
-		'users.email', 'users.avatar'
+
+		// 'profiles.first_name', 'profiles.last_name',
+		// 'users.email', 'users.avatar'
 	];
 
 
@@ -61,8 +62,8 @@ class ContentSearch {
 		$this->_query = DB::table('contents')
 							->select( DB::raw( $this->_cols ) )
 							->leftJoin( $this->_contentType['content_type'], 'contents.id', '=', $this->_contentType['content_type'] . '.content_id')
-							->leftJoin( 'users', 'users.id', '=', 'contents.user_id')
-							->leftJoin( 'profiles', 'profiles.user_id', '=', 'users.id')
+							// ->leftJoin( 'users', 'users.id', '=', 'contents.user_id')
+							// ->leftJoin( 'profiles', 'profiles.user_id', '=', 'users.id')
 							->where( 'contents.content_type_id', '=', $this->_contentType['id']);
 
 
@@ -162,6 +163,7 @@ class ContentSearch {
 		$this->_loadCategories = true;
 		return $this;
 	}
+
 
 	/**
 	 * This function performs a query and returns all the contents that match the search conditions.

@@ -17,6 +17,15 @@ class Utility
 	}
 
 
+	public static function jsonDebug( $debug )
+	{
+		header('Accept: application/json');
+		header('Content-Type: application/json');
+		header('Access-Control-Allow-Origin: *');
+		echo json_encode( ['debug' => $debug ] );
+	}
+
+
 	public static function getSqlQuery($query)
 	{
 		$params = array_map(function ($item) {

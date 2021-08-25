@@ -2,12 +2,12 @@
 
 namespace Kaleidoscope\Factotum\Http\Controllers\Api\NewsletterSubscription;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
 use Kaleidoscope\Factotum\Http\Requests\StoreNewsletterSubscription;
-use Kaleidoscope\Factotum\NewsletterSubscription;
+use Kaleidoscope\Factotum\Models\NewsletterSubscription;
 
 
-class CreateController extends Controller
+class CreateController extends ApiBaseController
 {
 
 	public function create( StoreNewsletterSubscription $request )

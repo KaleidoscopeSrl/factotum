@@ -20,6 +20,8 @@ class CampaignEmail extends Mailable implements ShouldQueue
 
     public function __construct( $campaignTemplate, $campaignEmail = null )
     {
+	    $this->queue = 'mailing';
+
     	if ( $campaignEmail ) {
     		$this->_campaignEmail = $campaignEmail;
 		}

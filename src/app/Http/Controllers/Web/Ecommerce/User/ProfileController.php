@@ -127,6 +127,7 @@ class ProfileController extends Controller
 
 	}
 
+
 	public function setDefaultCustomerAddress( Request $request )
 	{
 		try {
@@ -161,6 +162,36 @@ class ProfileController extends Controller
 			session()->flash( 'error', $ex->getMessage() );
 			return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => $ex->getMessage() ]) : view($this->_getServerErrorView());
 		}
+	}
+
+
+	public function getProvinceSelect( Request $request )
+	{
+		$view = 'factotum::ecommerce.user.ajax.province-select';
+
+		if ( file_exists( resource_path('views/ecommerce/user/province-select.blade.php') ) ) {
+			$view = 'ecommerce.user.ajax.province-select';
+		}
+
+		return response()->json([
+			'result'        => 'ok',
+			'html'          => view( $view )->render()
+		]);
+	}
+
+
+	public function getProvinceInput( Request $request )
+	{
+		$view = 'factotum::ecommerce.user.ajax.province-input';
+
+		if ( file_exists( resource_path('views/ecommerce/user/province-input.blade.php') ) ) {
+			$view = 'ecommerce.user.ajax.province-input';
+		}
+
+		return response()->json([
+			'result'        => 'ok',
+			'html'          => view( $view )->render()
+		]);
 	}
 
 }

@@ -21,4 +21,6 @@ return [
 	'profile_title'       => 'User Profile',
 	'profile_description' => 'User Profile',
 
+	'should_complete_profile' => 'You should complete your profile to proceed.'
+
 ];

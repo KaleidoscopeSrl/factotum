@@ -28,8 +28,7 @@ class FactotumInstallation extends Command
 		$this->installEcommerce  = false;
 		$this->installNewsletter = false;
 		$this->reInstall         = false;
-		$this->migrationPath     = 'vendor/kaleidoscope/' . ( env('APP_ENV') == 'local' ? 'dev-' : '')
-									. 'factotum/database/migrations';
+		$this->migrationPath     = 'vendor/kaleidoscope/factotum/database/migrations';
 	}
 
 
@@ -110,7 +109,9 @@ class FactotumInstallation extends Command
 	private function _dbSeeding()
 	{
 		$this->info('Seeding running...');
-		$this->call('db:seed');
+		$this->call('db:seed', [
+			'--class' => 'Kaleidoscope\Factotum\Seeds\DatabaseSeeder'
+		]);
 		$this->info('Seeding done.');
 
 		if ( $this->installEcommerce ) {

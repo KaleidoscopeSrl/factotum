@@ -5,6 +5,8 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Web\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller;
 
@@ -32,4 +34,29 @@ class ResetPasswordController extends Controller
 						]
 					]);
 	}
+
+	/**
+	 * Reset the given user's password.
+	 *
+	 * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+	 * @param  string  $password
+	 * @return void
+	 */
+	protected function resetPassword($user, $password)
+	{
+		$this->setUserPassword($user, $password);
+
+		$user->setRememberToken(Str::random(60));
+		$user->email_verified_at = date('Y-m-d H:i:s');
+		$user->save();
+
+		event(new PasswordReset($user));
+
+		if ( !$user->isProfileComplete() ) {
+			$this->redirectTo = '/user/profile';
+		}
+
+		$this->guard()->login($user);
+	}
+
 }

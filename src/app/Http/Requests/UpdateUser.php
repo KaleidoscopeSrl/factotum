@@ -18,9 +18,12 @@ class UpdateUser extends CustomFormRequest
 	public function rules()
 	{
 		$rules = [
-			'first_name'     => 'required|max:64',
-			'last_name'      => 'required|max:64',
-			'email'          => 'required|email|max:128',
+			'first_name'       => 'required|max:64',
+			'last_name'        => 'required|max:64',
+			'email'            => 'required|email|max:128',
+			'phone'            => 'required',
+			'privacy'          => 'required',
+			'terms_conditions' => 'required'
 		];
 
 		$data = $this->all();

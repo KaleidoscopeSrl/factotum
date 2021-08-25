@@ -1,13 +1,17 @@
 <?php
 
-use Illuminate\Database\Seeder;
+namespace Kaleidoscope\Factotum\Seeds;
 
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\Capability;
-use Kaleidoscope\Factotum\Role;
-use Kaleidoscope\Factotum\User;
-use Kaleidoscope\Factotum\Content;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\ContentField;
+use Kaleidoscope\Factotum\Models\Capability;
+use Kaleidoscope\Factotum\Models\Role;
+use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Models\Content;
+
 
 class PageTableSeeder extends Seeder
 {

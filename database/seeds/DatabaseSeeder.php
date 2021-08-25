@@ -1,19 +1,21 @@
 <?php
 
+namespace Kaleidoscope\Factotum\Seeds;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-use Kaleidoscope\Factotum\Capability;
-use Kaleidoscope\Factotum\Category;
-use Kaleidoscope\Factotum\Content;
-use Kaleidoscope\Factotum\CategoryContent;
-use Kaleidoscope\Factotum\ContentField;
-use Kaleidoscope\Factotum\ContentType;
-use Kaleidoscope\Factotum\Media;
-use Kaleidoscope\Factotum\Profile;
-use Kaleidoscope\Factotum\Role;
-use Kaleidoscope\Factotum\User;
+use Kaleidoscope\Factotum\Models\Capability;
+use Kaleidoscope\Factotum\Models\Category;
+use Kaleidoscope\Factotum\Models\Content;
+use Kaleidoscope\Factotum\Models\CategoryContent;
+use Kaleidoscope\Factotum\Models\ContentField;
+use Kaleidoscope\Factotum\Models\ContentType;
+use Kaleidoscope\Factotum\Models\Media;
+use Kaleidoscope\Factotum\Models\Profile;
+use Kaleidoscope\Factotum\Models\Role;
+use Kaleidoscope\Factotum\Models\User;
 
 
 class DatabaseSeeder extends Seeder

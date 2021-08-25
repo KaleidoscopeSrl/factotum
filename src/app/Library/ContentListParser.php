@@ -67,7 +67,6 @@ class ContentListParser {
 	 */
 	public function getList()
 	{
-
 		foreach ( $this->_contentList as $index => $content ) {
 
 			if ( $content && $content->fb_image ) {
@@ -97,7 +96,11 @@ class ContentListParser {
 					foreach ( $this->_fields as $fieldName => $field ) {
 
 						if ( $field->type == 'file_upload' ) {
-							$content->{$fieldName} = $this->_getFileData( $content->{$fieldName} );
+							if ( $content->{$fieldName} ) {
+								$content->{$fieldName} = $this->_getFileData( $content->{$fieldName} );
+							} else {
+								$content->{$fieldName} = null;
+							}
 						}
 
 						if ( $field->type == 'multiselect' ) {
@@ -237,12 +240,13 @@ class ContentListParser {
 			$subContentList = $contentSearch->search(true);
 
 			if ( $subContentList && $subContentList->count() > 0 ) {
-				$model = json_decode( Storage::get( 'models/' . $fieldModel->linked_content_type->content_type . '.json' ) );
+				return $subContentList;
 
-				$clp = new ContentListParser( $model, $subContentList );
-				$clp->enableAvoidDeepLinking();
-
-				return $clp->getList();
+				// TODO: serve ripetere la get list?
+//				$model = json_decode( Storage::get( 'models/' . $fieldModel->linked_content_type->content_type . '.json' ) );
+//				$clp = new ContentListParser( $model, $subContentList );
+//				$clp->enableAvoidDeepLinking();
+//				return $clp->getList();
 			}
 		}
 	}

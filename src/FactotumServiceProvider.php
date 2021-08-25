@@ -172,10 +172,11 @@ class FactotumServiceProvider extends ServiceProvider
 
 
 		// Middlewares
-		$this->getRouter()->pushMiddlewareToGroup('session_start',     \Illuminate\Session\Middleware\StartSession::class);
-		$this->getRouter()->pushMiddlewareToGroup('preflight',         \Kaleidoscope\Factotum\Http\Middleware\PreflightResponse::class);
-		$this->getRouter()->pushMiddlewareToGroup('cors',              \Fruitcake\Cors\HandleCors::class);
-		$this->getRouter()->pushMiddlewareToGroup('add_access_token',  \Kaleidoscope\Factotum\Http\Middleware\AddHeaderAccessToken::class);
+		$this->getRouter()->pushMiddlewareToGroup('session_start',      \Illuminate\Session\Middleware\StartSession::class);
+		$this->getRouter()->pushMiddlewareToGroup('preflight',          \Kaleidoscope\Factotum\Http\Middleware\PreflightResponse::class);
+		$this->getRouter()->pushMiddlewareToGroup('uncomplete_profile', \Kaleidoscope\Factotum\Http\Middleware\UncompleteProfile::class);
+		$this->getRouter()->pushMiddlewareToGroup('cors',               \Fruitcake\Cors\HandleCors::class);
+		$this->getRouter()->pushMiddlewareToGroup('add_access_token',   \Kaleidoscope\Factotum\Http\Middleware\AddHeaderAccessToken::class);
 
 
 
@@ -381,7 +382,10 @@ class FactotumServiceProvider extends ServiceProvider
 			if ( !file_exists( base_path('routes') . '/web/ecommerce/checkout.php' ) ) {
 
 				Route::group([
-					'middleware' => [ 'web' ],
+					'middleware' => [
+						'web',
+						'uncomplete_profile'
+					],
 					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Checkout'
 				], function ($router) {
 					require __DIR__ . '/routes/web/ecommerce/checkout.php';
@@ -394,7 +398,10 @@ class FactotumServiceProvider extends ServiceProvider
 			if ( !file_exists( base_path('routes') . '/web/ecommerce/payment.php' ) ) {
 
 				Route::group([
-					'middleware' => [ 'web' ],
+					'middleware' => [
+						'web',
+						'uncomplete_profile'
+					],
 					'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web\Ecommerce\Payment'
 				], function ($router) {
 					require __DIR__ . '/routes/web/ecommerce/payment.php';
@@ -444,22 +451,11 @@ class FactotumServiceProvider extends ServiceProvider
 
 		}
 
+		if ( !file_exists( base_path('routes') . '/web/public/web.php' ) ) {
+			require __DIR__ . '/routes/web/public/web.php';
 
-
-		// PAY ATTENTION!
-		// IF YOU OVERRIDE ONE OF THE DEFAULT FACTOTUM ROUTES, YOU SHOULD ALSO OVERRIDE THE MAIN public/web.php ROUTE FILE
-		if ( !file_exists( base_path('routes') . '/web.php' ) ) {
-			// Public routes
-			Route::group([
-				'middleware' => [
-					'web'
-				],
-				'namespace'  => 'Kaleidoscope\Factotum\Http\Controllers\Web'
-			], function ($router) {
-				require __DIR__ . '/routes/web/public/web.php';
-			});
+			$overridingRoutes = true;
 		}
-
 	}
 
 

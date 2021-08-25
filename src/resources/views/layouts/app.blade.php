@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ substr($currentLanguage, 0, 2) }}">
 <head>
-	@include('layouts.metatags', ['content' => ( isset($content) ? $content : null), 'metatags' => ( isset($metatags) ? $metatags : null )] )
+	@include('factotum::layouts.metatags', ['content' => ( isset($content) ? $content : null), 'metatags' => ( isset($metatags) ? $metatags : null )] )
 
 	<!-- Styles -->
 	<link href="/assets/css/main.css" rel="stylesheet">

@@ -20,5 +20,7 @@ return [
 
 	'profile_title'       => 'Profilo Utente',
 	'profile_description' => 'Profilo Utente',
+	
+	'should_complete_profile' => 'Completa il tuo profilo per procedere.'
 
 ];

@@ -4,11 +4,11 @@ namespace Kaleidoscope\Factotum\Http\Controllers\Api\NewsletterSubscription;
 
 use Illuminate\Http\Request;
 
-use Kaleidoscope\Factotum\Http\Controllers\Api\Controller;
+use Kaleidoscope\Factotum\Http\Controllers\Api\ApiBaseController;
+use Kaleidoscope\Factotum\Models\NewsletterSubscription;
 
-use Kaleidoscope\Factotum\NewsletterSubscription;
 
-class DeleteController extends Controller
+class DeleteController extends ApiBaseController
 {
 
 	public function remove(Request $request, $id)
