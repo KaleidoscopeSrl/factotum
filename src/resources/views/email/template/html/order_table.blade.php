@@ -31,6 +31,13 @@
 
 @endforeach
 
+@if ( $order && $order->discount_code )
+<tr>
+<td colspan="2"><strong>Codice Sconto</strong></td>
+<td>{{ $order->discount_code->code }}</td>
+</tr>
+@endif
+
 <tr>
 <td colspan="2"><strong>@lang('factotum::ecommerce_order.total_partial')</strong></td>
 <td>€ {{ number_format( $order->total_net + $order->total_tax, 2, ',', '.' )  }}</td>

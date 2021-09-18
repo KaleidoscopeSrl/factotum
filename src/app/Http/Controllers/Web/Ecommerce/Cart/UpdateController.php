@@ -124,7 +124,7 @@ class UpdateController extends Controller
 			$usedOnOrders = Order::where('discount_code_id', $discountCode->id)->count();
 
 			if ( $discountCode && $discountCode->amount == $usedOnOrders ) {
-				return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => 'Discount Code already used.' ]) : view($this->_getServerErrorView());
+				return $request->wantsJson() ? json_encode(['result' => 'ko', 'error' => Lang::get('factotum::ecommerce_cart.discount_code_already_used') ]) : view($this->_getServerErrorView());
 			}
 
 			$applicable = false;

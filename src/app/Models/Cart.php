@@ -17,6 +17,7 @@ class Cart extends Model
 		'payment_type',
 		'paypal_order_id',
 		'stripe_intent_id',
+		'edited',
 		'shipping'
 	];
 

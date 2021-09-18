@@ -49,6 +49,11 @@
 
 						</div>
 
+						<div class="field field-checkbox">
+							<input type="checkbox" name="remember" id="remember" value="1">
+							<label for="remember">Ricordami</label>
+						</div>
+
 						<div class="cta-container">
 							<button type="submit" class="cta">Login</button>
 						</div>

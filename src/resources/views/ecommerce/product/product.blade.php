@@ -18,13 +18,14 @@
 	}
 
 	$breadcrumbs['#'] = $product->name;
+
 	@endphp
 
 	<div class="container">
 
-		@include('layouts.breadcrumbs', [ 'breadcrumbs' => $breadcrumbs ])
+		@include('factotum::layouts.breadcrumbs', [ 'breadcrumbs' => $breadcrumbs ])
 
-		@include('partials.socials', [ 'title' => $product->name, 'url' => url()->current() ])
+		@include('factotum::partials.socials', [ 'title' => $product->name, 'url' => url()->current() ])
 
 		<div class="row clearfix">
 
@@ -32,7 +33,7 @@
 
 				<div class="img-container">
 					@if ( $product->image )
-						<img src="{{ $product->image }}" alt="{{ $product->name }}" class="img-responsive">
+						<img src="{{ $product->image['thumb'] }}" alt="{{ $product->name }}" class="img-responsive">
 					@else
 						<img src="/assets/media/img/product-placeholder.jpg" alt="{{ $product->name }}" class="img-responsive placeholder">
 					@endif
@@ -54,7 +55,7 @@
 					@endif
 				</ul>
 
-				<p>{{ $product->description }}</p>
+				{!! $product->description !!}
 
 				<div class="prices">
 					@if ( $product['discount_price'] != '' && $product['discount_price'] != 0 )

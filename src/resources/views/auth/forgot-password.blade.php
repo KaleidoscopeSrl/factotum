@@ -19,12 +19,6 @@
 
 					<h3>Recupera Password</h3>
 
-					@if (session('status'))
-						<div class="alert alert-success" role="alert">
-							@lang( 'factotum::auth.' . session('status') )
-						</div>
-					@endif
-
 					<form method="POST" action="/auth/send-reset-email">
 						@csrf
 

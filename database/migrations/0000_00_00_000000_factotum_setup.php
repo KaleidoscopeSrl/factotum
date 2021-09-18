@@ -163,7 +163,7 @@ class FactotumSetup extends Migration
 			$table->boolean('show_in_menu');
 			$table->boolean('is_home')->default(false)->nullable(true);
 			$table->integer('order_no')->nullable(true);
-			$table->string('seo_title', 60)->nullable(true);
+			$table->string('seo_title', 70)->nullable(true);
 			$table->text('seo_description')->nullable(true);
 			$table->string('seo_canonical_url', 255)->nullable(true);
 			$table->string('seo_robots_indexing', 10)->default('index')->nullable(true);
@@ -190,7 +190,7 @@ class FactotumSetup extends Migration
 			$table->string('lang', 5);
 			$table->integer('order_no')->nullable(true);
 
-			$table->string('seo_title', 60)->nullable(true);
+			$table->string('seo_title', 70)->nullable(true);
 			$table->text('seo_description')->nullable(true);
 			$table->string('seo_canonical_url', 255)->nullable(true);
 			$table->string('seo_robots_indexing', 10)->default('index')->nullable(true);

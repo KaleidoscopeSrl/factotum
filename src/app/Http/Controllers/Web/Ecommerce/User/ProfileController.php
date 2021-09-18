@@ -100,11 +100,12 @@ class ProfileController extends Controller
 					$customerAddress->type        = $type;
 				}
 	
-				$customerAddress->address  = $data['address'];
-				$customerAddress->zip      = $data['zip'];
-				$customerAddress->city     = $data['city'];
-				$customerAddress->province = $data['province'];
-				$customerAddress->country  = $data['country'];
+				$customerAddress->address         = $data['address'];
+				$customerAddress->address_line_2  = $data['address_line_2'];
+				$customerAddress->zip             = $data['zip'];
+				$customerAddress->city            = $data['city'];
+				$customerAddress->province        = $data['province'];
+				$customerAddress->country         = $data['country'];
 				$customerAddress->save();
 	
 				session()->flash( 'message', Lang::get('factotum::ecommerce_user.customer_address_saved') );

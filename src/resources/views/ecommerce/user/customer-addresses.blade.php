@@ -51,6 +51,10 @@
 											<span>{{ $d->address }}</span><br>
 											@endif
 
+											@if ( $d->address_line_2 != '' )
+												<span>{{ $d->address_line_2 }}</span><br>
+											@endif
+
 											@if ( $d->zip != '' && $d->city != '' )
 											<span>{{ $d->zip }} - {{ $d->city }}</span><br>
 											@endif
@@ -123,6 +127,10 @@
 
 												@if ( $i->address != '' )
 													<span>{{ $i->address }}</span><br>
+												@endif
+
+												@if ( $i->address_line_2 != '' )
+													<span>{{ $i->address_line_2 }}</span><br>
 												@endif
 
 												@if ( $i->zip != '' && $i->city != '' )

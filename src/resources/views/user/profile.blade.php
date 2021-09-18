@@ -19,12 +19,16 @@
 
 						<h3>Il tuo profilo</h3>
 
-						@if ( isset($completeProfile) )
+						@if ( isset($completeProfile) && $completeProfile )
 							<h2 class="red">@lang('factotum::user.should_complete_profile')</h2>
 						@endif
 
 						<form method="POST" action="/user/profile" class="container-fluid col-no-pl col-no-pr">
 							@csrf
+
+							@if ( isset($completeProfile) && $completeProfile )
+								<input type="hidden" name="complete_profile" value="1">
+							@endif
 
 							<div class="row clearfix">
 								<div class="col col-xs-12 col-md-6">

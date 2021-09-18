@@ -14,6 +14,9 @@ class ReadController extends ApiBaseController
 {
 	use EcommerceUtils;
 
+
+	// TODO: UPDATE carts SET edited = 1 WHERE id IN ( SELECT id FROM `carts` WHERE id IN (SELECT cart_id FROM cart_product ) )
+
     public function getListPaginated( Request $request )
     {
 		$limit     = $request->input('limit');
@@ -32,15 +35,16 @@ class ReadController extends ApiBaseController
 		}
 
 		$query = Cart::withTrashed();
-		$query->selectRaw('carts.*, first_name, last_name, company_name');
+		$query->selectRaw('carts.*, first_name, last_name, companies.name');
 		$query->join('users', 'users.id', '=', 'carts.customer_id');
 		$query->join('profiles', 'profiles.user_id', '=', 'users.id');
+
+		$query->where( 'edited', true );
 
 		if ( isset($filters) && count($filters) > 0 ) {
 			if ( isset($filters['term']) && strlen($filters['term']) > 0 ) {
 				$query->orWhereRaw( 'LCASE(first_name) like "%' . $filters['term'] . '%"' );
 				$query->orWhereRaw( 'LCASE(last_name) like "%' . $filters['term'] . '%"' );
-				$query->orWhereRaw( 'LCASE(company_name) like "%' . $filters['term'] . '%"' );
 			}
 		}
 
@@ -48,12 +52,12 @@ class ReadController extends ApiBaseController
 
 			$query->orderBy('last_name', $direction);
 			$query->orderBy('first_name', $direction);
-			$query->orderBy('company_name', $direction);
 
 		} else {
 			$query->orderBy($sort, $direction);
 		}
 
+		$total = $query->count();
 
         if ( $limit ) {
 			$query->take($limit);
@@ -70,7 +74,8 @@ class ReadController extends ApiBaseController
 				$cart->totals = $this->_getCartTotals( $cart );
 			}
 		}
-        return response()->json( [ 'result' => 'ok', 'carts' => $carts, 'total' => Cart::count() ]);
+
+        return response()->json( [ 'result' => 'ok', 'carts' => $carts, 'total' => $total ]);
     }
 
 

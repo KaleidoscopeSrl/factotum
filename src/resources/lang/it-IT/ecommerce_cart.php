@@ -20,5 +20,7 @@ return [
 	'discount_code_form_placeholder'      => 'Codice Sconto',
 	'discount_code_form_apply_cta_label'  => 'Applica',
 	'discount_code_form_remove_cta_label' => 'Rimuovi',
-	'discount_code_valid'                 => 'Valido'
+	'discount_code_valid'                 => 'Valido',
+	'discount_code_already_used'          => 'Codice Sconto già usato.',
+
 ];

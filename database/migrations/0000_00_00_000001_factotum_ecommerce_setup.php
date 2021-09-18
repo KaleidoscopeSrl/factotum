@@ -23,7 +23,7 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('name', 50);
 			$table->string('url', 255);
 			$table->string('abs_url', 255);
-			$table->string('seo_title', 60);
+			$table->string('seo_title', 70);
 			$table->text('seo_description');
 
 			$table->bigInteger('logo')->unsigned()->nullable();
@@ -65,7 +65,7 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->integer('order_no')->nullable(true);
 
-			$table->string('seo_title', 60)->nullable(true);
+			$table->string('seo_title', 70)->nullable(true);
 			$table->text('seo_description')->nullable(true);
 			$table->string('seo_canonical_url', 255)->nullable(true);
 			$table->string('seo_robots_indexing', 10)->default('index')->nullable(true);
@@ -118,7 +118,7 @@ class FactotumEcommerceSetup extends Migration
 
 			$table->integer('order_no')->nullable(true);
 
-			$table->string('seo_title', 60)->nullable(true);
+			$table->string('seo_title', 70)->nullable(true);
 			$table->text('seo_description')->nullable(true);
 			$table->string('seo_canonical_url', 255)->nullable(true);
 			$table->string('seo_robots_indexing', 10)->default('index')->nullable(true);
@@ -194,6 +194,8 @@ class FactotumEcommerceSetup extends Migration
 			$table->string('payment_type', 64)->nullable();
 			$table->string('paypal_order_id', 128)->nullable();
 			$table->string('stripe_intent_id', 128)->nullable();
+
+			$table->boolean('edited')->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();

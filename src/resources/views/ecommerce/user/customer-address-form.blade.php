@@ -25,11 +25,13 @@
 							  class="container-fluid col-no-pl col-no-pr">
 							@csrf
 
+							<small>* campi obbligatori</small>
+
 							<div class="row clearfix">
 								<div class="col col-xs-12 col-md-6">
 
 									<div class="field">
-										<label for="address">Indirizzo</label>
+										<label for="address">Indirizzo *</label>
 
 										<input id="address" type="text"
 											   value="@if( isset($address) ){{ $address->address }}@endif"
@@ -42,10 +44,30 @@
 									</div>
 
 								</div>
+								<div class="col col-xs-12 col-md-6">
+
+									<div class="field">
+										<label for="address_line_2">Ragione Sociale / Riferimento</label>
+
+										<input id="address_line_2" type="text"
+											   value="@if( isset($address) ){{ $address->address_line_2 }}@endif"
+											   class="form-control @error('address_line_2') is-invalid @enderror" name="address_line_2"
+											   required autofocus>
+
+										@error('address_line_2')
+										<p class="error" role="alert">{{ $message }}</p>
+										@enderror
+									</div>
+
+								</div>
+							</div>
+
+							<div class="row clearfix">
+
 								<div class="col col-xs-12 col-md-2">
 
 									<div class="field">
-										<label for="zip">CAP</label>
+										<label for="zip">CAP *</label>
 
 										<input id="zip" type="text"
 											   maxlength="7"
@@ -59,10 +81,11 @@
 									</div>
 
 								</div>
+
 								<div class="col col-xs-12 col-md-4">
 
 									<div class="field">
-										<label for="city">Città</label>
+										<label for="city">Città *</label>
 
 										<input id="city" type="text"
 											   value="@if( isset($address) ){{ $address->city }}@endif"
@@ -75,11 +98,8 @@
 									</div>
 
 								</div>
-							</div>
 
-
-							<div class="row clearfix">
-								<div class="col col-xs-12 col-md-6">
+								<div class="col col-xs-12 col-md-3">
 
 									<div class="field">
 										<label for="prov">Provincia *</label>
@@ -94,10 +114,11 @@
 									</div>
 
 								</div>
-								<div class="col col-xs-12 col-md-6">
+
+								<div class="col col-xs-12 col-md-3">
 
 									<div class="field">
-										<label for="country">Nazione</label>
+										<label for="country">Nazione *</label>
 
 										@php $countries = \Kaleidoscope\Factotum\Library\Utility::getCountries(); @endphp
 
@@ -116,8 +137,8 @@
 									</div>
 
 								</div>
-							</div>
 
+							</div>
 
 							<div class="row clearfix">
 								<div class="col col-xs-12">

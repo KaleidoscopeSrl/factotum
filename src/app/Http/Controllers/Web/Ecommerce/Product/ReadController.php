@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Lang;
 
 use Kaleidoscope\Factotum\Http\Controllers\Web\Controller as Controller;
 use Kaleidoscope\Factotum\Http\Requests\SearchProduct;
+use Kaleidoscope\Factotum\Library\Utility;
 use Kaleidoscope\Factotum\Models\Product;
 use Kaleidoscope\Factotum\Models\ProductCategory;
 
@@ -23,7 +24,11 @@ class ReadController extends Controller
         if ( $product ) {
 			$product->load([ 'brand', 'product_categories', 'tax' ]);
 
-			$categories = array_reverse( $product->product_categories() );
+	        $categories = $product->product_categories;
+
+			if ( $categories ) {
+				$categories = array_reverse( $categories->toArray() );
+			}
 
 			$view = 'factotum::ecommerce.product.product';
 			if ( file_exists( resource_path('views/ecommerce/product/product.blade.php') ) ) {

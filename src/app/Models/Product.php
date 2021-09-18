@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-use Kaleidoscope\Factotum\Library\Utility;
 
 
 class Product extends Model

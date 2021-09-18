@@ -617,17 +617,19 @@ trait EcommerceUtils
 
 				$order->phone = $user->profile->phone;
 
-				$order->delivery_address  = $deliveryAddress->address;
-				$order->delivery_city     = $deliveryAddress->city;
-				$order->delivery_zip      = $deliveryAddress->zip;
-				$order->delivery_province = $deliveryAddress->province;
-				$order->delivery_country  = $deliveryAddress->country;
+				$order->delivery_address        = $deliveryAddress->address;
+				$order->delivery_address_line_2 = $deliveryAddress->address_line_2;
+				$order->delivery_city           = $deliveryAddress->city;
+				$order->delivery_zip            = $deliveryAddress->zip;
+				$order->delivery_province       = $deliveryAddress->province;
+				$order->delivery_country        = $deliveryAddress->country;
 
-				$order->invoice_address  = $invoiceAddress->address;
-				$order->invoice_city     = $invoiceAddress->city;
-				$order->invoice_zip      = $invoiceAddress->zip;
-				$order->invoice_province = $invoiceAddress->province;
-				$order->invoice_country  = $invoiceAddress->country;
+				$order->invoice_address         = $invoiceAddress->address;
+				$order->invoice_address_line_2  = $invoiceAddress->address_line_2;
+				$order->invoice_city            = $invoiceAddress->city;
+				$order->invoice_zip             = $invoiceAddress->zip;
+				$order->invoice_province        = $invoiceAddress->province;
+				$order->invoice_country         = $invoiceAddress->country;
 
 				$order->notes = $cart->notes;
 
@@ -754,7 +756,10 @@ trait EcommerceUtils
 
 		$productCart->save();
 
-		$cart   = $this->_getCart();
+		$cart = $this->_getCart();
+		$cart->edited = true;
+		$cart->save();
+
 		$totals = $this->_getCartTotals( $cart );
 
 		return [

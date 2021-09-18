@@ -24,7 +24,8 @@ class AuthController extends Controller
 	use AuthenticatesUsers;
 
 	use EcommerceUtils;
-	
+
+
 	public function redirectTo()
 	{
 		return '/auth/login';
@@ -50,8 +51,8 @@ class AuthController extends Controller
 						]
 					]);
 	}
-	
-	
+
+
 	public function showEmailNotVerified( Request $request )
 	{
 

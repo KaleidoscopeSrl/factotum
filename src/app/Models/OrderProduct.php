@@ -30,7 +30,7 @@ class OrderProduct extends Model
 
 
 	public function product() {
-		return $this->hasOne('Kaleidoscope\Factotum\Models\Product', 'id', 'product_id');
+		return $this->hasOne('Kaleidoscope\Factotum\Models\Product', 'id', 'product_id')->withTrashed();
 	}
 
 	public function product_variant() {

@@ -20,6 +20,7 @@ return [
 	'discount_code_form_placeholder'      => 'Coupon Code',
 	'discount_code_form_apply_cta_label'  => 'apply',
 	'discount_code_form_remove_cta_label' => 'Remove',
-	'discount_code_valid'                 => 'Valid!'
+	'discount_code_valid'                 => 'Valid!',
+	'discount_code_already_used'          => 'Discount Code already used.',
 
 ];
