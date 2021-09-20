@@ -75,18 +75,30 @@ class KaleidoscopeTestCase extends TestCase
 	];
 
 
-	protected $userStructure = [
+	protected $profileStructure = [
 		'id',
 		'first_name',
 		'last_name',
-		'email',
-		'email_verified_at',
 		'phone',
-		'enabled',
-		'role',
+		'user_id',
+		'privacy',
+		'newsletter',
 		'created_at',
 		'updated_at'
 	];
+
+
+	protected $userStructure = [
+		'id',
+		'email',
+		'email_verified_at',
+		'role_id',
+		'editable',
+		'avatar',
+		'created_at',
+		'updated_at'
+	];
+
 
 
 	public function __construct( $name = null, array $data = [], $dataName = '' )

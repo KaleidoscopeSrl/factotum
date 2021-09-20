@@ -40,40 +40,43 @@ class UserTest extends KaleidoscopeTestCase
     }
 
 
-//	public function testPaginated()
-//	{
-//		$uri = $this->baseApiUrl . '/user/paginated';
-//
-//		$response = $this->getJson( $uri );
-//
-//		$this->checkResponse( $response, $uri );
-//
-//		$response
-//			->assertStatus(200)
-//			->assertJsonStructure([
-//				'result',
-//				'data' => $this->paginateStructure
-//			]);
-//	}
-//
-//
-//	public function testSingle()
-//	{
-//		$user = $this->repository->latest();
-//		$uri  = $this->baseApiUrl . '/user/single/' . $user->id;
-//
-//		$response = $this->getJson( $uri );
-//
-//		$this->checkResponse( $response, $uri );
-//
-//		$response
-//			->assertStatus(200)
-//			->assertJsonStructure([
-//				'result',
-//				'data' => $this->userStructure
-//			]);
-//	}
-//
+	public function testPaginated()
+	{
+		$uri = $this->baseApiUrl . '/user/paginated';
+
+		$response = $this->getJson( $uri );
+
+		$this->checkResponse( $response, $uri );
+
+		$response
+			->assertStatus(200)
+			->assertJsonStructure([
+				'result',
+				'data' => $this->paginateStructure
+			]);
+	}
+
+
+	public function testSingle()
+	{
+		$user = $this->repository->latest();
+		$uri  = $this->baseApiUrl . '/user/single/' . $user->id . '?relations=profile';
+
+		$response = $this->getJson( $uri );
+
+		echo '<pre>';
+		print_r($response);die;
+
+		$this->checkResponse( $response, $uri );
+
+		$response
+			->assertStatus(200)
+			->assertJsonStructure([
+				'result',
+				'data' => $this->userStructure
+			]);
+	}
+
 //
 //	public function testCreated()
 //	{
