@@ -1,0 +1,15 @@
+{
+	"result": "ok",
+	"data": {
+		"id": 117,
+		"first_name": "test",
+		"last_name": "test",
+		"email": "fmatteoriggio+test2@gmail.com",
+		"email_verified_at": null,
+		"phone": "12345678",
+		"enabled": 1,
+		"role": "admin",
+		"created_at": "2021-09-03T15:05:50.000000Z",
+		"updated_at": "2021-09-03T15:05:50.000000Z"
+	}
+}

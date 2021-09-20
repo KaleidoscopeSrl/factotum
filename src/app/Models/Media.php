@@ -10,29 +10,31 @@ use Image;
 
 use Kaleidoscope\Factotum\Library\Utility;
 
+
 class Media extends Model
 {
 
 	protected $fillable = [
+		'filename',
+		'filename_webp',
+		'thumb',
+		'thumb_webp',
+		'url',
+		'url_webp',
 		'user_id',
+		'mime_type',
 		'width',
 		'height',
 		'size',
-		'filename',
-		'thumb',
-		'url',
-		'filename_webp',
-		'thumb_webp',
-		'url_webp',
 		'caption',
 		'alt_text',
 		'description',
-		'mime_type'
 	];
 
 	protected $appends = ['icon'];
 
 
+	// TODO: spostare su repository
 	public static function filenameAvailable($filename, $origFilename = null, $counter = '')
 	{
 		$filename = str_replace('.jpeg', '.jpg', $filename);
@@ -64,6 +66,7 @@ class Media extends Model
 	}
 
 
+	// TODO: spostare su repository
 	public static function checkImageSizesNotExist( $field, $media )
 	{
 		$origImage    = Image::make( $media->url );
@@ -87,6 +90,7 @@ class Media extends Model
 	}
 
 
+	// TODO: spostare su repository
 	public static function retrieve( $mediaId, $fieldModel )
 	{
 		if ( !is_array($mediaId) ) {
@@ -121,6 +125,7 @@ class Media extends Model
 	}
 
 
+	// TODO: spostare su repository
 	// Dato un Campo e un MediaId, eseguo la funzione saveImage per quell'immagine
 	public static function saveImageById( $field, $mediaId )
 	{
@@ -134,6 +139,7 @@ class Media extends Model
 	}
 
 
+	// TODO: spostare su repository
 	// Dato un Campo e un MediaUrl, eseguo tutte le operazioni creazioni crop/resize/fit per quell'immagine
 	public static function saveImage( $field, $media )
 	{
@@ -189,6 +195,7 @@ class Media extends Model
 	}
 
 
+	// TODO: spostare su repository
 	public static function generateSize( $media, $resize )
 	{
 		$width  = $resize['w'];
@@ -206,6 +213,7 @@ class Media extends Model
 	}
 
 
+	// TODO: spostare su repository
 	public static function generateThumb( $media )
 	{
 		if ( File::exists( storage_path( 'app/public/media/' . $media->id . '/' . $media->filename ) ) ) {
@@ -246,7 +254,7 @@ class Media extends Model
 
 
 	// MUTATORS
-
+	// TODO: spostare su repository
 	public function getUrlAttribute($value)
 	{
 		return ( $value ? url( $value ) : null );

@@ -1,0 +1,23 @@
+{
+    "name": "kaleidoscope/factotum-cms",
+    "description": "",
+    "authors": [
+        {
+            "name": "Filippo Matteo Riggio",
+            "email": "filippo@kaleidoscope.it"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Kaleidoscope\\Factotum\\Modules\\Cms\\": ""
+        }
+    }
+}

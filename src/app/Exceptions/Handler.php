@@ -2,117 +2,103 @@
 
 namespace Kaleidoscope\Factotum\Exceptions;
 
-use Exception;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\UnauthorizedException;
+use Illuminate\Validation\ValidationException as IlluminateValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
-use Symfony\Component\Debug\Exception\FlattenException;
-use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
-use Illuminate\Support\Facades\Mail;
+use Kaleidoscope\Factotum\Http\Core\ApiResponse;
 
 
 class Handler extends ExceptionHandler
 {
 	/**
-	 * A list of the exception types that are not reported.
-	 *
-	 * @var array
+	 * @var ApiResponse
 	 */
-	protected $dontReport = [
-		//
-	];
+	protected $response;
 
 	/**
-	 * A list of the inputs that are never flashed for validation exceptions.
-	 *
-	 * @var array
+	 * Handler constructor.
+	 * @param Container $container
+	 * @param ApiResponse $response
 	 */
-	protected $dontFlash = [
-		'password',
-		'password_confirmation',
-	];
-
-	/**
-	 * Report or log an exception.
-	 *
-	 * @param  \Exception  $exception
-	 * @return void
-	 */
-	public function report(Exception $exception)
+	public function __construct(
+		Container $container,
+		ApiResponse $response
+	)
 	{
-//		if ( $this->shouldReport($exception) && env('APP_ENV') == 'production' ) {
-//			$this->sendEmail($exception);
-//		}
+		parent::__construct($container);
 
-		parent::report($exception);
+		$this->response = $response;
 	}
 
 	/**
-	 * Render an exception into an HTTP response.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Exception  $exception
-	 * @return \Illuminate\Http\Response
+     * A list of the exception types that are not reported.
+     *
+     * @var array
+     */
+    protected $dontReport = [
+        //
+    ];
+
+    /**
+     * A list of the inputs that are never flashed for validation exceptions.
+     *
+     * @var array
+     */
+    protected $dontFlash = [
+        'current_password',
+        'password',
+        'password_confirmation',
+    ];
+
+    /**
+     * Register the exception handling callbacks for the application.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->reportable(function (Throwable $e) {
+
+	        if (app()->bound('sentry') && $this->shouldReport($e)) {
+		        app('sentry')->captureException($e);
+	        }
+
+        });
+    }
+
+	/**
+	 * @param \Illuminate\Http\Request $request
+	 * @param Throwable $e
+	 * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+	 * @throws Throwable
 	 */
-	public function render($request, Exception $exception)
-	{
-		if ( $request->expectsJson() ) {
+    public function render($request, Throwable $e)
+    {
+	    if (config('app.debug')) {
+	    	return parent::render($request, $e);
+	    }
 
-			if ( $exception instanceof ValidationException) {
-				$errors  = $exception->validator->getMessageBag()->getMessages();
-				$message = array_first( $errors )[0];
+	    if ($e instanceof IlluminateValidationException) {
+		    return $this->response->exception(new ValidationException($e->validator));
+	    }
 
-				return response()->json( [
-					'result'  => 'ko',
-					'message' => $message,
-					'errors'  => $errors
-				], 422 );
-			}
+	    if ($e instanceof UnauthorizedException) {
+		    return $this->response->exception(new AccessDeniedException($e->getMessage()));
+	    }
 
-			return response()->json( [
-				'result'  => 'ko',
-				'message' => $exception->getMessage(),
-				'errors'  => [
-					'error' => [ $exception->getTrace() ],
-					'file'  => [ 'Error on file: ' . $exception->getFile() ],
-					'line'  => [ 'Error @line : ' . $exception->getLine() ],
-				]
-			], 422 );
+	    if ($e instanceof NotFoundHttpException) {
+		    return $this->response->exception(new NotFoundException());
+	    }
 
-		}
+	    if ($e instanceof ModelNotFoundException) {
+		    return $this->response->exception(new NotFoundException());
+	    }
 
-		return parent::render($request, $exception);
-	}
-
-	protected function unauthenticated($request, AuthenticationException $exception)
-	{
-		if ( $request->expectsJson() ) {
-			return response()->json([ 'result' => 'ko', 'error' => 'Non autorizzato.'], 401);
-		}
-
-		return response('Unauthenticated.', 401);
-	}
-
-
-	public function sendEmail(Exception $exception)
-	{
-		try {
-
-			$e = FlattenException::create($exception);
-
-			$handler = new SymfonyExceptionHandler();
-
-			$html = $handler->getHtml($e);
-
-			Mail::to('fmatteoriggio@gmail.com')
-				->cc('mguarino129@gmail.com')
-				->send(new ExceptionOccured($html));
-
-		} catch (Exception $ex) {
-
-			dd($ex);
-
-		}
-	}
+	    return $this->response->exception(new BadRequestException($e->getMessage()));
+    }
 }

@@ -1,0 +1,15 @@
+{
+	"result": "ok",
+	"data": [{
+		"id": 1,
+		"first_name": "Filippo",
+		"last_name": "Riggio",
+		"email": "filippo@kaleidoscope.it",
+		"email_verified_at": null,
+		"phone": "12341234",
+		"enabled": 1,
+		"role": "admin",
+		"created_at": null,
+		"updated_at": "2021-09-03T08:12:32.000000Z"
+	}]
+}

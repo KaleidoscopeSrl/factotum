@@ -11,35 +11,63 @@
         }
     ],
     "require": {
-		"php": "^7.3|^8.0",
+		"php": "^7.4|^8.0",
 		"ext-curl": "*",
 		"ext-json": "*",
 		"doctrine/dbal": "~2.3",
-        "intervention/image": "^2.4.2",
-        "barryvdh/laravel-debugbar": "^3.1.5",
-        "laravel/framework": "8.*",
-		"laravel/ui": "^2.1",
+		"fideloper/proxy": "^4.4",
+		"fruitcake/laravel-cors": "^2.0",
+		"guzzlehttp/guzzle": "^7.0.1",
+		"intervention/httpauth": "^3.0",
+		"intervention/image": "^2.5",
+		"laravel/framework": "8.*",
+        "barryvdh/laravel-debugbar": "3.*",
+		"laravel/horizon": "^5.7",
+		"laravel/sanctum": "^2.11.2",
+		"predis/predis": "^1.1",
+		"sentry/sentry-laravel": "^2.3",
         "spatie/laravel-sitemap": "^5.7",
-        "stripe/stripe-php": "^7.37"
+        "stripe/stripe-php": "^7.37",
+		"nwidart/laravel-modules": "^8.2",
+		"rap2hpoutre/laravel-log-viewer": "^1.7",
+		"knuckleswtf/scribe": "^3.10"
     },
+	"require-dev": {
+		"facade/ignition": "^2.5",
+		"fakerphp/faker": "^1.9.1",
+		"mockery/mockery": "^1.4.2",
+		"nunomaduro/collision": "^5.0",
+		"orchestra/testbench": "^6.21",
+		"phpunit/phpunit": "^9.5"
+	},
     "autoload": {
         "classmap": [
             "database",
-            "src",
             "src/app",
             "src/app/Console",
             "src/app/Console/Commands",
             "src/app/Observers"
         ],
         "psr-4": {
-            "Kaleidoscope\\Factotum\\":  "src",
-			"Kaleidoscope\\Factotum\\Seeds\\":  "database/seeds"
-        },
-        "files": [
-            "src/app/Library/ContentSearch.php",
-            "src/app/Library/ContentListParser.php",
-            "src/app/Library/Utility.php"
-        ]
+			"Kaleidoscope\\Factotum\\":  "src",
+			"Kaleidoscope\\Factotum\\Models\\":  "src/app/Models",
+			"Kaleidoscope\\Factotum\\Modules\\": "src/Modules/",
+			"Kaleidoscope\\Factotum\\Providers\\": "src/app/Providers",
+			"Kaleidoscope\\Factotum\\Seeds\\": "database/seeds"
+		},
+        "files": []
     },
-    "minimum-stability": "dev"
+	"autoload-dev": {
+		"psr-4": {
+			"Kaleidoscope\\Factotum\\Tests\\": "tests"
+		}
+	},
+    "minimum-stability": "dev",
+	"scripts": {
+		"post-autoload-dump": [
+			"@php ./vendor/bin/testbench package:discover --ansi"
+		],
+		"test": "vendor/bin/phpunit",
+		"test-f": "vendor/bin/phpunit --filter"
+	}
 }

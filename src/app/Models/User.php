@@ -2,37 +2,84 @@
 
 namespace Kaleidoscope\Factotum\Models;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
-use Image;
+use Illuminate\Notifications\Notifiable;
 
 use Kaleidoscope\Factotum\Notifications\ResetPasswordNotification;
 use Kaleidoscope\Factotum\Notifications\VerifyEmailNotification;
+use Laravel\Sanctum\HasApiTokens;
 
 
+/**
+ * Class User
+ * @package Kaleidoscope\Factotum\Models
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
-
-	use Notifiable;
-	use HasApiTokens;
+    use HasApiTokens, HasFactory, Notifiable;
 
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'email',
-		'password',
-		'role_id',
-		'avatar',
-		'url'
+	    'email',
+	    'email_verified_at',
+	    'password',
+	    'role_id',
+	    'editable',
+	    'avatar',
+	    'editable',
     ];
 
-	protected $hidden = [
-		'password',
-		'remember_token',
-		'updated_at',
-		'deleted_at'
-	];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+	public function profile() {
+		return $this->hasOne(Profile::class );
+	}
+
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+	public function role() {
+		return $this->hasOne( Role::class, 'id', 'role_id');
+	}
+
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+	public function avatar() {
+		return $this->hasOne(Media::class, 'id', 'avatar');
+	}
+
 
 
 	public function sendPasswordResetNotification($token)
@@ -44,62 +91,6 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function sendEmailVerificationNotification()
 	{
 		$this->notify(new VerifyEmailNotification);
-	}
-
-
-	public function profile() {
-		return $this->hasOne('Kaleidoscope\Factotum\Models\Profile');
-	}
-
-
-	public function role() {
-		return $this->hasOne('Kaleidoscope\Factotum\Models\Role', 'id', 'role_id');
-	}
-
-
-	public function avatar() {
-		return $this->hasOne('Kaleidoscope\Factotum\Models\Media', 'id', 'avatar');
-	}
-
-
-	public function isAdmin()
-	{
-		return ($this->role->role == 'admin' ? true : false);
-	}
-
-	public function isProfileComplete()
-	{
-		if ( !$this->profile->phone || !$this->profile->privacy || ( env('FACTOTUM_ECOMMERCE_INSTALLED') && !$this->profile->terms_conditions ) ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	public function canConfigure($contentTypeID)
-	{
-		$capability = Capability::where('role_id', $this->role_id)
-								->where('content_type_id', $contentTypeID)
-								->first();
-		return ($capability && $capability->configure ? true : false);
-	}
-
-
-	public function canEdit($contentTypeID)
-	{
-		$capability = Capability::where('role_id', $this->role_id)
-								->where('content_type_id', $contentTypeID)
-								->first();
-		return ($capability && $capability->edit ? true : false);
-	}
-
-
-	public function canPublish($contentTypeID)
-	{
-		$capability = Capability::where('role_id', $this->role_id)
-								->where('content_type_id', $contentTypeID)
-								->first();
-		return ($capability && $capability->publish ? true : false);
 	}
 
 }

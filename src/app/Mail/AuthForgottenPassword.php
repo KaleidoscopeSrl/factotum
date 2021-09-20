@@ -5,6 +5,7 @@ namespace Kaleidoscope\Factotum\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 use Kaleidoscope\Factotum\Models\User;
 
@@ -13,13 +14,9 @@ class AuthForgottenPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
-	public $user, $password;
+	public $user;
+	public $password;
 
-	/**
-	 * Create a new message instance.
-	 *
-	 * @return void
-	 */
 	public function __construct(User $user, $password)
 	{
 		$this->user     = $user;
@@ -33,13 +30,16 @@ class AuthForgottenPassword extends Mailable
      */
     public function build()
     {
-		$subject = 'Factotum - Recupero Password';
+	    $subject          = '[' . config('app.name') . '] - Recupero Password';
+	    $data['title']    = 'Recupero Password';
+	    $data['user']     = $this->user;
+	    $data['password'] = $this->password;
 
-		return $this->subject($subject)
-					->markdown('email.auth.forgotten_password', [
-						'demTitle' => 'Factotum - Recupero Password'
-					]);
+        return $this->from( config('mail.from.address'), config('mail.from.name') )
+	                ->subject($subject)
+	                ->markdown( 'emails.auth.forgotten_password', $data );
     }
 }
+
 
 

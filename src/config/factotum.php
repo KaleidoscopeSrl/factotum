@@ -2,6 +2,8 @@
 
 return [
 
+	// TODO: spostare le varie sezioni nel singolo modulo
+
 	// TODO: Aggiungere colonne non nominabili per ecommerce e modulo campagne
 
 	'prohibited_content_types' => [
@@ -185,8 +187,6 @@ return [
 	'invoice_start_number'   => 60,
 	'invoice_logo'           => '/assets/media/img/invoice-logo.png',
 
-
-
-	'version' => '6.0.10',
+	'version' => '7.0.0',
 
 ];

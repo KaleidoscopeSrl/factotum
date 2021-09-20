@@ -42,8 +42,9 @@ return [
         ],
 
         'api' => [
-            'driver'   => 'passport',
-            'provider' => 'users',
+	        'driver'   => 'session',
+	        'provider' => 'users',
+	        'hash'     => false,
         ],
     ],
 
@@ -67,7 +68,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model'  => Kaleidoscope\Factotum\User::class,
+            'model'  => Kaleidoscope\Factotum\Models\User::class,
         ],
 
         // 'users' => [

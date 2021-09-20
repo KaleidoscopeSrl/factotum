@@ -1,0 +1,13 @@
+{
+    "name": "Cms",
+    "alias": "cms",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Kaleidoscope\\Factotum\\Modules\\Cms\\Providers\\CmsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
