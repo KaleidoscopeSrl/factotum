@@ -3,7 +3,6 @@
 namespace Kaleidoscope\Factotum\Tests;
 
 
-use Kaleidoscope\Factotum\Models\Role;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
@@ -13,7 +12,11 @@ use Laravel\Sanctum\Sanctum;
 use Kaleidoscope\Factotum\FactotumServiceProvider;
 
 use Kaleidoscope\Factotum\Database\Factories\UserFactory;
+use Kaleidoscope\Factotum\Database\Factories\ProfileFactory;
+
 use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Models\Role;
+
 use Kaleidoscope\Factotum\Repositories\UserRepository;
 
 
@@ -110,6 +113,8 @@ class KaleidoscopeTestCase extends TestCase
 		if ( !$this->userRepository ) {
 			$this->userRepository = app()->make( UserRepository::class );
 		}
+
+		$this->userStructure['profile'] = $this->profileStructure;
 	}
 
 
@@ -146,7 +151,9 @@ class KaleidoscopeTestCase extends TestCase
 	protected function generateUserData()
 	{
 		$uF = new UserFactory();
-		return $uF->definition();
+		$pF = new ProfileFactory();
+
+		return array_merge( $uF->definition(), $pF->definition() );
 	}
 
 

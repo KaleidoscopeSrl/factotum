@@ -3,7 +3,9 @@
 namespace Kaleidoscope\Factotum\Tests\Feature;
 
 use Kaleidoscope\Factotum\Repositories\UserRepository;
+
 use Kaleidoscope\Factotum\Tests\KaleidoscopeTestCase;
+
 
 class UserTest extends KaleidoscopeTestCase
 {
@@ -60,12 +62,9 @@ class UserTest extends KaleidoscopeTestCase
 	public function testSingle()
 	{
 		$user = $this->repository->latest();
-		$uri  = $this->baseApiUrl . '/user/single/' . $user->id . '?relations=profile';
+		$uri  = $this->baseApiUrl . '/user/single/' . $user->id;
 
 		$response = $this->getJson( $uri );
-
-		echo '<pre>';
-		print_r($response);die;
 
 		$this->checkResponse( $response, $uri );
 
@@ -77,23 +76,24 @@ class UserTest extends KaleidoscopeTestCase
 			]);
 	}
 
-//
-//	public function testCreated()
-//	{
-//		$data = $this->generateUserData();
-//		$uri  = $this->baseApiUrl . '/user/create';
-//
-//		$response = $this->postJson($uri, $data);
-//
-//		$this->checkResponse( $response, $uri );
-//
-//		$response
-//			->assertStatus(200)
-//			->assertJsonStructure([
-//				'result',
-//				'data' => $this->userStructure
-//			]);
-//	}
+
+	public function testCreated()
+	{
+		$data = $this->generateUserData();
+		$uri  = $this->baseApiUrl . '/user/create';
+
+		dd($data);
+		$response = $this->postJson($uri, $data);
+
+		$this->checkResponse( $response, $uri );
+
+		$response
+			->assertStatus(200)
+			->assertJsonStructure([
+				'result',
+				'data' => $this->userStructure
+			]);
+	}
 //
 //
 //	public function testUpdated()

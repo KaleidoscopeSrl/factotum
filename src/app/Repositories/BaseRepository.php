@@ -128,7 +128,7 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	public function findOnlyTrashedById(int $id): ?Model
 	{
 		return $this->model->onlyTrashed()
-			->findOrFail($id);
+							->findOrFail($id);
 	}
 
 	/**

@@ -31,6 +31,14 @@ class UserService extends BaseService
 	}
 
 
+	public function single($id, array $data = [])
+	{
+		return parent::single( $id, [
+			'relations' => [ 'profile' ]
+		]);
+	}
+
+
 	public function forgotPassword( $email )
 	{
 		$user = $this->repository->getByEmail( $email );
