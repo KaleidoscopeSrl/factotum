@@ -25,16 +25,15 @@ class MediaFactory extends Factory
      */
     public function definition()
     {
-	    $user = User::factory()->make();
-	    $user->save();
+	    $user = User::first();
 
         return [
 	        'user_id'        => $user->id,
-	        'filename'       => $this->faker->word() . '.jpg',
-	        'filename_webp'  => $this->faker->word() . '.webp',
+	        'filename'       => $this->faker->word() . rand(0, 1000) . '.jpg',
+	        'filename_webp'  => $this->faker->word() . rand(0, 1000) . '.webp',
 
-	        'thumb'          => $this->faker->word() . '_thumb.jpg',
-	        'thumb_webp'     => $this->faker->word() . '_thumb.webp',
+	        'thumb'          => $this->faker->word() . rand(0, 1000) . '_thumb.jpg',
+	        'thumb_webp'     => $this->faker->word() . rand(0, 1000) . '_thumb.webp',
 
 	        'url'            => $this->faker->imageUrl(),
 	        'url_webp'       => $this->faker->imageUrl() . '.webp',

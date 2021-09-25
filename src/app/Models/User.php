@@ -2,24 +2,51 @@
 
 namespace Kaleidoscope\Factotum\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+
 use Illuminate\Notifications\Notifiable;
+
+use Laravel\Sanctum\HasApiTokens;
 
 use Kaleidoscope\Factotum\Notifications\ResetPasswordNotification;
 use Kaleidoscope\Factotum\Notifications\VerifyEmailNotification;
-use Laravel\Sanctum\HasApiTokens;
+use Kaleidoscope\Factotum\Models\BaseModel;
+
+use Kaleidoscope\Factotum\Database\Factories\UserFactory;
+
+
+
+
 
 
 /**
  * Class User
  * @package Kaleidoscope\Factotum\Models
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends BaseModel implements
+	AuthenticatableContract,
+	AuthorizableContract,
+	CanResetPasswordContract
 {
-    use HasApiTokens, HasFactory, Notifiable;
+	use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
+	use HasApiTokens, HasFactory, Notifiable;
 
+
+	protected static function newFactory()
+	{
+		return UserFactory::new();
+	}
+
+
+	protected $with = ['profile'];
 
     /**
      * The attributes that are mass assignable.

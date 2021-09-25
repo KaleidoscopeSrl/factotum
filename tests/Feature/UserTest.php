@@ -82,7 +82,6 @@ class UserTest extends KaleidoscopeTestCase
 		$data = $this->generateUserData();
 		$uri  = $this->baseApiUrl . '/user/create';
 
-		dd($data);
 		$response = $this->postJson($uri, $data);
 
 		$this->checkResponse( $response, $uri );

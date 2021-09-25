@@ -2,16 +2,22 @@
 
 namespace Kaleidoscope\Factotum\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Kaleidoscope\Factotum\Database\Factories\ProfileFactory;
 
-class Profile extends Model
+
+class Profile extends BaseModel
 {
 
+	protected static function newFactory()
+	{
+		return ProfileFactory::new();
+	}
+
 	protected $fillable = [
+		'user_id',
 		'first_name',
 		'last_name',
 		'phone',
-		'user_id',
 		'privacy',
 		'newsletter'
 	];

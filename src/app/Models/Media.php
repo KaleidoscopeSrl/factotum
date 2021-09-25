@@ -2,17 +2,22 @@
 
 namespace Kaleidoscope\Factotum\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Image;
 
+use Kaleidoscope\Factotum\Database\Factories\MediaFactory;
 use Kaleidoscope\Factotum\Library\Utility;
 
 
-class Media extends Model
+class Media extends BaseModel
 {
+
+	protected static function newFactory()
+	{
+		return MediaFactory::new();
+	}
 
 	protected $fillable = [
 		'filename',

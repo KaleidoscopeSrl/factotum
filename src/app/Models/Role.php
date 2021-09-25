@@ -2,10 +2,17 @@
 
 namespace Kaleidoscope\Factotum\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Kaleidoscope\Factotum\Database\Factories\RoleFactory;
 
-class Role extends Model
+
+class Role extends BaseModel
 {
+
+	protected static function newFactory()
+	{
+		return RoleFactory::new();
+	}
+
 
 	protected $fillable = [
 		'role',
@@ -14,7 +21,6 @@ class Role extends Model
 		'manage_users',
 		'manage_media',
 		'manage_settings',
-		'manage_categories',
 		'manage_brands',
 		'manage_products',
 		'manage_orders',

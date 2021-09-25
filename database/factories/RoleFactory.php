@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Kaleidoscope\Factotum\Models\Role;
 
 
-
 class RoleFactory extends Factory
 {
     /**
@@ -31,7 +30,6 @@ class RoleFactory extends Factory
 	        'manage_users'           => true,
 	        'manage_media'           => true,
 	        'manage_settings'        => true,
-	        'manage_categories'      => true,
 
 	        'manage_brands'              => true,
 	        'manage_products'            => true,
@@ -41,7 +39,7 @@ class RoleFactory extends Factory
 	        'manage_carts'               => true,
 	        'manage_taxes'               => true,
 
-	        'manage_newsletters'      => true,
+	        'manage_newsletters'         => true,
 
 		];
     }

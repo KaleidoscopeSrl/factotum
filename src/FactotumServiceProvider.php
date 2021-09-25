@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\File;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 
 
 //use Kaleidoscope\Factotum\Policies\UserPolicy;
@@ -151,16 +152,11 @@ class FactotumServiceProvider extends ServiceProvider
 
 		$this->registerConfig();
 
-
 		$this->app->register(\Laravel\Sanctum\SanctumServiceProvider::class);
 		$this->app->register(\Kaleidoscope\Factotum\Providers\AuthServiceProvider::class);
 		$this->app->register(\Kaleidoscope\Factotum\Providers\RouteServiceProvider::class);
+
 		// $this->app->register(\Kaleidoscope\Factotum\Modules\Cms\Providers\CmsServiceProvider::class);
-
-
-
-
-
 
 
 
@@ -555,6 +551,7 @@ class FactotumServiceProvider extends ServiceProvider
 
 	public function register()
 	{
+		$this->registerEloquentFactoriesFrom(__DIR__ . '/../database/factories');
 	}
 
 
@@ -566,6 +563,18 @@ class FactotumServiceProvider extends ServiceProvider
 	protected function getRouter()
 	{
 		return $this->app['router'];
+	}
+
+
+	/**
+	 * Register factories.
+	 *
+	 * @param  string  $path
+	 * @return void
+	 */
+	protected function registerEloquentFactoriesFrom($path)
+	{
+		// $this->app->make(EloquentFactory::class)->load($path);
 	}
 
 }

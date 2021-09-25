@@ -38,22 +38,26 @@
 		"mockery/mockery": "^1.4.2",
 		"nunomaduro/collision": "^5.0",
 		"orchestra/testbench": "^6.21",
-		"phpunit/phpunit": "^9.5"
+		"phpunit/phpunit": "^9.5",
+        "laravel/legacy-factories": "^1.0.4"
 	},
     "autoload": {
-        "classmap": [
-            "database",
-            "src/app",
-            "src/app/Console",
-            "src/app/Console/Commands",
-            "src/app/Observers"
-        ],
         "psr-4": {
 			"Kaleidoscope\\Factotum\\":  "src",
+			"Kaleidoscope\\Factotum\\Exceptions\\": "src/app/Exceptions/",
+			"Kaleidoscope\\Factotum\\Http\\": "src/app/Http",
+			"Kaleidoscope\\Factotum\\Library\\": "src/app/Library",
+			"Kaleidoscope\\Factotum\\Mail\\": "src/app/Mail/",
 			"Kaleidoscope\\Factotum\\Models\\":  "src/app/Models",
 			"Kaleidoscope\\Factotum\\Modules\\": "src/Modules/",
+			"Kaleidoscope\\Factotum\\Policies\\": "src/app/Policies",
 			"Kaleidoscope\\Factotum\\Providers\\": "src/app/Providers",
-			"Kaleidoscope\\Factotum\\Seeds\\": "database/seeds"
+			"Kaleidoscope\\Factotum\\Repositories\\": "src/app/Repositories",
+			"Kaleidoscope\\Factotum\\Services\\": "src/app/Services",
+			"Kaleidoscope\\Factotum\\Validators\\": "src/app/Validators",
+
+			"Kaleidoscope\\Factotum\\Database\\":  "database",
+			"Kaleidoscope\\Factotum\\Database\\Factories\\":  "database/factories"
 		},
         "files": []
     },

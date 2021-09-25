@@ -2,8 +2,10 @@
 
 namespace Kaleidoscope\Factotum\Repositories;
 
-use Kaleidoscope\Factotum\Models\Capability;
+// use Kaleidoscope\Factotum\Models\Capability;
+
 use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Repositories\Criteria\User\ProfileCriteria;
 
 
 /**
@@ -12,76 +14,74 @@ use Kaleidoscope\Factotum\Models\User;
  */
 class UserRepository extends BaseRepository
 {
-
 	/**
-	 * UserRepository constructor.
-	 * @param User $model
+	 * @return mixed|string
 	 */
-	public function __construct(User $model)
+	public function model()
 	{
-		parent::__construct($model);
+		return User::class;
 	}
 
 
-	public function isAdmin()
-	{
-		$user = $this->model;
+//	public function isAdmin()
+//	{
+//		$user = $this->model;
+//
+//		return ($user->role->role == 'admin' ? true : false);
+//	}
+//
 
-		return ($user->role->role == 'admin' ? true : false);
-	}
-
-
-	public function isProfileComplete()
-	{
-		$user = $this->model;
-
-		if ( !$user->profile->phone || !$user->profile->privacy || ( config('app.FACTOTUM_ECOMMERCE_INSTALLED') && !$user->profile->terms_conditions ) ) {
-			return false;
-		}
-
-		return true;
-	}
-
-
-	public function canConfigure($contentTypeID)
-	{
-		$user = $this->model;
-
-		$capability = Capability::where('role_id', $user->role_id)
-								->where('content_type_id', $contentTypeID)
-								->first();
-
-		return $capability && $capability->configure;
-	}
-
-
-	public function canEdit($contentTypeID)
-	{
-		$user = $this->model;
-
-		$capability = Capability::where('role_id', $user->role_id)
-								->where('content_type_id', $contentTypeID)
-								->first();
-
-		return $capability && $capability->edit;
-	}
-
-
-	public function canPublish($contentTypeID)
-	{
-		$user = $this->model;
-
-		$capability = Capability::where('role_id', $user->role_id)
-								->where('content_type_id', $contentTypeID)
-								->first();
-
-		return $capability && $capability->publish;
-	}
-
-
-	public function getByEmail( $email )
-	{
-		return $this->model->where('email', $email)->first();
-	}
+//	public function isProfileComplete()
+//	{
+//		$user = $this->model;
+//
+//		if ( !$user->profile->phone || !$user->profile->privacy || ( config('app.FACTOTUM_ECOMMERCE_INSTALLED') && !$user->profile->terms_conditions ) ) {
+//			return false;
+//		}
+//
+//		return true;
+//	}
+//
+//
+//	public function canConfigure($contentTypeID)
+//	{
+//		$user = $this->model;
+//
+//		$capability = Capability::where('role_id', $user->role_id)
+//								->where('content_type_id', $contentTypeID)
+//								->first();
+//
+//		return $capability && $capability->configure;
+//	}
+//
+//
+//	public function canEdit($contentTypeID)
+//	{
+//		$user = $this->model;
+//
+//		$capability = Capability::where('role_id', $user->role_id)
+//								->where('content_type_id', $contentTypeID)
+//								->first();
+//
+//		return $capability && $capability->edit;
+//	}
+//
+//
+//	public function canPublish($contentTypeID)
+//	{
+//		$user = $this->model;
+//
+//		$capability = Capability::where('role_id', $user->role_id)
+//								->where('content_type_id', $contentTypeID)
+//								->first();
+//
+//		return $capability && $capability->publish;
+//	}
+//
+//
+//	public function getByEmail( $email )
+//	{
+//		return $this->model->where('email', $email)->first();
+//	}
 
 }

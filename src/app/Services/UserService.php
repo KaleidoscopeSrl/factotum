@@ -5,8 +5,13 @@ namespace Kaleidoscope\Factotum\Services;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
+
+use Illuminate\Container\Container as App;
+use Illuminate\Database\Eloquent\Collection;
 
 use Kaleidoscope\Factotum\Mail\AuthForgottenPassword;
+use Kaleidoscope\Factotum\Repositories\ProfileRepository;
 use Kaleidoscope\Factotum\Repositories\UserRepository;
 use Kaleidoscope\Factotum\Validators\UserValidator;
 
@@ -17,6 +22,10 @@ use Kaleidoscope\Factotum\Validators\UserValidator;
  */
 class UserService extends BaseService
 {
+
+	protected $profileRepository;
+
+
 	/**
 	 * UserService constructor.
 	 * @param UserRepository $repository
@@ -28,14 +37,37 @@ class UserService extends BaseService
 	)
 	{
 		parent::__construct($repository, $validator);
+
+		$this->profileRepository = app()->make( ProfileRepository::class );
 	}
 
 
-	public function single($id, array $data = [])
+
+	/**
+	 * @param array $data
+	 * @return Model|null
+	 * @throws Exception
+	 */
+	public function create(array $data): ?Model
 	{
-		return parent::single( $id, [
-			'relations' => [ 'profile' ]
-		]);
+		$user = parent::create( $data );
+		
+		$this->profileRepository->startTransaction();
+
+		try {
+			$data['user_id'] = $user->id;
+			$result = $this->profileRepository->create($data);
+dd($result);
+			echo '<pre>';
+			print_r($result->toArray());die;
+
+			$this->profileRepository->commitTransaction();
+
+			return $user;
+		} catch (Exception $exception) {
+			$this->profileRepository->rollBackTransaction();
+			throw $exception;
+		}
 	}
 
 

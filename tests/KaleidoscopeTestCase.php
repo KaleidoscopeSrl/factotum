@@ -2,7 +2,6 @@
 
 namespace Kaleidoscope\Factotum\Tests;
 
-
 use Orchestra\Testbench\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
@@ -10,15 +9,13 @@ use Laravel\Sanctum\Sanctum;
 
 
 use Kaleidoscope\Factotum\FactotumServiceProvider;
-
 use Kaleidoscope\Factotum\Database\Factories\UserFactory;
+use Kaleidoscope\Factotum\Database\Factories\RoleFactory;
 use Kaleidoscope\Factotum\Database\Factories\ProfileFactory;
-
 use Kaleidoscope\Factotum\Models\User;
 use Kaleidoscope\Factotum\Models\Role;
 
 use Kaleidoscope\Factotum\Repositories\UserRepository;
-
 
 
 

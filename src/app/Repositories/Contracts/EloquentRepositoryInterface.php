@@ -1,6 +1,6 @@
 <?php
 
-namespace Kaleidoscope\Factotum\Repositories;
+namespace Kaleidoscope\Factotum\Repositories\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;

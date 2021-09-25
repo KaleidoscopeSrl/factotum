@@ -4,7 +4,12 @@ namespace Kaleidoscope\Factotum\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Container\Container as App;
 
+use Kaleidoscope\Factotum\Models\BaseModel;
+use Kaleidoscope\Factotum\Repositories\Contracts\EloquentRepositoryInterface;
+use Kaleidoscope\Factotum\Repositories\Criteria\BaseCriteria;
+use Kaleidoscope\Factotum\Repositories\Contracts\CriteriaInterface;
 use Kaleidoscope\Factotum\Repositories\Traits\HasTransactions;
 
 
@@ -12,9 +17,14 @@ use Kaleidoscope\Factotum\Repositories\Traits\HasTransactions;
  * Class BaseRepository
  * @package Kaleidoscope\Factotum\Repositories
  */
-abstract class BaseRepository implements EloquentRepositoryInterface
+abstract class BaseRepository implements EloquentRepositoryInterface, CriteriaInterface
 {
 	use HasTransactions;
+
+	/**
+	 * @var App
+	 */
+	private $app;
 
 	/**
 	 * @var Model
@@ -22,13 +32,48 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	protected $model;
 
 	/**
-	 * BaseRepository constructor.
-	 *
-	 * @param Model $model
+	 * @var Collection
 	 */
-	public function __construct(Model $model)
+	protected $criteria;
+
+	/**
+	 * @var bool
+	 */
+	protected $skipCriteria = false;
+
+	/**
+	 * BaseRepository constructor.
+	 * @param App $app
+	 * @param Collection $collection
+	 * @throws \Exception
+	 */
+	public function __construct(App $app, Collection $collection)
 	{
-		$this->model = $model;
+		$this->app      = $app;
+		$this->criteria = $collection;
+		$this->resetScope();
+		$this->makeModel();
+	}
+
+	/**
+	 * Specify Model class name
+	 *
+	 * @return mixed
+	 */
+	public abstract function model();
+
+	/**
+	 * @return BaseModel|object
+	 * @throws \Illuminate\Contracts\Container\BindingResolutionException
+	 */
+	public function makeModel()
+	{
+		$model = $this->app->make($this->model());
+
+		if (!$model instanceof BaseModel)
+			throw new \Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
+
+		return $this->model = $model;
 	}
 
 	/**
@@ -38,6 +83,8 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function all(array $columns = ['*'], array $relations = []): Collection
 	{
+		$this->applyCriteria();
+
 		return $this->model->with($relations)->get($columns);
 	}
 
@@ -47,7 +94,9 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function first($columns = ['*']): Model
 	{
-		return $this->model->first( $columns );
+		$this->applyCriteria();
+
+		return $this->model->first($columns);
 	}
 
 	/**
@@ -57,6 +106,8 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function allTrashed(): Collection
 	{
+		$this->applyCriteria();
+
 		return $this->model->onlyTrashed()->get();
 	}
 
@@ -66,7 +117,9 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function paginate(?int $limit = null)
 	{
-		$limit  = is_null($limit) ? config('api.pagination.limit', 15) : $limit;
+		$this->applyCriteria();
+
+		$limit = is_null($limit) ? config('api.pagination.limit', 15) : $limit;
 
 		$results = $this->model->paginate($limit);
 
@@ -81,6 +134,8 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function simplePaginate(?int $limit = null)
 	{
+		$this->applyCriteria();
+
 		$limit = is_null($limit) ? config('api.pagination.limit', 15) : $limit;
 
 		$results = $this->model->simplePaginate($limit);
@@ -99,8 +154,10 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	 * @param array $appends
 	 * @return Model
 	 */
-	public function findById( int $modelId, array $columns = ['*'], array $relations = [], array $appends = []): ?Model
+	public function findById(int $modelId, array $columns = ['*'], array $relations = [], array $appends = []): ?Model
 	{
+		$this->applyCriteria();
+
 		return $this->model->select($columns)
 			->with($relations)
 			->findOrFail($modelId)
@@ -115,6 +172,8 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function findTrashedById(int $modelId): ?Model
 	{
+		$this->applyCriteria();
+
 		return $this->model->withTrashed()
 			->findOrFail($modelId);
 	}
@@ -127,8 +186,10 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function findOnlyTrashedById(int $id): ?Model
 	{
+		$this->applyCriteria();
+
 		return $this->model->onlyTrashed()
-							->findOrFail($id);
+			->findOrFail($id);
 	}
 
 	/**
@@ -201,6 +262,78 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function latest()
 	{
+		$this->applyCriteria();
+
 		return $this->model->orderBy('id', 'desc')->first();
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function resetScope()
+	{
+		$this->skipCriteria(false);
+
+		return $this;
+	}
+
+	/**
+	 * @param bool $status
+	 * @return $this
+	 */
+	public function skipCriteria($status = true)
+	{
+		$this->skipCriteria = $status;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCriteria()
+	{
+		return $this->criteria;
+	}
+
+	/**
+	 * @param BaseCriteria $criteria
+	 * @return $this|mixed
+	 */
+	public function getByCriteria(BaseCriteria $criteria)
+	{
+		$this->model = $criteria->apply($this->model, $this);
+
+		return $this;
+	}
+
+	/**
+	 * @param BaseCriteria $criteria
+	 * @return $this|mixed
+	 */
+	public function pushCriteria(BaseCriteria $criteria)
+	{
+		$this->criteria->push($criteria);
+
+		return $this;
+	}
+
+	/**
+	 * @return $this|BaseRepository
+	 */
+	public function applyCriteria()
+	{
+		if ( $this->skipCriteria === true ) {
+			return $this;
+		}
+
+		foreach ($this->getCriteria() as $criteria) {
+			if ($criteria instanceof BaseCriteria) {
+				echo $this->model;die;
+				$this->model = $criteria->apply($this->model, $this);
+			}
+		}
+
+		return $this;
 	}
 }
