@@ -19,16 +19,11 @@ class Profile extends BaseModel
 		'last_name',
 		'phone',
 		'privacy',
-		'newsletter'
+		'newsletter',
+		'terms_conditions'
 	];
 
 
-	public function __construct()
-	{
-		if ( config('app.FACTOTUM_ECOMMERCE_INSTALLED') ) {
-			$this->fillable[] = 'terms_conditions';
-		}
-	}
 
 	protected $hidden = [
 		'deleted_at'

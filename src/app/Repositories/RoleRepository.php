@@ -13,12 +13,11 @@ class RoleRepository extends BaseRepository
 {
 
 	/**
-	 * RoleRepository constructor.
-	 * @param Role $model
+	 * @return string
 	 */
-	public function __construct(Role $model)
+	public function model(): string
 	{
-		parent::__construct($model);
+		return Role::class;
 	}
 
 }

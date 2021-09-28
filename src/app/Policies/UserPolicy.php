@@ -34,4 +34,9 @@ class UserPolicy
 		return ( $userOnEdit && ( $userOnEdit->editable || (!$userOnEdit->editable && auth()->user()->isAdmin() ) ) ? true : false );
 	}
 
+	public function deleteMultiple(User $user)
+	{
+		return ( auth()->user()->isAdmin() ? true : false );
+	}
+
 }

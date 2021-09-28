@@ -114,6 +114,13 @@ class FactotumServiceProvider extends ServiceProvider
 			)
 		);
 
+		$this->app['config']->set( 'laravel-skeleton',
+			array_replace_recursive(
+				require FACTOTUM_DIR . '/config/laravel-skeleton.php',
+				( file_exists( base_path('config/laravel-skeleton.php')) ? require base_path('config/laravel-skeleton.php') : [] ),
+			)
+		);
+
 		$this->app['config']->set( 'modules',
 			array_replace_recursive(
 				require FACTOTUM_DIR . '/config/modules.php',
@@ -189,9 +196,6 @@ class FactotumServiceProvider extends ServiceProvider
 //		// Migrations & Seeds
 //		// $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 //
-//
-//		// Configurations
-
 //
 //		$this->app['config']->set( 'cors', array_merge(
 //			$this->app['config']->get('cors', []), require __DIR__ . '/config/cors.php'

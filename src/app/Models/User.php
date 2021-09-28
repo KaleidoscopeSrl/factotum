@@ -18,7 +18,6 @@ use Laravel\Sanctum\HasApiTokens;
 
 use Kaleidoscope\Factotum\Notifications\ResetPasswordNotification;
 use Kaleidoscope\Factotum\Notifications\VerifyEmailNotification;
-use Kaleidoscope\Factotum\Models\BaseModel;
 
 use Kaleidoscope\Factotum\Database\Factories\UserFactory;
 

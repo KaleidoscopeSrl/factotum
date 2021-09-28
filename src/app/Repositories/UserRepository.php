@@ -5,7 +5,6 @@ namespace Kaleidoscope\Factotum\Repositories;
 // use Kaleidoscope\Factotum\Models\Capability;
 
 use Kaleidoscope\Factotum\Models\User;
-use Kaleidoscope\Factotum\Repositories\Criteria\User\ProfileCriteria;
 
 
 /**
@@ -15,9 +14,9 @@ use Kaleidoscope\Factotum\Repositories\Criteria\User\ProfileCriteria;
 class UserRepository extends BaseRepository
 {
 	/**
-	 * @return mixed|string
+	 * @return string
 	 */
-	public function model()
+	public function model(): string
 	{
 		return User::class;
 	}

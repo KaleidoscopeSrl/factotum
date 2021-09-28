@@ -6,13 +6,14 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-
-use Illuminate\Container\Container as App;
-use Illuminate\Database\Eloquent\Collection;
+use Exception;
 
 use Kaleidoscope\Factotum\Mail\AuthForgottenPassword;
-use Kaleidoscope\Factotum\Repositories\ProfileRepository;
+
+use Kaleidoscope\Factotum\Filters\UserFilter;
 use Kaleidoscope\Factotum\Repositories\UserRepository;
+use Kaleidoscope\Factotum\Skeleton;
+use Kaleidoscope\Factotum\Transformers\UserTransformer;
 use Kaleidoscope\Factotum\Validators\UserValidator;
 
 
@@ -23,7 +24,7 @@ use Kaleidoscope\Factotum\Validators\UserValidator;
 class UserService extends BaseService
 {
 
-	protected $profileRepository;
+	protected $profileService;
 
 
 	/**
@@ -32,13 +33,18 @@ class UserService extends BaseService
 	 * @param UserValidator $validator
 	 */
 	public function __construct(
-		UserRepository $repository,
-		UserValidator $validator
+		Skeleton $skeleton,
+		ProfileService $profileService
 	)
 	{
-		parent::__construct($repository, $validator);
+		parent::__construct($skeleton);
 
-		$this->profileRepository = app()->make( ProfileRepository::class );
+		$this->setFilter( UserFilter::class );
+		$this->setValidator( UserValidator::class );
+		$this->setRepository( UserRepository::class );
+		$this->setTransformer( UserTransformer::class );
+
+		$this->profileService = $profileService;
 	}
 
 
@@ -51,23 +57,32 @@ class UserService extends BaseService
 	public function create(array $data): ?Model
 	{
 		$user = parent::create( $data );
-		
-		$this->profileRepository->startTransaction();
 
-		try {
-			$data['user_id'] = $user->id;
-			$result = $this->profileRepository->create($data);
-dd($result);
-			echo '<pre>';
-			print_r($result->toArray());die;
+		$data['user_id'] = $user->id;
+		$this->profileService->create( $data );
 
-			$this->profileRepository->commitTransaction();
+		$user->load('profile');
 
-			return $user;
-		} catch (Exception $exception) {
-			$this->profileRepository->rollBackTransaction();
-			throw $exception;
-		}
+		return $user;
+	}
+
+
+
+	/**
+	 * @param $id
+	 * @param array $data
+	 * @return Model|null
+	 * @throws Exception
+	 */
+	public function update($id, array $data): ?Model
+	{
+		$user = parent::update( $id, $data );
+
+		$data['user_id'] = $user->id;
+
+		$this->profileService->update( $user->profile->id, $data );
+
+		return $user;
 	}
 
 

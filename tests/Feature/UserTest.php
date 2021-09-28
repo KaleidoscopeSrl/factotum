@@ -61,7 +61,11 @@ class UserTest extends KaleidoscopeTestCase
 
 	public function testSingle()
 	{
-		$user = $this->repository->latest();
+		$user = $this->repository->buildCriteria([
+			'sortBy' => 'id',
+			'order'  => 'desc'
+		])->first();
+
 		$uri  = $this->baseApiUrl . '/user/single/' . $user->id;
 
 		$response = $this->getJson( $uri );
@@ -93,34 +97,62 @@ class UserTest extends KaleidoscopeTestCase
 				'data' => $this->userStructure
 			]);
 	}
-//
-//
-//	public function testUpdated()
+
+
+	public function testUpdated()
+	{
+		$user = $this->repository->buildCriteria([
+			'sortBy' => 'id',
+			'order'  => 'desc'
+		])->first();
+
+		$data = $this->generateUserData();
+		$uri  = $this->baseApiUrl . '/user/update/' . $user->id;
+
+		$response = $this->putJson($uri, $data);
+
+		$this->checkResponse( $response, $uri );
+
+		$response
+			->assertStatus(200)
+			->assertJsonStructure([
+				'result',
+				'data' => $this->userStructure
+			]);
+	}
+
+
+	public function testDeleted()
+	{
+		$user = $this->repository->buildCriteria([
+			'sortBy' => 'id',
+			'order'  => 'desc'
+		])->first();
+
+		$uri = $this->baseApiUrl . '/user/delete/' . $user->id;
+
+		$response = $this->deleteJson( $uri );
+
+		$this->checkResponse( $response, $uri );
+
+		$response
+			->assertStatus(200)
+			->assertJsonStructure([
+				'result'
+			]);
+	}
+
+
+//	public function testMultipleDeleted()
 //	{
-//		$user = $this->repository->latest();
-//		$data = $this->generateUserData();
-//		$uri  = $this->baseApiUrl . '/user/update/' . $user->id;
+//		$users = $this->repository->buildCriteria([
+//			'sortBy' => 'id',
+//			'order'  => 'desc'
+//		])->take(2)->get()->pluck('id')->toArray();
 //
-//		$response = $this->putJson($uri, $data);
+//		$uri = $this->baseApiUrl . '/user/delete-users';
 //
-//		$this->checkResponse( $response, $uri );
-//
-//		$response
-//			->assertStatus(200)
-//			->assertJsonStructure([
-//				'result',
-//				'data' => $this->userStructure
-//			]);
-//	}
-//
-//
-//	public function testDeleted()
-//	{
-//		$user = $this->repository->latest();
-//
-//		$uri = $this->baseApiUrl . '/user/delete/' . $user->id;
-//
-//		$response = $this->deleteJson( $uri );
+//		$response = $this->deleteJson( $uri, [ 'ids' => $users ] );
 //
 //		$this->checkResponse( $response, $uri );
 //

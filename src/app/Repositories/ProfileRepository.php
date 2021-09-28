@@ -14,7 +14,7 @@ class ProfileRepository extends BaseRepository
 	/**
 	 * @return mixed|string
 	 */
-	public function model()
+	public function model(): string
 	{
 		return Profile::class;
 	}

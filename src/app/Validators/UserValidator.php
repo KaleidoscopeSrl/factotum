@@ -2,8 +2,6 @@
 
 namespace Kaleidoscope\Factotum\Validators;
 
-use Illuminate\Validation\Rule;
-
 
 /**
  * Class UserValidator
@@ -17,17 +15,10 @@ class UserValidator extends BaseValidator
 	protected function validateBasic()
 	{
 		$this->rules = [
-			'first_name' => 'required|max:128',
-			'last_name'  => 'required|max:128',
 			'email'      => 'required|max:128|email:filter|unique:users,email',
 			'phone'      => 'required|max:64',
-			'password'   => 'required|min:8',
 			'role_id'    => 'required',
 		];
-
-		if ( request()->input('avatar') ) {
-			$this->rules['avatar'] = 'required';
-		}
 	}
 
 

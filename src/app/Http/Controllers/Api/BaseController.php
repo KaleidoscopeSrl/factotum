@@ -129,17 +129,4 @@ abstract class BaseController extends Controller
     }
 
 
-	/**
-	 * @param Request $request
-	 * @return Response
-	 * @throws \Exception
-	 */
-	public function deleteMultiple(Request $request): Response
-	{
-		if ( $this->service->deleteMultiple( $request->input('ids') ) ) {
-			return $this->response->ok();
-		}
-	}
-
-
 }

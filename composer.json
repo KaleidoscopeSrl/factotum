@@ -44,7 +44,9 @@
     "autoload": {
         "psr-4": {
 			"Kaleidoscope\\Factotum\\":  "src",
+			"Kaleidoscope\\Factotum\\Criteria\\": "src/app/Criteria",
 			"Kaleidoscope\\Factotum\\Exceptions\\": "src/app/Exceptions/",
+			"Kaleidoscope\\Factotum\\Filters\\": "src/app/Filters/",
 			"Kaleidoscope\\Factotum\\Http\\": "src/app/Http",
 			"Kaleidoscope\\Factotum\\Library\\": "src/app/Library",
 			"Kaleidoscope\\Factotum\\Mail\\": "src/app/Mail/",
@@ -54,12 +56,14 @@
 			"Kaleidoscope\\Factotum\\Providers\\": "src/app/Providers",
 			"Kaleidoscope\\Factotum\\Repositories\\": "src/app/Repositories",
 			"Kaleidoscope\\Factotum\\Services\\": "src/app/Services",
+			"Kaleidoscope\\Factotum\\Transformers\\": "src/app/Transformers",
 			"Kaleidoscope\\Factotum\\Validators\\": "src/app/Validators",
 
 			"Kaleidoscope\\Factotum\\Database\\":  "database",
 			"Kaleidoscope\\Factotum\\Database\\Factories\\":  "database/factories"
 		},
-        "files": []
+        "files": [
+		]
     },
 	"autoload-dev": {
 		"psr-4": {

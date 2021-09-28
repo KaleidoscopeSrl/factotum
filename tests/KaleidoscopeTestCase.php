@@ -38,19 +38,13 @@ class KaleidoscopeTestCase extends TestCase
 
 
 	protected $paginateStructure = [
-		'current_page',
-		'data',
-		'first_page_url',
-		'from',
-		'last_page',
-		'last_page_url',
-		'links',
-		'next_page_url',
-		'path',
-		'per_page',
-		'prev_page_url',
-		'to',
-		'total'
+		'collection' => [],
+		'pagination' => [
+			'page',
+			'perPage',
+			'total',
+			'totalPages'
+		]
 	];
 
 
@@ -107,11 +101,16 @@ class KaleidoscopeTestCase extends TestCase
 
 		$this->baseApiUrl = env('APP_URL') . '/api/v1';
 
+		$this->userStructure['profile'] = $this->profileStructure;
+	}
+
+	public function setUp(): void
+	{
+		parent::setUp();
+
 		if ( !$this->userRepository ) {
 			$this->userRepository = app()->make( UserRepository::class );
 		}
-
-		$this->userStructure['profile'] = $this->profileStructure;
 	}
 
 

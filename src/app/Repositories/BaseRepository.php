@@ -2,286 +2,170 @@
 
 namespace Kaleidoscope\Factotum\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Container\Container as App;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Closure;
+use Exception;
+use Illuminate\Support\Collection;
 
-use Kaleidoscope\Factotum\Models\BaseModel;
-use Kaleidoscope\Factotum\Repositories\Contracts\EloquentRepositoryInterface;
-use Kaleidoscope\Factotum\Repositories\Criteria\BaseCriteria;
-use Kaleidoscope\Factotum\Repositories\Contracts\CriteriaInterface;
+use Kaleidoscope\Factotum\Skeleton;
+use Kaleidoscope\Factotum\Criteria\BaseCriteria;
+use Kaleidoscope\Factotum\Criteria\DataCriteria;
+use Kaleidoscope\Factotum\Repositories\Traits\HasActions;
+use Kaleidoscope\Factotum\Repositories\Traits\HasGetters;
 use Kaleidoscope\Factotum\Repositories\Traits\HasTransactions;
-
 
 /**
  * Class BaseRepository
  * @package Kaleidoscope\Factotum\Repositories
  */
-abstract class BaseRepository implements EloquentRepositoryInterface, CriteriaInterface
+abstract class BaseRepository
 {
-	use HasTransactions;
+	use HasActions,
+		HasGetters,
+		HasTransactions;
 
 	/**
-	 * @var App
+	 * @var Skeleton
 	 */
-	private $app;
+	protected Skeleton $skeleton;
 
 	/**
-	 * @var Model
+	 * @var
 	 */
 	protected $model;
 
 	/**
 	 * @var Collection
 	 */
-	protected $criteria;
+	protected Collection $criteria;
+
+	/**
+	 * @var Closure|null
+	 */
+	protected ?Closure $scopeQuery = null;
 
 	/**
 	 * @var bool
 	 */
-	protected $skipCriteria = false;
+	protected bool $skipCriteria = false;
 
 	/**
 	 * BaseRepository constructor.
-	 * @param App $app
-	 * @param Collection $collection
-	 * @throws \Exception
+	 * @param Skeleton $skeleton
+	 * @throws Exception
 	 */
-	public function __construct(App $app, Collection $collection)
+	public function __construct(Skeleton $skeleton)
 	{
-		$this->app      = $app;
-		$this->criteria = $collection;
-		$this->resetScope();
+		$this->skeleton = $skeleton;
+		$this->criteria = new Collection();
 		$this->makeModel();
+		$this->boot();
 	}
 
 	/**
-	 * Specify Model class name
 	 *
-	 * @return mixed
 	 */
-	public abstract function model();
+	public function boot()
+	{
+		//
+	}
 
 	/**
-	 * @return BaseModel|object
-	 * @throws \Illuminate\Contracts\Container\BindingResolutionException
+	 * @return mixed
+	 */
+	public function getModel()
+	{
+		$this->applyCriteria();
+		$this->applyScope();
+
+		return $this->model;
+	}
+
+	/**
+	 * @return $this
+	 * @throws Exception
+	 */
+	public function resetModel(): self
+	{
+		$this->makeModel();
+
+		return $this;
+	}
+
+	/**
+	 * @param array $attributes
+	 * @return mixed
+	 */
+	public function makeModelInstance(array $attributes = [])
+	{
+		$model = $this->model();
+
+		return new $model($attributes);
+	}
+
+	/**
+	 * @return mixed|object
+	 * @throws BindingResolutionException
 	 */
 	public function makeModel()
 	{
-		$model = $this->app->make($this->model());
-
-		if (!$model instanceof BaseModel)
-			throw new \Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
+		$model = $this->skeleton->makeInstance($this->model());
 
 		return $this->model = $model;
 	}
 
 	/**
-	 * @param array $columns
-	 * @param array $relations
-	 * @return Collection
+	 * @return string
 	 */
-	public function all(array $columns = ['*'], array $relations = []): Collection
-	{
-		$this->applyCriteria();
+	public abstract function model(): string;
 
-		return $this->model->with($relations)->get($columns);
+	/**
+	 * @return $this
+	 */
+	public function resetScope(): self
+	{
+		$this->scopeQuery = null;
+
+		return $this;
 	}
 
 	/**
-	 * @param string[] $columns
-	 * @return Model
+	 * @param Closure $scope
+	 * @return $this
 	 */
-	public function first($columns = ['*']): Model
+	public function scopeQuery(Closure $scope): self
 	{
-		$this->applyCriteria();
+		$this->scopeQuery = $scope;
 
-		return $this->model->first($columns);
-	}
-
-	/**
-	 * Get all trashed models.
-	 *
-	 * @return Collection
-	 */
-	public function allTrashed(): Collection
-	{
-		$this->applyCriteria();
-
-		return $this->model->onlyTrashed()->get();
-	}
-
-	/**
-	 * @param int|null $limit
-	 * @return mixed
-	 */
-	public function paginate(?int $limit = null)
-	{
-		$this->applyCriteria();
-
-		$limit = is_null($limit) ? config('api.pagination.limit', 15) : $limit;
-
-		$results = $this->model->paginate($limit);
-
-		$results->appends(app('request')->query());
-
-		return $results;
-	}
-
-	/**
-	 * @param int|null $limit
-	 * @return mixed
-	 */
-	public function simplePaginate(?int $limit = null)
-	{
-		$this->applyCriteria();
-
-		$limit = is_null($limit) ? config('api.pagination.limit', 15) : $limit;
-
-		$results = $this->model->simplePaginate($limit);
-
-		$results->appends(app('request')->query());
-
-		return $results;
-	}
-
-	/**
-	 * Find model by id.
-	 *
-	 * @param int $modelId
-	 * @param array $columns
-	 * @param array $relations
-	 * @param array $appends
-	 * @return Model
-	 */
-	public function findById(int $modelId, array $columns = ['*'], array $relations = [], array $appends = []): ?Model
-	{
-		$this->applyCriteria();
-
-		return $this->model->select($columns)
-			->with($relations)
-			->findOrFail($modelId)
-			->append($appends);
-	}
-
-	/**
-	 * Find trashed model by id.
-	 *
-	 * @param int $modelId
-	 * @return Model
-	 */
-	public function findTrashedById(int $modelId): ?Model
-	{
-		$this->applyCriteria();
-
-		return $this->model->withTrashed()
-			->findOrFail($modelId);
-	}
-
-	/**
-	 * Find only trashed model by id.
-	 *
-	 * @param int $id
-	 * @return Model
-	 */
-	public function findOnlyTrashedById(int $id): ?Model
-	{
-		$this->applyCriteria();
-
-		return $this->model->onlyTrashed()
-			->findOrFail($id);
-	}
-
-	/**
-	 * Create a model.
-	 *
-	 * @param array $payload
-	 * @return Model
-	 */
-	public function create(array $payload): ?Model
-	{
-		$model = $this->model->create($payload);
-
-		return $model->fresh();
-	}
-
-	/**
-	 * Update existing model
-	 *
-	 * @param int $id
-	 * @param array $payload
-	 * @return Model|null
-	 */
-	public function update(int $id, array $payload): ?Model
-	{
-		$item = $this->model->findOrFail($id);
-		$item->update($payload);
-
-		return $item->fresh();
-	}
-
-	/**
-	 * Delete by id.
-	 *
-	 * @param int $id
-	 * @return bool
-	 */
-	public function deleteById(int $id): bool
-	{
-		return $this->model->findOrFail($id)->delete();
-	}
-
-	/**
-	 * Restore model by id.
-	 *
-	 * @param int $id
-	 * @return bool
-	 */
-	public function restoreById(int $id): bool
-	{
-		return $this->model->onlyTrashed()
-			->findOrFail($id)
-			->restore();
-	}
-
-	/**
-	 * Permanently delete by id.
-	 *
-	 * @param int $id
-	 * @return bool
-	 */
-	public function permanentlyDeleteById(int $id): bool
-	{
-		return $this->model->onlyTrashed()
-			->findOrFail($id)
-			->forceDelete();
-	}
-
-	/**
-	 * @return Model
-	 */
-	public function latest()
-	{
-		$this->applyCriteria();
-
-		return $this->model->orderBy('id', 'desc')->first();
+		return $this;
 	}
 
 	/**
 	 * @return $this
 	 */
-	public function resetScope()
+	protected function applyScope(): self
 	{
-		$this->skipCriteria(false);
+		if (isset($this->scopeQuery) && is_callable($this->scopeQuery)) {
+			$callback = $this->scopeQuery;
+			$this->model = $callback($this->model);
+		}
 
 		return $this;
+	}
+
+	/**
+	 * @return Collection
+	 */
+	public function getCriteria(): Collection
+	{
+		return $this->criteria;
 	}
 
 	/**
 	 * @param bool $status
 	 * @return $this
 	 */
-	public function skipCriteria($status = true)
+	public function skipCriteria(bool $status = true): self
 	{
 		$this->skipCriteria = $status;
 
@@ -289,51 +173,84 @@ abstract class BaseRepository implements EloquentRepositoryInterface, CriteriaIn
 	}
 
 	/**
-	 * @return mixed
+	 * @return $this
 	 */
-	public function getCriteria()
+	public function resetCriteria(): self
 	{
-		return $this->criteria;
-	}
-
-	/**
-	 * @param BaseCriteria $criteria
-	 * @return $this|mixed
-	 */
-	public function getByCriteria(BaseCriteria $criteria)
-	{
-		$this->model = $criteria->apply($this->model, $this);
+		$this->criteria = new Collection();
 
 		return $this;
 	}
 
 	/**
-	 * @param BaseCriteria $criteria
-	 * @return $this|mixed
+	 * @param $criteria
+	 * @return $this
+	 * @throws Exception
 	 */
-	public function pushCriteria(BaseCriteria $criteria)
+	public function pushCriteria($criteria): self
 	{
+		if (is_string($criteria)) {
+			$criteria = new $criteria;
+		}
+		if (!$criteria instanceof BaseCriteria) {
+			throw new Exception("Class " . get_class($criteria) . " must be an instance of BaseApiCriteria");
+		}
+
 		$this->criteria->push($criteria);
 
 		return $this;
 	}
 
 	/**
-	 * @return $this|BaseRepository
+	 * @return $this
 	 */
-	public function applyCriteria()
+	protected function applyCriteria(): self
 	{
-		if ( $this->skipCriteria === true ) {
+		if ($this->skipCriteria === true) {
 			return $this;
 		}
 
-		foreach ($this->getCriteria() as $criteria) {
-			if ($criteria instanceof BaseCriteria) {
-				echo $this->model;die;
-				$this->model = $criteria->apply($this->model, $this);
+		$criteria = $this->getCriteria();
+
+		if ($criteria) {
+			foreach ($criteria as $c) {
+				if ($c instanceof BaseCriteria) {
+					$this->model = $c->apply($this->model, $this);
+				}
 			}
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param $criteria
+	 * @return $this
+	 */
+	public function popCriteria($criteria): self
+	{
+		$this->criteria = $this->criteria->reject(function ($item) use ($criteria) {
+			if (is_object($item) && is_string($criteria)) {
+				return get_class($item) === $criteria;
+			}
+
+			if (is_string($item) && is_object($criteria)) {
+				return $item === get_class($criteria);
+			}
+
+			return get_class($item) === get_class($criteria);
+		});
+
+		return $this;
+	}
+
+	/**
+	 * @param array $data
+	 * @return $this
+	 * @throws Exception
+	 */
+	public function buildCriteria(array $data): self
+	{
+		return $this->pushCriteria(new DataCriteria($this->skeleton, $data));
 	}
 }
