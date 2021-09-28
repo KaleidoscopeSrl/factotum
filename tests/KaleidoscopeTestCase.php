@@ -12,6 +12,7 @@ use Kaleidoscope\Factotum\FactotumServiceProvider;
 use Kaleidoscope\Factotum\Database\Factories\UserFactory;
 use Kaleidoscope\Factotum\Database\Factories\RoleFactory;
 use Kaleidoscope\Factotum\Database\Factories\ProfileFactory;
+use Kaleidoscope\Factotum\Database\Factories\MediaFactory;
 use Kaleidoscope\Factotum\Models\User;
 use Kaleidoscope\Factotum\Models\Role;
 

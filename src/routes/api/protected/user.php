@@ -7,10 +7,7 @@ Route::group([
 ], function () {
 
 
-	Route::group(['middleware' => 'can:create,Kaleidoscope\Factotum\User'], function() {
-		Route::post('/create',        'UserController@create');
-	});
-
+	Route::post('/create',        'UserController@create')->middleware('can:create,Kaleidoscope\Factotum\User');
 
 	Route::group(['middleware' => 'can:read,Kaleidoscope\Factotum\User'], function() {
 		Route::get('/collected',      'UserController@collected');
@@ -18,21 +15,10 @@ Route::group([
 		Route::get('/single/{id}',    'UserController@single');
 	});
 
+	Route::put('/update/{id}',    'UserController@update')->middleware('can:update,Kaleidoscope\Factotum\User,id');
 
-	Route::group(['middleware' => 'can:update,Kaleidoscope\Factotum\User,id'], function() {
-		Route::put('/update/{id}',    'UserController@update');
-	});
-
-
-	Route::group(['middleware' => 'can:delete,Kaleidoscope\Factotum\User,id'], function() {
-		Route::delete('/delete/{id}',      'UserController@delete');
-	});
-
-
-	// TODO: sistemare
-	Route::group(['middleware' => 'can:deleteMultiple,Kaleidoscope\Factotum\User'], function() {
-		Route::delete('/delete-users',     'UserController@deleteUsers');
-	});
+	Route::delete('/delete/{id}',   'UserController@delete')->middleware('can:delete,Kaleidoscope\Factotum\User,id');
+	Route::delete('/delete-users',  'UserController@deleteUsers')->middleware('can:deleteMultipleUsers,Kaleidoscope\Factotum\User');
 
 
 });

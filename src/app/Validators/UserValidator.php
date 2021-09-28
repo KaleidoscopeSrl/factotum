@@ -45,4 +45,15 @@ class UserValidator extends BaseValidator
 		}
 	}
 
+
+	/**
+	 *
+	 */
+	protected function validateDeleteMultiple()
+	{
+		$this->rules = [
+			'ids'  => 'required|array',
+		];
+	}
+
 }

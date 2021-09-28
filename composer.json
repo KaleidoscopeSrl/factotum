@@ -62,9 +62,11 @@
 			"Kaleidoscope\\Factotum\\Database\\":  "database",
 			"Kaleidoscope\\Factotum\\Database\\Factories\\":  "database/factories"
 		},
-        "files": [
+		"files": [
+			"src/app/Helpers/functions.php",
+			"src/app/Helpers/constants.php"
 		]
-    },
+	},
 	"autoload-dev": {
 		"psr-4": {
 			"Kaleidoscope\\Factotum\\Tests\\": "tests"

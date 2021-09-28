@@ -123,10 +123,27 @@ abstract class BaseController extends Controller
 	 */
     public function delete($id, Request $request): Response
     {
-    	if ( $this->service->delete( $id, $request->all() ) ) {
+    	if ( $this->service->delete( $id ) ) {
 		    return $this->response->ok();
 	    }
     }
+
+
+
+	/**
+	 * @param $id
+	 * @param Request $request
+	 * @return Response
+	 * @throws \Exception
+	 */
+	public function deleteMultiple( Request $request): Response
+	{
+//		dd( $request->all() );
+		return $this->response->ok();
+		if ( $this->service->deleteMultiple( 'ids', $request->all() ) ) {
+			return $this->response->ok();
+		}
+	}
 
 
 }

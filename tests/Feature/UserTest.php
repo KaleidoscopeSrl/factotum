@@ -143,25 +143,25 @@ class UserTest extends KaleidoscopeTestCase
 	}
 
 
-//	public function testMultipleDeleted()
-//	{
-//		$users = $this->repository->buildCriteria([
-//			'sortBy' => 'id',
-//			'order'  => 'desc'
-//		])->take(2)->get()->pluck('id')->toArray();
-//
-//		$uri = $this->baseApiUrl . '/user/delete-users';
-//
-//		$response = $this->deleteJson( $uri, [ 'ids' => $users ] );
-//
-//		$this->checkResponse( $response, $uri );
-//
-//		$response
-//			->assertStatus(200)
-//			->assertJsonStructure([
-//				'result'
-//			]);
-//	}
+	public function testMultipleDeleted()
+	{
+		$users = $this->repository->buildCriteria([
+			'sortBy' => 'id',
+			'order'  => 'desc'
+		])->take(2)->get()->pluck('id')->toArray();
+
+		$uri = $this->baseApiUrl . '/user/delete-users';
+
+		$response = $this->deleteJson( $uri, [ 'ids' => $users ] );
+
+		$this->checkResponse( $response, $uri );
+
+		$response
+			->assertStatus(200)
+			->assertJsonStructure([
+				'result'
+			]);
+	}
 
 
 }

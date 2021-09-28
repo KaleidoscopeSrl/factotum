@@ -258,17 +258,16 @@ abstract class BaseService
 	 * @throws Exception
 	 * @throws ValidationException
 	 */
-	public function deleteMultiple($ids)
+	public function deleteMultiple( $field, $values )
 	{
 		$this->validator
-			->addParam('ids', $ids)
+			->addParam($field, $values)
 			->validate('deleteMultiple');
 
 		$this->repository->startTransaction();
 
 		try {
-
-			$result = $this->baseDeleteMultiple($ids);
+			$result = $this->baseDeleteMultiple( $field, $values );
 
 			$this->repository->commitTransaction();
 
@@ -320,6 +319,19 @@ abstract class BaseService
 	protected function baseDelete($id)
 	{
 		return $this->repository->delete($id);
+	}
+
+
+
+	/**
+	 * @param $field
+	 * @param array $values
+	 * @return mixed
+	 * @throws Exception
+	 */
+	protected function baseDeleteMultiple($field, $values)
+	{
+		return $this->repository->findWhereIn( $field, $values )->deleteAll();
 	}
 
 

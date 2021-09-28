@@ -5,38 +5,66 @@ namespace Kaleidoscope\Factotum\Policies;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 use Kaleidoscope\Factotum\Models\User;
+use Kaleidoscope\Factotum\Repositories\UserRepository;
 
 
 class UserPolicy
 {
+
     use HandlesAuthorization;
 
-	// TODO: cambiare con repository
-	public function create(User $user)
+
+    protected $repository;
+
+
+    public function __construct( UserRepository $repository )
+    {
+    	$this->repository = $repository;
+    }
+
+
+    private function _baseEditingCheck( $id = null )
 	{
-		return ( $user->role->backend_access && $user->role->manage_users ? true : false );
+		$editingUser = $this->repository->find( $id );
+
+		if ( !$editingUser || ( $editingUser && !$editingUser->editable ) ) {
+			return false;
+		}
 	}
 
-	public function read(User $user)
+
+	public function create(?User $user) : bool
 	{
-		return ( $user->role->backend_access && $user->role->manage_users ? true : false );
+		return auth_user_role()->manage_users;
 	}
 
-	public function update(User $user, $userID)
+
+	public function read(?User $user) : bool
 	{
-		$userOnEdit = User::find($userID);
-		return ( $userOnEdit && ( $userOnEdit->editable || !$userOnEdit->editable && auth()->user()->isAdmin() ) ? true : false );
+		return auth_user_role()->manage_users;
 	}
 
-	public function delete(User $user, $userID)
+
+	public function update(?User $user, $id = null) : bool
 	{
-		$userOnEdit = User::find($userID);
-		return ( $userOnEdit && ( $userOnEdit->editable || (!$userOnEdit->editable && auth()->user()->isAdmin() ) ) ? true : false );
+		$this->_baseEditingCheck( $id );
+
+		return auth_user_role()->manage_users;
 	}
 
-	public function deleteMultiple(User $user)
+
+	public function delete(?User $user, $id = null ) : bool
 	{
-		return ( auth()->user()->isAdmin() ? true : false );
+		$this->_baseEditingCheck( $id );
+
+		return auth_user_role()->manage_users;
 	}
+
+
+	public function deleteMultipleUsers(): bool
+	{
+		return auth_user_role()->role === \ConstRoles::ADMIN;
+	}
+
 
 }
